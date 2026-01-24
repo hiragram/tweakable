@@ -1,0 +1,4 @@
+options:
+  xcodeprojPath: "Okumuka.xcodeproj"
+  prefix: Acknowledgements
+  singlePage: true

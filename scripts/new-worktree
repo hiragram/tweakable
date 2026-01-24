@@ -1,0 +1,22 @@
+#!/bin/bash -eux
+
+cd "$(git rev-parse --show-toplevel)"
+
+# /usr/share/dict/words から6文字以下の単語をランダムに3つ取得して結合
+name=$(awk 'BEGIN{srand()} length<=6{lines[++n]=$0} END{for(i=1;i<=3;i++){idx=int(rand()*n)+1; words[i]=lines[idx]} print tolower(words[1]"-"words[2]"-"words[3])}' /usr/share/dict/words)
+
+# worktrees/ ディレクトリがなければ作成
+mkdir -p worktrees
+
+# リモートのmainの最新を取得
+git fetch origin main
+
+# git worktree を作成（origin/mainを起点に新しいブランチを作成）
+git worktree add -b "$name" "worktrees/$name" origin/main
+
+echo "Created worktree: worktrees/$name"
+
+# worktreeディレクトリでzellijセッションを開始
+cd "worktrees/$name"
+direnv allow
+zellij --new-session-with-layout claude-dev -s "$name"

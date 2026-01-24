@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "CB8A2755-6D60-4136-AF7F-934D428852A5",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Okumuka.xcodeproj",
+        "identifier" : "6060BFE92F114CD30010E87A",
+        "name" : "OkumukaUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

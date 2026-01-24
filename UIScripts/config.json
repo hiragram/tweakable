@@ -1,0 +1,5 @@
+{
+  "bundleId": "app.hiragram.Okumuka",
+  "defaultTimeout": 10,
+  "defaultWaitAfterAction": 0.5
+}

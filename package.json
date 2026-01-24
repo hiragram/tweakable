@@ -1,0 +1,9 @@
+{
+  "name": "okumuka",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "danger": "^12.3.3",
+    "typescript": "^5.9.3"
+  }
+}

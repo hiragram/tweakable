@@ -1,0 +1,248 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install xcbeautify
+        run: |
+          if ! command -v xcbeautify &> /dev/null; then
+            brew install xcbeautify
+          fi
+
+      - name: Generate iOS secrets
+        env:
+          SUPABASE_PROJECT_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
+          SUPABASE_PUBLISHABLE_API_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_API_KEY }}
+        run: ./scripts/generate-ios-secrets-json
+
+      - name: Clean build
+        run: |
+          xcodebuild clean \
+            -project Okumuka.xcodeproj \
+            -scheme AppCore \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project Okumuka.xcodeproj \
+            -scheme AppCore \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -resultBundlePath TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | xcbeautify --report junit --report-path test-reports
+
+      - name: Publish test results
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: 'test-reports/junit.xml'
+          include_passed: true
+          detailed_summary: true
+          annotate_only: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+
+  e2e-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        run: |
+          if ! command -v npx &> /dev/null; then
+            echo "npm/npx is required but not installed"
+            exit 1
+          fi
+          # supabaseをプロジェクトローカルにインストール（既存のpackage.jsonを使用）
+          npm install supabase --save-dev || true
+
+      - name: Start Supabase
+        run: |
+          ./scripts/setup-test-supabase.sh -d supabase -p okumuka-e2e -w 20
+
+      - name: Install xcbeautify
+        run: |
+          if ! command -v xcbeautify &> /dev/null; then
+            brew install xcbeautify
+          fi
+
+      - name: Generate iOS secrets
+        env:
+          SUPABASE_PROJECT_URL: ${{ env.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_API_KEY: ${{ env.SUPABASE_ANON_KEY }}
+        run: ./scripts/generate-ios-secrets-json
+
+      - name: Run E2E Tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project Okumuka.xcodeproj \
+            -scheme OkumukaUITests \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -resultBundlePath E2ETestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | xcbeautify --report junit --report-path e2e-test-reports
+
+      - name: Stop Supabase
+        if: always()
+        run: |
+          ./scripts/stop-test-supabase.sh -d supabase
+
+      - name: Publish E2E test results
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: 'e2e-test-reports/junit.xml'
+          include_passed: true
+          detailed_summary: true
+          annotate_only: true
+          check_name: 'E2E Test Results'
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: E2ETestResults
+          path: E2ETestResults.xcresult
+
+  danger:
+    runs-on: self-hosted
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup cml
+        run: |
+          if ! command -v cml &> /dev/null; then
+            npm install -g @dvcorg/cml
+          fi
+
+      - name: Generate and upload snapshot diffs
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # ImageMagickがなければインストール
+          if ! command -v compare &> /dev/null; then
+            brew install imagemagick
+          fi
+
+          # JSON出力用
+          echo '{"snapshots":[' > snapshot-urls.json
+          first=true
+
+          add_json_entry() {
+            local name="$1"
+            local type="$2"
+            local before="$3"
+            local after="$4"
+            local diff="$5"
+
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo ',' >> snapshot-urls.json
+            fi
+            echo "{\"name\":\"${name}\",\"type\":\"${type}\",\"before\":\"${before}\",\"after\":\"${after}\",\"diff\":\"${diff}\"}" >> snapshot-urls.json
+          }
+
+          # 追加されたファイル
+          added_files=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} -- '*__Snapshots__*.png' 2>/dev/null || true)
+          if [ -n "$added_files" ]; then
+            echo "Added snapshot files:"
+            echo "$added_files"
+            for file in $added_files; do
+              if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                after_url=$(cml publish "$file")
+                add_json_entry "$filename" "added" "" "$after_url" ""
+                echo "Uploaded (added): $filename"
+              fi
+            done
+          fi
+
+          # 削除されたファイル
+          deleted_files=$(git diff --diff-filter=D --name-only origin/${{ github.base_ref }} -- '*__Snapshots__*.png' 2>/dev/null || true)
+          if [ -n "$deleted_files" ]; then
+            echo "Deleted snapshot files:"
+            echo "$deleted_files"
+            for file in $deleted_files; do
+              filename=$(basename "$file")
+              if git show origin/${{ github.base_ref }}:"$file" > /tmp/before.png 2>/dev/null; then
+                before_url=$(cml publish /tmp/before.png)
+                add_json_entry "$filename" "deleted" "$before_url" "" ""
+                echo "Uploaded (deleted): $filename"
+              fi
+            done
+          fi
+
+          # 変更されたファイル
+          modified_files=$(git diff --diff-filter=M --name-only origin/${{ github.base_ref }} -- '*__Snapshots__*.png' 2>/dev/null || true)
+          if [ -n "$modified_files" ]; then
+            echo "Modified snapshot files:"
+            echo "$modified_files"
+            for file in $modified_files; do
+              if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                if git show origin/${{ github.base_ref }}:"$file" > /tmp/before.png 2>/dev/null; then
+                  before_url=$(cml publish /tmp/before.png)
+                  after_url=$(cml publish "$file")
+                  compare -metric AE -fuzz 5% /tmp/before.png "$file" /tmp/diff.png 2>/dev/null || true
+                  diff_url=$(cml publish /tmp/diff.png)
+                  add_json_entry "$filename" "modified" "$before_url" "$after_url" "$diff_url"
+                  echo "Uploaded (modified): $filename"
+                fi
+              fi
+            done
+          fi
+
+          if [ -z "$added_files" ] && [ -z "$deleted_files" ] && [ -z "$modified_files" ]; then
+            echo "No snapshot changes detected"
+          fi
+
+          echo ']}' >> snapshot-urls.json
+          cat snapshot-urls.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Danger
+        run: npx danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}

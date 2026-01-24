@@ -1,0 +1,43 @@
+{
+  "name": "メンバー招待",
+  "description": "グループにメンバーを招待する（オーナーのみ）",
+  "preconditions": ["ホーム画面表示状態", "グループオーナーであること"],
+  "actions": [
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "home_button_settings" },
+      "description": "設定ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "settings_button_inviteMember" },
+      "timeout": 5
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "settings_button_inviteMember" },
+      "description": "メンバーを招待ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "inviteMember_button_copyUrl" },
+      "timeout": 10,
+      "description": "招待URL生成を待機"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "inviteMember_button_copyUrl" },
+      "description": "URLをコピー"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "inviteMember_button_close" },
+      "description": "招待画面を閉じる"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "settings_button_done" },
+      "description": "設定画面を閉じる"
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "name": "設定アクション",
+  "description": "設定画面に関する操作",
+  "actions": {
+    "openJoinRequests": {
+      "description": "参加リクエスト一覧を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_joinRequests" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "joinRequestList_button_close" },
+          "timeout": 5
+        }
+      ]
+    },
+    "closeJoinRequests": {
+      "description": "参加リクエスト一覧を閉じる",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "joinRequestList_button_close" }
+        }
+      ]
+    },
+    "openInviteMember": {
+      "description": "メンバー招待画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_inviteMember" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "inviteMember_button_close" },
+          "timeout": 10
+        }
+      ]
+    },
+    "closeInviteMember": {
+      "description": "メンバー招待画面を閉じる",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "inviteMember_button_close" }
+        }
+      ]
+    },
+    "copyInviteUrl": {
+      "description": "招待URLをコピー",
+      "actions": [
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "inviteMember_button_copyUrl" },
+          "timeout": 10
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "inviteMember_button_copyUrl" }
+        }
+      ]
+    },
+    "openAddLocation": {
+      "description": "天気地点追加画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_addLocation" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "weatherLocationEdit_button_save" },
+          "timeout": 5
+        }
+      ]
+    },
+    "closeWeatherLocationEdit": {
+      "description": "天気地点編集をキャンセル",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weatherLocationEdit_button_cancel" }
+        }
+      ]
+    },
+    "saveWeatherLocation": {
+      "description": "天気地点を保存",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weatherLocationEdit_button_save" }
+        }
+      ]
+    },
+    "deleteWeatherLocation": {
+      "description": "天気地点を削除",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weatherLocationEdit_button_delete" }
+        }
+      ]
+    },
+    "openWeekdaySettings": {
+      "description": "曜日設定画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_weekdaySettings" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "weekdaySettings_button_done" },
+          "timeout": 5
+        }
+      ]
+    },
+    "closeWeekdaySettings": {
+      "description": "曜日設定画面を閉じる",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weekdaySettings_button_done" }
+        }
+      ]
+    },
+    "openMemberList": {
+      "description": "メンバー一覧を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_memberList" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "memberList_button_close" },
+          "timeout": 5
+        }
+      ]
+    },
+    "closeMemberList": {
+      "description": "メンバー一覧を閉じる",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "memberList_button_close" }
+        }
+      ]
+    }
+  }
+}

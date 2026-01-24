@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "9A1B2C3D-4E5F-6789-ABCD-EF0123456789",
+      "name" : "Japanese",
+      "options" : {
+        "language" : "ja",
+        "region" : "JP"
+      }
+    },
+    {
+      "id" : "1A2B3C4D-5E6F-7890-ABCD-EF1234567890",
+      "name" : "English",
+      "options" : {
+        "language" : "en",
+        "region" : "US"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Okumuka.xcodeproj",
+      "identifier" : "2B9C6B9D2D1D47A500FF00DD",
+      "name" : "AppTests"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Okumuka.xcodeproj",
+        "identifier" : "2B9C6B9D2D1D47A500FF00DD",
+        "name" : "AppTests"
+      }
+    }
+  ],
+  "version" : 1
+}

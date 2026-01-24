@@ -1,0 +1,102 @@
+#!/bin/bash -eu
+
+cd "$(git rev-parse --show-toplevel)"
+
+WORKTREES_DIR="worktrees"
+
+if [ ! -d "$WORKTREES_DIR" ]; then
+    echo "No worktrees directory found"
+    exit 0
+fi
+
+# リモートの最新を取得
+echo "Fetching from origin..."
+git fetch origin --prune
+
+removed_count=0
+skipped_count=0
+
+for worktree_path in "$WORKTREES_DIR"/*/; do
+    # ディレクトリが存在しない場合（glob が展開されなかった場合）はスキップ
+    [ -d "$worktree_path" ] || continue
+
+    worktree_name=$(basename "$worktree_path")
+
+    # .DS_Store などの隠しファイル/ディレクトリはスキップ
+    [[ "$worktree_name" == .* ]] && continue
+
+    echo ""
+    echo "Checking: $worktree_name"
+
+    # worktree内で最新のコミットハッシュを取得
+    head_commit=$(git -C "$worktree_path" rev-parse HEAD 2>/dev/null)
+    if [ -z "$head_commit" ]; then
+        echo "  -> Could not get HEAD commit, skipping"
+        ((skipped_count++))
+        continue
+    fi
+
+    # worktreeのブランチ名を取得
+    branch_name=$(git -C "$worktree_path" rev-parse --abbrev-ref HEAD 2>/dev/null)
+    if [ -z "$branch_name" ] || [ "$branch_name" = "HEAD" ]; then
+        echo "  -> Detached HEAD or no branch, skipping"
+        ((skipped_count++))
+        continue
+    fi
+
+    # 未コミットの変更があるかチェック
+    if [ -n "$(git -C "$worktree_path" status --porcelain 2>/dev/null)" ]; then
+        echo "  -> Has uncommitted changes, skipping"
+        ((skipped_count++))
+        continue
+    fi
+
+    # リモートブランチが存在するかチェック
+    remote_ref="origin/$branch_name"
+    remote_commit=$(git rev-parse "$remote_ref" 2>/dev/null || echo "")
+
+    if [ -z "$remote_commit" ]; then
+        # リモートブランチがない場合、HEADがmainにマージ済みかチェック
+        # (PRがマージされるとリモートブランチは削除されるため)
+        if git merge-base --is-ancestor "$head_commit" origin/main 2>/dev/null; then
+            echo "  -> Remote branch deleted but HEAD is merged into main, removing worktree..."
+            git worktree remove "$worktree_path"
+
+            # ローカルブランチも削除
+            if git branch -d "$branch_name" 2>/dev/null; then
+                echo "  -> Local branch '$branch_name' deleted"
+            fi
+
+            ((removed_count++))
+        else
+            echo "  -> Remote branch '$remote_ref' not found and HEAD not merged into main, skipping"
+            ((skipped_count++))
+        fi
+        continue
+    fi
+
+    # ローカルのHEADがリモートと同じかチェック
+    if [ "$head_commit" = "$remote_commit" ]; then
+        echo "  -> HEAD is pushed to remote, removing worktree..."
+        git worktree remove "$worktree_path"
+
+        # ローカルブランチも削除
+        if git branch -d "$branch_name" 2>/dev/null; then
+            echo "  -> Local branch '$branch_name' deleted"
+        fi
+
+        ((removed_count++))
+    else
+        # ローカルがリモートより先に進んでいる場合
+        ahead_count=$(git rev-list "$remote_ref".."$head_commit" --count 2>/dev/null || echo "?")
+        echo "  -> Local is $ahead_count commit(s) ahead of remote, keeping"
+        ((skipped_count++))
+    fi
+done
+
+echo ""
+echo "Running git worktree prune..."
+git worktree prune -v
+
+echo ""
+echo "Done! Removed: $removed_count, Skipped: $skipped_count"

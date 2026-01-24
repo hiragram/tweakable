@@ -1,0 +1,139 @@
+{
+  "name": "スケジュールアクション",
+  "description": "スケジュール入力に関する操作",
+  "actions": {
+    "toggleDropOffDay0": {
+      "description": "1日目の送りステータスを変更",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day0" }
+        }
+      ]
+    },
+    "togglePickUpDay0": {
+      "description": "1日目の迎えステータスを変更",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day0" }
+        }
+      ]
+    },
+    "toggleDropOffDay1": {
+      "description": "2日目の送りステータスを変更",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day1" }
+        }
+      ]
+    },
+    "togglePickUpDay1": {
+      "description": "2日目の迎えステータスを変更",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day1" }
+        }
+      ]
+    },
+    "toggleDropOffDay2": {
+      "description": "3日目の送りステータスを変更",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day2" }
+        }
+      ]
+    },
+    "togglePickUpDay2": {
+      "description": "3日目の迎えステータスを変更",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day2" }
+        }
+      ]
+    },
+    "submitSchedule": {
+      "description": "スケジュールを提出",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_submit" }
+        }
+      ]
+    },
+    "dismissScheduleError": {
+      "description": "スケジュールエラーダイアログを閉じる",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_errorOk" }
+        }
+      ]
+    },
+    "setAllDaysOk": {
+      "description": "全日を送り・迎えOKに設定（未設定状態から）",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day0" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day0" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day1" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day1" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day2" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day2" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day3" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day3" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day4" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day4" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day5" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day5" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day6" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day6" }
+        }
+      ]
+    }
+  }
+}

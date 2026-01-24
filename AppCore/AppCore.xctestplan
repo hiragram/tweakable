@@ -1,0 +1,43 @@
+{
+  "configurations" : [
+    {
+      "id" : "51F11723-F7FC-4685-BFBB-DBDEE7891702",
+      "name" : "Japanese",
+      "options" : {
+        "language" : "ja",
+        "locationScenario" : {
+          "identifier" : "Tokyo, Japan",
+          "referenceType" : "built-in"
+        },
+        "region" : "JP"
+      }
+    },
+    {
+      "id" : "8224414F-8F7A-4517-9119-C1AD81AA0A43",
+      "name" : "English",
+      "options" : {
+        "language" : "en",
+        "locationScenario" : {
+          "identifier" : "San Francisco, CA, USA",
+          "referenceType" : "built-in"
+        },
+        "region" : "US"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "areLocalizationScreenshotsEnabled" : true,
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Okumuka.xcodeproj",
+        "identifier" : "13421E21D638B9A2AF490E9D",
+        "name" : "AppCoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}

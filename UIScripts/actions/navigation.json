@@ -1,0 +1,144 @@
+{
+  "name": "画面遷移アクション",
+  "description": "再利用可能な画面遷移操作",
+  "actions": {
+    "openSettings": {
+      "description": "設定画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_button_settings" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "settings_button_done" },
+          "timeout": 5
+        }
+      ]
+    },
+    "closeSettings": {
+      "description": "設定画面を閉じる",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_done" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "home_button_enterSchedule" },
+          "timeout": 5
+        }
+      ]
+    },
+    "openScheduleInput": {
+      "description": "スケジュール入力画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_button_enterSchedule" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "weeklySchedule_button_submit" },
+          "timeout": 5
+        }
+      ]
+    },
+    "openGroupSelector": {
+      "description": "グループセレクタを開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_menu_groupSelector" }
+        }
+      ]
+    },
+    "createNewGroupFromSelector": {
+      "description": "グループセレクタから新規グループ作成",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_menu_groupSelector" }
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_menu_createGroup" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "createGroup_textField_groupName" },
+          "timeout": 5
+        }
+      ]
+    },
+    "openWeekdaySettings": {
+      "description": "曜日設定画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_button_settings" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "settings_button_weekdaySettings" },
+          "timeout": 5
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_weekdaySettings" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "weekdaySettings_button_done" },
+          "timeout": 5
+        }
+      ]
+    },
+    "openMemberList": {
+      "description": "メンバー一覧画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_button_settings" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "settings_button_memberList" },
+          "timeout": 5
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_memberList" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "memberList_button_close" },
+          "timeout": 5
+        }
+      ]
+    },
+    "openAbout": {
+      "description": "アプリ情報画面を開く",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "home_button_settings" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "settings_button_about" },
+          "timeout": 5
+        },
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "settings_button_about" }
+        },
+        {
+          "type": "waitForElement",
+          "target": { "type": "identifier", "value": "about_button_done" },
+          "timeout": 5
+        }
+      ]
+    }
+  }
+}

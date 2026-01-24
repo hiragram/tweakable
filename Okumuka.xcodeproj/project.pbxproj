@@ -1,0 +1,925 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		06E727A519666D5EB769E48C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1341A3A7B48D2D831F5B3A0B /* SnapshotTesting */; };
+		13F44984C73A079666CD86B6 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
+		216B88F0DEFD6E92529C3D1E /* AppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */; };
+		372D36D31D1EB73873572135 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
+		4A2A683173C28C5A899B2CB5 /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 8F2A6A6368E5F0E8FDA73256 /* Prefire */; };
+		51B57C2309CD7633C4EA9959 /* AppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */; };
+		6092575643421CFA96A3C04E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
+		6BC14EA9E12BCD8D57966AC1 /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 8F2A6A6368E5F0E8FDA73256 /* Prefire */; };
+		83C8142B8C3702E8A32222A8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 08FCE47940BCEB1C3EED8AE2 /* FirebaseAnalytics */; };
+		960FC31A43E0FFC4F0C83CC7 /* AppCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C8BE25BE753C7B9849D9DF66 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A409321C5710B40D143288E3 /* FirebaseCore */; };
+		CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
+		DA6A2692A88AD5190972A231 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
+		E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
+		F25F7253A7F6AFEED4F2F009 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3B46B0DF4FDF4351ECB820E2 /* Supabase */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6060BFF02F114CD30010E87A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 605EE8002EECE98A00201738 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 605EE8072EECE98A00201738;
+			remoteInfo = Okumuka;
+		};
+		6097B85D2EED6E5C0050C23E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 605EE8002EECE98A00201738 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F8526392D51C1752599E497;
+			remoteInfo = AppCore;
+		};
+		9B565B9BDB390D9B0C9B5EF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 605EE8002EECE98A00201738 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F8526392D51C1752599E497;
+			remoteInfo = AppCore;
+		};
+		9BBAAD8F0E14DB8545CB50BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 605EE8002EECE98A00201738 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F8526392D51C1752599E497;
+			remoteInfo = AppCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6097B85F2EED6E5C0050C23E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				960FC31A43E0FFC4F0C83CC7 /* AppCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		60366F382F14313100D47AF3 /* OkumukaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OkumukaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		608F341C2F17E30C005327D4 /* SecretsPlugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SecretsPlugin; sourceTree = "<group>"; };
+		60E177FE2EF1AAC80020BBF4 /* Okumuka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Okumuka.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		60E177FF2EF1AAC80020BBF4 /* AppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60E178002EF1AAC80020BBF4 /* AppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		237132394016568C190E316B /* AppCoreTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AppCoreTests;
+			sourceTree = "<group>";
+		};
+		605EE80A2EECE98A00201738 /* Okumuka */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Okumuka;
+			sourceTree = "<group>";
+		};
+		6060BFEB2F114CD30010E87A /* OkumukaUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OkumukaUITests;
+			sourceTree = "<group>";
+		};
+		7424E054005991592BBD469B /* AppCore */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AppCore;
+			sourceTree = "<group>";
+		};
+		E33F31B86DD5A77104FCE345 /* Settings.bundle */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = Settings.bundle;
+			path = Okumuka/Settings.bundle;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2E65359EE77B3EBAA86D0245 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BC14EA9E12BCD8D57966AC1 /* Prefire in Frameworks */,
+				CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */,
+				83C8142B8C3702E8A32222A8 /* FirebaseAnalytics in Frameworks */,
+				F25F7253A7F6AFEED4F2F009 /* Supabase in Frameworks */,
+				E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		416E3E9E14050A9D932B7137 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A2A683173C28C5A899B2CB5 /* Prefire in Frameworks */,
+				06E727A519666D5EB769E48C /* SnapshotTesting in Frameworks */,
+				C8BE25BE753C7B9849D9DF66 /* FirebaseCore in Frameworks */,
+				372D36D31D1EB73873572135 /* FirebaseCrashlytics in Frameworks */,
+				6092575643421CFA96A3C04E /* FirebaseMessaging in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		605EE8052EECE98A00201738 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13F44984C73A079666CD86B6 /* FirebaseCrashlytics in Frameworks */,
+				51B57C2309CD7633C4EA9959 /* AppCore.framework in Frameworks */,
+				DA6A2692A88AD5190972A231 /* FirebaseMessaging in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6060BFE72F114CD30010E87A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				216B88F0DEFD6E92529C3D1E /* AppCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		605EE7FF2EECE98A00201738 = {
+			isa = PBXGroup;
+			children = (
+				608F341C2F17E30C005327D4 /* SecretsPlugin */,
+				605EE80A2EECE98A00201738 /* Okumuka */,
+				7424E054005991592BBD469B /* AppCore */,
+				237132394016568C190E316B /* AppCoreTests */,
+				60E177FE2EF1AAC80020BBF4 /* Okumuka.app */,
+				60E177FF2EF1AAC80020BBF4 /* AppCore.framework */,
+				60E178002EF1AAC80020BBF4 /* AppCoreTests.xctest */,
+				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
+				6060BFEB2F114CD30010E87A /* OkumukaUITests */,
+				60366F382F14313100D47AF3 /* OkumukaUITests.xctest */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		13421E21D638B9A2AF490E9D /* AppCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4820171F86BE50C99C64D45C /* Build configuration list for PBXNativeTarget "AppCoreTests" */;
+			buildPhases = (
+				80B9D2A0CA1B4C6DC8BE0CFC /* Sources */,
+				416E3E9E14050A9D932B7137 /* Frameworks */,
+				4E97108728DC6BD960FFD8B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				36F920FCB98637094059BC0A /* PBXTargetDependency */,
+				FA6F19B682A20369A0613CD9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				237132394016568C190E316B /* AppCoreTests */,
+			);
+			name = AppCoreTests;
+			packageProductDependencies = (
+				8F2A6A6368E5F0E8FDA73256 /* Prefire */,
+				1341A3A7B48D2D831F5B3A0B /* SnapshotTesting */,
+				A409321C5710B40D143288E3 /* FirebaseCore */,
+				2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */,
+				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
+			);
+			productName = AppCoreTests;
+			productReference = 60E178002EF1AAC80020BBF4 /* AppCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1F8526392D51C1752599E497 /* AppCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E979C96976AE2B1E8169E237 /* Build configuration list for PBXNativeTarget "AppCore" */;
+			buildPhases = (
+				9BFA496058147E2386E73246 /* Sources */,
+				2E65359EE77B3EBAA86D0245 /* Frameworks */,
+				A0B215BBA26D10A7807D686E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				60F40BB12F17E3A80094F963 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7424E054005991592BBD469B /* AppCore */,
+			);
+			name = AppCore;
+			packageProductDependencies = (
+				8F2A6A6368E5F0E8FDA73256 /* Prefire */,
+				2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */,
+				08FCE47940BCEB1C3EED8AE2 /* FirebaseAnalytics */,
+				3B46B0DF4FDF4351ECB820E2 /* Supabase */,
+				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
+			);
+			productName = AppCore;
+			productReference = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		605EE8072EECE98A00201738 /* Okumuka */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 605EE8132EECE98C00201738 /* Build configuration list for PBXNativeTarget "Okumuka" */;
+			buildPhases = (
+				605EE8042EECE98A00201738 /* Sources */,
+				605EE8052EECE98A00201738 /* Frameworks */,
+				605EE8062EECE98A00201738 /* Resources */,
+				6097B85F2EED6E5C0050C23E /* Embed Frameworks */,
+				CA6F67EC861E37E77E15AC7F /* Upload dSYMs to Crashlytics */,
+				8A514B82DDB3DDC939EA2FF8 /* Copy LicensePlist to Settings.bundle */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6097B85E2EED6E5C0050C23E /* PBXTargetDependency */,
+				FEAE782429FDBC0A0CCA94C3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				605EE80A2EECE98A00201738 /* Okumuka */,
+				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
+			);
+			name = Okumuka;
+			packageProductDependencies = (
+				2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */,
+				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
+			);
+			productName = Okumuka;
+			productReference = 60E177FE2EF1AAC80020BBF4 /* Okumuka.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6060BFE92F114CD30010E87A /* OkumukaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6060BFF42F114CD30010E87A /* Build configuration list for PBXNativeTarget "OkumukaUITests" */;
+			buildPhases = (
+				6060BFE62F114CD30010E87A /* Sources */,
+				6060BFE72F114CD30010E87A /* Frameworks */,
+				6060BFE82F114CD30010E87A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6060BFF12F114CD30010E87A /* PBXTargetDependency */,
+				B66AF085B5EC6BAB14E6C03E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6060BFEB2F114CD30010E87A /* OkumukaUITests */,
+			);
+			name = OkumukaUITests;
+			packageProductDependencies = (
+			);
+			productName = OkumukaUITests;
+			productReference = 60366F382F14313100D47AF3 /* OkumukaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		605EE8002EECE98A00201738 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					605EE8072EECE98A00201738 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					6060BFE92F114CD30010E87A = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 605EE8072EECE98A00201738;
+					};
+				};
+			};
+			buildConfigurationList = 605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Okumuka" */;
+			developmentRegion = ja;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ja,
+			);
+			mainGroup = 605EE7FF2EECE98A00201738;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8A75E4AA8EB890E920E2BDBE /* XCRemoteSwiftPackageReference "Prefire" */,
+				482B6C2297B2D9ADBD9F342E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */,
+				7FC25B772CFE756B9D05226E /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 605EE7FF2EECE98A00201738;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				605EE8072EECE98A00201738 /* Okumuka */,
+				1F8526392D51C1752599E497 /* AppCore */,
+				13421E21D638B9A2AF490E9D /* AppCoreTests */,
+				6060BFE92F114CD30010E87A /* OkumukaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E97108728DC6BD960FFD8B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		605EE8062EECE98A00201738 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6060BFE82F114CD30010E87A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0B215BBA26D10A7807D686E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8A514B82DDB3DDC939EA2FF8 /* Copy LicensePlist to Settings.bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy LicensePlist to Settings.bundle";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "ACKNOWLEDGEMENTS_DIR=\"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/com.mono0926.LicensePlist.Output\"\nDESTINATION_PATH=\"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Settings.bundle/\"\n\nif [ -d \"$ACKNOWLEDGEMENTS_DIR\" ]; then\n  cp -r \"${ACKNOWLEDGEMENTS_DIR}\"/* \"${DESTINATION_PATH}\"\n  rm -rf \"${ACKNOWLEDGEMENTS_DIR}\"\nfi";
+		};
+		CA6F67EC861E37E77E15AC7F /* Upload dSYMs to Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(SRCROOT)/Okumuka/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Upload dSYMs to Crashlytics";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"${SRCROOT}/Okumuka/GoogleService-Info.plist\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		605EE8042EECE98A00201738 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6060BFE62F114CD30010E87A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80B9D2A0CA1B4C6DC8BE0CFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9BFA496058147E2386E73246 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		36F920FCB98637094059BC0A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AppCore;
+			target = 1F8526392D51C1752599E497 /* AppCore */;
+			targetProxy = 9BBAAD8F0E14DB8545CB50BA /* PBXContainerItemProxy */;
+		};
+		6060BFF12F114CD30010E87A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 605EE8072EECE98A00201738 /* Okumuka */;
+			targetProxy = 6060BFF02F114CD30010E87A /* PBXContainerItemProxy */;
+		};
+		6097B85E2EED6E5C0050C23E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F8526392D51C1752599E497 /* AppCore */;
+			targetProxy = 6097B85D2EED6E5C0050C23E /* PBXContainerItemProxy */;
+		};
+		60F40BB12F17E3A80094F963 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 60F40BB02F17E3A80094F963 /* GenerateSecretsPlugin */;
+		};
+		B66AF085B5EC6BAB14E6C03E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AppCore;
+			target = 1F8526392D51C1752599E497 /* AppCore */;
+			targetProxy = 9B565B9BDB390D9B0C9B5EF0 /* PBXContainerItemProxy */;
+		};
+		FA6F19B682A20369A0613CD9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 7ABC10101EC9A8BE6E7F21DF /* PrefireTestsPlugin */;
+		};
+		FEAE782429FDBC0A0CCA94C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = D0187CD4C05FEFADA34DFC5B /* LicensePlistBuildTool */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		466834DEC02951EABD89A868 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		605EE8112EECE98C00201738 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Q3N95Y73WF;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		605EE8122EECE98C00201738 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Q3N95Y73WF;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		605EE8142EECE98C00201738 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = app_icon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Okumuka/Okumuka.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q3N95Y73WF;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Okumuka-Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.Okumuka;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		605EE8152EECE98C00201738 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = app_icon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Okumuka/Okumuka.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q3N95Y73WF;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Okumuka-Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.Okumuka;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		6060BFF22F114CD30010E87A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q3N95Y73WF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.OkumukaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Okumuka;
+			};
+			name = Debug;
+		};
+		6060BFF32F114CD30010E87A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q3N95Y73WF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.OkumukaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Okumuka;
+			};
+			name = Release;
+		};
+		6F064BB00A3334DC9482F428 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_STRING_CATALOG_SYMBOLS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCore;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		8E66F8983ABBC3F67E64DAE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_STRING_CATALOG_SYMBOLS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCore;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		ABD0456CABD99968CC4006E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4820171F86BE50C99C64D45C /* Build configuration list for PBXNativeTarget "AppCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABD0456CABD99968CC4006E6 /* Debug */,
+				466834DEC02951EABD89A868 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Okumuka" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				605EE8112EECE98C00201738 /* Debug */,
+				605EE8122EECE98C00201738 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		605EE8132EECE98C00201738 /* Build configuration list for PBXNativeTarget "Okumuka" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				605EE8142EECE98C00201738 /* Debug */,
+				605EE8152EECE98C00201738 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6060BFF42F114CD30010E87A /* Build configuration list for PBXNativeTarget "OkumukaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6060BFF22F114CD30010E87A /* Debug */,
+				6060BFF32F114CD30010E87A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E979C96976AE2B1E8169E237 /* Build configuration list for PBXNativeTarget "AppCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F064BB00A3334DC9482F428 /* Debug */,
+				8E66F8983ABBC3F67E64DAE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mono0926/LicensePlist";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.26.0;
+			};
+		};
+		2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		482B6C2297B2D9ADBD9F342E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.15.0;
+			};
+		};
+		7FC25B772CFE756B9D05226E /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		8A75E4AA8EB890E920E2BDBE /* XCRemoteSwiftPackageReference "Prefire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BarredEwe/Prefire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		08FCE47940BCEB1C3EED8AE2 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		1341A3A7B48D2D831F5B3A0B /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 482B6C2297B2D9ADBD9F342E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		3B46B0DF4FDF4351ECB820E2 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7FC25B772CFE756B9D05226E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		60F40BB02F17E3A80094F963 /* GenerateSecretsPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "plugin:GenerateSecretsPlugin";
+		};
+		7ABC10101EC9A8BE6E7F21DF /* PrefireTestsPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A75E4AA8EB890E920E2BDBE /* XCRemoteSwiftPackageReference "Prefire" */;
+			productName = "plugin:PrefireTestsPlugin";
+		};
+		8F2A6A6368E5F0E8FDA73256 /* Prefire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A75E4AA8EB890E920E2BDBE /* XCRemoteSwiftPackageReference "Prefire" */;
+			productName = Prefire;
+		};
+		A409321C5710B40D143288E3 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		B12A079B278B22C7A7973CBA /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		D0187CD4C05FEFADA34DFC5B /* LicensePlistBuildTool */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */;
+			productName = "plugin:LicensePlistBuildTool";
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 605EE8002EECE98A00201738 /* Project object */;
+}

@@ -1,0 +1,57 @@
+{
+  "name": "天気地点追加",
+  "description": "天気を表示する地点を追加する",
+  "preconditions": ["ホーム画面表示状態"],
+  "actions": [
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "home_button_settings" },
+      "description": "設定ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "settings_button_addLocation" },
+      "timeout": 5
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "settings_button_addLocation" },
+      "description": "天気地点を追加ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "weatherLocationEdit_map_selector" },
+      "timeout": 5
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weatherLocationEdit_map_selector" },
+      "description": "マップをタップして位置を選択"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weatherLocationEdit_textField_label" }
+    },
+    {
+      "type": "typeText",
+      "target": { "type": "identifier", "value": "weatherLocationEdit_textField_label" },
+      "text": "自宅"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weatherLocationEdit_button_save" },
+      "description": "保存ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "settings_button_addLocation" },
+      "timeout": 10,
+      "description": "設定画面に戻ることを確認"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "settings_button_done" },
+      "description": "設定画面を閉じる"
+    }
+  ]
+}

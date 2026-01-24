@@ -1,0 +1,37 @@
+{
+  "name": "グループ作成",
+  "description": "新規グループを作成する",
+  "preconditions": ["NoGroupView表示状態"],
+  "actions": [
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "noGroup_button_createGroup" },
+      "description": "グループ作成ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "createGroup_textField_groupName" },
+      "timeout": 5
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "createGroup_textField_groupName" }
+    },
+    {
+      "type": "typeText",
+      "target": { "type": "identifier", "value": "createGroup_textField_groupName" },
+      "text": "テストグループ"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "createGroup_button_create" },
+      "description": "作成ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "home_button_enterSchedule" },
+      "timeout": 15,
+      "description": "ホーム画面表示を待機（CloudKit同期があるため長めに設定）"
+    }
+  ]
+}

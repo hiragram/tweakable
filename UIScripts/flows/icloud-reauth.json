@@ -1,0 +1,43 @@
+{
+  "name": "iCloud再認証",
+  "description": "iCloudのパスワード再入力が必要な場合の操作フロー",
+  "preconditions": ["アプリがiCloud必要画面を表示している"],
+  "note": "パスワード入力は手動で行う必要があります",
+  "actions": [
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "iCloudRequired_button_openSettings" },
+      "description": "「設定を開く」ボタンをタップ"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "label", "value": "Yuya Hirayama" },
+      "description": "Apple Accountをタップ（ユーザー名は環境により異なる）"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "label", "value": "パスワード" },
+      "timeout": 5,
+      "description": "パスワード入力ダイアログを待機"
+    },
+    {
+      "description": "【手動操作】パスワードを入力してOKをタップ"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "label", "value": "OK" },
+      "description": "OKボタンをタップ（パスワード入力後）"
+    }
+  ],
+  "postActions": [
+    {
+      "description": "アプリに戻って「再確認」をタップ",
+      "actions": [
+        {
+          "type": "tap",
+          "target": { "type": "identifier", "value": "iCloudRequired_button_retry" }
+        }
+      ]
+    }
+  ]
+}

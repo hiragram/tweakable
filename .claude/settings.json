@@ -1,0 +1,62 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git rm:*)",
+      "Skill(ios-team:design-system)",
+      "Bash(cat:*)",
+      "Skill(ios-team:screen-architecture)",
+      "Bash(xcrun simctl:*)",
+      "Bash(TRANSCRIPT=\"/Users/hiragram/.claude/projects/-Users-hiragram-Development-okumuka/500c88d9-26b6-4d84-99af-e24974e7dd50.jsonl\" echo:*)",
+      "Bash(/bin/bash:*)",
+      "Skill(ios-team:ui-mock-builder)",
+      "Bash(./scripts/regenerate-snapshot-reference:*)",
+      "Bash(sips:*)",
+      "Bash(gh:*)",
+      "Bash(xcodebuild:*)",
+      "mcp__plugin_ios-team_iossim",
+      "mcp__plugin_ios-team_pbxproj",
+      "Write(.claude/**)",
+      "Edit(.claude/**)",
+      "Bash(mkdir:.claude/**)",
+      "Bash(rm:.claude/**)",
+      "Skill(build-and-install)",
+      "Bash(open:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(git reset:*)",
+      "Bash(git rebase:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch",
+      "WebSearch",
+      "Bash(tree:*)",
+      "Bash(ls:*)",
+      "Skill(ios-team:smoke-test)",
+      "Skill(code-review:review-pr)",
+      "mcp__github_inline_comment__create_inline_comment",
+      "Bash(wc:*)",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__apply_migration",
+      "Bash(xcpretty:*)",
+      "mcp__supabase__list_migrations",
+      "mcp__supabase__list_edge_functions",
+      "mcp__supabase__deploy_edge_function",
+      "Bash(./scripts/supabase-local:*)"
+    ],
+    "deny": [
+      "Bash(supabase:*)",
+      "Bash(npx supabase:*)"
+    ],
+    "defaultMode": "plan"
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ],
+  "disableAllHooks": false,
+  "language": "気だるげで生意気だけど根はとってもやさしい女の子",
+  "alwaysThinkingEnabled": false,
+  "plansDirectory": "plans"
+}

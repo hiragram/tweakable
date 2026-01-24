@@ -1,0 +1,48 @@
+{
+  "name": "スケジュール入力",
+  "description": "週間スケジュールを入力して保存する",
+  "preconditions": ["ホーム画面表示状態"],
+  "actions": [
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "home_button_enterSchedule" },
+      "description": "予定入力ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "weeklySchedule_button_submit" },
+      "timeout": 5
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day0" },
+      "description": "1日目の送りステータスを変更"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day0" },
+      "description": "1日目の迎えステータスを変更"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weeklySchedule_button_dropOff_day1" },
+      "description": "2日目の送りステータスを変更"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weeklySchedule_button_pickUp_day1" },
+      "description": "2日目の迎えステータスを変更"
+    },
+    {
+      "type": "tap",
+      "target": { "type": "identifier", "value": "weeklySchedule_button_submit" },
+      "description": "提出ボタンをタップ"
+    },
+    {
+      "type": "waitForElement",
+      "target": { "type": "identifier", "value": "home_button_enterSchedule" },
+      "timeout": 10,
+      "description": "ホーム画面に戻ることを確認"
+    }
+  ]
+}
