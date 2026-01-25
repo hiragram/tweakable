@@ -19,4 +19,5 @@ echo "Created worktree: worktrees/$name"
 # worktreeディレクトリでzellijセッションを開始
 cd "worktrees/$name"
 direnv allow
+export CLAUDE_CODE_TASK_LIST_ID="$name"
 zellij --new-session-with-layout claude-dev -s "$name"
