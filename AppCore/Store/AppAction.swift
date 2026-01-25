@@ -24,6 +24,9 @@ public enum AppAction: Sendable {
     /// 自分の担当一覧のアクション
     case myAssignments(MyAssignmentsAction)
 
+    /// レシピ画面のアクション
+    case recipe(RecipeAction)
+
     /// 画面遷移
     case setScreenState(ScreenState)
 }
