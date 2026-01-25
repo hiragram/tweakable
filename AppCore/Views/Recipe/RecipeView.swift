@@ -346,7 +346,7 @@ struct RecipeView: View {
         RecipeView(
             recipe: nil,
             isLoading: false,
-            errorMessage: "レシピの読み込みに失敗しました",
+            errorMessage: String(localized: "recipe_error_load_failed", bundle: .app),
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
             onRetryTapped: {},

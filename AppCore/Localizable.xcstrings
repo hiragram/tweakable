@@ -891,6 +891,22 @@
         }
       }
     },
+    "recipe_error_load_failed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load recipe"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レシピの読み込みに失敗しました"
+          }
+        }
+      }
+    },
     "recipe_section_ingredients" : {
       "localizations" : {
         "en" : {
@@ -935,6 +951,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "キャンセル"
+          }
+        }
+      }
+    },
+    "substitution_error_failed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Substitution failed. Please try again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "置き換えに失敗しました。もう一度お試しください。"
           }
         }
       }

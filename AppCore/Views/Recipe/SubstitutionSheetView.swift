@@ -232,7 +232,7 @@ struct SubstitutionSheetView: View {
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
-        errorMessage: "置き換えに失敗しました。もう一度お試しください。",
+        errorMessage: String(localized: "substitution_error_failed", bundle: .app),
         onSubmit: { _ in },
         onUpgradeTapped: {},
         onDismiss: {}
