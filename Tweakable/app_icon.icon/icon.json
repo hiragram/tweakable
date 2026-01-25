@@ -1,8 +1,8 @@
 {
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.96783,0.70519,0.40971,1.00000",
-      "display-p3:1.00000,0.66283,0.61686,1.00000"
+      "display-p3:1.00000,0.78321,0.46716,1.00000",
+      "display-p3:0.96783,0.42250,0.39887,1.00000"
     ],
     "orientation" : {
       "start" : {
@@ -21,13 +21,12 @@
         {
           "blend-mode" : "normal",
           "fill" : {
-            "solid" : "display-p3:1.00000,0.90151,0.81902,1.00000"
+            "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
           },
-          "glass" : true,
-          "image-name" : "baby (1) 2.svg",
-          "name" : "baby (1) 2",
+          "image-name" : "chef-hat 2.svg",
+          "name" : "chef-hat 2",
           "position" : {
-            "scale" : 15.61,
+            "scale" : 25.55,
             "translation-in-points" : [
               0,
               0
