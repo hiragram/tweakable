@@ -28,6 +28,7 @@ public enum RecipeReducer {
 
         case .requestSubstitution:
             state.isProcessingSubstitution = true
+            state.errorMessage = nil
 
         case .substitutionCompleted(let recipe):
             state.currentRecipe = recipe

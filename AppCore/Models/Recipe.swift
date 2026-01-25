@@ -56,6 +56,7 @@ public struct Ingredient: Equatable, Sendable, Identifiable {
     public let id: UUID
     public let name: String
     public let amount: String?
+    /// LLM APIによる置き換え処理で変更されたかどうか
     public var isModified: Bool
 
     public init(
@@ -79,6 +80,7 @@ public struct CookingStep: Equatable, Sendable, Identifiable {
     public let stepNumber: Int
     public let instruction: String
     public let imageURLs: [URL]
+    /// LLM APIによる置き換え処理で変更されたかどうか
     public var isModified: Bool
 
     public init(
