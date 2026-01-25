@@ -31,7 +31,7 @@ jobs:
       - name: Clean build
         run: |
           xcodebuild clean \
-            -project Okumuka.xcodeproj \
+            -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             CODE_SIGNING_ALLOWED=NO
@@ -40,7 +40,7 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild test \
-            -project Okumuka.xcodeproj \
+            -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -resultBundlePath TestResults.xcresult \
@@ -99,8 +99,8 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild test \
-            -project Okumuka.xcodeproj \
-            -scheme OkumukaUITests \
+            -project Tweakable.xcodeproj \
+            -scheme TweakableUITests \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -resultBundlePath E2ETestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO \
