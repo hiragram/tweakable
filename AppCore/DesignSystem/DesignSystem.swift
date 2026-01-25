@@ -25,7 +25,7 @@ extension DesignSystem {
         layout: .default
     )
 
-    // MARK: - Sage Kitchen (Mediterranean Herb Garden)
+    // MARK: - Sage Kitchen (Mediterranean Herb Garden & Terracotta)
 
     static let sageKitchen = DesignSystem(
         name: "Sage Kitchen",
@@ -85,7 +85,7 @@ extension DesignSystem {
         layout: .default
     )
 
-    // MARK: - Citrus Pop (Vibrant Orange & Lime)
+    // MARK: - Citrus Pop (Vibrant Orange & Electric Lime)
 
     static let citrusPop = DesignSystem(
         name: "Citrus Pop",
@@ -97,7 +97,7 @@ extension DesignSystem {
         layout: .default
     )
 
-    // MARK: - Berry Blast (Hot Pink & Purple)
+    // MARK: - Berry Blast (Hot Pink & Electric Purple)
 
     static let berryBlast = DesignSystem(
         name: "Berry Blast",
@@ -109,7 +109,7 @@ extension DesignSystem {
         layout: .default
     )
 
-    // MARK: - Tropical Punch (Mango & Ocean)
+    // MARK: - Tropical Punch (Mango Yellow & Ocean Blue)
 
     static let tropicalPunch = DesignSystem(
         name: "Tropical Punch",
@@ -121,7 +121,7 @@ extension DesignSystem {
         layout: .default
     )
 
-    // MARK: - Garden Fresh (Green & Red)
+    // MARK: - Garden Fresh (Leaf Green & Tomato Red)
 
     static let gardenFresh = DesignSystem(
         name: "Garden Fresh",
