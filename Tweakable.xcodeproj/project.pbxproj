@@ -70,7 +70,6 @@
 
 /* Begin PBXFileReference section */
 		60366F382F14313100D47AF3 /* TweakableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TweakableUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		608F341C2F17E30C005327D4 /* SecretsPlugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SecretsPlugin; sourceTree = "<group>"; };
 		60E177FE2EF1AAC80020BBF4 /* Tweakable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tweakable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60E177FF2EF1AAC80020BBF4 /* AppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60E178002EF1AAC80020BBF4 /* AppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,7 +152,6 @@
 		605EE7FF2EECE98A00201738 = {
 			isa = PBXGroup;
 			children = (
-				608F341C2F17E30C005327D4 /* SecretsPlugin */,
 				605EE80A2EECE98A00201738 /* Tweakable */,
 				7424E054005991592BBD469B /* AppCore */,
 				237132394016568C190E316B /* AppCoreTests */,
@@ -209,7 +207,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				60F40BB12F17E3A80094F963 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				7424E054005991592BBD469B /* AppCore */,
@@ -441,10 +438,6 @@
 			isa = PBXTargetDependency;
 			target = 1F8526392D51C1752599E497 /* AppCore */;
 			targetProxy = 6097B85D2EED6E5C0050C23E /* PBXContainerItemProxy */;
-		};
-		60F40BB12F17E3A80094F963 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 60F40BB02F17E3A80094F963 /* GenerateSecretsPlugin */;
 		};
 		B66AF085B5EC6BAB14E6C03E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -870,10 +863,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
-		};
-		60F40BB02F17E3A80094F963 /* GenerateSecretsPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = "plugin:GenerateSecretsPlugin";
 		};
 		7ABC10101EC9A8BE6E7F21DF /* PrefireTestsPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
