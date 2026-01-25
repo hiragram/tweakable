@@ -29,6 +29,9 @@ public enum AppReducer {
         case .myAssignments(let myAssignmentsAction):
             MyAssignmentsReducer.reduce(state: &state.myAssignments, action: myAssignmentsAction)
 
+        case .recipe(let recipeAction):
+            RecipeReducer.reduce(state: &state.recipe, action: recipeAction)
+
         case .setScreenState(let screenState):
             state.screenState = screenState
         }

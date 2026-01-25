@@ -23,6 +23,9 @@ public struct AppState: Equatable, Sendable {
     /// 認証状態
     public var auth = AuthUIState()
 
+    /// レシピ画面の状態
+    public var recipe = RecipeState()
+
     public init() {}
 }
 

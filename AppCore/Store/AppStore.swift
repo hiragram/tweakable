@@ -70,6 +70,9 @@ public final class AppStore {
         case .myAssignments(let myAssignmentsAction):
             await handleMyAssignmentsSideEffects(myAssignmentsAction)
 
+        case .recipe(let recipeAction):
+            await handleRecipeSideEffects(recipeAction)
+
         case .setScreenState:
             // No side effects
             break
@@ -176,6 +179,24 @@ public final class AppStore {
     private func handleMyAssignmentsSideEffects(_ action: MyAssignmentsAction) async {
         // バックエンドなし - 永続化機能は削除
         fatalError("Backend functionality has been removed - standalone mode")
+    }
+
+    // MARK: - Recipe Side Effects
+
+    private func handleRecipeSideEffects(_ action: RecipeAction) async {
+        switch action {
+        case .loadRecipe(let url):
+            // TODO: LLM API呼び出し実装（別タスク）
+            break
+
+        case .requestSubstitution(let prompt):
+            // TODO: LLM API呼び出し実装（別タスク）
+            break
+
+        default:
+            // その他のアクションは副作用なし
+            break
+        }
     }
 
     // MARK: - Public Helpers for Onboarding
