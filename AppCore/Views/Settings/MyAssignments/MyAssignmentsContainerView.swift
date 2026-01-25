@@ -11,7 +11,7 @@ struct MyAssignmentsContainerView: View {
         )
         let sortedDates = assignmentsByDate.keys.sorted()
 
-        MyAssignmentsView(
+        MyAssignmentsView_Okumuka(
             assignmentsByDate: assignmentsByDate,
             sortedDates: sortedDates,
             isLoading: store.state.myAssignments.isLoading,

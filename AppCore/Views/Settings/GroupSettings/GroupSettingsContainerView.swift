@@ -18,7 +18,7 @@ struct GroupSettingsContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        GroupSettingsView(
+        GroupSettingsView_Okumuka(
             pendingJoinRequestsCount: store.state.sharing.pendingJoinRequests.count,
             isDeletingGroup: store.state.schedule.isDeletingGroup,
             onJoinRequestsTapped: {

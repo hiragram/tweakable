@@ -397,14 +397,14 @@ struct MyAssignmentsViewAccessibilityIDTests {
 
     @Test
     func myAssignmentsAccessibilityID_doneButton_returnsCorrectIdentifier() {
-        let id = MyAssignmentsView.AccessibilityID.doneButton
+        let id = MyAssignmentsView_Okumuka.AccessibilityID.doneButton
         #expect(id.rawIdentifier == "myAssignments_button_done")
     }
 
     @Test
     func myAssignmentsAccessibilityID_assignmentRow_returnsCorrectIdentifier() {
         let rowID = UUID(uuidString: "12345678-1234-1234-1234-123456789012")!
-        let id = MyAssignmentsView.AccessibilityID.assignmentRow(id: rowID)
+        let id = MyAssignmentsView_Okumuka.AccessibilityID.assignmentRow(id: rowID)
         #expect(id.rawIdentifier == "myAssignments_row_12345678-1234-1234-1234-123456789012")
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Group settings detail view (parameter-based, no @State)
-struct GroupSettingsView: View {
+struct GroupSettingsView_Okumuka: View {
     // MARK: - Parameters
 
     let pendingJoinRequestsCount: Int
@@ -102,7 +102,7 @@ struct GroupSettingsView: View {
 
 #Preview("GroupSettingsView - Default") {
     NavigationStack {
-        GroupSettingsView(
+        GroupSettingsView_Okumuka(
             pendingJoinRequestsCount: 0,
             isDeletingGroup: false,
             onJoinRequestsTapped: {},
@@ -115,7 +115,7 @@ struct GroupSettingsView: View {
 
 #Preview("GroupSettingsView - WithPendingRequests") {
     NavigationStack {
-        GroupSettingsView(
+        GroupSettingsView_Okumuka(
             pendingJoinRequestsCount: 3,
             isDeletingGroup: false,
             onJoinRequestsTapped: {},
@@ -128,7 +128,7 @@ struct GroupSettingsView: View {
 
 #Preview("GroupSettingsView - Deleting") {
     NavigationStack {
-        GroupSettingsView(
+        GroupSettingsView_Okumuka(
             pendingJoinRequestsCount: 0,
             isDeletingGroup: true,
             onJoinRequestsTapped: {},

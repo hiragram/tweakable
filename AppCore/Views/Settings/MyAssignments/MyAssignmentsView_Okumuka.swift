@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// 自分の担当一覧画面（パラメータベース）
-struct MyAssignmentsView: View {
+struct MyAssignmentsView_Okumuka: View {
     // MARK: - Accessibility IDs
 
     public enum AccessibilityID: AccessibilityIDConvertible, Sendable {
@@ -162,7 +162,7 @@ struct MyAssignmentsView: View {
 // MARK: - Preview
 
 #Preview("MyAssignmentsView - Empty") {
-    MyAssignmentsView(
+    MyAssignmentsView_Okumuka(
         assignmentsByDate: [:],
         sortedDates: [],
         isLoading: false,
@@ -196,7 +196,7 @@ struct MyAssignmentsView: View {
     let assignmentsByDate = MyAssignmentsReducer.groupByDate(items)
     let sortedDates = assignmentsByDate.keys.sorted()
 
-    return MyAssignmentsView(
+    return MyAssignmentsView_Okumuka(
         assignmentsByDate: assignmentsByDate,
         sortedDates: sortedDates,
         isLoading: false,
@@ -207,7 +207,7 @@ struct MyAssignmentsView: View {
 }
 
 #Preview("MyAssignmentsView - Loading") {
-    MyAssignmentsView(
+    MyAssignmentsView_Okumuka(
         assignmentsByDate: [:],
         sortedDates: [],
         isLoading: true,
