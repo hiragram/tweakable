@@ -14,7 +14,7 @@ struct JoinRequestListContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        JoinRequestListView(
+        JoinRequestListView_Okumuka(
             requests: store.state.sharing.pendingJoinRequests,
             processingRequestID: store.state.sharing.processingRequestID,
             errorMessage: store.state.sharing.sharingError,

@@ -21,7 +21,7 @@ struct InviteMemberContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        InviteMemberView(
+        InviteMemberView_Okumuka(
             invitationState: store.state.sharing.invitationState,
             groupName: groupName,
             onShare: { url in

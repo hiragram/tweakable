@@ -6,7 +6,7 @@ struct WeekdaySettingsContainerView: View {
     let onDismiss: () -> Void
 
     var body: some View {
-        WeekdaySettingsView(
+        WeekdaySettingsView_Okumuka(
             enabledWeekdays: store.state.schedule.currentGroup?.enabledWeekdays ?? UserGroup.defaultEnabledWeekdays,
             onEnabledWeekdayChanged: { weekday, enabled in
                 store.send(.schedule(.updateEnabledWeekday(weekday: weekday, enabled: enabled)))

@@ -32,7 +32,7 @@ public struct RootView: View {
             switch store.state.screenState {
             // MARK: - Supabase Auth States
             case .checkingAuth:
-                LoadingView(message: "認証状態を確認中...")
+                LoadingView_Okumuka(message: "認証状態を確認中...")
 
             case .login:
                 EmailInputContainerView(store: store)
@@ -41,7 +41,7 @@ public struct RootView: View {
                 OTPInputContainerView(store: store, email: email)
 
             case .onboarding:
-                WelcomeView { name in
+                WelcomeView_Okumuka { name in
                     store.completeOnboarding(userName: name)
                 }
 
@@ -80,7 +80,7 @@ public struct RootView: View {
         }
         .overlay(alignment: .top) {
             if store.state.schedule.showSuccessToast {
-                SuccessToast()
+                SuccessToast_Okumuka()
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .padding(.top, theme.spacing.md)
             }

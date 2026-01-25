@@ -60,7 +60,7 @@ struct AssignmentPickerContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        AssignmentPickerView(
+        AssignmentPickerView_Okumuka(
             assignments: assignments,
             onDropOffSelected: { index, member in
                 handleDropOffSelection(index: index, member: member)

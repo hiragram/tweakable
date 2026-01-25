@@ -6,7 +6,7 @@ struct ScheduleContainerView: View {
     var onSubmitCompleted: () -> Void = {}
 
     var body: some View {
-        WeeklyScheduleView(
+        WeeklyScheduleView_Okumuka(
             weekEntries: store.state.schedule.weekEntries,
             currentUser: store.state.schedule.currentUser,
             isLoading: store.state.schedule.isLoading,
