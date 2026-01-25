@@ -1,4 +1,3 @@
-import Prefire
 import SwiftUI
 
 /// 自分の担当一覧画面（パラメータベース）
@@ -171,7 +170,6 @@ struct MyAssignmentsView: View {
         onRefresh: {},
         onDismiss: {}
     )
-    .prefireEnabled()
 }
 
 #Preview("MyAssignmentsView - WithAssignments") {
@@ -206,7 +204,6 @@ struct MyAssignmentsView: View {
         onRefresh: {},
         onDismiss: {}
     )
-    .prefireEnabled()
 }
 
 #Preview("MyAssignmentsView - Loading") {
@@ -218,5 +215,4 @@ struct MyAssignmentsView: View {
         onRefresh: {},
         onDismiss: {}
     )
-    .prefireEnabled()
 }

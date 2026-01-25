@@ -1,4 +1,3 @@
-import Prefire
 import SwiftUI
 
 /// Group settings detail view (parameter-based, no @State)
@@ -112,7 +111,6 @@ struct GroupSettingsView: View {
             onDeleteGroupTapped: {}
         )
     }
-    .prefireEnabled()
 }
 
 #Preview("GroupSettingsView - WithPendingRequests") {
@@ -126,7 +124,6 @@ struct GroupSettingsView: View {
             onDeleteGroupTapped: {}
         )
     }
-    .prefireEnabled()
 }
 
 #Preview("GroupSettingsView - Deleting") {
@@ -140,5 +137,4 @@ struct GroupSettingsView: View {
             onDeleteGroupTapped: {}
         )
     }
-    .prefireEnabled()
 }
