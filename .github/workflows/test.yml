@@ -22,12 +22,6 @@ jobs:
             brew install xcbeautify
           fi
 
-      - name: Generate iOS secrets
-        env:
-          SUPABASE_PROJECT_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
-          SUPABASE_PUBLISHABLE_API_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_API_KEY }}
-        run: ./scripts/generate-ios-secrets-json
-
       - name: Clean build
         run: |
           xcodebuild clean \
@@ -89,12 +83,6 @@ jobs:
           if ! command -v xcbeautify &> /dev/null; then
             brew install xcbeautify
           fi
-
-      - name: Generate iOS secrets
-        env:
-          SUPABASE_PROJECT_URL: ${{ env.SUPABASE_URL }}
-          SUPABASE_PUBLISHABLE_API_KEY: ${{ env.SUPABASE_ANON_KEY }}
-        run: ./scripts/generate-ios-secrets-json
 
       - name: Run E2E Tests
         run: |
