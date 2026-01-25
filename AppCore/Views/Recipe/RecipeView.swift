@@ -174,7 +174,8 @@ struct RecipeView: View {
             }
 
             VStack(spacing: 0) {
-                ForEach(Array(ingredientsInfo.items.enumerated()), id: \.element.id) { index, ingredient in
+                ForEach(ingredientsInfo.items.indices, id: \.self) { index in
+                    let ingredient = ingredientsInfo.items[index]
                     ingredientRow(ingredient, index: index)
 
                     if index < ingredientsInfo.items.count - 1 {
@@ -230,7 +231,8 @@ struct RecipeView: View {
                 .foregroundColor(ds.colors.textPrimary.color)
 
             VStack(spacing: ds.spacing.sm) {
-                ForEach(Array(steps.enumerated()), id: \.element.id) { index, step in
+                ForEach(steps.indices, id: \.self) { index in
+                    let step = steps[index]
                     stepRow(step, index: index)
                 }
             }
