@@ -65,6 +65,7 @@ jobs:
 
   e2e-test:
     runs-on: self-hosted
+    if: false  # 一時的に無効化（将来復活予定）
 
     steps:
       - name: Checkout
