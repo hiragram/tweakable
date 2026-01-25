@@ -26,7 +26,7 @@ struct AboutContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        AboutView(
+        AboutView_Okumuka(
             appVersion: appInfoService.appVersion,
             buildNumber: appInfoService.buildNumber,
             installDate: installDate,

@@ -14,7 +14,7 @@ struct MemberListContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        MemberListView(
+        MemberListView_Okumuka(
             members: store.state.sharing.members,
             isLoading: store.state.sharing.isLoadingMembers,
             errorMessage: store.state.sharing.sharingError,

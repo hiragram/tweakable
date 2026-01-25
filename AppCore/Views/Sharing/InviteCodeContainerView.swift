@@ -25,7 +25,7 @@ public struct InviteCodeContainerView: View {
     // MARK: - Body
 
     public var body: some View {
-        InviteCodeView(
+        InviteCodeView_Okumuka(
             isCreating: store.state.sharing.isCreatingInviteCode,
             generatedCode: store.state.sharing.generatedInviteCode,
             errorMessage: store.state.sharing.sharingError,

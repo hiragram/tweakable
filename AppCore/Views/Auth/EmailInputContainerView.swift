@@ -5,7 +5,7 @@ struct EmailInputContainerView: View {
     let store: AppStore
 
     var body: some View {
-        EmailInputView(
+        EmailInputView_Okumuka(
             email: store.state.auth.email,
             isSending: store.state.auth.isSendingOTP,
             errorMessage: store.state.auth.errorMessage,

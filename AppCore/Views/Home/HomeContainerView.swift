@@ -102,7 +102,7 @@ struct HomeContainerView: View {
     // MARK: - Content Views
 
     private var homeViewContent: some View {
-        HomeView(
+        HomeView_Okumuka(
             groupName: store.state.schedule.currentGroup?.name ?? "",
             groups: store.state.schedule.groups,
             todayDropOff: store.state.home.todayDropOff,
@@ -153,7 +153,7 @@ struct HomeContainerView: View {
     }
 
     private var noGroupContent: some View {
-        NoGroupView(
+        NoGroupView_Okumuka(
             onCreateGroupTapped: {
                 showsCreateGroupSheet = true
             }
@@ -161,7 +161,7 @@ struct HomeContainerView: View {
     }
 
     private var waitingForApprovalContent: some View {
-        WaitingForApprovalView(
+        WaitingForApprovalView_Okumuka(
             groupName: store.state.schedule.currentGroup?.name ?? "",
             isLoading: store.state.sharing.isCheckingApprovalStatus,
             onReload: {

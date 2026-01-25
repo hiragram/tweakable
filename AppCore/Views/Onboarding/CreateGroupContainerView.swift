@@ -38,7 +38,7 @@ struct CreateGroupContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        CreateGroupView(
+        CreateGroupView_Okumuka(
             groupName: groupName,
             showsValidationError: showsValidationError,
             isCreating: isCreating,

@@ -6,7 +6,7 @@ struct OTPInputContainerView: View {
     let email: String
 
     var body: some View {
-        OTPInputView(
+        OTPInputView_Okumuka(
             email: email,
             otp: store.state.auth.otp,
             isVerifying: store.state.auth.isVerifyingOTP,

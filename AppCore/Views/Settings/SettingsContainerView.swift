@@ -27,7 +27,7 @@ struct SettingsContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        SettingsView(
+        SettingsView_Okumuka(
             weatherLocations: store.state.home.weatherLocations,
             canAddLocation: store.state.home.weatherLocations.count < 2,
             pendingJoinRequestsCount: store.state.sharing.pendingJoinRequests.count,
@@ -137,7 +137,7 @@ struct SettingsContainerView: View {
 /// Container view for WeatherLocationEditView
 struct WeatherLocationEditContainerView: View {
     let store: AppStore
-    let mode: WeatherLocationEditView.Mode
+    let mode: WeatherLocationEditView_Okumuka.Mode
     let onDismiss: () -> Void
 
     // MARK: - Local State
@@ -150,7 +150,7 @@ struct WeatherLocationEditContainerView: View {
 
     // MARK: - Initialization
 
-    init(store: AppStore, mode: WeatherLocationEditView.Mode, onDismiss: @escaping () -> Void) {
+    init(store: AppStore, mode: WeatherLocationEditView_Okumuka.Mode, onDismiss: @escaping () -> Void) {
         self.store = store
         self.mode = mode
         self.onDismiss = onDismiss
@@ -191,7 +191,7 @@ struct WeatherLocationEditContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        WeatherLocationEditView(
+        WeatherLocationEditView_Okumuka(
             mode: mode,
             region: region,
             selectedCoordinate: selectedCoordinate,

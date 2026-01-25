@@ -41,7 +41,7 @@ struct AcceptInvitationContainerView: View {
     // MARK: - Body
 
     var body: some View {
-        AcceptInvitationView(
+        AcceptInvitationView_Okumuka(
             state: store.state.sharing.acceptInvitationState,
             invitationInfo: resolvedInvitationInfo,
             onAccept: {

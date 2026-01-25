@@ -21,7 +21,7 @@ public struct JoinWithCodeContainerView: View {
     // MARK: - Body
 
     public var body: some View {
-        JoinWithCodeView(
+        JoinWithCodeView_Okumuka(
             codeInput: Binding(
                 get: { store.state.sharing.inviteCodeInput },
                 set: { store.send(.sharing(.setInviteCodeInput($0))) }

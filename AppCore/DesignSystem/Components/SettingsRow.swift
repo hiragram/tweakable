@@ -1,4 +1,3 @@
-import Prefire
 import SwiftUI
 
 /// A reusable settings row component for navigation-style list items.
@@ -213,7 +212,6 @@ private struct AccessibilityIdentifierModifier: ViewModifier {
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsRow - WithBadge") {
@@ -226,7 +224,6 @@ private struct AccessibilityIdentifierModifier: ViewModifier {
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsRow - Destructive") {
@@ -239,7 +236,6 @@ private struct AccessibilityIdentifierModifier: ViewModifier {
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsRow - WithSubtitle") {
@@ -252,7 +248,6 @@ private struct AccessibilityIdentifierModifier: ViewModifier {
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsRow - Loading") {
@@ -266,7 +261,6 @@ private struct AccessibilityIdentifierModifier: ViewModifier {
     .clipShape(RoundedRectangle(cornerRadius: 12))
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsRow - InNavigationLink") {
@@ -298,5 +292,4 @@ private struct AccessibilityIdentifierModifier: ViewModifier {
         .listStyle(.insetGrouped)
         .navigationTitle("Settings")
     }
-    .prefireEnabled()
 }
