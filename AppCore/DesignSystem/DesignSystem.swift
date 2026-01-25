@@ -24,6 +24,114 @@ extension DesignSystem {
         shadow: .default,
         layout: .default
     )
+
+    // MARK: - Sage Kitchen (Mediterranean Herb Garden & Terracotta)
+
+    static let sageKitchen = DesignSystem(
+        name: "Sage Kitchen",
+        colors: .sageKitchen,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Midnight Bistro (Deep Navy & Deep Teal)
+
+    static let midnightBistro = DesignSystem(
+        name: "Midnight Bistro",
+        colors: .midnightBistro,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Sunset Market (Coral & Teal)
+
+    static let sunsetMarket = DesignSystem(
+        name: "Sunset Market",
+        colors: .sunsetMarket,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Zen Garden (Matcha & Charcoal)
+
+    static let zenGarden = DesignSystem(
+        name: "Zen Garden",
+        colors: .zenGarden,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Spice Route (Turmeric & Indigo)
+
+    static let spiceRoute = DesignSystem(
+        name: "Spice Route",
+        colors: .spiceRoute,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Citrus Pop (Vibrant Orange & Electric Lime)
+
+    static let citrusPop = DesignSystem(
+        name: "Citrus Pop",
+        colors: .citrusPop,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Berry Blast (Hot Pink & Electric Purple)
+
+    static let berryBlast = DesignSystem(
+        name: "Berry Blast",
+        colors: .berryBlast,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Tropical Punch (Mango Yellow & Ocean Blue)
+
+    static let tropicalPunch = DesignSystem(
+        name: "Tropical Punch",
+        colors: .tropicalPunch,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
+
+    // MARK: - Garden Fresh (Leaf Green & Tomato Red)
+
+    static let gardenFresh = DesignSystem(
+        name: "Garden Fresh",
+        colors: .gardenFresh,
+        typography: .default,
+        spacing: .default,
+        cornerRadius: .default,
+        shadow: .default,
+        layout: .default
+    )
 }
 
 // MARK: - Preview
@@ -161,7 +269,18 @@ private struct TypographySample: View {
 }
 
 struct DesignSystem_Previews: PreviewProvider {
-    static var themes: [DesignSystem] = [.default]
+    static var themes: [DesignSystem] = [
+        .default,
+        .sageKitchen,
+        .midnightBistro,
+        .sunsetMarket,
+        .zenGarden,
+        .spiceRoute,
+        .citrusPop,
+        .berryBlast,
+        .tropicalPunch,
+        .gardenFresh
+    ]
 
     static var previews: some View {
         ForEach(themes, id: \.name) { theme in
