@@ -9,10 +9,16 @@ struct RecipeContainerView: View {
     @State private var showsSubstitutionSheet = false
 
     /// Whether the user is a premium subscriber
-    /// TODO: Implement RevenueCat integration
+    /// TODO: Implement RevenueCat integration for premium subscription check (MVP requirement)
     private var isPremiumUser: Bool {
-        // For now, return true for development
-        true
+        // SECURITY: This MUST be implemented before production release
+        #if DEBUG
+        return true  // Development only - REMOVE BEFORE SHIPPING
+        #else
+        // Production builds require RevenueCat integration
+        // This will cause a compile error until properly implemented
+        #error("RevenueCat integration required before production build")
+        #endif
     }
 
     var body: some View {
@@ -34,7 +40,7 @@ struct RecipeContainerView: View {
                 }
             },
             onShoppingListTapped: {
-                // TODO: Navigate to shopping list
+                // TODO: Navigate to shopping list screen (MVP requirement, separate task)
             }
         )
         .sheet(isPresented: $showsSubstitutionSheet) {
@@ -48,7 +54,7 @@ struct RecipeContainerView: View {
                         store.send(.recipe(.requestSubstitution(prompt: prompt)))
                     },
                     onUpgradeTapped: {
-                        // TODO: Show paywall
+                        // TODO: Show RevenueCat paywall for premium subscription (MVP requirement, separate task)
                     },
                     onDismiss: {
                         store.send(.recipe(.closeSubstitutionSheet))
@@ -69,4 +75,4 @@ struct RecipeContainerView: View {
 
 // MARK: - Preview
 
-// Preview requires mock dependencies, so use RecipeView preview instead
+// Preview requires AppStore instance, so use RecipeView preview instead

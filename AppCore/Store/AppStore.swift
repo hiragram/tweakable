@@ -186,11 +186,11 @@ public final class AppStore {
     private func handleRecipeSideEffects(_ action: RecipeAction) async {
         switch action {
         case .loadRecipe(let url):
-            // TODO: LLM API呼び出し実装（別タスク）
+            // TODO: Implement LLM API call for recipe extraction (MVP requirement, separate task)
             break
 
         case .requestSubstitution(let prompt):
-            // TODO: LLM API呼び出し実装（別タスク）
+            // TODO: Implement LLM API call for ingredient/step substitution (MVP requirement, separate task)
             break
 
         default:
