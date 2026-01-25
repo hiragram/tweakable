@@ -45,18 +45,9 @@ struct CreateGroupContainerView: View {
             onGroupNameChanged: handleGroupNameChanged,
             onCancel: onCancel,
             onCreate: handleCreate,
-            onPasteInvitationURL: { url in
-                // 招待情報を取得してシートを表示（CreateGroupView内で表示）
-                Task { @MainActor in
-                    do {
-                        let info = try await store.fetchInvitationInfo(from: url)
-                        // acceptInvitationStateを.pendingに設定
-                        store.send(.sharing(.setInvitationInfo(info)))
-                        pendingInvitationInfo = info
-                    } catch {
-                        store.send(.sharing(.shareAcceptanceFailed(error: error.localizedDescription)))
-                    }
-                }
+            onPasteInvitationURL: { _ in
+                // バックエンドなし - 招待機能は削除
+                fatalError("Invitation functionality has been removed - standalone mode")
             }
         )
         .sheet(item: $pendingInvitationInfo) { info in

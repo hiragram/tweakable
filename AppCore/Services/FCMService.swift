@@ -13,9 +13,6 @@ public protocol FCMServiceProtocol: Sendable {
     /// FCMトークンを取得する
     func getToken() async throws -> String
 
-    /// FCMトークンをSupabaseのprofilesテーブルに保存する
-    func saveToken(_ token: String, userID: UUID) async throws
-
     /// トークン更新を監視し、更新時にコールバックを呼ぶ
     func observeTokenRefresh(_ handler: @escaping (String) -> Void)
 }
@@ -23,17 +20,14 @@ public protocol FCMServiceProtocol: Sendable {
 /// FCMServiceのエラー
 public enum FCMServiceError: Error, Sendable {
     case tokenNotAvailable
-    case saveFailed(String)
 }
 
 /// FCMService実装
 public final class FCMService: NSObject, FCMServiceProtocol, @unchecked Sendable {
 
-    private let storageService: SupabaseStorageServiceProtocol
     private var tokenRefreshHandler: ((String) -> Void)?
 
-    public init(storageService: SupabaseStorageServiceProtocol) {
-        self.storageService = storageService
+    public override init() {
         super.init()
         Messaging.messaging().delegate = self
     }
@@ -44,14 +38,6 @@ public final class FCMService: NSObject, FCMServiceProtocol, @unchecked Sendable
             return token
         } catch {
             throw FCMServiceError.tokenNotAvailable
-        }
-    }
-
-    public func saveToken(_ token: String, userID: UUID) async throws {
-        do {
-            try await storageService.saveFCMToken(token, userID: userID)
-        } catch {
-            throw FCMServiceError.saveFailed(error.localizedDescription)
         }
     }
 

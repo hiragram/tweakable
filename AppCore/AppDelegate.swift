@@ -56,11 +56,7 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
-        // TODO: FCMトークンをSupabaseに保存する処理を追加
-        // 実装方法:
-        //   1. SupabaseStorageService.saveProfile() でprofiles.fcm_tokenを更新
-        //   2. AppStoreからcurrentUserIDを取得して保存
-        // 関連: Phase 4.1（FCM設定）完了後に実装
+        // バックエンドなし - トークン保存は不要
     }
 
     public func application(
@@ -77,14 +73,7 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         didReceiveRemoteNotification userInfo: [AnyHashable: Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        // FCMからの通知を処理
-        // TODO: Supabase/FCM通知の処理を追加
-        // 実装内容:
-        //   1. userInfo["notification_type"]で通知タイプを判定
-        //   2. 担当者割り当て通知 → AppStoreに通知してスケジュール再フェッチ
-        //   3. 参加リクエスト通知 → グループ情報を再フェッチ
-        //   4. 参加承認通知 → グループ情報を再フェッチ
-        // 関連: Phase 4.2（Database Webhooks + Edge Functions）完了後に実装
+        // バックエンドなし - リモート通知は使用しない
         completionHandler(.noData)
     }
 

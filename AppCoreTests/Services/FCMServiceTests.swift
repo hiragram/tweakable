@@ -43,40 +43,6 @@ struct FCMServiceTests {
         }
     }
 
-    // MARK: - saveToken Tests
-
-    @Test
-    func saveToken_savesTokenWithUserID() async throws {
-        // Arrange
-        let mockService = MockFCMService()
-        let userID = UUID()
-        let token = "saved-token-xyz789"
-
-        // Act
-        try await mockService.saveToken(token, userID: userID)
-
-        // Assert
-        #expect(mockService.saveTokenCallCount == 1)
-        #expect(mockService.savedTokens.count == 1)
-        #expect(mockService.savedTokens.first?.token == token)
-        #expect(mockService.savedTokens.first?.userID == userID)
-    }
-
-    @Test
-    func saveToken_throwsOnFailure() async throws {
-        // Arrange
-        let mockService = MockFCMService()
-        mockService.shouldThrowOnSaveToken = true
-
-        // Act & Assert
-        do {
-            try await mockService.saveToken("token", userID: UUID())
-            #expect(Bool(false), "Should have thrown an error")
-        } catch {
-            #expect(error is FCMServiceError)
-        }
-    }
-
     // MARK: - observeTokenRefresh Tests
 
     @Test

@@ -53,18 +53,9 @@ struct SettingsContainerView: View {
             onAboutTapped: {
                 showsAbout = true
             },
-            onPasteInvitationURL: { url in
-                // 招待情報を取得してシートを表示（設定画面内で表示）
-                Task { @MainActor in
-                    do {
-                        let info = try await store.fetchInvitationInfo(from: url)
-                        // acceptInvitationStateを.pendingに設定
-                        store.send(.sharing(.setInvitationInfo(info)))
-                        pendingInvitationInfo = info
-                    } catch {
-                        store.send(.sharing(.shareAcceptanceFailed(error: error.localizedDescription)))
-                    }
-                }
+            onPasteInvitationURL: { _ in
+                // バックエンドなし - 招待機能は削除
+                fatalError("Invitation functionality has been removed - standalone mode")
             },
             onDismiss: onDismiss,
             groupSettingsDestination: {

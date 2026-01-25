@@ -10,7 +10,6 @@ import SwiftUI
 /// アプリのルートビュー
 public struct RootView: View {
     @State private var store: AppStore
-    @State private var showDebugMenu = false
 
     private let theme = DesignSystem.default
 
@@ -21,13 +20,9 @@ public struct RootView: View {
     }
 
     public init(
-        supabaseClient: (any SupabaseClientProtocol)? = nil,
-        supabaseStorageService: (any SupabaseStorageServiceProtocol)? = nil,
         networkMonitor: (any NetworkMonitorProtocol)? = nil
     ) {
         _store = State(initialValue: AppStore(
-            supabaseClient: supabaseClient,
-            supabaseStorageService: supabaseStorageService,
             networkMonitor: networkMonitor ?? NetworkMonitor()
         ))
     }
@@ -91,13 +86,6 @@ public struct RootView: View {
             }
         }
         .animation(.easeOut(duration: 0.2), value: store.state.schedule.showSuccessToast)
-        // MARK: - Debug Menu (Quick Action)
-        .onReceive(NotificationCenter.default.publisher(for: AppDelegate.debugMenuShortcutNotification)) { _ in
-            showDebugMenu = true
-        }
-        .sheet(isPresented: $showDebugMenu) {
-            DebugMenuContainerView(onDismiss: { showDebugMenu = false })
-        }
     }
 }
 

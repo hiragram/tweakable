@@ -21,7 +21,6 @@
 		CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
 		DA6A2692A88AD5190972A231 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
 		E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
-		F25F7253A7F6AFEED4F2F009 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3B46B0DF4FDF4351ECB820E2 /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,7 +113,6 @@
 				6BC14EA9E12BCD8D57966AC1 /* Prefire in Frameworks */,
 				CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */,
 				83C8142B8C3702E8A32222A8 /* FirebaseAnalytics in Frameworks */,
-				F25F7253A7F6AFEED4F2F009 /* Supabase in Frameworks */,
 				E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,7 +219,6 @@
 				8F2A6A6368E5F0E8FDA73256 /* Prefire */,
 				2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */,
 				08FCE47940BCEB1C3EED8AE2 /* FirebaseAnalytics */,
-				3B46B0DF4FDF4351ECB820E2 /* Supabase */,
 				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
 			);
 			productName = AppCore;
@@ -316,7 +313,6 @@
 				482B6C2297B2D9ADBD9F342E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */,
-				7FC25B772CFE756B9D05226E /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 605EE7FF2EECE98A00201738;
@@ -851,14 +847,6 @@
 				minimumVersion = 1.15.0;
 			};
 		};
-		7FC25B772CFE756B9D05226E /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		8A75E4AA8EB890E920E2BDBE /* XCRemoteSwiftPackageReference "Prefire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/BarredEwe/Prefire.git";
@@ -884,11 +872,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
-		};
-		3B46B0DF4FDF4351ECB820E2 /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7FC25B772CFE756B9D05226E /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
 		};
 		60F40BB02F17E3A80094F963 /* GenerateSecretsPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
