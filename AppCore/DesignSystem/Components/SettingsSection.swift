@@ -1,4 +1,3 @@
-import Prefire
 import SwiftUI
 
 /// A reusable settings section component with optional header and footer.
@@ -88,7 +87,6 @@ struct SettingsDivider: View {
     }
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsSection - WithHeaderAndFooter") {
@@ -110,7 +108,6 @@ struct SettingsDivider: View {
     }
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsSection - MultipleRows") {
@@ -139,7 +136,6 @@ struct SettingsDivider: View {
     }
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
 
 #Preview("SettingsSection - NoHeader") {
@@ -151,5 +147,4 @@ struct SettingsDivider: View {
     }
     .padding()
     .background(DesignSystem.default.colors.backgroundPrimary.color)
-    .prefireEnabled()
 }
