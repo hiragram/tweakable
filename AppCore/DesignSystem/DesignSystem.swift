@@ -37,7 +37,7 @@ extension DesignSystem {
         layout: .default
     )
 
-    // MARK: - Midnight Bistro (Deep Navy & Gold)
+    // MARK: - Midnight Bistro (Deep Navy & Deep Teal)
 
     static let midnightBistro = DesignSystem(
         name: "Midnight Bistro",
