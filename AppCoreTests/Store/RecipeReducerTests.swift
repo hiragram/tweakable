@@ -158,6 +158,29 @@ struct RecipeReducerTests {
         #expect(state.isProcessingSubstitution == false)
     }
 
+    @Test
+    func reduce_substitutionFailed_closesSheet() {
+        var state = RecipeState()
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.isProcessingSubstitution = true
+
+        RecipeReducer.reduce(state: &state, action: .substitutionFailed("エラー"))
+
+        #expect(state.substitutionTarget == nil)
+    }
+
+    @Test
+    func reduce_loadRecipe_clearsExistingError() {
+        var state = RecipeState()
+        state.errorMessage = "前回のエラー"
+        let url = URL(string: "https://example.com/recipe")!
+
+        RecipeReducer.reduce(state: &state, action: .loadRecipe(url: url))
+
+        #expect(state.errorMessage == nil)
+        #expect(state.isLoadingRecipe == true)
+    }
+
     // MARK: - Clear Tests
 
     @Test
