@@ -85,7 +85,7 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         completionHandler: @escaping (Bool) -> Void
     ) {
         switch shortcutItem.type {
-        case "app.hiragram.Okumuka.debugMenu":
+        case "app.hiragram.Tweakable.debugMenu":
             NotificationCenter.default.post(name: Self.debugMenuShortcutNotification, object: nil)
             completionHandler(true)
         default:

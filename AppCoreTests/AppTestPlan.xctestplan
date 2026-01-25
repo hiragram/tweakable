@@ -19,7 +19,7 @@
   ],
   "defaultOptions" : {
     "targetForVariableExpansion" : {
-      "containerPath" : "container:Okumuka.xcodeproj",
+      "containerPath" : "container:Tweakable.xcodeproj",
       "identifier" : "2B9C6B9D2D1D47A500FF00DD",
       "name" : "AppTests"
     }
@@ -27,7 +27,7 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:Okumuka.xcodeproj",
+        "containerPath" : "container:Tweakable.xcodeproj",
         "identifier" : "2B9C6B9D2D1D47A500FF00DD",
         "name" : "AppTests"
       }

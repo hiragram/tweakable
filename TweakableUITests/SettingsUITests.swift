@@ -1,6 +1,6 @@
 //
 //  SettingsUITests.swift
-//  OkumukaUITests
+//  TweakableUITests
 //
 
 import XCTest

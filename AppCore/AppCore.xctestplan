@@ -33,7 +33,7 @@
     {
       "parallelizable" : true,
       "target" : {
-        "containerPath" : "container:Okumuka.xcodeproj",
+        "containerPath" : "container:Tweakable.xcodeproj",
         "identifier" : "13421E21D638B9A2AF490E9D",
         "name" : "AppCoreTests"
       }

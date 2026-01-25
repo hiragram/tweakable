@@ -29,7 +29,7 @@
 			containerPortal = 605EE8002EECE98A00201738 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 605EE8072EECE98A00201738;
-			remoteInfo = Okumuka;
+			remoteInfo = Tweakable;
 		};
 		6097B85D2EED6E5C0050C23E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -69,9 +69,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		60366F382F14313100D47AF3 /* OkumukaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OkumukaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		60366F382F14313100D47AF3 /* TweakableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TweakableUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		608F341C2F17E30C005327D4 /* SecretsPlugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SecretsPlugin; sourceTree = "<group>"; };
-		60E177FE2EF1AAC80020BBF4 /* Okumuka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Okumuka.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		60E177FE2EF1AAC80020BBF4 /* Tweakable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tweakable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60E177FF2EF1AAC80020BBF4 /* AppCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60E178002EF1AAC80020BBF4 /* AppCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -82,14 +82,14 @@
 			path = AppCoreTests;
 			sourceTree = "<group>";
 		};
-		605EE80A2EECE98A00201738 /* Okumuka */ = {
+		605EE80A2EECE98A00201738 /* Tweakable */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Okumuka;
+			path = Tweakable;
 			sourceTree = "<group>";
 		};
-		6060BFEB2F114CD30010E87A /* OkumukaUITests */ = {
+		6060BFEB2F114CD30010E87A /* TweakableUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OkumukaUITests;
+			path = TweakableUITests;
 			sourceTree = "<group>";
 		};
 		7424E054005991592BBD469B /* AppCore */ = {
@@ -100,7 +100,7 @@
 		E33F31B86DD5A77104FCE345 /* Settings.bundle */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			name = Settings.bundle;
-			path = Okumuka/Settings.bundle;
+			path = Tweakable/Settings.bundle;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -154,15 +154,15 @@
 			isa = PBXGroup;
 			children = (
 				608F341C2F17E30C005327D4 /* SecretsPlugin */,
-				605EE80A2EECE98A00201738 /* Okumuka */,
+				605EE80A2EECE98A00201738 /* Tweakable */,
 				7424E054005991592BBD469B /* AppCore */,
 				237132394016568C190E316B /* AppCoreTests */,
-				60E177FE2EF1AAC80020BBF4 /* Okumuka.app */,
+				60E177FE2EF1AAC80020BBF4 /* Tweakable.app */,
 				60E177FF2EF1AAC80020BBF4 /* AppCore.framework */,
 				60E178002EF1AAC80020BBF4 /* AppCoreTests.xctest */,
 				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
-				6060BFEB2F114CD30010E87A /* OkumukaUITests */,
-				60366F382F14313100D47AF3 /* OkumukaUITests.xctest */,
+				6060BFEB2F114CD30010E87A /* TweakableUITests */,
+				60366F382F14313100D47AF3 /* TweakableUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -225,9 +225,9 @@
 			productReference = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		605EE8072EECE98A00201738 /* Okumuka */ = {
+		605EE8072EECE98A00201738 /* Tweakable */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 605EE8132EECE98C00201738 /* Build configuration list for PBXNativeTarget "Okumuka" */;
+			buildConfigurationList = 605EE8132EECE98C00201738 /* Build configuration list for PBXNativeTarget "Tweakable" */;
 			buildPhases = (
 				605EE8042EECE98A00201738 /* Sources */,
 				605EE8052EECE98A00201738 /* Frameworks */,
@@ -243,21 +243,21 @@
 				FEAE782429FDBC0A0CCA94C3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				605EE80A2EECE98A00201738 /* Okumuka */,
+				605EE80A2EECE98A00201738 /* Tweakable */,
 				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
 			);
-			name = Okumuka;
+			name = Tweakable;
 			packageProductDependencies = (
 				2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */,
 				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
 			);
-			productName = Okumuka;
-			productReference = 60E177FE2EF1AAC80020BBF4 /* Okumuka.app */;
+			productName = Tweakable;
+			productReference = 60E177FE2EF1AAC80020BBF4 /* Tweakable.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6060BFE92F114CD30010E87A /* OkumukaUITests */ = {
+		6060BFE92F114CD30010E87A /* TweakableUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6060BFF42F114CD30010E87A /* Build configuration list for PBXNativeTarget "OkumukaUITests" */;
+			buildConfigurationList = 6060BFF42F114CD30010E87A /* Build configuration list for PBXNativeTarget "TweakableUITests" */;
 			buildPhases = (
 				6060BFE62F114CD30010E87A /* Sources */,
 				6060BFE72F114CD30010E87A /* Frameworks */,
@@ -270,13 +270,13 @@
 				B66AF085B5EC6BAB14E6C03E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				6060BFEB2F114CD30010E87A /* OkumukaUITests */,
+				6060BFEB2F114CD30010E87A /* TweakableUITests */,
 			);
-			name = OkumukaUITests;
+			name = TweakableUITests;
 			packageProductDependencies = (
 			);
-			productName = OkumukaUITests;
-			productReference = 60366F382F14313100D47AF3 /* OkumukaUITests.xctest */;
+			productName = TweakableUITests;
+			productReference = 60366F382F14313100D47AF3 /* TweakableUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -298,7 +298,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Okumuka" */;
+			buildConfigurationList = 605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Tweakable" */;
 			developmentRegion = ja;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -319,10 +319,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				605EE8072EECE98A00201738 /* Okumuka */,
+				605EE8072EECE98A00201738 /* Tweakable */,
 				1F8526392D51C1752599E497 /* AppCore */,
 				13421E21D638B9A2AF490E9D /* AppCoreTests */,
-				6060BFE92F114CD30010E87A /* OkumukaUITests */,
+				6060BFE92F114CD30010E87A /* TweakableUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -382,7 +382,7 @@
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
-				"$(SRCROOT)/Okumuka/GoogleService-Info.plist",
+				"$(SRCROOT)/Tweakable/GoogleService-Info.plist",
 				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "Upload dSYMs to Crashlytics";
@@ -390,7 +390,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"${SRCROOT}/Okumuka/GoogleService-Info.plist\"";
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"${SRCROOT}/Tweakable/GoogleService-Info.plist\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -434,7 +434,7 @@
 		};
 		6060BFF12F114CD30010E87A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 605EE8072EECE98A00201738 /* Okumuka */;
+			target = 605EE8072EECE98A00201738 /* Tweakable */;
 			targetProxy = 6060BFF02F114CD30010E87A /* PBXContainerItemProxy */;
 		};
 		6097B85E2EED6E5C0050C23E /* PBXTargetDependency */ = {
@@ -468,7 +468,7 @@
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.tweakable.AppCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
 			};
@@ -601,14 +601,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = app_icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = Okumuka/Okumuka.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q3N95Y73WF;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Okumuka-Info.plist";
+				INFOPLIST_FILE = "Tweakable-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -622,7 +621,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.Okumuka;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.Tweakable;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -644,14 +643,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = app_icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = Okumuka/Okumuka.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q3N95Y73WF;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Okumuka-Info.plist";
+				INFOPLIST_FILE = "Tweakable-Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -665,7 +663,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.Okumuka;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.Tweakable;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -690,7 +688,7 @@
 				DEVELOPMENT_TEAM = Q3N95Y73WF;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.OkumukaUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.TweakableUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -698,7 +696,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Okumuka;
+				TEST_TARGET_NAME = Tweakable;
 			};
 			name = Debug;
 		};
@@ -710,7 +708,7 @@
 				DEVELOPMENT_TEAM = Q3N95Y73WF;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.OkumukaUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.hiragram.TweakableUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -718,7 +716,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Okumuka;
+				TEST_TARGET_NAME = Tweakable;
 			};
 			name = Release;
 		};
@@ -735,7 +733,7 @@
 				GENERATE_STRING_CATALOG_SYMBOLS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.tweakable.AppCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 6.0;
@@ -754,7 +752,7 @@
 				GENERATE_STRING_CATALOG_SYMBOLS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.tweakable.AppCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 6.0;
@@ -766,7 +764,7 @@
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.okumuka.AppCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hiragram.tweakable.AppCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;
 			};
@@ -784,7 +782,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Okumuka" */ = {
+		605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Tweakable" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				605EE8112EECE98C00201738 /* Debug */,
@@ -793,7 +791,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		605EE8132EECE98C00201738 /* Build configuration list for PBXNativeTarget "Okumuka" */ = {
+		605EE8132EECE98C00201738 /* Build configuration list for PBXNativeTarget "Tweakable" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				605EE8142EECE98C00201738 /* Debug */,
@@ -802,7 +800,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6060BFF42F114CD30010E87A /* Build configuration list for PBXNativeTarget "OkumukaUITests" */ = {
+		6060BFF42F114CD30010E87A /* Build configuration list for PBXNativeTarget "TweakableUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6060BFF22F114CD30010E87A /* Debug */,

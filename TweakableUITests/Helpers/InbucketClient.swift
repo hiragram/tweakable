@@ -1,6 +1,6 @@
 //
 //  InbucketClient.swift
-//  OkumukaUITests
+//  TweakableUITests
 //
 //  Inbucket REST APIクライアント（OTPメール取得用）
 

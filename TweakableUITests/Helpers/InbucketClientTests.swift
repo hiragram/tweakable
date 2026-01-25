@@ -1,6 +1,6 @@
 //
 //  InbucketClientTests.swift
-//  OkumukaUITests
+//  TweakableUITests
 //
 //  InbucketClient のユニットテスト
 

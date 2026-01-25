@@ -44,7 +44,7 @@ struct WelcomeView: View {
 
                 // Title
                 VStack(spacing: theme.spacing.sm) {
-                    Text("Okumuka")
+                    Text("Tweakable")
                         .font(theme.typography.displayLarge.font)
                         .foregroundColor(theme.colors.textPrimary.color)
 

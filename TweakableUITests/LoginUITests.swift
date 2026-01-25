@@ -1,6 +1,6 @@
 //
 //  LoginUITests.swift
-//  OkumukaUITests
+//  TweakableUITests
 //
 //  ログイン画面のUIテスト（E2E）
 

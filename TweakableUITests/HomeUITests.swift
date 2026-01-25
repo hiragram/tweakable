@@ -1,6 +1,6 @@
 //
 //  HomeUITests.swift
-//  OkumukaUITests
+//  TweakableUITests
 //
 
 import XCTest

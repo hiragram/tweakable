@@ -17,7 +17,7 @@
       <TestPlans>
          <TestPlanReference
             default = "YES"
-            reference = "container:OkumukaUITests/OkumukaUITests.xctestplan">
+            reference = "container:TweakableUITests/TweakableUITests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>
@@ -28,9 +28,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6060BFE92F114CD30010E87A"
-               BuildableName = "OkumukaUITests.xctest"
-               BlueprintName = "OkumukaUITests"
-               ReferencedContainer = "container:Okumuka.xcodeproj">
+               BuildableName = "TweakableUITests.xctest"
+               BlueprintName = "TweakableUITests"
+               ReferencedContainer = "container:Tweakable.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

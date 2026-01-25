@@ -16,7 +16,7 @@ struct DesignSystem {
 
 extension DesignSystem {
     static let `default` = DesignSystem(
-        name: "Okumuka",
+        name: "Tweakable",
         colors: .default,
         typography: .default,
         spacing: .default,

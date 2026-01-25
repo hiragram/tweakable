@@ -1,6 +1,6 @@
 //
 //  OnboardingUITests.swift
-//  OkumukaUITests
+//  TweakableUITests
 //
 //  Note: オンボーディング系のテストはアプリの初期状態に依存するため、
 //  テスト実行条件が限定されます。通常のテスト実行時はスキップされることがあります。

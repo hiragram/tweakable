@@ -2,7 +2,7 @@ import Foundation
 import os
 import SwiftUI
 
-private let actionLogger = Logger(subsystem: "com.okumuka.app", category: "Actions")
+private let actionLogger = Logger(subsystem: "com.tweakable.app", category: "Actions")
 
 /// アプリ全体のStore（状態保持 + Action dispatch）
 @MainActor
