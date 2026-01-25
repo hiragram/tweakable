@@ -21,3 +21,10 @@
 - OkumukaのCLAUDE.md: @docs/old-CLAUDE.md
     - OkumukaのCLAUDE.mdをそのままコピペしたもの。
 - 開発ルールについては従いつつ、Okumuka固有の記載は適宜無視してもよい。
+
+## 開発環境
+
+### シミュレータ
+
+- xcodebuildでテストやビルドを実行する際は **iPhone 17 Pro** シミュレータを使用すること
+- iPhone 16シリーズのシミュレータはインストールされていないため使用不可
