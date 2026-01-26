@@ -10,6 +10,7 @@
 		06E727A519666D5EB769E48C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 1341A3A7B48D2D831F5B3A0B /* SnapshotTesting */; };
 		13F44984C73A079666CD86B6 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
 		216B88F0DEFD6E92529C3D1E /* AppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */; };
+		22CECF98942BDB7CC608BC6B /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 63DA120AC5D8B714616ECCD6 /* OpenAI */; };
 		372D36D31D1EB73873572135 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
 		4A2A683173C28C5A899B2CB5 /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 8F2A6A6368E5F0E8FDA73256 /* Prefire */; };
 		51B57C2309CD7633C4EA9959 /* AppCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */; };
@@ -113,6 +114,7 @@
 				CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */,
 				83C8142B8C3702E8A32222A8 /* FirebaseAnalytics in Frameworks */,
 				E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */,
+				22CECF98942BDB7CC608BC6B /* OpenAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +219,7 @@
 				2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */,
 				08FCE47940BCEB1C3EED8AE2 /* FirebaseAnalytics */,
 				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
+				63DA120AC5D8B714616ECCD6 /* OpenAI */,
 			);
 			productName = AppCore;
 			productReference = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */;
@@ -241,7 +244,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				605EE80A2EECE98A00201738 /* Tweakable */,
-				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
+				E33F31B86DD5A77104FCE345 /* Tweakable/Settings.bundle */,
 			);
 			name = Tweakable;
 			packageProductDependencies = (
@@ -310,6 +313,7 @@
 				482B6C2297B2D9ADBD9F342E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */,
+				AB11DA9A6686F30FB79D43C7 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 605EE7FF2EECE98A00201738;
@@ -846,6 +850,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		AB11DA9A6686F30FB79D43C7 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.7;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -863,6 +875,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		63DA120AC5D8B714616ECCD6 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB11DA9A6686F30FB79D43C7 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
 		};
 		7ABC10101EC9A8BE6E7F21DF /* PrefireTestsPlugin */ = {
 			isa = XCSwiftPackageProductDependency;

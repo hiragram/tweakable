@@ -256,8 +256,9 @@ struct RecipeView: View {
                         .font(.body)
                         .foregroundColor(ds.colors.textPrimary.color)
                         .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                    Spacer()
+                    Spacer(minLength: 0)
 
                     if step.isModified {
                         modifiedBadge
@@ -294,10 +295,7 @@ struct RecipeView: View {
                     case .success(let image):
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth: .infinity)
-                            .aspectRatio(4 / 3, contentMode: .fit)
-                            .clipped()
+                            .aspectRatio(contentMode: .fit)
                     case .failure:
                         Rectangle()
                             .fill(ds.colors.backgroundTertiary.color)
@@ -309,6 +307,7 @@ struct RecipeView: View {
                 .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
             }
         }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Modified Badge
