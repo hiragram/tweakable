@@ -166,66 +166,79 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
         return response.toRecipe(sourceURL: sourceURL)
     }
 
-    // MARK: - Private Helpers
+    // MARK: - JSON-LD Extraction Helpers
 
     /// HTMLからRecipe型のJSON-LDを抽出
     /// - Parameter html: HTMLコンテンツ
     /// - Returns: JSON-LD文字列（見つからない場合はnil）
     private static func extractRecipeJsonLD(from html: String) -> String? {
-        // <script type="application/ld+json">...</script> を探す
+        let jsonStrings = extractJsonLDScripts(from: html)
+
+        for jsonString in jsonStrings {
+            if let recipeJson = findRecipeInJsonLD(jsonString) {
+                return formatRecipeJson(recipeJson)
+            }
+        }
+
+        return nil
+    }
+
+    /// HTMLからJSON-LDスクリプトの内容を抽出
+    /// - Parameter html: HTMLコンテンツ
+    /// - Returns: JSON-LD文字列の配列
+    private static func extractJsonLDScripts(from html: String) -> [String] {
         let pattern = #"<script[^>]*type\s*=\s*["\']application/ld\+json["\'][^>]*>([\s\S]*?)</script>"#
 
         guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else {
-            return nil
+            return []
         }
 
         let range = NSRange(html.startIndex..., in: html)
         let matches = regex.matches(in: html, options: [], range: range)
 
-        for match in matches {
-            guard let contentRange = Range(match.range(at: 1), in: html) else { continue }
-            let jsonString = String(html[contentRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+        return matches.compactMap { match in
+            guard let contentRange = Range(match.range(at: 1), in: html) else { return nil }
+            return String(html[contentRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
 
-            // JSONをパースしてRecipe型か確認
-            guard let data = jsonString.data(using: .utf8),
-                  let json = try? JSONSerialization.jsonObject(with: data) else {
-                continue
-            }
+    /// JSON-LD文字列からRecipe型のオブジェクトを探す
+    /// - Parameter jsonString: JSON-LD文字列
+    /// - Returns: Recipe型のJSONオブジェクト（見つからない場合はnil）
+    private static func findRecipeInJsonLD(_ jsonString: String) -> [String: Any]? {
+        guard let data = jsonString.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data) else {
+            return nil
+        }
 
-            // 配列の場合
-            if let array = json as? [[String: Any]] {
-                for item in array {
-                    if Self.isRecipeType(item) {
-                        if let prettyData = try? JSONSerialization.data(withJSONObject: item, options: .prettyPrinted),
-                           let prettyString = String(data: prettyData, encoding: .utf8) {
-                            return prettyString
-                        }
-                    }
-                }
+        // 配列の場合
+        if let array = json as? [[String: Any]] {
+            return array.first { isRecipeType($0) }
+        }
+
+        // 単一オブジェクトの場合
+        if let dict = json as? [String: Any] {
+            if isRecipeType(dict) {
+                return dict
             }
-            // 単一オブジェクトの場合
-            else if let dict = json as? [String: Any] {
-                if Self.isRecipeType(dict) {
-                    if let prettyData = try? JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted),
-                       let prettyString = String(data: prettyData, encoding: .utf8) {
-                        return prettyString
-                    }
-                }
-                // @graphの中にRecipeがある場合
-                if let graph = dict["@graph"] as? [[String: Any]] {
-                    for item in graph {
-                        if Self.isRecipeType(item) {
-                            if let prettyData = try? JSONSerialization.data(withJSONObject: item, options: .prettyPrinted),
-                               let prettyString = String(data: prettyData, encoding: .utf8) {
-                                return prettyString
-                            }
-                        }
-                    }
-                }
+            // @graphの中にRecipeがある場合
+            if let graph = dict["@graph"] as? [[String: Any]] {
+                return graph.first { isRecipeType($0) }
             }
         }
 
         return nil
+    }
+
+    /// RecipeのJSONオブジェクトを整形して文字列に変換
+    /// - Parameter recipeJson: Recipe型のJSONオブジェクト
+    /// - Returns: 整形されたJSON文字列（変換失敗時はnil）
+    private static func formatRecipeJson(_ recipeJson: [String: Any]) -> String? {
+        guard let prettyData = try? JSONSerialization.data(withJSONObject: recipeJson, options: .prettyPrinted),
+              let prettyString = String(data: prettyData, encoding: .utf8) else {
+            return nil
+        }
+        return prettyString
     }
 
     /// JSON-LDオブジェクトがRecipe型かどうか判定
