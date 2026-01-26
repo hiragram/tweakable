@@ -8,6 +8,19 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     // MARK: - Static Properties
 
     /// JSON-LD抽出用の正規表現（関数呼び出しごとの再コンパイルを避けるためキャッシュ）
+    ///
+    /// パターン解説:
+    /// - `<script[^>]*`: `<script`で始まり、`>`以外の任意の文字が続く（他の属性を許容）
+    /// - `type\s*=\s*["\']application/ld\+json["\']`: type属性がapplication/ld+jsonであること
+    /// - `[^>]*>`: `>`以外の任意の文字の後に`>`が来る
+    /// - `([\s\S]*?)`: キャプチャグループ。`\s\S`は改行を含む任意の文字（`.`は改行にマッチしない）
+    /// - `?`は非貪欲マッチ（最短一致）で、最初の`</script>`で停止
+    /// - `</script>`: 終了タグ
+    ///
+    /// 対応例:
+    /// - `<script type="application/ld+json">...</script>`
+    /// - `<script id="schema" type="application/ld+json">...</script>`
+    /// - `<script type='application/ld+json'>...</script>`（シングルクォート）
     private static let jsonLDRegex: NSRegularExpression? = {
         try? NSRegularExpression(
             pattern: #"<script[^>]*type\s*=\s*["\']application/ld\+json["\'][^>]*>([\s\S]*?)</script>"#,
@@ -190,8 +203,17 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     }
 
     /// HTMLからJSON-LDスクリプトの内容を抽出
+    ///
+    /// HTMLページ内のすべての`<script type="application/ld+json">`タグを検索し、
+    /// その内容を文字列の配列として返す。
+    ///
+    /// 処理フロー:
+    /// 1. 正規表現で`<script type="application/ld+json">...</script>`にマッチ
+    /// 2. キャプチャグループ（スクリプトタグの内側）を抽出
+    /// 3. 前後の空白をトリムして返す
+    ///
     /// - Parameter html: HTMLコンテンツ
-    /// - Returns: JSON-LD文字列の配列
+    /// - Returns: JSON-LD文字列の配列（見つからない場合は空配列）
     private static func extractJsonLDScripts(from html: String) -> [String] {
         guard let regex = jsonLDRegex else {
             return []
