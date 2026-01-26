@@ -31,8 +31,7 @@
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES"
-            useTestSelectionWhitelist = "NO">
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6060BFE92F114CD30010E87A"
@@ -63,13 +62,6 @@
             ReferencedContainer = "container:Tweakable.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "OPENAI_API_KEY"
-            value = "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"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
