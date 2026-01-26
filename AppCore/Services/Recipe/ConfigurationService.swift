@@ -7,8 +7,13 @@ public struct ConfigurationService: ConfigurationServiceProtocol, Sendable {
     public init() {}
 
     public func getOpenAIAPIKey() async -> String? {
+        #if DEBUG
+        // DEBUG時は環境変数から取得
+        return ProcessInfo.processInfo.environment["OPENAI_API_KEY"]
+        #else
         // TODO: 本番ではFirebase Remote Configから取得する
-        return "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"
+        return nil
+        #endif
     }
 
     public func getOpenAIModel() async -> String {
