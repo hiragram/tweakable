@@ -54,13 +54,20 @@ struct RecipeHomeContainerView: View {
     }
 
     private func extractRecipe() {
-        guard let url = URL(string: urlText), url.scheme != nil else {
+        let finalURL: URL?
+
+        if let url = URL(string: urlText), url.scheme != nil {
+            finalURL = url
+        } else {
             // httpsを補完して再試行
-            if let url = URL(string: "https://\(urlText)") {
-                store.send(.recipe(.loadRecipe(url: url)))
-            }
+            finalURL = URL(string: "https://\(urlText)")
+        }
+
+        guard let url = finalURL, url.scheme == "https" else {
+            // HTTPSスキーム以外は拒否
             return
         }
+
         store.send(.recipe(.loadRecipe(url: url)))
     }
 }
