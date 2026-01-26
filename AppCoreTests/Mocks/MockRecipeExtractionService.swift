@@ -8,6 +8,13 @@ public final class MockRecipeExtractionService: RecipeExtractionServiceProtocol,
     public var extractRecipeCallCount = 0
     public var lastExtractedURL: URL?
 
+    // substituteRecipe用のプロパティ
+    public var substitutedRecipe: Recipe?
+    public var substitutionError: Error?
+    public var substituteRecipeCallCount = 0
+    public var lastSubstitutionTarget: SubstitutionTarget?
+    public var lastSubstitutionPrompt: String?
+
     public init(recipe: Recipe? = nil, error: Error? = nil) {
         self.recipeToReturn = recipe
         self.errorToThrow = error
@@ -26,5 +33,25 @@ public final class MockRecipeExtractionService: RecipeExtractionServiceProtocol,
         }
 
         return recipe
+    }
+
+    public func substituteRecipe(
+        recipe: Recipe,
+        target: SubstitutionTarget,
+        prompt: String
+    ) async throws -> Recipe {
+        substituteRecipeCallCount += 1
+        lastSubstitutionTarget = target
+        lastSubstitutionPrompt = prompt
+
+        if let error = substitutionError {
+            throw error
+        }
+
+        guard let result = substitutedRecipe else {
+            throw RecipeExtractionError.extractionFailed("No mock substituted recipe configured")
+        }
+
+        return result
     }
 }

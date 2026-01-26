@@ -222,9 +222,34 @@ public final class AppStore {
                 send(.recipe(.recipeLoadFailed(String(localized: "recipe_error_unexpected", bundle: .app) + ": \(error.localizedDescription)")))
             }
 
-        case .requestSubstitution:
-            // 置き換え機能は別タスク（スコープ外）
-            break
+        case .requestSubstitution(let prompt):
+            guard let recipe = state.recipe.currentRecipe,
+                  let target = state.recipe.substitutionTarget else {
+                send(.recipe(.substitutionFailed(String(localized: "substitution_error_no_target", bundle: .app))))
+                return
+            }
+
+            do {
+                let updatedRecipe = try await recipeExtractionService.substituteRecipe(
+                    recipe: recipe,
+                    target: target,
+                    prompt: prompt
+                )
+                send(.recipe(.substitutionCompleted(updatedRecipe)))
+            } catch let error as RecipeExtractionError {
+                let message: String
+                switch error {
+                case .htmlFetchFailed(let detail):
+                    message = String(localized: "substitution_error_failed", bundle: .app) + ": \(detail)"
+                case .apiKeyNotConfigured:
+                    message = String(localized: "recipe_error_api_key_not_configured", bundle: .app)
+                case .extractionFailed(let detail):
+                    message = String(localized: "substitution_error_failed", bundle: .app) + ": \(detail)"
+                }
+                send(.recipe(.substitutionFailed(message)))
+            } catch {
+                send(.recipe(.substitutionFailed(String(localized: "substitution_error_unexpected", bundle: .app) + ": \(error.localizedDescription)")))
+            }
 
         default:
             // その他のアクションは副作用なし

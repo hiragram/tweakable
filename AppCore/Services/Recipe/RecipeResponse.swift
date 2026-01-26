@@ -14,16 +14,31 @@ public struct RecipeResponse: Codable, Sendable, JSONSchemaConvertible {
     public struct IngredientResponse: Codable, Sendable, JSONSchemaConvertible {
         public let name: String
         public let amount: String?
+        public let isModified: Bool?
 
-        public static let example = IngredientResponse(name: "玉ねぎ", amount: "2個")
+        public init(name: String, amount: String? = nil, isModified: Bool? = nil) {
+            self.name = name
+            self.amount = amount
+            self.isModified = isModified
+        }
+
+        public static let example = IngredientResponse(name: "玉ねぎ", amount: "2個", isModified: false)
     }
 
     public struct StepResponse: Codable, Sendable, JSONSchemaConvertible {
         public let stepNumber: Int
         public let instruction: String
         public let imageURLs: [String]?
+        public let isModified: Bool?
 
-        public static let example = StepResponse(stepNumber: 1, instruction: "野菜を切る", imageURLs: ["https://example.com/step1.jpg"])
+        public init(stepNumber: Int, instruction: String, imageURLs: [String]? = nil, isModified: Bool? = nil) {
+            self.stepNumber = stepNumber
+            self.instruction = instruction
+            self.imageURLs = imageURLs
+            self.isModified = isModified
+        }
+
+        public static let example = StepResponse(stepNumber: 1, instruction: "野菜を切る", imageURLs: ["https://example.com/step1.jpg"], isModified: false)
     }
 
     // JSONSchemaConvertibleの要件
@@ -54,14 +69,15 @@ extension RecipeResponse {
             ingredientsInfo: Ingredients(
                 servings: servings,
                 items: ingredients.map {
-                    Ingredient(name: $0.name, amount: $0.amount)
+                    Ingredient(name: $0.name, amount: $0.amount, isModified: $0.isModified ?? false)
                 }
             ),
             steps: steps.map {
                 CookingStep(
                     stepNumber: $0.stepNumber,
                     instruction: $0.instruction,
-                    imageURLs: $0.imageURLs?.compactMap { URL(string: $0) } ?? []
+                    imageURLs: $0.imageURLs?.compactMap { URL(string: $0) } ?? [],
+                    isModified: $0.isModified ?? false
                 )
             },
             sourceURL: sourceURL

@@ -171,14 +171,16 @@ struct RecipeReducerTests {
     }
 
     @Test
-    func reduce_substitutionFailed_closesSheet() {
+    func reduce_substitutionFailed_keepsSheetOpen() {
+        // エラー時はシートを閉じず、リトライ可能にする
         var state = RecipeState()
         state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
         state.isProcessingSubstitution = true
 
         RecipeReducer.reduce(state: &state, action: .substitutionFailed("エラー"))
 
-        #expect(state.substitutionTarget == nil)
+        // シートは開いたままにする（substitutionTargetはnilにならない）
+        #expect(state.substitutionTarget != nil)
     }
 
     @Test

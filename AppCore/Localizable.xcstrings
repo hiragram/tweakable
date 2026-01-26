@@ -2875,6 +2875,54 @@
         }
       }
     },
+    "substitution_error_failed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to modify the recipe"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レシピの変更に失敗しました"
+          }
+        }
+      }
+    },
+    "substitution_error_no_target" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No item selected for substitution"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "置き換え対象が選択されていません"
+          }
+        }
+      }
+    },
+    "substitution_error_unexpected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected error occurred during substitution"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "置き換え中に予期しないエラーが発生しました"
+          }
+        }
+      }
+    },
     "recipe_home_extract_button" : {
       "localizations" : {
         "en" : {

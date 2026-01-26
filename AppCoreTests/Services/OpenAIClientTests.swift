@@ -417,4 +417,90 @@ struct OpenAIClientTests {
         // 韓国語への翻訳指示が含まれることを確認
         #expect(instruction.contains("translated into ko"))
     }
+
+    // MARK: - RecipeResponse isModified Tests
+
+    @Test
+    func recipeResponse_toRecipe_preservesIsModifiedFlags() {
+        let response = RecipeResponse(
+            title: "置き換え後のレシピ",
+            description: nil,
+            imageURLs: [],
+            servings: "2人分",
+            ingredients: [
+                .init(name: "豚肉", amount: "200g", isModified: true),
+                .init(name: "塩", amount: "少々", isModified: false),
+                .init(name: "こしょう", amount: "少々")  // isModifiedなし（nil）
+            ],
+            steps: [
+                .init(stepNumber: 1, instruction: "豚肉を切る", imageURLs: nil, isModified: true),
+                .init(stepNumber: 2, instruction: "塩をふる", imageURLs: nil, isModified: false),
+                .init(stepNumber: 3, instruction: "焼く", imageURLs: nil)  // isModifiedなし（nil）
+            ]
+        )
+
+        let recipe = response.toRecipe(sourceURL: URL(string: "https://example.com")!)
+
+        // isModified: true が保持される
+        #expect(recipe.ingredientsInfo.items[0].isModified == true)
+        #expect(recipe.steps[0].isModified == true)
+
+        // isModified: false が保持される
+        #expect(recipe.ingredientsInfo.items[1].isModified == false)
+        #expect(recipe.steps[1].isModified == false)
+
+        // isModified: nil は false にデフォルト
+        #expect(recipe.ingredientsInfo.items[2].isModified == false)
+        #expect(recipe.steps[2].isModified == false)
+    }
+
+    @Test
+    func decodeRecipe_withIsModifiedFlags_preservesFlags() throws {
+        let sourceURL = URL(string: "https://example.com/recipe")!
+        let jsonWithModified = """
+            {
+                "title": "置き換えレシピ",
+                "description": null,
+                "imageURLs": [],
+                "servings": "2人分",
+                "ingredients": [
+                    {"name": "豚肉", "amount": "200g", "isModified": true},
+                    {"name": "塩", "amount": "少々", "isModified": false}
+                ],
+                "steps": [
+                    {"stepNumber": 1, "instruction": "豚肉を切る", "imageURLs": [], "isModified": true},
+                    {"stepNumber": 2, "instruction": "塩をふる", "imageURLs": [], "isModified": false}
+                ]
+            }
+            """
+
+        let recipe = try OpenAIClient.testableDecodeRecipe(content: jsonWithModified, sourceURL: sourceURL)
+
+        #expect(recipe.ingredientsInfo.items[0].isModified == true)
+        #expect(recipe.ingredientsInfo.items[1].isModified == false)
+        #expect(recipe.steps[0].isModified == true)
+        #expect(recipe.steps[1].isModified == false)
+    }
+
+    // MARK: - substituteRecipe Tests
+
+    @Test
+    func substituteRecipe_apiKeyNotConfigured_throwsError() async throws {
+        let mockConfig = MockConfigurationService(apiKey: nil)
+        let client = OpenAIClient(configurationService: mockConfig)
+        let recipe = Recipe(
+            title: "テスト料理",
+            ingredientsInfo: Ingredients(items: [Ingredient(name: "鶏肉", amount: "200g")]),
+            steps: [CookingStep(stepNumber: 1, instruction: "鶏肉を切る")]
+        )
+
+        await #expect(throws: OpenAIClientError.apiKeyNotConfigured) {
+            try await client.substituteRecipe(
+                recipe: recipe,
+                target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
+                prompt: "豚肉に変えて",
+                targetLanguage: "ja"
+            )
+        }
+    }
 }
