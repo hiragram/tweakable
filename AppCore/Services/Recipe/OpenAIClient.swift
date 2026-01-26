@@ -10,6 +10,37 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     }
 
     public func extractRecipe(html: String, sourceURL: URL, targetLanguage: String) async throws -> Recipe {
+        // 1. API設定を取得
+        let (openAI, model) = try await getOpenAIConfiguration()
+
+        // 2. コンテンツを準備（JSON-LD優先）
+        let (content, contentType) = prepareContent(from: html)
+
+        // 3. プロンプトを構築
+        let systemPrompt = buildSystemPrompt(for: targetLanguage)
+
+        // 4. デバッグログ出力
+        logRequest(model: model, contentType: contentType, systemPrompt: systemPrompt, sourceURL: sourceURL)
+
+        // 5. クエリを構築
+        let query = buildChatQuery(
+            systemPrompt: systemPrompt,
+            content: content,
+            sourceURL: sourceURL,
+            model: model
+        )
+
+        // 6. API呼び出し
+        let result = try await executeQuery(openAI: openAI, query: query)
+
+        // 7. レスポンスをデコード
+        return try decodeRecipe(from: result, sourceURL: sourceURL)
+    }
+
+    // MARK: - Extract Recipe Helpers
+
+    /// OpenAI APIの設定を取得
+    private func getOpenAIConfiguration() async throws -> (OpenAI, String) {
         guard let apiKey = await configurationService.getOpenAIAPIKey() else {
             throw OpenAIClientError.apiKeyNotConfigured
         }
@@ -19,34 +50,23 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
             token: apiKey,
             timeoutInterval: 120.0
         )
-        let openAI = OpenAI(configuration: configuration)
+        return (OpenAI(configuration: configuration), model)
+    }
 
-        let languageInstruction: String
-        switch targetLanguage {
-        case "ja":
-            languageInstruction = """
-                IMPORTANT: You MUST respond with ALL text fields (title, description, ingredient names, step instructions) translated into Japanese. Do not leave any text in English.
-                Also, convert all measurements to metric units (grams, milliliters, etc.). For example: "2 oz" → "60g", "1 cup" → "240ml", "1 Tbsp" → "大さじ1", "1 tsp" → "小さじ1".
-                """
-        case "en":
-            languageInstruction = "Respond in English. Keep the original measurement units."
-        default:
-            languageInstruction = "IMPORTANT: You MUST respond with ALL text fields translated into \(targetLanguage)."
-        }
-
-        // JSON-LDがあればそれを優先、なければHTML全体を使用
-        let contentToAnalyze: String
-        let contentType: String
+    /// HTMLからコンテンツを準備（JSON-LD優先）
+    private func prepareContent(from html: String) -> (content: String, type: String) {
         if let jsonLD = Self.extractRecipeJsonLD(from: html) {
-            contentToAnalyze = "JSON-LD Recipe Data:\n\(jsonLD)"
-            contentType = "JSON-LD"
+            return ("JSON-LD Recipe Data:\n\(jsonLD)", "JSON-LD")
         } else {
-            contentToAnalyze = "HTML:\n\(html)"
-            contentType = "HTML"
+            return ("HTML:\n\(html)", "HTML")
         }
+    }
 
-        // システムプロンプトをログ出力
-        let systemPrompt = """
+    /// 言語に応じたシステムプロンプトを構築
+    private func buildSystemPrompt(for targetLanguage: String) -> String {
+        let languageInstruction = buildLanguageInstruction(for: targetLanguage)
+
+        return """
             You are a recipe extraction assistant. Extract recipe information from HTML content.
 
             IMPORTANT RULES:
@@ -57,14 +77,43 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
 
             \(languageInstruction)
             """
+    }
+
+    /// 言語に応じた指示文を生成
+    private func buildLanguageInstruction(for targetLanguage: String) -> String {
+        switch targetLanguage {
+        case "ja":
+            return """
+                IMPORTANT: You MUST respond with ALL text fields (title, description, ingredient names, step instructions) translated into Japanese. Do not leave any text in English.
+                Also, convert all measurements to metric units (grams, milliliters, etc.). For example: "2 oz" → "60g", "1 cup" → "240ml", "1 Tbsp" → "大さじ1", "1 tsp" → "小さじ1".
+                """
+        case "en":
+            return "Respond in English. Keep the original measurement units."
+        default:
+            return "IMPORTANT: You MUST respond with ALL text fields translated into \(targetLanguage)."
+        }
+    }
+
+    /// デバッグ用のログ出力
+    private func logRequest(model: String, contentType: String, systemPrompt: String, sourceURL: URL) {
+        #if DEBUG
         print("=== OpenAI Request ===")
         print("Model: \(model)")
         print("Content type: \(contentType)")
-        print("System prompt:\n\(systemPrompt)")
-        print("User prompt: Extract the complete recipe from the following content. Include every ingredient with its exact amount, and all cooking steps without summarizing. Source URL: \(sourceURL.absoluteString)")
+        print("System prompt length: \(systemPrompt.count) characters")
+        print("User prompt: Extract recipe from \(sourceURL.absoluteString)")
         print("======================")
+        #endif
+    }
 
-        let query = ChatQuery(
+    /// ChatQueryを構築
+    private func buildChatQuery(
+        systemPrompt: String,
+        content: String,
+        sourceURL: URL,
+        model: String
+    ) -> ChatQuery {
+        ChatQuery(
             messages: [
                 .system(.init(content: .textContent(systemPrompt))),
                 .user(.init(content: .string("""
@@ -72,7 +121,7 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
 
                     Source URL: \(sourceURL.absoluteString)
 
-                    \(contentToAnalyze)
+                    \(content)
                     """
                 )))
             ],
@@ -85,16 +134,23 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
                 )
             )
         )
+    }
 
-        let result: ChatResult
+    /// OpenAI APIを呼び出し
+    private func executeQuery(openAI: OpenAI, query: ChatQuery) async throws -> ChatResult {
         do {
-            result = try await openAI.chats(query: query)
+            return try await openAI.chats(query: query)
         } catch {
+            #if DEBUG
             print("OpenAI API error: \(error)")
             print("OpenAI API error type: \(type(of: error))")
+            #endif
             throw OpenAIClientError.networkError(error.localizedDescription)
         }
+    }
 
+    /// レスポンスをRecipeにデコード
+    private func decodeRecipe(from result: ChatResult, sourceURL: URL) throws -> Recipe {
         guard let content = result.choices.first?.message.content else {
             throw OpenAIClientError.noResponseContent
         }
