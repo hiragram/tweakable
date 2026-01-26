@@ -121,4 +121,57 @@ struct RecipeExtractionServiceTests {
         // OpenAIClientにtargetLanguageが渡されていることを確認
         #expect(mockOpenAI.lastTargetLanguage != nil)
     }
+
+    @Test
+    func extractRecipe_apiKeyNotConfigured_throwsApiKeyNotConfiguredError() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html><body>Recipe content</body></html>")
+        let mockOpenAI = MockOpenAIClient(error: .apiKeyNotConfigured)
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        // OpenAIClientError.apiKeyNotConfiguredがRecipeExtractionError.apiKeyNotConfiguredに変換されることを確認
+        await #expect(throws: RecipeExtractionError.apiKeyNotConfigured) {
+            try await service.extractRecipe(from: url)
+        }
+    }
+
+    @Test
+    func extractRecipe_otherOpenAIError_throwsExtractionFailed() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html><body>Recipe content</body></html>")
+        let mockOpenAI = MockOpenAIClient(error: .noResponseContent)
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        // OpenAIClientError.noResponseContentはRecipeExtractionError.extractionFailedに変換されることを確認
+        do {
+            _ = try await service.extractRecipe(from: url)
+            Issue.record("Expected error to be thrown")
+        } catch {
+            if case RecipeExtractionError.extractionFailed = error {
+                // Expected
+            } else if case RecipeExtractionError.apiKeyNotConfigured = error {
+                Issue.record("Expected extractionFailed, but got apiKeyNotConfigured")
+            } else {
+                Issue.record("Unexpected error type: \(error)")
+            }
+        }
+    }
 }

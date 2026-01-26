@@ -4,6 +4,9 @@ import Foundation
 
 @Suite
 struct OpenAIClientTests {
+
+    // MARK: - RecipeResponse Tests
+
     @Test
     func recipeResponse_toRecipe_convertsCorrectly() async throws {
         let response = RecipeResponse(
@@ -48,5 +51,258 @@ struct OpenAIClientTests {
                 targetLanguage: "ja"
             )
         }
+    }
+
+    // MARK: - JSON-LD Extraction Tests
+
+    @Test
+    func extractJsonLDScripts_singleScript_extractsContent() {
+        let html = """
+            <html>
+            <head>
+                <script type="application/ld+json">
+                {"@type": "Recipe", "name": "Test Recipe"}
+                </script>
+            </head>
+            </html>
+            """
+
+        let scripts = OpenAIClient.testableExtractJsonLDScripts(from: html)
+
+        #expect(scripts.count == 1)
+        #expect(scripts[0].contains("Recipe"))
+    }
+
+    @Test
+    func extractJsonLDScripts_multipleScripts_extractsAll() {
+        let html = """
+            <html>
+            <head>
+                <script type="application/ld+json">{"@type": "Organization"}</script>
+                <script type="application/ld+json">{"@type": "Recipe", "name": "Test"}</script>
+            </head>
+            </html>
+            """
+
+        let scripts = OpenAIClient.testableExtractJsonLDScripts(from: html)
+
+        #expect(scripts.count == 2)
+    }
+
+    @Test
+    func extractJsonLDScripts_noScripts_returnsEmpty() {
+        let html = "<html><head><title>No JSON-LD</title></head></html>"
+
+        let scripts = OpenAIClient.testableExtractJsonLDScripts(from: html)
+
+        #expect(scripts.isEmpty)
+    }
+
+    @Test
+    func extractJsonLDScripts_singleQuotesType_extractsContent() {
+        let html = """
+            <html>
+            <script type='application/ld+json'>{"@type": "Recipe"}</script>
+            </html>
+            """
+
+        let scripts = OpenAIClient.testableExtractJsonLDScripts(from: html)
+
+        #expect(scripts.count == 1)
+    }
+
+    @Test
+    func findRecipeInJsonLD_singleRecipe_returnsRecipe() {
+        let json = """
+            {"@type": "Recipe", "name": "Chocolate Cake"}
+            """
+
+        let result = OpenAIClient.testableFindRecipeInJsonLD(json)
+
+        #expect(result != nil)
+        #expect(result?["name"] as? String == "Chocolate Cake")
+    }
+
+    @Test
+    func findRecipeInJsonLD_array_findsRecipe() {
+        let json = """
+            [
+                {"@type": "Organization", "name": "Test Org"},
+                {"@type": "Recipe", "name": "Apple Pie"}
+            ]
+            """
+
+        let result = OpenAIClient.testableFindRecipeInJsonLD(json)
+
+        #expect(result != nil)
+        #expect(result?["name"] as? String == "Apple Pie")
+    }
+
+    @Test
+    func findRecipeInJsonLD_graphStructure_findsRecipe() {
+        let json = """
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {"@type": "WebPage", "name": "Page"},
+                    {"@type": "Recipe", "name": "Pasta"}
+                ]
+            }
+            """
+
+        let result = OpenAIClient.testableFindRecipeInJsonLD(json)
+
+        #expect(result != nil)
+        #expect(result?["name"] as? String == "Pasta")
+    }
+
+    @Test
+    func findRecipeInJsonLD_typeArray_findsRecipe() {
+        let json = """
+            {"@type": ["Article", "Recipe"], "name": "Mixed Type Recipe"}
+            """
+
+        let result = OpenAIClient.testableFindRecipeInJsonLD(json)
+
+        #expect(result != nil)
+        #expect(result?["name"] as? String == "Mixed Type Recipe")
+    }
+
+    @Test
+    func findRecipeInJsonLD_noRecipe_returnsNil() {
+        let json = """
+            {"@type": "Organization", "name": "Not a Recipe"}
+            """
+
+        let result = OpenAIClient.testableFindRecipeInJsonLD(json)
+
+        #expect(result == nil)
+    }
+
+    @Test
+    func findRecipeInJsonLD_invalidJson_returnsNil() {
+        let json = "not valid json"
+
+        let result = OpenAIClient.testableFindRecipeInJsonLD(json)
+
+        #expect(result == nil)
+    }
+
+    @Test
+    func extractRecipeJsonLD_fullHTML_extractsRecipe() {
+        let html = """
+            <html>
+            <head>
+                <script type="application/ld+json">
+                {
+                    "@context": "https://schema.org",
+                    "@type": "Recipe",
+                    "name": "Full Recipe",
+                    "recipeIngredient": ["flour", "sugar"]
+                }
+                </script>
+            </head>
+            </html>
+            """
+
+        let result = OpenAIClient.testableExtractRecipeJsonLD(from: html)
+
+        #expect(result != nil)
+        #expect(result?.contains("Full Recipe") == true)
+    }
+
+    @Test
+    func extractRecipeJsonLD_noRecipeInJsonLD_returnsNil() {
+        let html = """
+            <html>
+            <head>
+                <script type="application/ld+json">
+                {"@type": "Organization", "name": "Not Recipe"}
+                </script>
+            </head>
+            </html>
+            """
+
+        let result = OpenAIClient.testableExtractRecipeJsonLD(from: html)
+
+        #expect(result == nil)
+    }
+
+    // MARK: - decodeRecipe Error Handling Tests
+
+    @Test
+    func decodeRecipe_noContent_throwsNoResponseContentError() {
+        let sourceURL = URL(string: "https://example.com/recipe")!
+
+        #expect(throws: OpenAIClientError.noResponseContent) {
+            _ = try OpenAIClient.testableDecodeRecipe(content: nil, sourceURL: sourceURL)
+        }
+    }
+
+    @Test
+    func decodeRecipe_invalidJson_throwsDecodingError() {
+        let sourceURL = URL(string: "https://example.com/recipe")!
+        let invalidJson = "not a valid json"
+
+        do {
+            _ = try OpenAIClient.testableDecodeRecipe(content: invalidJson, sourceURL: sourceURL)
+            Issue.record("Expected decodingError to be thrown")
+        } catch {
+            if case OpenAIClientError.decodingError = error {
+                // Expected
+            } else {
+                Issue.record("Expected OpenAIClientError.decodingError, got \(error)")
+            }
+        }
+    }
+
+    @Test
+    func decodeRecipe_missingRequiredFields_throwsDecodingError() {
+        let sourceURL = URL(string: "https://example.com/recipe")!
+        // title is required but missing
+        let incompleteJson = """
+            {
+                "description": "Test",
+                "imageURLs": [],
+                "ingredients": [],
+                "steps": []
+            }
+            """
+
+        do {
+            _ = try OpenAIClient.testableDecodeRecipe(content: incompleteJson, sourceURL: sourceURL)
+            Issue.record("Expected decodingError to be thrown")
+        } catch {
+            if case OpenAIClientError.decodingError = error {
+                // Expected
+            } else {
+                Issue.record("Expected OpenAIClientError.decodingError, got \(error)")
+            }
+        }
+    }
+
+    @Test
+    func decodeRecipe_validJson_returnsRecipe() throws {
+        let sourceURL = URL(string: "https://example.com/recipe")!
+        let validJson = """
+            {
+                "title": "Test Recipe",
+                "description": "A test recipe",
+                "imageURLs": ["https://example.com/image.jpg"],
+                "servings": "4人分",
+                "ingredients": [
+                    {"name": "Flour", "amount": "2 cups"}
+                ],
+                "steps": [
+                    {"stepNumber": 1, "instruction": "Mix ingredients", "imageURLs": []}
+                ]
+            }
+            """
+
+        let recipe = try OpenAIClient.testableDecodeRecipe(content: validJson, sourceURL: sourceURL)
+
+        #expect(recipe.title == "Test Recipe")
+        #expect(recipe.ingredientsInfo.items.count == 1)
+        #expect(recipe.steps.count == 1)
     }
 }

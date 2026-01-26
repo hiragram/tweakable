@@ -252,3 +252,44 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
         return false
     }
 }
+
+// MARK: - Testing Support
+
+extension OpenAIClient {
+    /// テスト用: HTMLからRecipe型のJSON-LDを抽出（内部メソッドの公開）
+    internal static func testableExtractRecipeJsonLD(from html: String) -> String? {
+        extractRecipeJsonLD(from: html)
+    }
+
+    /// テスト用: HTMLからJSON-LDスクリプトの内容を抽出（内部メソッドの公開）
+    internal static func testableExtractJsonLDScripts(from html: String) -> [String] {
+        extractJsonLDScripts(from: html)
+    }
+
+    /// テスト用: JSON-LD文字列からRecipe型のオブジェクトを探す（内部メソッドの公開）
+    internal static func testableFindRecipeInJsonLD(_ jsonString: String) -> [String: Any]? {
+        findRecipeInJsonLD(jsonString)
+    }
+
+    /// テスト用: JSONコンテンツをRecipeにデコード（内部メソッドの公開）
+    /// - Parameters:
+    ///   - content: OpenAI APIからのJSONレスポンス（文字列）
+    ///   - sourceURL: レシピのソースURL
+    /// - Returns: デコードされたRecipe
+    /// - Throws: noResponseContent（contentがnilの場合）、decodingError（JSONパースに失敗した場合）
+    internal static func testableDecodeRecipe(content: String?, sourceURL: URL) throws -> Recipe {
+        guard let content = content else {
+            throw OpenAIClientError.noResponseContent
+        }
+
+        let decoder = JSONDecoder()
+        let response: RecipeResponse
+        do {
+            response = try decoder.decode(RecipeResponse.self, from: Data(content.utf8))
+        } catch {
+            throw OpenAIClientError.decodingError(error.localizedDescription)
+        }
+
+        return response.toRecipe(sourceURL: sourceURL)
+    }
+}
