@@ -53,6 +53,43 @@ struct HTMLFetcherTests {
             try await fetcher.fetchHTML(from: URL(string: "https://example.com")!)
         }
     }
+
+    @Test
+    func fetchHTML_emptyData_throwsNoDataError() async throws {
+        let mockSession = MockURLSession()
+        mockSession.data = Data() // 空データ
+        mockSession.response = HTTPURLResponse(
+            url: URL(string: "https://example.com")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+
+        let fetcher = HTMLFetcher(session: mockSession)
+
+        await #expect(throws: HTMLFetcherError.noData) {
+            try await fetcher.fetchHTML(from: URL(string: "https://example.com")!)
+        }
+    }
+
+    @Test
+    func fetchHTML_invalidEncoding_throwsDecodingError() async throws {
+        let mockSession = MockURLSession()
+        // UTF-8でデコードできないバイト列
+        mockSession.data = Data([0xFF, 0xFE, 0xFD])
+        mockSession.response = HTTPURLResponse(
+            url: URL(string: "https://example.com")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+
+        let fetcher = HTMLFetcher(session: mockSession)
+
+        await #expect(throws: HTMLFetcherError.decodingError) {
+            try await fetcher.fetchHTML(from: URL(string: "https://example.com")!)
+        }
+    }
 }
 
 // MARK: - MockURLSession
