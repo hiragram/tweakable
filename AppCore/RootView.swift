@@ -59,7 +59,7 @@ public struct RootView: View {
                 )
 
             case .main:
-                HomeContainerView(store: store)
+                RecipeHomeContainerView(store: store)
             }
         }
         .onAppear {

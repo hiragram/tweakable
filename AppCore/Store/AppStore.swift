@@ -17,17 +17,33 @@ public final class AppStore {
     private let networkMonitor: any NetworkMonitorProtocol
     private let weatherService: any WeatherServiceProtocol
     private let userDefaults: any UserDefaultsProtocol
+    private let recipeExtractionService: any RecipeExtractionServiceProtocol
 
     // MARK: - Initialization
 
     public init(
         networkMonitor: any NetworkMonitorProtocol = NetworkMonitor(),
         weatherService: any WeatherServiceProtocol = WeatherKitService(),
-        userDefaults: any UserDefaultsProtocol = UserDefaults.standard
+        userDefaults: any UserDefaultsProtocol = UserDefaults.standard,
+        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil
     ) {
         self.networkMonitor = networkMonitor
         self.weatherService = weatherService
         self.userDefaults = userDefaults
+
+        // RecipeExtractionService のデフォルト構成
+        if let service = recipeExtractionService {
+            self.recipeExtractionService = service
+        } else {
+            let configService = ConfigurationService()
+            let htmlFetcher = HTMLFetcher()
+            let openAIClient = OpenAIClient(configurationService: configService)
+            self.recipeExtractionService = RecipeExtractionService(
+                htmlFetcher: htmlFetcher,
+                openAIClient: openAIClient,
+                configurationService: configService
+            )
+        }
     }
 
     // MARK: - Public Methods
@@ -186,11 +202,28 @@ public final class AppStore {
     private func handleRecipeSideEffects(_ action: RecipeAction) async {
         switch action {
         case .loadRecipe(let url):
-            // TODO: Implement LLM API call for recipe extraction (MVP requirement, separate task)
-            break
+            do {
+                let recipe = try await recipeExtractionService.extractRecipe(from: url)
+                send(.recipe(.recipeLoaded(recipe)))
+            } catch let error as RecipeExtractionError {
+                let message: String
+                switch error {
+                case .htmlFetchFailed(let detail):
+                    message = String(localized: "recipe_error_html_fetch_failed", bundle: .app) + ": \(detail)"
+                case .apiKeyNotConfigured:
+                    message = String(localized: "recipe_error_api_key_not_configured", bundle: .app)
+                case .extractionFailed(let detail):
+                    message = String(localized: "recipe_error_extraction_failed", bundle: .app) + ": \(detail)"
+                }
+                print("RecipeExtractionError: \(message)")
+                send(.recipe(.recipeLoadFailed(message)))
+            } catch {
+                print("Unexpected error: \(error)")
+                send(.recipe(.recipeLoadFailed(String(localized: "recipe_error_unexpected", bundle: .app) + ": \(error.localizedDescription)")))
+            }
 
-        case .requestSubstitution(let prompt):
-            // TODO: Implement LLM API call for ingredient/step substitution (MVP requirement, separate task)
+        case .requestSubstitution:
+            // 置き換え機能は別タスク（スコープ外）
             break
 
         default:
