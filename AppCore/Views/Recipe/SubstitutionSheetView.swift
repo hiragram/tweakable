@@ -103,9 +103,24 @@ struct SubstitutionSheetView: View {
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
 
-                TextField(String(localized: "substitution_placeholder", bundle: .app), text: $promptText, axis: .vertical)
-                    .textFieldStyle(.roundedBorder)
-                    .lineLimit(3...6)
+                TextEditor(text: $promptText)
+                    .frame(minHeight: 80, maxHeight: 150)
+                    .padding(4)
+                    .background(ds.colors.backgroundSecondary.color)
+                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: ds.cornerRadius.sm)
+                            .stroke(ds.colors.textTertiary.color.opacity(0.3), lineWidth: 1)
+                    )
+                    .overlay(alignment: .topLeading) {
+                        if promptText.isEmpty {
+                            Text("substitution_placeholder", bundle: .app)
+                                .foregroundColor(ds.colors.textTertiary.color)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 12)
+                                .allowsHitTesting(false)
+                        }
+                    }
                     .focused($isTextFieldFocused)
                     .disabled(isProcessing)
                     .accessibilityIdentifier(SubstitutionSheetAccessibilityID.promptTextField)
