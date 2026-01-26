@@ -363,4 +363,58 @@ struct OpenAIClientTests {
         #expect(type == "HTML")
         #expect(content.hasPrefix("HTML:\n"))
     }
+
+    // MARK: - buildLanguageInstruction Tests
+
+    @Test
+    func buildLanguageInstruction_japanese_includesMetricConversion() {
+        let instruction = OpenAIClient.testableBuildLanguageInstruction(for: "ja")
+
+        // 日本語への翻訳指示が含まれることを確認
+        #expect(instruction.contains("translated into Japanese"))
+        // メトリック単位への変換指示が含まれることを確認
+        #expect(instruction.contains("metric units"))
+        #expect(instruction.contains("大さじ1"))
+        #expect(instruction.contains("小さじ1"))
+        #expect(instruction.contains("240ml"))
+        #expect(instruction.contains("60g"))
+    }
+
+    @Test
+    func buildLanguageInstruction_english_keepsOriginalUnits() {
+        let instruction = OpenAIClient.testableBuildLanguageInstruction(for: "en")
+
+        // 英語での応答指示が含まれることを確認
+        #expect(instruction.contains("Respond in English"))
+        // 元の単位を維持する指示が含まれることを確認
+        #expect(instruction.contains("Keep the original measurement units"))
+        // メトリック変換指示が含まれないことを確認
+        #expect(!instruction.contains("metric units"))
+    }
+
+    @Test
+    func buildLanguageInstruction_otherLanguage_includesTranslationInstruction() {
+        let instruction = OpenAIClient.testableBuildLanguageInstruction(for: "fr")
+
+        // 指定言語への翻訳指示が含まれることを確認
+        #expect(instruction.contains("translated into fr"))
+        // メトリック変換指示が含まれないことを確認（英語以外のデフォルト）
+        #expect(!instruction.contains("metric units"))
+    }
+
+    @Test
+    func buildLanguageInstruction_chineseLanguage_includesTranslationInstruction() {
+        let instruction = OpenAIClient.testableBuildLanguageInstruction(for: "zh")
+
+        // 中国語への翻訳指示が含まれることを確認
+        #expect(instruction.contains("translated into zh"))
+    }
+
+    @Test
+    func buildLanguageInstruction_koreanLanguage_includesTranslationInstruction() {
+        let instruction = OpenAIClient.testableBuildLanguageInstruction(for: "ko")
+
+        // 韓国語への翻訳指示が含まれることを確認
+        #expect(instruction.contains("translated into ko"))
+    }
 }

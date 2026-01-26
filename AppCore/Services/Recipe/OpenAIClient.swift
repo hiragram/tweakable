@@ -329,4 +329,21 @@ extension OpenAIClient {
 
         return response.toRecipe(sourceURL: sourceURL)
     }
+
+    /// テスト用: 言語コードに応じた指示文を生成（内部メソッドの公開）
+    /// - Parameter targetLanguage: ターゲット言語コード（例: "ja", "en"）
+    /// - Returns: 言語に応じた指示文
+    internal static func testableBuildLanguageInstruction(for targetLanguage: String) -> String {
+        switch targetLanguage {
+        case "ja":
+            return """
+                IMPORTANT: You MUST respond with ALL text fields (title, description, ingredient names, step instructions) translated into Japanese. Do not leave any text in English.
+                Also, convert all measurements to metric units (grams, milliliters, etc.). For example: "2 oz" → "60g", "1 cup" → "240ml", "1 Tbsp" → "大さじ1", "1 tsp" → "小さじ1".
+                """
+        case "en":
+            return "Respond in English. Keep the original measurement units."
+        default:
+            return "IMPORTANT: You MUST respond with ALL text fields translated into \(targetLanguage)."
+        }
+    }
 }
