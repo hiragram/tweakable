@@ -5,6 +5,16 @@ import OpenAI
 public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     private let configurationService: ConfigurationServiceProtocol
 
+    // MARK: - Static Properties
+
+    /// JSON-LD抽出用の正規表現（関数呼び出しごとの再コンパイルを避けるためキャッシュ）
+    private static let jsonLDRegex: NSRegularExpression? = {
+        try? NSRegularExpression(
+            pattern: #"<script[^>]*type\s*=\s*["\']application/ld\+json["\'][^>]*>([\s\S]*?)</script>"#,
+            options: .caseInsensitive
+        )
+    }()
+
     public init(configurationService: ConfigurationServiceProtocol) {
         self.configurationService = configurationService
     }
@@ -183,9 +193,7 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     /// - Parameter html: HTMLコンテンツ
     /// - Returns: JSON-LD文字列の配列
     private static func extractJsonLDScripts(from html: String) -> [String] {
-        let pattern = #"<script[^>]*type\s*=\s*["\']application/ld\+json["\'][^>]*>([\s\S]*?)</script>"#
-
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else {
+        guard let regex = jsonLDRegex else {
             return []
         }
 
