@@ -297,6 +297,17 @@ extension OpenAIClient {
         findRecipeInJsonLD(jsonString)
     }
 
+    /// テスト用: HTMLからコンテンツを準備（内部メソッドの公開）
+    /// - Parameter html: HTMLコンテンツ
+    /// - Returns: (content: 抽出されたコンテンツ, type: コンテンツタイプ "JSON-LD" または "HTML")
+    internal static func testablePrepareContent(from html: String) -> (content: String, type: String) {
+        if let jsonLD = extractRecipeJsonLD(from: html) {
+            return ("JSON-LD Recipe Data:\n\(jsonLD)", "JSON-LD")
+        } else {
+            return ("HTML:\n\(html)", "HTML")
+        }
+    }
+
     /// テスト用: JSONコンテンツをRecipeにデコード（内部メソッドの公開）
     /// - Parameters:
     ///   - content: OpenAI APIからのJSONレスポンス（文字列）

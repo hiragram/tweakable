@@ -305,4 +305,62 @@ struct OpenAIClientTests {
         #expect(recipe.ingredientsInfo.items.count == 1)
         #expect(recipe.steps.count == 1)
     }
+
+    // MARK: - prepareContent Tests
+
+    @Test
+    func prepareContent_noJsonLD_usesHTML() {
+        // JSON-LDを含まないHTML
+        let html = "<html><body><h1>Recipe without JSON-LD</h1><p>Ingredients: flour, sugar</p></body></html>"
+
+        let (content, type) = OpenAIClient.testablePrepareContent(from: html)
+
+        // HTMLが使用されることを確認
+        #expect(type == "HTML")
+        #expect(content.hasPrefix("HTML:\n"))
+        #expect(content.contains(html))
+    }
+
+    @Test
+    func prepareContent_withJsonLD_usesJsonLD() {
+        // JSON-LDを含むHTML
+        let html = """
+            <html>
+            <head>
+                <script type="application/ld+json">
+                {"@type": "Recipe", "name": "Test Recipe", "recipeIngredient": ["flour"]}
+                </script>
+            </head>
+            <body><h1>Recipe Page</h1></body>
+            </html>
+            """
+
+        let (content, type) = OpenAIClient.testablePrepareContent(from: html)
+
+        // JSON-LDが使用されることを確認
+        #expect(type == "JSON-LD")
+        #expect(content.hasPrefix("JSON-LD Recipe Data:\n"))
+        #expect(content.contains("Test Recipe"))
+    }
+
+    @Test
+    func prepareContent_nonRecipeJsonLD_usesHTML() {
+        // RecipeではないJSON-LDを含むHTML
+        let html = """
+            <html>
+            <head>
+                <script type="application/ld+json">
+                {"@type": "Organization", "name": "Test Org"}
+                </script>
+            </head>
+            <body><h1>Organization Page</h1></body>
+            </html>
+            """
+
+        let (content, type) = OpenAIClient.testablePrepareContent(from: html)
+
+        // Recipe型ではないので、HTMLにフォールバックすることを確認
+        #expect(type == "HTML")
+        #expect(content.hasPrefix("HTML:\n"))
+    }
 }
