@@ -128,29 +128,34 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     }
 
     /// Recipeをテキスト形式にシリアライズ（プロンプト用）
+    ///
+    /// 配列に追加してjoinedで結合することで、ループ内での文字列連結によるO(n²)を回避
     private func serializeRecipeForPrompt(_ recipe: Recipe) -> String {
-        var result = "Title: \(recipe.title)\n"
+        var components: [String] = []
+        components.append("Title: \(recipe.title)")
 
         if let description = recipe.description {
-            result += "Description: \(description)\n"
+            components.append("Description: \(description)")
         }
 
         if let servings = recipe.ingredientsInfo.servings {
-            result += "Servings: \(servings)\n"
+            components.append("Servings: \(servings)")
         }
 
-        result += "\nIngredients:\n"
+        components.append("")
+        components.append("Ingredients:")
         for ingredient in recipe.ingredientsInfo.items {
             let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
-            result += "- \(ingredient.name): \(amount)\n"
+            components.append("- \(ingredient.name): \(amount)")
         }
 
-        result += "\nSteps:\n"
+        components.append("")
+        components.append("Steps:")
         for step in recipe.steps {
-            result += "\(step.stepNumber). \(step.instruction)\n"
+            components.append("\(step.stepNumber). \(step.instruction)")
         }
 
-        return result
+        return components.joined(separator: "\n")
     }
 
     /// 置き換え対象を説明する文字列を生成
