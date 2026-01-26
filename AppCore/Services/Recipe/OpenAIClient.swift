@@ -7,6 +7,13 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
 
     // MARK: - Static Properties
 
+    /// sourceURLがnilの場合のフォールバックURL
+    // swiftlint:disable:next force_unwrapping
+    private static let fallbackSourceURL = URL(string: "about:blank")!
+
+    /// 分量が指定されていない場合のプレースホルダー
+    private static let amountNotSpecifiedPlaceholder = "(amount not specified)"
+
     /// JSON-LD抽出用の正規表現（関数呼び出しごとの再コンパイルを避けるためキャッシュ）
     ///
     /// パターン解説:
@@ -30,6 +37,136 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
 
     public init(configurationService: ConfigurationServiceProtocol) {
         self.configurationService = configurationService
+    }
+
+    public func substituteRecipe(
+        recipe: Recipe,
+        target: SubstitutionTarget,
+        prompt: String,
+        targetLanguage: String
+    ) async throws -> Recipe {
+        // 1. API設定を取得
+        let (openAI, model) = try await getOpenAIConfiguration()
+
+        // 2. プロンプトを構築
+        let systemPrompt = buildSubstitutionSystemPrompt(for: targetLanguage)
+        let userContent = buildSubstitutionUserContent(recipe: recipe, target: target, prompt: prompt)
+
+        // 3. デバッグログ出力
+        #if DEBUG
+        print("=== OpenAI Substitution Request ===")
+        print("Model: \(model)")
+        print("Target: \(target)")
+        print("User prompt length: \(prompt.count) characters")
+        print("===================================")
+        #endif
+
+        // 4. クエリを構築
+        let query = ChatQuery(
+            messages: [
+                .system(.init(content: .textContent(systemPrompt))),
+                .user(.init(content: .string(userContent)))
+            ],
+            model: model,
+            responseFormat: .jsonSchema(
+                .init(
+                    name: "recipe-substitution",
+                    schema: .derivedJsonSchema(RecipeResponse.self),
+                    strict: true
+                )
+            )
+        )
+
+        // 5. API呼び出し
+        let result = try await executeQuery(openAI: openAI, query: query)
+
+        // 6. レスポンスをデコード（元のsourceURLを維持）
+        return try decodeRecipe(from: result, sourceURL: recipe.sourceURL ?? Self.fallbackSourceURL)
+    }
+
+    // MARK: - Substitution Helpers
+
+    /// 置き換え用のシステムプロンプトを構築
+    private func buildSubstitutionSystemPrompt(for targetLanguage: String) -> String {
+        let languageInstruction = buildLanguageInstruction(for: targetLanguage)
+
+        return """
+            You are a cooking expert. Modify the given recipe based on the user's request.
+
+            IMPORTANT RULES:
+            - Modify the specified ingredient or step according to the user's request
+            - When an ingredient is changed, also adjust related cooking steps if necessary
+            - Set isModified: true for any changed ingredients or steps
+            - Keep isModified: false for unchanged items
+            - Keep the recipe structure intact (all required fields)
+            - Preserve ALL other ingredients and steps that are not affected by the change
+
+            \(languageInstruction)
+            """
+    }
+
+    /// 置き換え用のユーザーコンテンツを構築
+    private func buildSubstitutionUserContent(recipe: Recipe, target: SubstitutionTarget, prompt: String) -> String {
+        let recipeJson = serializeRecipeForPrompt(recipe)
+        let targetDescription = describeSubstitutionTarget(target)
+
+        return """
+            ## Current Recipe
+            \(recipeJson)
+
+            ## Target to Modify
+            \(targetDescription)
+
+            ## User's Request
+            \(prompt)
+
+            Please modify the recipe according to the user's request. Remember to:
+            1. Set isModified: true for changed items
+            2. Adjust related cooking steps if the ingredient change affects them
+            3. Keep all other items unchanged with isModified: false
+            """
+    }
+
+    /// Recipeをテキスト形式にシリアライズ（プロンプト用）
+    ///
+    /// 配列に追加してjoinedで結合することで、ループ内での文字列連結によるO(n²)を回避
+    private func serializeRecipeForPrompt(_ recipe: Recipe) -> String {
+        var components: [String] = []
+        components.append("Title: \(recipe.title)")
+
+        if let description = recipe.description {
+            components.append("Description: \(description)")
+        }
+
+        if let servings = recipe.ingredientsInfo.servings {
+            components.append("Servings: \(servings)")
+        }
+
+        components.append("")
+        components.append("Ingredients:")
+        for ingredient in recipe.ingredientsInfo.items {
+            let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
+            components.append("- \(ingredient.name): \(amount)")
+        }
+
+        components.append("")
+        components.append("Steps:")
+        for step in recipe.steps {
+            components.append("\(step.stepNumber). \(step.instruction)")
+        }
+
+        return components.joined(separator: "\n")
+    }
+
+    /// 置き換え対象を説明する文字列を生成
+    private func describeSubstitutionTarget(_ target: SubstitutionTarget) -> String {
+        switch target {
+        case .ingredient(let ingredient):
+            let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
+            return "Type: Ingredient\nName: \(ingredient.name) (\(amount))"
+        case .step(let step):
+            return "Type: Cooking Step\nStep \(step.stepNumber): \(step.instruction)"
+        }
     }
 
     public func extractRecipe(html: String, sourceURL: URL, targetLanguage: String) async throws -> Recipe {

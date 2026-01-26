@@ -17,4 +17,18 @@ public protocol OpenAIClientProtocol: Sendable {
     ///   - targetLanguage: 出力言語（例: "ja", "en"）
     /// - Returns: 抽出されたRecipe
     func extractRecipe(html: String, sourceURL: URL, targetLanguage: String) async throws -> Recipe
+
+    /// レシピの材料または調理工程を置き換える
+    /// - Parameters:
+    ///   - recipe: 現在のレシピ
+    ///   - target: 置き換え対象（材料または工程）
+    ///   - prompt: ユーザーの置き換え指示
+    ///   - targetLanguage: 出力言語（例: "ja", "en"）
+    /// - Returns: 置き換え後のRecipe
+    func substituteRecipe(
+        recipe: Recipe,
+        target: SubstitutionTarget,
+        prompt: String,
+        targetLanguage: String
+    ) async throws -> Recipe
 }

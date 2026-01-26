@@ -42,4 +42,26 @@ public struct RecipeExtractionService: RecipeExtractionServiceProtocol, Sendable
             throw RecipeExtractionError.extractionFailed(error.localizedDescription)
         }
     }
+
+    public func substituteRecipe(
+        recipe: Recipe,
+        target: SubstitutionTarget,
+        prompt: String
+    ) async throws -> Recipe {
+        // 端末の言語設定を取得
+        let targetLanguage = Locale.current.language.languageCode?.identifier ?? "en"
+
+        do {
+            return try await openAIClient.substituteRecipe(
+                recipe: recipe,
+                target: target,
+                prompt: prompt,
+                targetLanguage: targetLanguage
+            )
+        } catch let error as OpenAIClientError where error == .apiKeyNotConfigured {
+            throw RecipeExtractionError.apiKeyNotConfigured
+        } catch {
+            throw RecipeExtractionError.extractionFailed(error.localizedDescription)
+        }
+    }
 }

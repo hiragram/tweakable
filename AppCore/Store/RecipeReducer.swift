@@ -38,7 +38,7 @@ public enum RecipeReducer {
         case .substitutionFailed(let message):
             state.errorMessage = message
             state.isProcessingSubstitution = false
-            state.substitutionTarget = nil  // シートを閉じる
+            // シートは閉じない（リトライ可能にする）
 
         case .clearError:
             state.errorMessage = nil
