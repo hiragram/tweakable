@@ -11,6 +11,9 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     // swiftlint:disable:next force_unwrapping
     private static let fallbackSourceURL = URL(string: "about:blank")!
 
+    /// 分量が指定されていない場合のプレースホルダー
+    private static let amountNotSpecifiedPlaceholder = "(amount not specified)"
+
     /// JSON-LD抽出用の正規表現（関数呼び出しごとの再コンパイルを避けるためキャッシュ）
     ///
     /// パターン解説:
@@ -138,7 +141,7 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
 
         result += "\nIngredients:\n"
         for ingredient in recipe.ingredientsInfo.items {
-            let amount = ingredient.amount ?? "(amount not specified)"
+            let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
             result += "- \(ingredient.name): \(amount)\n"
         }
 
@@ -154,7 +157,7 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     private func describeSubstitutionTarget(_ target: SubstitutionTarget) -> String {
         switch target {
         case .ingredient(let ingredient):
-            let amount = ingredient.amount ?? "(amount not specified)"
+            let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
             return "Type: Ingredient\nName: \(ingredient.name) (\(amount))"
         case .step(let step):
             return "Type: Cooking Step\nStep \(step.stepNumber): \(step.instruction)"

@@ -205,21 +205,10 @@ public final class AppStore {
             do {
                 let recipe = try await recipeExtractionService.extractRecipe(from: url)
                 send(.recipe(.recipeLoaded(recipe)))
-            } catch let error as RecipeExtractionError {
-                let message: String
-                switch error {
-                case .htmlFetchFailed(let detail):
-                    message = String(localized: "recipe_error_html_fetch_failed", bundle: .app) + ": \(detail)"
-                case .apiKeyNotConfigured:
-                    message = String(localized: "recipe_error_api_key_not_configured", bundle: .app)
-                case .extractionFailed(let detail):
-                    message = String(localized: "recipe_error_extraction_failed", bundle: .app) + ": \(detail)"
-                }
+            } catch {
+                let message = buildRecipeErrorMessage(error, context: .load)
                 print("RecipeExtractionError: \(message)")
                 send(.recipe(.recipeLoadFailed(message)))
-            } catch {
-                print("Unexpected error: \(error)")
-                send(.recipe(.recipeLoadFailed(String(localized: "recipe_error_unexpected", bundle: .app) + ": \(error.localizedDescription)")))
             }
 
         case .requestSubstitution(let prompt):
@@ -236,24 +225,41 @@ public final class AppStore {
                     prompt: prompt
                 )
                 send(.recipe(.substitutionCompleted(updatedRecipe)))
-            } catch let error as RecipeExtractionError {
-                let message: String
-                switch error {
-                case .htmlFetchFailed(let detail):
-                    message = String(localized: "substitution_error_failed", bundle: .app) + ": \(detail)"
-                case .apiKeyNotConfigured:
-                    message = String(localized: "recipe_error_api_key_not_configured", bundle: .app)
-                case .extractionFailed(let detail):
-                    message = String(localized: "substitution_error_failed", bundle: .app) + ": \(detail)"
-                }
-                send(.recipe(.substitutionFailed(message)))
             } catch {
-                send(.recipe(.substitutionFailed(String(localized: "substitution_error_unexpected", bundle: .app) + ": \(error.localizedDescription)")))
+                let message = buildRecipeErrorMessage(error, context: .substitution)
+                send(.recipe(.substitutionFailed(message)))
             }
 
         default:
             // その他のアクションは副作用なし
             break
+        }
+    }
+
+    // MARK: - Recipe Error Handling
+
+    /// エラーメッセージを構築するコンテキスト
+    private enum RecipeErrorContext {
+        case load
+        case substitution
+    }
+
+    /// RecipeExtractionErrorからローカライズされたエラーメッセージを構築
+    private func buildRecipeErrorMessage(_ error: Error, context: RecipeErrorContext) -> String {
+        if let recipeError = error as? RecipeExtractionError {
+            switch recipeError {
+            case .htmlFetchFailed(let detail):
+                let baseKey = context == .load ? "recipe_error_html_fetch_failed" : "substitution_error_failed"
+                return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(detail)"
+            case .apiKeyNotConfigured:
+                return String(localized: "recipe_error_api_key_not_configured", bundle: .app)
+            case .extractionFailed(let detail):
+                let baseKey = context == .load ? "recipe_error_extraction_failed" : "substitution_error_failed"
+                return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(detail)"
+            }
+        } else {
+            let baseKey = context == .load ? "recipe_error_unexpected" : "substitution_error_unexpected"
+            return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(error.localizedDescription)"
         }
     }
 
