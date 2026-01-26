@@ -26,7 +26,6 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
         let query = buildChatQuery(
             systemPrompt: systemPrompt,
             content: content,
-            sourceURL: sourceURL,
             model: model
         )
 
@@ -110,7 +109,6 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     private func buildChatQuery(
         systemPrompt: String,
         content: String,
-        sourceURL: URL,
         model: String
     ) -> ChatQuery {
         ChatQuery(
@@ -118,8 +116,6 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
                 .system(.init(content: .textContent(systemPrompt))),
                 .user(.init(content: .string("""
                     Extract the complete recipe from the following content. Include every ingredient with its exact amount, and all cooking steps without summarizing.
-
-                    Source URL: \(sourceURL.absoluteString)
 
                     \(content)
                     """
