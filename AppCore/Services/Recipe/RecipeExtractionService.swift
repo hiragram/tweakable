@@ -21,8 +21,6 @@ public struct RecipeExtractionService: RecipeExtractionServiceProtocol, Sendable
         let html: String
         do {
             html = try await htmlFetcher.fetchHTML(from: url)
-        } catch let error as HTMLFetcherError {
-            throw RecipeExtractionError.htmlFetchFailed(error.localizedDescription)
         } catch {
             throw RecipeExtractionError.htmlFetchFailed(error.localizedDescription)
         }
@@ -32,24 +30,16 @@ public struct RecipeExtractionService: RecipeExtractionServiceProtocol, Sendable
         print("Target language: \(targetLanguage)")
 
         // 3. OpenAI APIでレシピを抽出
-        let recipe: Recipe
         do {
-            recipe = try await openAIClient.extractRecipe(
+            return try await openAIClient.extractRecipe(
                 html: html,
                 sourceURL: url,
                 targetLanguage: targetLanguage
             )
-        } catch let error as OpenAIClientError {
-            switch error {
-            case .apiKeyNotConfigured:
-                throw RecipeExtractionError.apiKeyNotConfigured
-            default:
-                throw RecipeExtractionError.extractionFailed(error.localizedDescription)
-            }
+        } catch let error as OpenAIClientError where error == .apiKeyNotConfigured {
+            throw RecipeExtractionError.apiKeyNotConfigured
         } catch {
             throw RecipeExtractionError.extractionFailed(error.localizedDescription)
         }
-
-        return recipe
     }
 }
