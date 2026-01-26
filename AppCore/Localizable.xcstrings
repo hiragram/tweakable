@@ -2763,6 +2763,70 @@
         }
       }
     },
+    "recipe_error_html_fetch_failed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to fetch recipe from this site"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このサイトからレシピを取得できませんでした"
+          }
+        }
+      }
+    },
+    "recipe_error_api_key_not_configured" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A configuration error occurred. Please restart the app."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定エラーが発生しました。アプリを再起動してください"
+          }
+        }
+      }
+    },
+    "recipe_error_extraction_failed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to parse recipe information"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レシピ情報を解析できませんでした"
+          }
+        }
+      }
+    },
+    "recipe_error_unexpected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected error occurred"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "予期しないエラーが発生しました"
+          }
+        }
+      }
+    },
     "recipe_home_extract_button" : {
       "localizations" : {
         "en" : {

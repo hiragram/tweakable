@@ -209,17 +209,17 @@ public final class AppStore {
                 let message: String
                 switch error {
                 case .htmlFetchFailed(let detail):
-                    message = "このサイトからレシピを取得できませんでした: \(detail)"
+                    message = String(localized: "recipe_error_html_fetch_failed", bundle: .app) + ": \(detail)"
                 case .apiKeyNotConfigured:
-                    message = "設定エラーが発生しました。アプリを再起動してください"
+                    message = String(localized: "recipe_error_api_key_not_configured", bundle: .app)
                 case .extractionFailed(let detail):
-                    message = "レシピ情報を解析できませんでした: \(detail)"
+                    message = String(localized: "recipe_error_extraction_failed", bundle: .app) + ": \(detail)"
                 }
                 print("RecipeExtractionError: \(message)")
                 send(.recipe(.recipeLoadFailed(message)))
             } catch {
                 print("Unexpected error: \(error)")
-                send(.recipe(.recipeLoadFailed("予期しないエラーが発生しました: \(error.localizedDescription)")))
+                send(.recipe(.recipeLoadFailed(String(localized: "recipe_error_unexpected", bundle: .app) + ": \(error.localizedDescription)")))
             }
 
         case .requestSubstitution:
