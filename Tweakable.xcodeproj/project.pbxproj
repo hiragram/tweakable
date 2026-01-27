@@ -250,7 +250,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				605EE80A2EECE98A00201738 /* Tweakable */,
-				E33F31B86DD5A77104FCE345 /* Tweakable/Settings.bundle */,
+				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
 			);
 			name = Tweakable;
 			packageProductDependencies = (

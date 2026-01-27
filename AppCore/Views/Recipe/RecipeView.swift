@@ -6,6 +6,7 @@ enum RecipeAccessibilityID {
     static let loadingView = "recipe_view_loading"
     static let errorView = "recipe_view_error"
     static let errorRetryButton = "recipe_button_retry"
+    static let heroImage = "recipe_image_hero"
     static let recipeTitle = "recipe_text_title"
     static let recipeDescription = "recipe_text_description"
     static let ingredientsList = "recipe_list_ingredients"
@@ -29,6 +30,8 @@ struct RecipeView: View {
     let onStepTapped: (CookingStep) -> Void
     let onRetryTapped: () -> Void
     let onShoppingListTapped: () -> Void
+
+    @State private var isTitleVisible: Bool = true
 
     var body: some View {
         Group {
@@ -88,29 +91,53 @@ struct RecipeView: View {
 
     private func recipeContent(_ recipe: Recipe) -> some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: ds.spacing.lg) {
-                // Recipe Description
-                if let description = recipe.description {
-                    Text(description)
-                        .font(.body)
-                        .foregroundColor(ds.colors.textSecondary.color)
-                        .accessibilityIdentifier(RecipeAccessibilityID.recipeDescription)
+            VStack(alignment: .leading, spacing: 0) {
+                // Hero Image
+                if let firstImageURL = recipe.imageURLs.first {
+                    heroImage(firstImageURL)
                 }
 
-                // Recipe Images
-                if !recipe.imageURLs.isEmpty {
-                    recipeImages(recipe.imageURLs)
+                // Content area with rounded top corners
+                VStack(alignment: .leading, spacing: ds.spacing.lg) {
+                    // Recipe Title
+                    Text(recipe.title)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(ds.colors.textPrimary.color)
+
+                    // Recipe Description
+                    if let description = recipe.description {
+                        Text(description)
+                            .font(.body)
+                            .foregroundColor(ds.colors.textSecondary.color)
+                            .accessibilityIdentifier(RecipeAccessibilityID.recipeDescription)
+                    }
+
+                    // Ingredients Section
+                    ingredientsSection(recipe.ingredientsInfo)
+
+                    // Steps Section
+                    stepsSection(recipe.steps)
                 }
-
-                // Ingredients Section
-                ingredientsSection(recipe.ingredientsInfo)
-
-                // Steps Section
-                stepsSection(recipe.steps)
+                .padding(ds.spacing.md)
+                .padding(.top, ds.spacing.lg)
+                .background(ds.colors.backgroundPrimary.color)
+                .clipShape(
+                    RoundedCorner(radius: ds.cornerRadius.xl, corners: [.topLeft, .topRight])
+                )
+                .offset(y: -ds.spacing.xl)
             }
-            .padding(ds.spacing.md)
+            .frame(maxWidth: .infinity)
         }
-        .navigationTitle(recipe.title)
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+            // ヒーロー画像(300pt) + コンテンツ上部パディング分スクロールしたらタイトル非表示
+            geometry.contentOffset.y > 280
+        } action: { _, shouldShowNavTitle in
+            isTitleVisible = !shouldShowNavTitle
+        }
+        .ignoresSafeArea(edges: .top)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(isTitleVisible ? "" : recipe.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: onShoppingListTapped) {
@@ -121,40 +148,36 @@ struct RecipeView: View {
         }
     }
 
-    // MARK: - Recipe Images
+    // MARK: - Hero Image
 
-    private func recipeImages(_ urls: [URL]) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: ds.spacing.sm) {
-                ForEach(urls, id: \.self) { url in
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .empty:
-                            Rectangle()
-                                .fill(ds.colors.backgroundSecondary.color)
-                                .frame(width: 200, height: 150)
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 200, height: 150)
-                                .clipped()
-                        case .failure:
-                            Rectangle()
-                                .fill(ds.colors.backgroundSecondary.color)
-                                .frame(width: 200, height: 150)
-                                .overlay {
-                                    Image(systemName: "photo")
-                                        .foregroundColor(ds.colors.textTertiary.color)
-                                }
-                        @unknown default:
-                            EmptyView()
-                        }
+    private func heroImage(_ url: URL) -> some View {
+        AsyncImage(url: url) { phase in
+            switch phase {
+            case .empty:
+                Rectangle()
+                    .fill(ds.colors.backgroundSecondary.color)
+                    .frame(height: 300)
+            case .success(let image):
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 300)
+                    .clipped()
+            case .failure:
+                Rectangle()
+                    .fill(ds.colors.backgroundSecondary.color)
+                    .frame(height: 300)
+                    .overlay {
+                        Image(systemName: "photo")
+                            .font(.largeTitle)
+                            .foregroundColor(ds.colors.textTertiary.color)
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-                }
+            @unknown default:
+                EmptyView()
             }
         }
+        .accessibilityIdentifier(RecipeAccessibilityID.heroImage)
     }
 
     // MARK: - Ingredients Section
@@ -188,9 +211,6 @@ struct RecipeView: View {
                     }
                 }
             }
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 2)
             .accessibilityIdentifier(RecipeAccessibilityID.ingredientsList)
         }
     }
@@ -220,7 +240,7 @@ struct RecipeView: View {
                         .foregroundColor(ds.colors.textTertiary.color)
                 }
             }
-            .padding(ds.spacing.md)
+            .padding(.vertical, ds.spacing.sm)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -285,10 +305,7 @@ struct RecipeView: View {
                     stepImages(step.imageURLs)
                 }
             }
-            .padding(ds.spacing.md)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 2)
+            .padding(.vertical, ds.spacing.sm)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -494,4 +511,20 @@ struct RecipeView: View {
         )
     }
     .prefireEnabled()
+}
+
+// MARK: - RoundedCorner Shape
+
+private struct RoundedCorner: Shape {
+    var radius: CGFloat
+    var corners: UIRectCorner
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
+    }
 }
