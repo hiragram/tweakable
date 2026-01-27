@@ -90,14 +90,16 @@ struct RecipeView: View {
     // MARK: - Recipe Content
 
     private func recipeContent(_ recipe: Recipe) -> some View {
-        ScrollView {
+        let hasHeroImage = recipe.imageURLs.first != nil
+
+        return ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Hero Image
                 if let firstImageURL = recipe.imageURLs.first {
                     heroImage(firstImageURL)
                 }
 
-                // Content area with rounded top corners
+                // Content area with rounded top corners (only when hero image exists)
                 VStack(alignment: .leading, spacing: ds.spacing.lg) {
                     // Recipe Title
                     Text(recipe.title)
@@ -120,12 +122,12 @@ struct RecipeView: View {
                     stepsSection(recipe.steps)
                 }
                 .padding(ds.spacing.md)
-                .padding(.top, ds.spacing.lg)
-                .background(ds.colors.backgroundPrimary.color)
+                .padding(.top, hasHeroImage ? ds.spacing.lg : 0)
+                .background(hasHeroImage ? ds.colors.backgroundPrimary.color : .clear)
                 .clipShape(
-                    RoundedCorner(radius: ds.cornerRadius.xl, corners: [.topLeft, .topRight])
+                    RoundedCorner(radius: hasHeroImage ? ds.cornerRadius.xl : 0, corners: [.topLeft, .topRight])
                 )
-                .offset(y: -ds.spacing.xl)
+                .offset(y: hasHeroImage ? -ds.spacing.xl : 0)
             }
             .frame(maxWidth: .infinity)
         }
@@ -135,7 +137,7 @@ struct RecipeView: View {
         } action: { _, shouldShowNavTitle in
             isTitleVisible = !shouldShowNavTitle
         }
-        .ignoresSafeArea(edges: .top)
+        .ignoresSafeArea(edges: hasHeroImage ? .top : [])
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(isTitleVisible ? "" : recipe.title)
         .toolbar {
