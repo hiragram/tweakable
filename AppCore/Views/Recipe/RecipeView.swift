@@ -161,7 +161,11 @@ struct RecipeView: View {
 
     private func ingredientsSection(_ ingredientsInfo: Ingredients) -> some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            HStack {
+            HStack(spacing: ds.spacing.xs) {
+                Image(systemName: "carrot.fill")
+                    .font(.headline)
+                    .foregroundColor(ds.colors.secondaryBrand.color)
+
                 Text("recipe_section_ingredients", bundle: .app)
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
@@ -184,8 +188,9 @@ struct RecipeView: View {
                     }
                 }
             }
-            .background(ds.colors.backgroundSecondary.color)
+            .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 2)
             .accessibilityIdentifier(RecipeAccessibilityID.ingredientsList)
         }
     }
@@ -226,9 +231,15 @@ struct RecipeView: View {
 
     private func stepsSection(_ steps: [CookingStep]) -> some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            Text("recipe_section_steps", bundle: .app)
-                .font(.headline)
-                .foregroundColor(ds.colors.textPrimary.color)
+            HStack(spacing: ds.spacing.xs) {
+                Image(systemName: "list.number")
+                    .font(.headline)
+                    .foregroundColor(ds.colors.secondaryBrand.color)
+
+                Text("recipe_section_steps", bundle: .app)
+                    .font(.headline)
+                    .foregroundColor(ds.colors.textPrimary.color)
+            }
 
             VStack(spacing: ds.spacing.sm) {
                 ForEach(steps.indices, id: \.self) { index in
@@ -275,8 +286,9 @@ struct RecipeView: View {
                 }
             }
             .padding(ds.spacing.md)
-            .background(ds.colors.backgroundSecondary.color)
+            .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+            .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 2)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
