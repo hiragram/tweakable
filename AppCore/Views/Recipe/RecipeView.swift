@@ -89,17 +89,23 @@ struct RecipeView: View {
 
     // MARK: - Recipe Content
 
+    /// レシピのメインコンテンツを表示
+    ///
+    /// スクロール位置に応じてナビゲーションタイトルを動的に切り替える。
+    /// - ヒーロー画像表示中: タイトル非表示（画像内に料理名が見える想定）
+    /// - スクロール後: ナビゲーションバーにタイトルを表示
     private func recipeContent(_ recipe: Recipe) -> some View {
         let hasHeroImage = recipe.imageURLs.first != nil
 
         return ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                // Hero Image
+            VStack(spacing: 0) {
+                // Hero Image（画面幅いっぱい）
                 if let firstImageURL = recipe.imageURLs.first {
                     heroImage(firstImageURL)
                 }
 
                 // Content area with rounded top corners (only when hero image exists)
+                // 背景を先に配置
                 VStack(alignment: .leading, spacing: ds.spacing.lg) {
                     // Recipe Title
                     Text(recipe.title)
@@ -121,15 +127,10 @@ struct RecipeView: View {
                     // Steps Section
                     stepsSection(recipe.steps)
                 }
-                .padding(ds.spacing.md)
-                .padding(.top, hasHeroImage ? ds.spacing.lg : 0)
-                .background(hasHeroImage ? ds.colors.backgroundPrimary.color : .clear)
-                .clipShape(
-                    RoundedCorner(radius: hasHeroImage ? ds.cornerRadius.xl : 0, corners: [.topLeft, .topRight])
-                )
-                .offset(y: hasHeroImage ? -ds.spacing.xl : 0)
+                .padding(.horizontal, ds.spacing.md)
+                .padding(.vertical, ds.spacing.md)
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
         }
         .onScrollGeometryChange(for: Bool.self) { geometry in
             // ヒーロー画像(300pt) + コンテンツ上部パディング分スクロールしたらタイトル非表示
@@ -137,7 +138,6 @@ struct RecipeView: View {
         } action: { _, shouldShowNavTitle in
             isTitleVisible = !shouldShowNavTitle
         }
-        .ignoresSafeArea(edges: hasHeroImage ? .top : [])
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(isTitleVisible ? "" : recipe.title)
         .toolbar {
@@ -163,12 +163,7 @@ struct RecipeView: View {
                             .fill(ds.colors.backgroundSecondary.color)
                             .frame(height: 300)
                     case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 300)
-                            .clipped()
+                        heroImageContent(image)
                     case .failure:
                         Rectangle()
                             .fill(ds.colors.backgroundSecondary.color)
@@ -185,23 +180,28 @@ struct RecipeView: View {
             case .local(let fileURL):
                 if let data = try? Data(contentsOf: fileURL),
                    let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 300)
-                        .clipped()
+                    heroImageContent(Image(uiImage: uiImage))
                 }
             case .uiImage(let uiImage):
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 300)
-                    .clipped()
+                heroImageContent(Image(uiImage: uiImage))
             }
         }
+        .clipShape(RoundedCorner(radius: ds.cornerRadius.xl, corners: [.bottomLeft, .bottomRight]))
+        .overlay(alignment: .top) {
+            SmoothGradient(
+                from: .clear,
+                to: Color(uiColor: .systemBackground),
+                startPoint: .bottom,
+                endPoint: .top
+            )
+            .frame(height: 60)
+        }
         .accessibilityIdentifier(RecipeAccessibilityID.heroImage)
+    }
+
+    /// ブラー背景付きヒーロー画像
+    private func heroImageContent(_ image: Image) -> some View {
+        BlurredBackgroundImage(image: image, height: 300)
     }
 
     // MARK: - Ingredients Section
@@ -338,7 +338,8 @@ struct RecipeView: View {
 
     private func stepImages(_ sources: [ImageSource]) -> some View {
         VStack(spacing: ds.spacing.sm) {
-            ForEach(Array(sources.enumerated()), id: \.offset) { _, source in
+            ForEach(sources.indices, id: \.self) { index in
+                let source = sources[index]
                 Group {
                     switch source {
                     case .remote(let url):
@@ -541,6 +542,53 @@ struct RecipeView: View {
         )
     }
     .prefireEnabled()
+}
+
+#Preview("With Recipe (Remote Hero Image)") {
+    NavigationStack {
+        RecipeView(
+            recipe: Recipe(
+                title: "鶏の照り焼き",
+                description: "甘辛いタレが食欲をそそる定番の照り焼きチキン。ご飯のおかずにぴったりです。",
+                imageURLs: [.remote(url: URL(string: "https://img-global-jp.cpcdn.com/recipes/a74bad56b72e6dab/1280x1280sq80/photo.webp")!)],
+                ingredientsInfo: Ingredients(
+                    servings: "2人分",
+                    items: [
+                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
+                        Ingredient(name: "醤油", amount: "大さじ3"),
+                        Ingredient(name: "みりん", amount: "大さじ2"),
+                        Ingredient(name: "砂糖", amount: "大さじ1"),
+                        Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                    ]
+                ),
+                steps: [
+                    CookingStep(
+                        stepNumber: 1,
+                        instruction: "鶏もも肉を一口大に切る",
+                        imageURLs: [.previewPlaceholder()]
+                    ),
+                    CookingStep(
+                        stepNumber: 2,
+                        instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
+                        imageURLs: [.previewPlaceholder()],
+                        isModified: true
+                    ),
+                    CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
+                    CookingStep(
+                        stepNumber: 4,
+                        instruction: "タレを絡めながら照りが出るまで煮詰める",
+                        imageURLs: [.previewPlaceholder()]
+                    )
+                ]
+            ),
+            isLoading: false,
+            errorMessage: nil,
+            onIngredientTapped: { _ in },
+            onStepTapped: { _ in },
+            onRetryTapped: {},
+            onShoppingListTapped: {}
+        )
+    }
 }
 
 // MARK: - RoundedCorner Shape

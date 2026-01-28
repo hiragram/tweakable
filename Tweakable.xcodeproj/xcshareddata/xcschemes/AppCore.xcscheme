@@ -44,15 +44,14 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            default = "YES"
-            reference = "container:AppCore/AppCore.xctestplan">
+            reference = "container:AppCore/AppCore.xctestplan"
+            default = "YES">
          </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES"
-            useTestSelectionWhitelist = "NO">
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13421E21D638B9A2AF490E9D"

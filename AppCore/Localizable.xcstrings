@@ -2811,54 +2811,6 @@
         }
       }
     },
-    "recipe_error_api_key_not_configured" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A configuration error occurred. Please restart the app."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "設定エラーが発生しました。アプリを再起動してください"
-          }
-        }
-      }
-    },
-    "recipe_error_extraction_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to parse recipe information"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "レシピ情報を解析できませんでした"
-          }
-        }
-      }
-    },
-    "recipe_error_html_fetch_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to fetch recipe from this site"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このサイトからレシピを取得できませんでした"
-          }
-        }
-      }
-    },
     "recipe_error_unexpected" : {
       "localizations" : {
         "en" : {
@@ -2871,54 +2823,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "予期しないエラーが発生しました"
-          }
-        }
-      }
-    },
-    "substitution_error_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to modify the recipe"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "レシピの変更に失敗しました"
-          }
-        }
-      }
-    },
-    "substitution_error_no_target" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No item selected for substitution"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "置き換え対象が選択されていません"
-          }
-        }
-      }
-    },
-    "substitution_error_unexpected" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An unexpected error occurred during substitution"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "置き換え中に予期しないエラーが発生しました"
           }
         }
       }
@@ -3600,18 +3504,49 @@
       }
     },
     "substitution_error_failed" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Substitution failed. Please try again."
+            "value" : "Failed to modify the recipe"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "置き換えに失敗しました。もう一度お試しください。"
+            "value" : "レシピの変更に失敗しました"
+          }
+        }
+      }
+    },
+    "substitution_error_no_target" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No item selected for substitution"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "置き換え対象が選択されていません"
+          }
+        }
+      }
+    },
+    "substitution_error_unexpected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unexpected error occurred during substitution"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "置き換え中に予期しないエラーが発生しました"
           }
         }
       }
