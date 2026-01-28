@@ -104,8 +104,7 @@ struct RecipeView: View {
                     heroImage(firstImageURL)
                 }
 
-                // Content area with rounded top corners (only when hero image exists)
-                // 背景を先に配置
+                // Content area
                 VStack(alignment: .leading, spacing: ds.spacing.lg) {
                     // Recipe Title
                     Text(recipe.title)
@@ -133,7 +132,7 @@ struct RecipeView: View {
             }
         }
         .onScrollGeometryChange(for: Bool.self) { geometry in
-            // ヒーロー画像(300pt) + コンテンツ上部パディング分スクロールしたらタイトル非表示
+            // 280pt以上スクロールしたらナビゲーションタイトルを表示
             geometry.contentOffset.y > 280
         } action: { _, shouldShowNavTitle in
             isTitleVisible = !shouldShowNavTitle
