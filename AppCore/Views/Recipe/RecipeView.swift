@@ -152,31 +152,53 @@ struct RecipeView: View {
 
     // MARK: - Hero Image
 
-    private func heroImage(_ url: URL) -> some View {
-        AsyncImage(url: url) { phase in
-            switch phase {
-            case .empty:
-                Rectangle()
-                    .fill(ds.colors.backgroundSecondary.color)
-                    .frame(height: 300)
-            case .success(let image):
-                image
+    private func heroImage(_ source: ImageSource) -> some View {
+        Group {
+            switch source {
+            case .remote(let url):
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        Rectangle()
+                            .fill(ds.colors.backgroundSecondary.color)
+                            .frame(height: 300)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 300)
+                            .clipped()
+                    case .failure:
+                        Rectangle()
+                            .fill(ds.colors.backgroundSecondary.color)
+                            .frame(height: 300)
+                            .overlay {
+                                Image(systemName: "photo")
+                                    .font(.largeTitle)
+                                    .foregroundColor(ds.colors.textTertiary.color)
+                            }
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+            case .local(let fileURL):
+                if let data = try? Data(contentsOf: fileURL),
+                   let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 300)
+                        .clipped()
+                }
+            case .uiImage(let uiImage):
+                Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: .infinity)
                     .frame(height: 300)
                     .clipped()
-            case .failure:
-                Rectangle()
-                    .fill(ds.colors.backgroundSecondary.color)
-                    .frame(height: 300)
-                    .overlay {
-                        Image(systemName: "photo")
-                            .font(.largeTitle)
-                            .foregroundColor(ds.colors.textTertiary.color)
-                    }
-            @unknown default:
-                EmptyView()
             }
         }
         .accessibilityIdentifier(RecipeAccessibilityID.heroImage)
@@ -314,25 +336,41 @@ struct RecipeView: View {
         .accessibilityIdentifier(RecipeAccessibilityID.stepItem(index))
     }
 
-    private func stepImages(_ urls: [URL]) -> some View {
+    private func stepImages(_ sources: [ImageSource]) -> some View {
         VStack(spacing: ds.spacing.sm) {
-            ForEach(urls, id: \.self) { url in
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
-                        Rectangle()
-                            .fill(ds.colors.backgroundTertiary.color)
-                            .aspectRatio(4 / 3, contentMode: .fit)
-                    case .success(let image):
-                        image
+            ForEach(Array(sources.enumerated()), id: \.offset) { _, source in
+                Group {
+                    switch source {
+                    case .remote(let url):
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                Rectangle()
+                                    .fill(ds.colors.backgroundTertiary.color)
+                                    .aspectRatio(4 / 3, contentMode: .fit)
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            case .failure:
+                                Rectangle()
+                                    .fill(ds.colors.backgroundTertiary.color)
+                                    .aspectRatio(4 / 3, contentMode: .fit)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                    case .local(let fileURL):
+                        if let data = try? Data(contentsOf: fileURL),
+                           let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                    case .uiImage(let uiImage):
+                        Image(uiImage: uiImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                    case .failure:
-                        Rectangle()
-                            .fill(ds.colors.backgroundTertiary.color)
-                            .aspectRatio(4 / 3, contentMode: .fit)
-                    @unknown default:
-                        EmptyView()
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
@@ -463,10 +501,7 @@ struct RecipeView: View {
             recipe: Recipe(
                 title: "鶏の照り焼き",
                 description: "甘辛いタレが食欲をそそる定番の照り焼きチキン。ご飯のおかずにぴったりです。",
-                imageURLs: [
-                    URL(string: "https://picsum.photos/seed/chicken-dish/200/150")!,
-                    URL(string: "https://picsum.photos/seed/cooking-pan/200/150")!
-                ],
+                imageURLs: [.previewPlaceholder()],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
                     items: [
@@ -481,26 +516,19 @@ struct RecipeView: View {
                     CookingStep(
                         stepNumber: 1,
                         instruction: "鶏もも肉を一口大に切る",
-                        imageURLs: [
-                            URL(string: "https://picsum.photos/seed/cutting-board/400/300")!
-                        ]
+                        imageURLs: [.previewPlaceholder()]
                     ),
                     CookingStep(
                         stepNumber: 2,
                         instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
-                        imageURLs: [
-                            URL(string: "https://picsum.photos/seed/frying-meat/400/300")!,
-                            URL(string: "https://picsum.photos/seed/golden-brown/400/300")!
-                        ],
+                        imageURLs: [.previewPlaceholder()],
                         isModified: true
                     ),
                     CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
                     CookingStep(
                         stepNumber: 4,
                         instruction: "タレを絡めながら照りが出るまで煮詰める",
-                        imageURLs: [
-                            URL(string: "https://picsum.photos/seed/sauce-glaze/400/300")!
-                        ]
+                        imageURLs: [.previewPlaceholder()]
                     )
                 ]
             ),

@@ -11,7 +11,7 @@ struct RecipeExtractionServiceTests {
         Recipe(
             title: "テストレシピ",
             description: "テスト用の説明",
-            imageURLs: [URL(string: "https://example.com/image.jpg")!],
+            imageURLs: [.remote(url: URL(string: "https://example.com/image.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "2人分",
                 items: [

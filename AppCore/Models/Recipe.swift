@@ -7,7 +7,7 @@ public struct Recipe: Equatable, Sendable, Identifiable {
     public let id: UUID
     public let title: String
     public let description: String?
-    public let imageURLs: [URL]
+    public let imageURLs: [ImageSource]
     public var ingredientsInfo: Ingredients
     public var steps: [CookingStep]
     public let sourceURL: URL?
@@ -16,7 +16,7 @@ public struct Recipe: Equatable, Sendable, Identifiable {
         id: UUID = UUID(),
         title: String,
         description: String? = nil,
-        imageURLs: [URL] = [],
+        imageURLs: [ImageSource] = [],
         ingredientsInfo: Ingredients,
         steps: [CookingStep],
         sourceURL: URL? = nil
@@ -79,7 +79,7 @@ public struct CookingStep: Equatable, Sendable, Identifiable {
     public let id: UUID
     public let stepNumber: Int
     public let instruction: String
-    public let imageURLs: [URL]
+    public let imageURLs: [ImageSource]
     /// LLM APIによる置き換え処理で変更されたかどうか
     public var isModified: Bool
 
@@ -87,7 +87,7 @@ public struct CookingStep: Equatable, Sendable, Identifiable {
         id: UUID = UUID(),
         stepNumber: Int,
         instruction: String,
-        imageURLs: [URL] = [],
+        imageURLs: [ImageSource] = [],
         isModified: Bool = false
     ) {
         self.id = id
