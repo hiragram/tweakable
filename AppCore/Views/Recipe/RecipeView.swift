@@ -6,6 +6,7 @@ enum RecipeAccessibilityID {
     static let loadingView = "recipe_view_loading"
     static let errorView = "recipe_view_error"
     static let errorRetryButton = "recipe_button_retry"
+    static let heroImage = "recipe_image_hero"
     static let recipeTitle = "recipe_text_title"
     static let recipeDescription = "recipe_text_description"
     static let ingredientsList = "recipe_list_ingredients"
@@ -29,6 +30,8 @@ struct RecipeView: View {
     let onStepTapped: (CookingStep) -> Void
     let onRetryTapped: () -> Void
     let onShoppingListTapped: () -> Void
+
+    @State private var isTitleVisible: Bool = true
 
     var body: some View {
         Group {
@@ -86,31 +89,56 @@ struct RecipeView: View {
 
     // MARK: - Recipe Content
 
+    /// レシピのメインコンテンツを表示
+    ///
+    /// スクロール位置に応じてナビゲーションタイトルを動的に切り替える。
+    /// - ヒーロー画像表示中: タイトル非表示（画像内に料理名が見える想定）
+    /// - スクロール後: ナビゲーションバーにタイトルを表示
     private func recipeContent(_ recipe: Recipe) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: ds.spacing.lg) {
-                // Recipe Description
-                if let description = recipe.description {
-                    Text(description)
-                        .font(.body)
-                        .foregroundColor(ds.colors.textSecondary.color)
-                        .accessibilityIdentifier(RecipeAccessibilityID.recipeDescription)
+        let hasHeroImage = recipe.imageURLs.first != nil
+
+        return ScrollView {
+            VStack(spacing: 0) {
+                // Hero Image（画面幅いっぱい）
+                if let firstImageURL = recipe.imageURLs.first {
+                    heroImage(firstImageURL)
                 }
 
-                // Recipe Images
-                if !recipe.imageURLs.isEmpty {
-                    recipeImages(recipe.imageURLs)
+                // Content area
+                VStack(alignment: .leading, spacing: ds.spacing.lg) {
+                    // Recipe Title
+                    Text(recipe.title)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(ds.colors.textPrimary.color)
+
+                    // Recipe Description
+                    if let description = recipe.description {
+                        Text(description)
+                            .font(.body)
+                            .foregroundColor(ds.colors.textSecondary.color)
+                            .accessibilityIdentifier(RecipeAccessibilityID.recipeDescription)
+                    }
+
+                    // Ingredients Section
+                    ingredientsSection(recipe.ingredientsInfo)
+
+                    // Steps Section
+                    stepsSection(recipe.steps)
                 }
-
-                // Ingredients Section
-                ingredientsSection(recipe.ingredientsInfo)
-
-                // Steps Section
-                stepsSection(recipe.steps)
+                .padding(.horizontal, ds.spacing.md)
+                .padding(.vertical, ds.spacing.md)
+                .frame(maxWidth: .infinity)
             }
-            .padding(ds.spacing.md)
         }
-        .navigationTitle(recipe.title)
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+            // 280pt以上スクロールしたらナビゲーションタイトルを表示
+            geometry.contentOffset.y > 280
+        } action: { _, shouldShowNavTitle in
+            isTitleVisible = !shouldShowNavTitle
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(isTitleVisible ? "" : recipe.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: onShoppingListTapped) {
@@ -121,47 +149,69 @@ struct RecipeView: View {
         }
     }
 
-    // MARK: - Recipe Images
+    // MARK: - Hero Image
 
-    private func recipeImages(_ urls: [URL]) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: ds.spacing.sm) {
-                ForEach(urls, id: \.self) { url in
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .empty:
-                            Rectangle()
-                                .fill(ds.colors.backgroundSecondary.color)
-                                .frame(width: 200, height: 150)
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 200, height: 150)
-                                .clipped()
-                        case .failure:
-                            Rectangle()
-                                .fill(ds.colors.backgroundSecondary.color)
-                                .frame(width: 200, height: 150)
-                                .overlay {
-                                    Image(systemName: "photo")
-                                        .foregroundColor(ds.colors.textTertiary.color)
-                                }
-                        @unknown default:
-                            EmptyView()
-                        }
+    private func heroImage(_ source: ImageSource) -> some View {
+        Group {
+            switch source {
+            case .remote(let url):
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        Rectangle()
+                            .fill(ds.colors.backgroundSecondary.color)
+                            .frame(height: 300)
+                    case .success(let image):
+                        heroImageContent(image)
+                    case .failure:
+                        Rectangle()
+                            .fill(ds.colors.backgroundSecondary.color)
+                            .frame(height: 300)
+                            .overlay {
+                                Image(systemName: "photo")
+                                    .font(.largeTitle)
+                                    .foregroundColor(ds.colors.textTertiary.color)
+                            }
+                    @unknown default:
+                        EmptyView()
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
                 }
+            case .local(let fileURL):
+                if let data = try? Data(contentsOf: fileURL),
+                   let uiImage = UIImage(data: data) {
+                    heroImageContent(Image(uiImage: uiImage))
+                }
+            case .uiImage(let uiImage):
+                heroImageContent(Image(uiImage: uiImage))
             }
         }
+        .clipShape(RoundedCorner(radius: ds.cornerRadius.xl, corners: [.bottomLeft, .bottomRight]))
+        .overlay(alignment: .top) {
+            SmoothGradient(
+                from: .clear,
+                to: Color(uiColor: .systemBackground),
+                startPoint: .bottom,
+                endPoint: .top
+            )
+            .frame(height: 60)
+        }
+        .accessibilityIdentifier(RecipeAccessibilityID.heroImage)
+    }
+
+    /// ブラー背景付きヒーロー画像
+    private func heroImageContent(_ image: Image) -> some View {
+        BlurredBackgroundImage(image: image, height: 300)
     }
 
     // MARK: - Ingredients Section
 
     private func ingredientsSection(_ ingredientsInfo: Ingredients) -> some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            HStack {
+            HStack(spacing: ds.spacing.xs) {
+                Image(systemName: "carrot.fill")
+                    .font(.headline)
+                    .foregroundColor(ds.colors.secondaryBrand.color)
+
                 Text("recipe_section_ingredients", bundle: .app)
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
@@ -184,8 +234,6 @@ struct RecipeView: View {
                     }
                 }
             }
-            .background(ds.colors.backgroundSecondary.color)
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
             .accessibilityIdentifier(RecipeAccessibilityID.ingredientsList)
         }
     }
@@ -215,7 +263,7 @@ struct RecipeView: View {
                         .foregroundColor(ds.colors.textTertiary.color)
                 }
             }
-            .padding(ds.spacing.md)
+            .padding(.vertical, ds.spacing.sm)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -226,9 +274,15 @@ struct RecipeView: View {
 
     private func stepsSection(_ steps: [CookingStep]) -> some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            Text("recipe_section_steps", bundle: .app)
-                .font(.headline)
-                .foregroundColor(ds.colors.textPrimary.color)
+            HStack(spacing: ds.spacing.xs) {
+                Image(systemName: "list.number")
+                    .font(.headline)
+                    .foregroundColor(ds.colors.secondaryBrand.color)
+
+                Text("recipe_section_steps", bundle: .app)
+                    .font(.headline)
+                    .foregroundColor(ds.colors.textPrimary.color)
+            }
 
             VStack(spacing: ds.spacing.sm) {
                 ForEach(steps.indices, id: \.self) { index in
@@ -274,34 +328,49 @@ struct RecipeView: View {
                     stepImages(step.imageURLs)
                 }
             }
-            .padding(ds.spacing.md)
-            .background(ds.colors.backgroundSecondary.color)
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+            .padding(.vertical, ds.spacing.sm)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(RecipeAccessibilityID.stepItem(index))
     }
 
-    private func stepImages(_ urls: [URL]) -> some View {
+    private func stepImages(_ sources: [ImageSource]) -> some View {
         VStack(spacing: ds.spacing.sm) {
-            ForEach(urls, id: \.self) { url in
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
-                        Rectangle()
-                            .fill(ds.colors.backgroundTertiary.color)
-                            .aspectRatio(4 / 3, contentMode: .fit)
-                    case .success(let image):
-                        image
+            ForEach(sources.indices, id: \.self) { index in
+                let source = sources[index]
+                Group {
+                    switch source {
+                    case .remote(let url):
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                Rectangle()
+                                    .fill(ds.colors.backgroundTertiary.color)
+                                    .aspectRatio(4 / 3, contentMode: .fit)
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            case .failure:
+                                Rectangle()
+                                    .fill(ds.colors.backgroundTertiary.color)
+                                    .aspectRatio(4 / 3, contentMode: .fit)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                    case .local(let fileURL):
+                        if let data = try? Data(contentsOf: fileURL),
+                           let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                    case .uiImage(let uiImage):
+                        Image(uiImage: uiImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                    case .failure:
-                        Rectangle()
-                            .fill(ds.colors.backgroundTertiary.color)
-                            .aspectRatio(4 / 3, contentMode: .fit)
-                    @unknown default:
-                        EmptyView()
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
@@ -432,10 +501,7 @@ struct RecipeView: View {
             recipe: Recipe(
                 title: "鶏の照り焼き",
                 description: "甘辛いタレが食欲をそそる定番の照り焼きチキン。ご飯のおかずにぴったりです。",
-                imageURLs: [
-                    URL(string: "https://picsum.photos/seed/chicken-dish/200/150")!,
-                    URL(string: "https://picsum.photos/seed/cooking-pan/200/150")!
-                ],
+                imageURLs: [.previewPlaceholder()],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
                     items: [
@@ -450,26 +516,19 @@ struct RecipeView: View {
                     CookingStep(
                         stepNumber: 1,
                         instruction: "鶏もも肉を一口大に切る",
-                        imageURLs: [
-                            URL(string: "https://picsum.photos/seed/cutting-board/400/300")!
-                        ]
+                        imageURLs: [.previewPlaceholder()]
                     ),
                     CookingStep(
                         stepNumber: 2,
                         instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
-                        imageURLs: [
-                            URL(string: "https://picsum.photos/seed/frying-meat/400/300")!,
-                            URL(string: "https://picsum.photos/seed/golden-brown/400/300")!
-                        ],
+                        imageURLs: [.previewPlaceholder()],
                         isModified: true
                     ),
                     CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
                     CookingStep(
                         stepNumber: 4,
                         instruction: "タレを絡めながら照りが出るまで煮詰める",
-                        imageURLs: [
-                            URL(string: "https://picsum.photos/seed/sauce-glaze/400/300")!
-                        ]
+                        imageURLs: [.previewPlaceholder()]
                     )
                 ]
             ),
@@ -482,4 +541,67 @@ struct RecipeView: View {
         )
     }
     .prefireEnabled()
+}
+
+#Preview("With Recipe (Remote Hero Image)") {
+    NavigationStack {
+        RecipeView(
+            recipe: Recipe(
+                title: "鶏の照り焼き",
+                description: "甘辛いタレが食欲をそそる定番の照り焼きチキン。ご飯のおかずにぴったりです。",
+                imageURLs: [.remote(url: URL(string: "https://img-global-jp.cpcdn.com/recipes/a74bad56b72e6dab/1280x1280sq80/photo.webp")!)],
+                ingredientsInfo: Ingredients(
+                    servings: "2人分",
+                    items: [
+                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
+                        Ingredient(name: "醤油", amount: "大さじ3"),
+                        Ingredient(name: "みりん", amount: "大さじ2"),
+                        Ingredient(name: "砂糖", amount: "大さじ1"),
+                        Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                    ]
+                ),
+                steps: [
+                    CookingStep(
+                        stepNumber: 1,
+                        instruction: "鶏もも肉を一口大に切る",
+                        imageURLs: [.previewPlaceholder()]
+                    ),
+                    CookingStep(
+                        stepNumber: 2,
+                        instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
+                        imageURLs: [.previewPlaceholder()],
+                        isModified: true
+                    ),
+                    CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
+                    CookingStep(
+                        stepNumber: 4,
+                        instruction: "タレを絡めながら照りが出るまで煮詰める",
+                        imageURLs: [.previewPlaceholder()]
+                    )
+                ]
+            ),
+            isLoading: false,
+            errorMessage: nil,
+            onIngredientTapped: { _ in },
+            onStepTapped: { _ in },
+            onRetryTapped: {},
+            onShoppingListTapped: {}
+        )
+    }
+}
+
+// MARK: - RoundedCorner Shape
+
+private struct RoundedCorner: Shape {
+    var radius: CGFloat
+    var corners: UIRectCorner
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
+    }
 }

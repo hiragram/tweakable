@@ -65,7 +65,7 @@ extension RecipeResponse {
         Recipe(
             title: title,
             description: description,
-            imageURLs: imageURLs.compactMap { URL(string: $0) },
+            imageURLs: imageURLs.compactMap { URL(string: $0) }.map { .remote(url: $0) },
             ingredientsInfo: Ingredients(
                 servings: servings,
                 items: ingredients.map {
@@ -76,7 +76,7 @@ extension RecipeResponse {
                 CookingStep(
                     stepNumber: $0.stepNumber,
                     instruction: $0.instruction,
-                    imageURLs: $0.imageURLs?.compactMap { URL(string: $0) } ?? [],
+                    imageURLs: $0.imageURLs?.compactMap { URL(string: $0) }.map { .remote(url: $0) } ?? [],
                     isModified: $0.isModified ?? false
                 )
             },
