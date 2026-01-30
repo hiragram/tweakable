@@ -234,7 +234,7 @@ public final class AppStore {
         case .requestSubstitution(let prompt):
             guard let recipe = state.recipe.currentRecipe,
                   let target = state.recipe.substitutionTarget else {
-                send(.recipe(.substitutionFailed(String(localized: .substitutionErrorNoTarget))))
+                send(.recipe(.substitutionFailed(String(localized: "substitution_error_no_target", bundle: .app))))
                 return
             }
 
@@ -295,19 +295,19 @@ public final class AppStore {
             switch recipeError {
             case .htmlFetchFailed(let detail):
                 return context == .load
-                    ? String(localized: .recipeErrorHtmlFetchFailed(detail))
-                    : String(localized: .substitutionErrorFailed) + ": \(detail)"
+                    ? String(localized: "recipe_error_html_fetch_failed \(detail)", bundle: .app)
+                    : String(localized: "substitution_error_failed", bundle: .app) + ": \(detail)"
             case .apiKeyNotConfigured:
-                return String(localized: .recipeErrorApiKeyNotConfigured)
+                return String(localized: "recipe_error_api_key_not_configured", bundle: .app)
             case .extractionFailed(let detail):
                 return context == .load
-                    ? String(localized: .recipeErrorExtractionFailed(detail))
-                    : String(localized: .substitutionErrorFailed) + ": \(detail)"
+                    ? String(localized: "recipe_error_extraction_failed \(detail)", bundle: .app)
+                    : String(localized: "substitution_error_failed", bundle: .app) + ": \(detail)"
             }
         } else {
             let baseMessage = context == .load
-                ? String(localized: .recipeErrorUnexpected)
-                : String(localized: .substitutionErrorUnexpected)
+                ? String(localized: "recipe_error_unexpected", bundle: .app)
+                : String(localized: "substitution_error_unexpected", bundle: .app)
             return baseMessage + ": \(error.localizedDescription)"
         }
     }
