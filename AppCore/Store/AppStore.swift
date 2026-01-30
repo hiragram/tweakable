@@ -234,7 +234,7 @@ public final class AppStore {
         case .requestSubstitution(let prompt):
             guard let recipe = state.recipe.currentRecipe,
                   let target = state.recipe.substitutionTarget else {
-                send(.recipe(.substitutionFailed(String(localized: "substitution_error_no_target", bundle: .app))))
+                send(.recipe(.substitutionFailed(String(localized: .substitutionErrorNoTarget))))
                 return
             }
 
@@ -294,17 +294,21 @@ public final class AppStore {
         if let recipeError = error as? RecipeExtractionError {
             switch recipeError {
             case .htmlFetchFailed(let detail):
-                let baseKey = context == .load ? "recipe_error_html_fetch_failed" : "substitution_error_failed"
-                return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(detail)"
+                return context == .load
+                    ? String(localized: .recipeErrorHtmlFetchFailed(detail))
+                    : String(localized: .substitutionErrorFailed) + ": \(detail)"
             case .apiKeyNotConfigured:
-                return String(localized: "recipe_error_api_key_not_configured", bundle: .app)
+                return String(localized: .recipeErrorApiKeyNotConfigured)
             case .extractionFailed(let detail):
-                let baseKey = context == .load ? "recipe_error_extraction_failed" : "substitution_error_failed"
-                return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(detail)"
+                return context == .load
+                    ? String(localized: .recipeErrorExtractionFailed(detail))
+                    : String(localized: .substitutionErrorFailed) + ": \(detail)"
             }
         } else {
-            let baseKey = context == .load ? "recipe_error_unexpected" : "substitution_error_unexpected"
-            return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(error.localizedDescription)"
+            let baseMessage = context == .load
+                ? String(localized: .recipeErrorUnexpected)
+                : String(localized: .substitutionErrorUnexpected)
+            return baseMessage + ": \(error.localizedDescription)"
         }
     }
 

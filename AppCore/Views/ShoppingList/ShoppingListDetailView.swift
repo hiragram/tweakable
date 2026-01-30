@@ -53,11 +53,11 @@ struct ShoppingListDetailView: View {
                 .font(.system(size: 48))
                 .foregroundColor(ds.colors.textTertiary.color)
 
-            Text("shopping_list_detail_empty_title", bundle: .app)
+            Text(.shoppingListDetailEmptyTitle)
                 .font(.headline)
                 .foregroundColor(ds.colors.textPrimary.color)
 
-            Text("shopping_list_detail_empty_message", bundle: .app)
+            Text(.shoppingListDetailEmptyMessage)
                 .font(.body)
                 .foregroundColor(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
@@ -151,7 +151,7 @@ struct ShoppingListDetailView: View {
                         }
                     }) {
                         HStack(spacing: ds.spacing.xs) {
-                            Text(String(localized: "shopping_list_detail_sources \(item.breakdowns.count)", bundle: .app))
+                            Text(String(localized: .shoppingListDetailSources(item.breakdowns.count)))
                                 .font(.caption)
                                 .foregroundColor(ds.colors.textSecondary.color)
 

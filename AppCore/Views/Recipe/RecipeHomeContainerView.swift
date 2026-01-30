@@ -29,7 +29,7 @@ struct RecipeHomeContainerView: View {
                     showingShoppingLists = true
                 }
             )
-            .navigationTitle(String(localized: "recipe_home_navigation_title", bundle: .app))
+            .navigationTitle(String(localized: .recipeHomeNavigationTitle))
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $showingRecipe) {
                 RecipeContainerView(store: store)
@@ -55,13 +55,13 @@ struct RecipeHomeContainerView: View {
                 }
             }
             .alert(
-                String(localized: "recipe_error_title", bundle: .app),
+                String(localized: .recipeErrorTitle),
                 isPresented: .init(
                     get: { store.state.recipe.errorMessage != nil && !store.state.recipe.isLoadingRecipe },
                     set: { if !$0 { store.send(.recipe(.clearError)) } }
                 )
             ) {
-                Button(String(localized: "common_ok", bundle: .app), role: .cancel) {
+                Button(String(localized: .commonOk), role: .cancel) {
                     store.send(.recipe(.clearError))
                 }
             } message: {

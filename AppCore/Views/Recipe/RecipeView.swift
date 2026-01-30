@@ -71,7 +71,7 @@ struct RecipeView: View {
                 .multilineTextAlignment(.center)
 
             Button(action: onRetryTapped) {
-                Label(String(localized: "recipe_button_retry", bundle: .app), systemImage: "arrow.clockwise")
+                Label(String(localized: .recipeButtonRetry), systemImage: "arrow.clockwise")
                     .font(.headline)
             }
             .buttonStyle(.borderedProminent)
@@ -85,7 +85,7 @@ struct RecipeView: View {
     // MARK: - Empty View
 
     private var emptyView: some View {
-        Text("recipe_empty_message", bundle: .app)
+        Text(.recipeEmptyMessage)
             .font(.body)
             .foregroundColor(ds.colors.textSecondary.color)
     }
@@ -227,7 +227,7 @@ struct RecipeView: View {
                     .font(.headline)
                     .foregroundColor(ds.colors.secondaryBrand.color)
 
-                Text("recipe_section_ingredients", bundle: .app)
+                Text(.recipeSectionIngredients)
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
 
@@ -293,7 +293,7 @@ struct RecipeView: View {
                     .font(.headline)
                     .foregroundColor(ds.colors.secondaryBrand.color)
 
-                Text("recipe_section_steps", bundle: .app)
+                Text(.recipeSectionSteps)
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
             }
@@ -395,7 +395,7 @@ struct RecipeView: View {
     // MARK: - Modified Badge
 
     private var modifiedBadge: some View {
-        Text("recipe_badge_modified_label", bundle: .app)
+        Text(.recipeBadgeModifiedLabel)
             .font(.caption2)
             .fontWeight(.medium)
             .foregroundColor(.white)
@@ -432,7 +432,7 @@ struct RecipeView: View {
             recipe: nil,
             isLoading: false,
             isSaving: false,
-            errorMessage: String(localized: "recipe_error_load_failed", bundle: .app),
+            errorMessage: String(localized: .recipeErrorLoadFailed),
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
             onRetryTapped: {},

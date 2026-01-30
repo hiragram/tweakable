@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Accessibility Identifiers
 
 enum SubstitutionSheetAccessibilityID {
-    static let sheetContainer = "substitutionSheet_container"
+    static let cancelButton = "substitutionSheet_button_cancel"
     static let promptTextField = "substitutionSheet_textField_prompt"
     static let submitButton = "substitutionSheet_button_submit"
     static let upgradeButton = "substitutionSheet_button_upgrade"
@@ -43,14 +43,15 @@ struct SubstitutionSheetView: View {
                 Spacer()
             }
             .padding(ds.spacing.md)
-            .navigationTitle(String(localized: "substitution_title", bundle: .app))
+            .navigationTitle(String(localized: .substitutionTitle))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(String(localized: "substitution_button_cancel", bundle: .app)) {
+                    Button(String(localized: .substitutionButtonCancel)) {
                         onDismiss()
                     }
                     .disabled(isProcessing)
+                    .accessibilityIdentifier(SubstitutionSheetAccessibilityID.cancelButton)
                 }
             }
         }
@@ -60,7 +61,7 @@ struct SubstitutionSheetView: View {
 
     private var targetInfoSection: some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            Text("substitution_section_target", bundle: .app)
+            Text(.substitutionSectionTarget)
                 .font(.headline)
                 .foregroundColor(ds.colors.textPrimary.color)
 
@@ -98,7 +99,7 @@ struct SubstitutionSheetView: View {
     private var premiumUserContent: some View {
         VStack(spacing: ds.spacing.md) {
             VStack(alignment: .leading, spacing: ds.spacing.sm) {
-                Text("substitution_prompt_label", bundle: .app)
+                Text(.substitutionPromptLabel)
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
 
@@ -113,7 +114,7 @@ struct SubstitutionSheetView: View {
                     )
                     .overlay(alignment: .topLeading) {
                         if promptText.isEmpty {
-                            Text("substitution_placeholder", bundle: .app)
+                            Text(.substitutionPlaceholder)
                                 .foregroundColor(ds.colors.textTertiary.color)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 12)
@@ -140,10 +141,10 @@ struct SubstitutionSheetView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .accessibilityIdentifier(SubstitutionSheetAccessibilityID.loadingIndicator)
-                        Text("substitution_processing", bundle: .app)
+                        Text(.substitutionProcessing)
                     }
                 } else {
-                    Text("substitution_button_submit", bundle: .app)
+                    Text(.substitutionButtonSubmit)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -172,12 +173,12 @@ struct SubstitutionSheetView: View {
                     .font(.system(size: 48))
                     .foregroundColor(ds.colors.primaryBrand.color)
 
-                Text("substitution_premium_title", bundle: .app)
+                Text(.substitutionPremiumTitle)
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(ds.colors.textPrimary.color)
 
-                Text("substitution_premium_description", bundle: .app)
+                Text(.substitutionPremiumDescription)
                     .font(.body)
                     .foregroundColor(ds.colors.textSecondary.color)
                     .multilineTextAlignment(.center)
@@ -186,7 +187,7 @@ struct SubstitutionSheetView: View {
             Button(action: onUpgradeTapped) {
                 HStack {
                     Image(systemName: "crown.fill")
-                    Text("substitution_button_upgrade", bundle: .app)
+                    Text(.substitutionButtonUpgrade)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, ds.spacing.sm)
@@ -246,7 +247,7 @@ struct SubstitutionSheetView: View {
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
-        errorMessage: String(localized: "substitution_error_failed", bundle: .app),
+        errorMessage: String(localized: .substitutionErrorFailed),
         onSubmit: { _ in },
         onUpgradeTapped: {},
         onDismiss: {}
