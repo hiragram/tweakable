@@ -27,6 +27,9 @@ public enum AppAction: Sendable {
     /// レシピ画面のアクション
     case recipe(RecipeAction)
 
+    /// 買い物リスト機能のアクション
+    case shoppingList(ShoppingListAction)
+
     /// 画面遷移
     case setScreenState(ScreenState)
 }

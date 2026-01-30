@@ -32,6 +32,9 @@ public enum AppReducer {
         case .recipe(let recipeAction):
             RecipeReducer.reduce(state: &state.recipe, action: recipeAction)
 
+        case .shoppingList(let shoppingListAction):
+            ShoppingListReducer.reduce(state: &state.shoppingList, action: shoppingListAction)
+
         case .setScreenState(let screenState):
             state.screenState = screenState
         }

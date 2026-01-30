@@ -26,6 +26,9 @@ public struct AppState: Equatable, Sendable {
     /// レシピ画面の状態
     public var recipe = RecipeState()
 
+    /// 買い物リスト機能の状態
+    public var shoppingList = ShoppingListState()
+
     public init() {}
 }
 

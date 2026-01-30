@@ -1,5 +1,6 @@
 import Foundation
 import os
+import SwiftData
 import SwiftUI
 
 private let actionLogger = Logger(subsystem: "com.tweakable.app", category: "Actions")
@@ -18,6 +19,7 @@ public final class AppStore {
     private let weatherService: any WeatherServiceProtocol
     private let userDefaults: any UserDefaultsProtocol
     private let recipeExtractionService: any RecipeExtractionServiceProtocol
+    private let recipePersistenceService: any RecipePersistenceServiceProtocol
 
     // MARK: - Initialization
 
@@ -25,7 +27,8 @@ public final class AppStore {
         networkMonitor: any NetworkMonitorProtocol = NetworkMonitor(),
         weatherService: any WeatherServiceProtocol = WeatherKitService(),
         userDefaults: any UserDefaultsProtocol = UserDefaults.standard,
-        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil
+        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
+        recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil
     ) {
         self.networkMonitor = networkMonitor
         self.weatherService = weatherService
@@ -43,6 +46,18 @@ public final class AppStore {
                 openAIClient: openAIClient,
                 configurationService: configService
             )
+        }
+
+        // RecipePersistenceService のデフォルト構成
+        if let service = recipePersistenceService {
+            self.recipePersistenceService = service
+        } else {
+            do {
+                let container = try ModelContainerProvider.makeContainer()
+                self.recipePersistenceService = RecipePersistenceService(modelContainer: container)
+            } catch {
+                fatalError("Failed to create ModelContainer: \(error)")
+            }
         }
     }
 
@@ -88,6 +103,9 @@ public final class AppStore {
 
         case .recipe(let recipeAction):
             await handleRecipeSideEffects(recipeAction)
+
+        case .shoppingList(let shoppingListAction):
+            await handleShoppingListSideEffects(shoppingListAction)
 
         case .setScreenState:
             // No side effects
@@ -230,6 +248,31 @@ public final class AppStore {
                 send(.recipe(.substitutionFailed(message)))
             }
 
+        case .saveRecipe:
+            guard let recipe = state.recipe.currentRecipe else { return }
+            do {
+                try await recipePersistenceService.saveRecipe(recipe)
+                send(.recipe(.recipeSaved(recipe)))
+            } catch {
+                send(.recipe(.recipeSaveFailed(error.localizedDescription)))
+            }
+
+        case .loadSavedRecipes:
+            do {
+                let recipes = try await recipePersistenceService.loadAllRecipes()
+                send(.recipe(.savedRecipesLoaded(recipes)))
+            } catch {
+                send(.recipe(.savedRecipesLoadFailed(error.localizedDescription)))
+            }
+
+        case .deleteRecipe(let id):
+            do {
+                try await recipePersistenceService.deleteRecipe(id: id)
+                send(.recipe(.recipeDeleted(id: id)))
+            } catch {
+                send(.recipe(.recipeDeleteFailed(error.localizedDescription)))
+            }
+
         default:
             // その他のアクションは副作用なし
             break
@@ -260,6 +303,48 @@ public final class AppStore {
         } else {
             let baseKey = context == .load ? "recipe_error_unexpected" : "substitution_error_unexpected"
             return String(localized: String.LocalizationValue(baseKey), bundle: .app) + ": \(error.localizedDescription)"
+        }
+    }
+
+    // MARK: - ShoppingList Side Effects
+
+    private func handleShoppingListSideEffects(_ action: ShoppingListAction) async {
+        switch action {
+        case .loadShoppingLists:
+            do {
+                let lists = try await recipePersistenceService.loadAllShoppingLists()
+                send(.shoppingList(.shoppingListsLoaded(lists)))
+            } catch {
+                send(.shoppingList(.shoppingListsLoadFailed(error.localizedDescription)))
+            }
+
+        case .createShoppingList(let name, let recipeIDs):
+            do {
+                let list = try await recipePersistenceService.createShoppingList(name: name, recipeIDs: recipeIDs)
+                send(.shoppingList(.shoppingListCreated(list)))
+            } catch {
+                send(.shoppingList(.shoppingListCreateFailed(error.localizedDescription)))
+            }
+
+        case .deleteShoppingList(let id):
+            do {
+                try await recipePersistenceService.deleteShoppingList(id: id)
+                send(.shoppingList(.shoppingListDeleted(id: id)))
+            } catch {
+                send(.shoppingList(.shoppingListDeleteFailed(error.localizedDescription)))
+            }
+
+        case .updateItemChecked(let itemID, let isChecked):
+            do {
+                try await recipePersistenceService.updateShoppingItemChecked(itemID: itemID, isChecked: isChecked)
+                send(.shoppingList(.itemCheckedUpdated(itemID: itemID, isChecked: isChecked)))
+            } catch {
+                send(.shoppingList(.itemCheckUpdateFailed(error.localizedDescription)))
+            }
+
+        default:
+            // その他のアクションは副作用なし
+            break
         }
     }
 

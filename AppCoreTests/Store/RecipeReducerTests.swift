@@ -293,4 +293,124 @@ struct RecipeReducerTests {
 
         #expect(target1 != target3)
     }
+
+    // MARK: - Save Recipe Tests
+
+    @Test
+    func reduce_saveRecipe_setsSavingState() {
+        var state = RecipeState()
+        state.currentRecipe = makeSampleRecipe()
+
+        RecipeReducer.reduce(state: &state, action: .saveRecipe)
+
+        #expect(state.isSavingRecipe == true)
+    }
+
+    @Test
+    func reduce_recipeSaved_clearsStateAndAddsToSaved() {
+        var state = RecipeState()
+        state.isSavingRecipe = true
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+
+        RecipeReducer.reduce(state: &state, action: .recipeSaved(recipe))
+
+        #expect(state.isSavingRecipe == false)
+        #expect(state.savedRecipes.contains { $0.id == recipe.id })
+    }
+
+    @Test
+    func reduce_recipeSaveFailed_setsErrorAndClearsSaving() {
+        var state = RecipeState()
+        state.isSavingRecipe = true
+
+        RecipeReducer.reduce(state: &state, action: .recipeSaveFailed("保存に失敗しました"))
+
+        #expect(state.isSavingRecipe == false)
+        #expect(state.errorMessage == "保存に失敗しました")
+    }
+
+    // MARK: - Load Saved Recipes Tests
+
+    @Test
+    func reduce_loadSavedRecipes_setsLoadingState() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .loadSavedRecipes)
+
+        #expect(state.isLoadingSavedRecipes == true)
+    }
+
+    @Test
+    func reduce_savedRecipesLoaded_setsRecipes() {
+        var state = RecipeState()
+        state.isLoadingSavedRecipes = true
+        let recipes = [makeSampleRecipe(), makeSampleRecipe()]
+
+        RecipeReducer.reduce(state: &state, action: .savedRecipesLoaded(recipes))
+
+        #expect(state.isLoadingSavedRecipes == false)
+        #expect(state.savedRecipes.count == 2)
+    }
+
+    @Test
+    func reduce_savedRecipesLoadFailed_setsError() {
+        var state = RecipeState()
+        state.isLoadingSavedRecipes = true
+
+        RecipeReducer.reduce(state: &state, action: .savedRecipesLoadFailed("読み込み失敗"))
+
+        #expect(state.isLoadingSavedRecipes == false)
+        #expect(state.errorMessage == "読み込み失敗")
+    }
+
+    // MARK: - Delete Recipe Tests
+
+    @Test
+    func reduce_deleteRecipe_setsDeletingState() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.savedRecipes = [recipe]
+
+        RecipeReducer.reduce(state: &state, action: .deleteRecipe(id: recipe.id))
+
+        #expect(state.isDeletingRecipe == true)
+    }
+
+    @Test
+    func reduce_recipeDeleted_removesFromSaved() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.savedRecipes = [recipe]
+        state.isDeletingRecipe = true
+
+        RecipeReducer.reduce(state: &state, action: .recipeDeleted(id: recipe.id))
+
+        #expect(state.isDeletingRecipe == false)
+        #expect(!state.savedRecipes.contains { $0.id == recipe.id })
+    }
+
+    @Test
+    func reduce_recipeDeleteFailed_setsError() {
+        var state = RecipeState()
+        state.isDeletingRecipe = true
+
+        RecipeReducer.reduce(state: &state, action: .recipeDeleteFailed("削除に失敗"))
+
+        #expect(state.isDeletingRecipe == false)
+        #expect(state.errorMessage == "削除に失敗")
+    }
+
+    // MARK: - Select Saved Recipe Tests
+
+    @Test
+    func reduce_selectSavedRecipe_setsCurrent() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.savedRecipes = [recipe]
+
+        RecipeReducer.reduce(state: &state, action: .selectSavedRecipe(recipe))
+
+        #expect(state.currentRecipe == recipe)
+    }
 }
