@@ -1173,91 +1173,6 @@
         }
       }
     },
-    "debug_environment_local" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Local"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ローカル"
-          }
-        }
-      }
-    },
-    "debug_environment_production" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Production"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "本番環境"
-          }
-        }
-      }
-    },
-    "debug_menu_title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Debug Menu"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デバッグメニュー"
-          }
-        }
-      }
-    },
-    "debug_supabase_section_footer" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Changes will take effect after app restart"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "変更はアプリ再起動後に反映されます"
-          }
-        }
-      }
-    },
-    "debug_supabase_section_header" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Supabase Connection"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Supabase接続先"
-          }
-        }
-      }
-    },
     "groupSettings_management_header" : {
       "localizations" : {
         "en" : {
@@ -1595,142 +1510,6 @@
         }
       }
     },
-    "icloud_required_description" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This app requires iCloud sign-in\nto share schedules between partners"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このアプリは夫婦間でスケジュールを共有するため、\niCloudへのサインインが必要です"
-          }
-        }
-      }
-    },
-    "icloud_required_instructions" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How to Sign In"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サインイン方法"
-          }
-        }
-      }
-    },
-    "icloud_required_open_settings" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "設定を開く"
-          }
-        }
-      }
-    },
-    "icloud_required_retry" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retry"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "再確認"
-          }
-        }
-      }
-    },
-    "icloud_required_step1" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings app"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "設定アプリを開く"
-          }
-        }
-      }
-    },
-    "icloud_required_step2" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap \"Apple Account\""
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "「Apple Account」をタップ"
-          }
-        }
-      }
-    },
-    "icloud_required_step3" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in with Apple ID"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple IDでサインイン"
-          }
-        }
-      }
-    },
-    "icloud_required_title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud Required"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloudが必要です"
-          }
-        }
-      }
-    },
     "invite_code_about_description" : {
       "localizations" : {
         "en" : {
@@ -1875,23 +1654,6 @@
         }
       }
     },
-    "invite_member_create_link" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Create Invite Link"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "招待リンクを作成"
-          }
-        }
-      }
-    },
     "invite_member_creating" : {
       "localizations" : {
         "en" : {
@@ -1952,40 +1714,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "家族を招待"
-          }
-        }
-      }
-    },
-    "invite_member_how_it_works" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "How it works"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "招待の流れ"
-          }
-        }
-      }
-    },
-    "invite_member_link_ready" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invite link ready"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "招待リンクが作成されました"
           }
         }
       }
@@ -2325,23 +2053,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "グループに参加"
-          }
-        }
-      }
-    },
-    "loading_checking_icloud" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Checking iCloud..."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloudを確認中..."
           }
         }
       }
@@ -3241,23 +2952,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "招待URLを貼り付け"
-          }
-        }
-      }
-    },
-    "settings_join_requests" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Join Requests"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "参加リクエスト"
           }
         }
       }
