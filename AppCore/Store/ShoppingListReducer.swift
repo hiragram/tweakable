@@ -39,6 +39,10 @@ public enum ShoppingListReducer {
         case .shoppingListDeleted(let id):
             state.isDeletingList = false
             state.shoppingLists.removeAll { $0.id == id }
+            // 削除されたリストが現在表示中のリストだった場合はクリア
+            if state.currentShoppingList?.id == id {
+                state.currentShoppingList = nil
+            }
 
         case .shoppingListDeleteFailed(let message):
             state.isDeletingList = false

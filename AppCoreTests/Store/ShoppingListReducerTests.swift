@@ -149,6 +149,36 @@ struct ShoppingListReducerTests {
     }
 
     @Test
+    func reduce_shoppingListDeleted_clearsCurrentShoppingListIfDeleted() {
+        var state = ShoppingListState()
+        let list = makeSampleShoppingList()
+        state.shoppingLists = [list]
+        state.currentShoppingList = list
+        state.isDeletingList = true
+
+        ShoppingListReducer.reduce(state: &state, action: .shoppingListDeleted(id: list.id))
+
+        #expect(state.currentShoppingList == nil)
+        #expect(!state.shoppingLists.contains { $0.id == list.id })
+        #expect(state.isDeletingList == false)
+    }
+
+    @Test
+    func reduce_shoppingListDeleted_keepsCurrentShoppingListIfDifferent() {
+        var state = ShoppingListState()
+        let listToDelete = makeSampleShoppingList(id: UUID(), name: "削除するリスト")
+        let currentList = makeSampleShoppingList(id: UUID(), name: "現在のリスト")
+        state.shoppingLists = [listToDelete, currentList]
+        state.currentShoppingList = currentList
+        state.isDeletingList = true
+
+        ShoppingListReducer.reduce(state: &state, action: .shoppingListDeleted(id: listToDelete.id))
+
+        #expect(state.currentShoppingList == currentList)
+        #expect(state.shoppingLists.count == 1)
+    }
+
+    @Test
     func reduce_shoppingListDeleteFailed_setsError() {
         var state = ShoppingListState()
         state.isDeletingList = true
@@ -219,6 +249,50 @@ struct ShoppingListReducerTests {
         ShoppingListReducer.reduce(state: &state, action: .itemCheckedUpdated(itemID: itemID, isChecked: true))
 
         #expect(state.currentShoppingList?.items.first { $0.id == itemID }?.isChecked == true)
+        #expect(state.isUpdatingItem == false)
+    }
+
+    @Test
+    func reduce_itemCheckedUpdated_handlesNilCurrentShoppingList() {
+        var state = ShoppingListState()
+        state.currentShoppingList = nil
+        state.isUpdatingItem = true
+        let itemID = UUID()
+
+        ShoppingListReducer.reduce(state: &state, action: .itemCheckedUpdated(itemID: itemID, isChecked: true))
+
+        #expect(state.currentShoppingList == nil)
+        #expect(state.isUpdatingItem == false)
+    }
+
+    @Test
+    func reduce_itemCheckedUpdated_handlesNonExistentItemID() {
+        var state = ShoppingListState()
+        let existingItemID = UUID()
+        let nonExistentItemID = UUID()
+        let item = ShoppingListItemDTO(
+            id: existingItemID,
+            name: "鶏肉",
+            totalAmount: "200g",
+            category: nil,
+            isChecked: false,
+            breakdowns: []
+        )
+        let list = ShoppingListDTO(
+            id: UUID(),
+            name: "テスト",
+            createdAt: Date(),
+            updatedAt: Date(),
+            recipeIDs: [],
+            items: [item]
+        )
+        state.currentShoppingList = list
+        state.isUpdatingItem = true
+
+        ShoppingListReducer.reduce(state: &state, action: .itemCheckedUpdated(itemID: nonExistentItemID, isChecked: true))
+
+        // 既存アイテムのisCheckedは変更されない
+        #expect(state.currentShoppingList?.items.first { $0.id == existingItemID }?.isChecked == false)
         #expect(state.isUpdatingItem == false)
     }
 

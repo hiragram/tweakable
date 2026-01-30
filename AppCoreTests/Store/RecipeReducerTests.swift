@@ -320,6 +320,34 @@ struct RecipeReducerTests {
     }
 
     @Test
+    func reduce_recipeSaved_updatesExistingRecipe() {
+        var state = RecipeState()
+        let recipeID = UUID()
+        let originalRecipe = Recipe(
+            id: recipeID,
+            title: "元のタイトル",
+            ingredientsInfo: Ingredients(items: []),
+            steps: []
+        )
+        state.savedRecipes = [originalRecipe]
+        state.isSavingRecipe = true
+
+        let updatedRecipe = Recipe(
+            id: recipeID,
+            title: "更新後のタイトル",
+            ingredientsInfo: Ingredients(items: [Ingredient(name: "鶏肉", amount: "200g")]),
+            steps: []
+        )
+
+        RecipeReducer.reduce(state: &state, action: .recipeSaved(updatedRecipe))
+
+        #expect(state.isSavingRecipe == false)
+        #expect(state.savedRecipes.count == 1)
+        #expect(state.savedRecipes.first?.title == "更新後のタイトル")
+        #expect(state.savedRecipes.first?.ingredientsInfo.items.count == 1)
+    }
+
+    @Test
     func reduce_recipeSaveFailed_setsErrorAndClearsSaving() {
         var state = RecipeState()
         state.isSavingRecipe = true
