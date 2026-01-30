@@ -59,24 +59,10 @@ jobs:
 
   e2e-test:
     runs-on: self-hosted
-    if: false  # 一時的に無効化（将来復活予定）
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Supabase CLI
-        run: |
-          if ! command -v npx &> /dev/null; then
-            echo "npm/npx is required but not installed"
-            exit 1
-          fi
-          # supabaseをプロジェクトローカルにインストール（既存のpackage.jsonを使用）
-          npm install supabase --save-dev || true
-
-      - name: Start Supabase
-        run: |
-          ./scripts/setup-test-supabase.sh -d supabase -p okumuka-e2e -w 20
 
       - name: Install xcbeautify
         run: |
@@ -94,11 +80,6 @@ jobs:
             -resultBundlePath E2ETestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO \
             2>&1 | xcbeautify --report junit --report-path e2e-test-reports
-
-      - name: Stop Supabase
-        if: always()
-        run: |
-          ./scripts/stop-test-supabase.sh -d supabase
 
       - name: Publish E2E test results
         uses: mikepenz/action-junit-report@v5

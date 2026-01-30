@@ -20,10 +20,12 @@ public struct RootView: View {
     }
 
     public init(
-        networkMonitor: (any NetworkMonitorProtocol)? = nil
+        networkMonitor: (any NetworkMonitorProtocol)? = nil,
+        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil
     ) {
         _store = State(initialValue: AppStore(
-            networkMonitor: networkMonitor ?? NetworkMonitor()
+            networkMonitor: networkMonitor ?? NetworkMonitor(),
+            recipeExtractionService: recipeExtractionService
         ))
     }
 

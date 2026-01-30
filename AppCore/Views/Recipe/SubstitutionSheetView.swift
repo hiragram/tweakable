@@ -53,7 +53,6 @@ struct SubstitutionSheetView: View {
                     .disabled(isProcessing)
                 }
             }
-            .accessibilityIdentifier(SubstitutionSheetAccessibilityID.sheetContainer)
         }
     }
 
