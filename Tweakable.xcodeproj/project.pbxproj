@@ -305,7 +305,7 @@
 				};
 			};
 			buildConfigurationList = 605EE8032EECE98A00201738 /* Build configuration list for PBXProject "Tweakable" */;
-			developmentRegion = ja;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
