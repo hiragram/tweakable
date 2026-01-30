@@ -22,6 +22,18 @@ struct ShoppingListDetailView: View {
 
     @State private var expandedItemIDs: Set<UUID> = []
 
+    /// カテゴリでグループ化したアイテム（パフォーマンス最適化）
+    private var groupedItemsByCategory: (groups: [String: [ShoppingListItemDTO]], sortedKeys: [String]) {
+        let grouped = Dictionary(grouping: shoppingList.items) { $0.category ?? "" }
+        let sortedKeys = grouped.keys.sorted { lhs, rhs in
+            // Empty category goes last
+            if lhs.isEmpty { return false }
+            if rhs.isEmpty { return true }
+            return lhs < rhs
+        }
+        return (grouped, sortedKeys)
+    }
+
     var body: some View {
         Group {
             if shoppingList.items.isEmpty {
@@ -59,14 +71,7 @@ struct ShoppingListDetailView: View {
     private var listView: some View {
         ScrollView {
             VStack(spacing: ds.spacing.lg) {
-                // Group items by category
-                let groupedItems = Dictionary(grouping: shoppingList.items) { $0.category ?? "" }
-                let sortedCategories = groupedItems.keys.sorted { lhs, rhs in
-                    // Empty category goes last
-                    if lhs.isEmpty { return false }
-                    if rhs.isEmpty { return true }
-                    return lhs < rhs
-                }
+                let (groupedItems, sortedCategories) = groupedItemsByCategory
 
                 ForEach(sortedCategories, id: \.self) { category in
                     VStack(alignment: .leading, spacing: ds.spacing.sm) {

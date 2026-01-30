@@ -56,7 +56,9 @@ public final class AppStore {
                 let container = try ModelContainerProvider.makeContainer()
                 self.recipePersistenceService = RecipePersistenceService(modelContainer: container)
             } catch {
-                fatalError("Failed to create ModelContainer: \(error)")
+                // グレースフルデグラデーション: 永続化なしで動作
+                print("Warning: ModelContainer initialization failed, running without persistence: \(error)")
+                self.recipePersistenceService = NoOpRecipePersistenceService()
             }
         }
     }

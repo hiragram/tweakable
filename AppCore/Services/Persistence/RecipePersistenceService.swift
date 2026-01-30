@@ -113,13 +113,11 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
     public func createShoppingList(name: String, recipeIDs: [UUID]) async throws -> ShoppingListDTO {
         let context = modelContainer.mainContext
 
-        // レシピを取得
-        let recipes = try recipeIDs.compactMap { id -> PersistedRecipe? in
-            let descriptor = FetchDescriptor<PersistedRecipe>(
-                predicate: #Predicate { $0.id == id }
-            )
-            return try context.fetch(descriptor).first
-        }
+        // レシピを一括取得（N+1問題を回避）
+        let allRecipesDescriptor = FetchDescriptor<PersistedRecipe>()
+        let allRecipes = try context.fetch(allRecipesDescriptor)
+        let recipeIDSet = Set(recipeIDs)
+        let recipes = allRecipes.filter { recipeIDSet.contains($0.id) }
 
         // 買い物リストを作成
         let shoppingList = PersistedShoppingList(
