@@ -53,6 +53,12 @@ struct RecipeHomeView: View {
                     .keyboardType(.URL)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
+                    .disabled(isLoading)
+                    .onSubmit {
+                        if !urlText.isEmpty && !isLoading {
+                            onExtractTapped()
+                        }
+                    }
                     .accessibilityIdentifier(RecipeHomeAccessibilityID.urlTextField)
 
                     if !urlText.isEmpty {
