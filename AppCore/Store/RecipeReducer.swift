@@ -49,6 +49,49 @@ public enum RecipeReducer {
             state.isProcessingSubstitution = false
             state.errorMessage = nil
             state.substitutionTarget = nil
+
+        // MARK: - Persistence
+
+        case .saveRecipe:
+            state.isSavingRecipe = true
+
+        case .recipeSaved(let recipe):
+            state.isSavingRecipe = false
+            // 既存のレシピを更新、なければ追加
+            if let index = state.savedRecipes.firstIndex(where: { $0.id == recipe.id }) {
+                state.savedRecipes[index] = recipe
+            } else {
+                state.savedRecipes.append(recipe)
+            }
+
+        case .recipeSaveFailed(let message):
+            state.isSavingRecipe = false
+            state.errorMessage = message
+
+        case .loadSavedRecipes:
+            state.isLoadingSavedRecipes = true
+
+        case .savedRecipesLoaded(let recipes):
+            state.isLoadingSavedRecipes = false
+            state.savedRecipes = recipes
+
+        case .savedRecipesLoadFailed(let message):
+            state.isLoadingSavedRecipes = false
+            state.errorMessage = message
+
+        case .deleteRecipe:
+            state.isDeletingRecipe = true
+
+        case .recipeDeleted(let id):
+            state.isDeletingRecipe = false
+            state.savedRecipes.removeAll { $0.id == id }
+
+        case .selectSavedRecipe(let recipe):
+            state.currentRecipe = recipe
+
+        case .recipeDeleteFailed(let message):
+            state.isDeletingRecipe = false
+            state.errorMessage = message
         }
     }
 }

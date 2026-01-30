@@ -6,6 +6,8 @@ enum RecipeHomeAccessibilityID {
     static let urlTextField = "recipeHome_textField_url"
     static let extractButton = "recipeHome_button_extract"
     static let clearButton = "recipeHome_button_clear"
+    static let savedRecipesButton = "recipeHome_button_savedRecipes"
+    static let shoppingListsButton = "recipeHome_button_shoppingLists"
 }
 
 // MARK: - RecipeHomeView
@@ -16,13 +18,19 @@ struct RecipeHomeView: View {
 
     @Binding var urlText: String
     let isLoading: Bool
+    let savedRecipesCount: Int
+    let shoppingListsCount: Int
     let onExtractTapped: () -> Void
+    let onSavedRecipesTapped: () -> Void
+    let onShoppingListsTapped: () -> Void
 
     var body: some View {
-        VStack(spacing: ds.spacing.xl) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: ds.spacing.xl) {
+                Spacer()
+                    .frame(height: ds.spacing.xl)
 
-            // App icon / illustration
+                // App icon / illustration
             Image(systemName: "fork.knife.circle.fill")
                 .font(.system(size: 80))
                 .foregroundStyle(ds.colors.primaryBrand.color)
@@ -40,9 +48,56 @@ struct RecipeHomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, ds.spacing.lg)
 
-            Spacer()
+            // Saved Recipes Button
+            if savedRecipesCount > 0 {
+                Button(action: onSavedRecipesTapped) {
+                    HStack(spacing: ds.spacing.sm) {
+                        Image(systemName: "bookmark.fill")
+                        Text("saved_recipes_button", bundle: .app)
+                        Spacer()
+                        Text("\(savedRecipesCount)")
+                            .font(.subheadline)
+                            .foregroundColor(ds.colors.textSecondary.color)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(ds.colors.textTertiary.color)
+                    }
+                    .padding(ds.spacing.md)
+                    .background(ds.colors.backgroundSecondary.color)
+                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, ds.spacing.lg)
+                .accessibilityIdentifier(RecipeHomeAccessibilityID.savedRecipesButton)
+            }
 
-            // URL input section
+            // Shopping Lists Button
+            Button(action: onShoppingListsTapped) {
+                HStack(spacing: ds.spacing.sm) {
+                    Image(systemName: "cart.fill")
+                    Text("shopping_lists_title", bundle: .app)
+                    Spacer()
+                    if shoppingListsCount > 0 {
+                        Text("\(shoppingListsCount)")
+                            .font(.subheadline)
+                            .foregroundColor(ds.colors.textSecondary.color)
+                    }
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(ds.colors.textTertiary.color)
+                }
+                .padding(ds.spacing.md)
+                .background(ds.colors.backgroundSecondary.color)
+                .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, ds.spacing.lg)
+            .accessibilityIdentifier(RecipeHomeAccessibilityID.shoppingListsButton)
+
+                Spacer()
+                    .frame(height: ds.spacing.xl)
+
+                // URL input section
             VStack(spacing: ds.spacing.md) {
                 HStack {
                     TextField(
@@ -99,32 +154,61 @@ struct RecipeHomeView: View {
             }
             .padding(.horizontal, ds.spacing.lg)
             .padding(.bottom, ds.spacing.xl)
+            }
         }
     }
 }
 
 // MARK: - Preview
 
-#Preview("Empty") {
+#Preview("RecipeHome Empty") {
     RecipeHomeView(
         urlText: .constant(""),
         isLoading: false,
-        onExtractTapped: {}
+        savedRecipesCount: 0,
+        shoppingListsCount: 0,
+        onExtractTapped: {},
+        onSavedRecipesTapped: {},
+        onShoppingListsTapped: {}
     )
+    .prefireEnabled()
 }
 
-#Preview("With URL") {
+#Preview("RecipeHome With URL") {
     RecipeHomeView(
         urlText: .constant("https://www.allrecipes.com/recipe/12345"),
         isLoading: false,
-        onExtractTapped: {}
+        savedRecipesCount: 0,
+        shoppingListsCount: 0,
+        onExtractTapped: {},
+        onSavedRecipesTapped: {},
+        onShoppingListsTapped: {}
     )
+    .prefireEnabled()
 }
 
-#Preview("Loading") {
+#Preview("RecipeHome Loading") {
     RecipeHomeView(
         urlText: .constant("https://www.allrecipes.com/recipe/12345"),
         isLoading: true,
-        onExtractTapped: {}
+        savedRecipesCount: 0,
+        shoppingListsCount: 0,
+        onExtractTapped: {},
+        onSavedRecipesTapped: {},
+        onShoppingListsTapped: {}
     )
+    .prefireEnabled()
+}
+
+#Preview("RecipeHome With Saved") {
+    RecipeHomeView(
+        urlText: .constant(""),
+        isLoading: false,
+        savedRecipesCount: 3,
+        shoppingListsCount: 2,
+        onExtractTapped: {},
+        onSavedRecipesTapped: {},
+        onShoppingListsTapped: {}
+    )
+    .prefireEnabled()
 }

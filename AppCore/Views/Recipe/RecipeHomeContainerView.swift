@@ -8,20 +8,51 @@ struct RecipeHomeContainerView: View {
 
     @State private var urlText: String = ""
     @State private var showingRecipe: Bool = false
+    @State private var showingSavedRecipes: Bool = false
+    @State private var showingShoppingLists: Bool = false
+    @State private var showingShoppingListDetail: Bool = false
 
     var body: some View {
         NavigationStack {
             RecipeHomeView(
                 urlText: $urlText,
                 isLoading: store.state.recipe.isLoadingRecipe,
+                savedRecipesCount: store.state.recipe.savedRecipes.count,
+                shoppingListsCount: store.state.shoppingList.shoppingLists.count,
                 onExtractTapped: {
                     extractRecipe()
+                },
+                onSavedRecipesTapped: {
+                    showingSavedRecipes = true
+                },
+                onShoppingListsTapped: {
+                    showingShoppingLists = true
                 }
             )
             .navigationTitle(String(localized: "recipe_home_navigation_title", bundle: .app))
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $showingRecipe) {
                 RecipeContainerView(store: store)
+            }
+            .navigationDestination(isPresented: $showingSavedRecipes) {
+                SavedRecipesContainerView(
+                    store: store,
+                    onRecipeSelected: { recipe in
+                        showingSavedRecipes = false
+                        showingRecipe = true
+                    }
+                )
+            }
+            .navigationDestination(isPresented: $showingShoppingLists) {
+                ShoppingListsContainerView(
+                    store: store,
+                    onListSelected: { list in
+                        showingShoppingListDetail = true
+                    }
+                )
+                .navigationDestination(isPresented: $showingShoppingListDetail) {
+                    ShoppingListDetailContainerView(store: store)
+                }
             }
             .alert(
                 String(localized: "recipe_error_title", bundle: .app),
@@ -49,6 +80,11 @@ struct RecipeHomeContainerView: View {
                 if oldValue == true && newValue == false {
                     store.send(.recipe(.clearRecipe))
                 }
+            }
+            .onAppear {
+                // アプリ起動時に保存済みレシピと買い物リストを読み込む
+                store.send(.recipe(.loadSavedRecipes))
+                store.send(.shoppingList(.loadShoppingLists))
             }
         }
     }

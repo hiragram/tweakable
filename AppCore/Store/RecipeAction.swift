@@ -50,4 +50,36 @@ public enum RecipeAction: Sendable {
 
     /// レシピをクリア
     case clearRecipe
+
+    // MARK: - Persistence
+
+    /// レシピを保存（副作用: PersistenceService呼び出し → recipeSaved or recipeSaveFailed）
+    case saveRecipe
+
+    /// レシピ保存成功（saveRecipeの結果）
+    case recipeSaved(Recipe)
+
+    /// レシピ保存失敗（saveRecipeの結果）
+    case recipeSaveFailed(String)
+
+    /// 保存済みレシピ一覧を読み込む（副作用: PersistenceService呼び出し → savedRecipesLoaded or savedRecipesLoadFailed）
+    case loadSavedRecipes
+
+    /// 保存済みレシピ読み込み成功（loadSavedRecipesの結果）
+    case savedRecipesLoaded([Recipe])
+
+    /// 保存済みレシピ読み込み失敗（loadSavedRecipesの結果）
+    case savedRecipesLoadFailed(String)
+
+    /// レシピを削除（副作用: PersistenceService呼び出し → recipeDeleted or recipeDeleteFailed）
+    case deleteRecipe(id: UUID)
+
+    /// レシピ削除成功（deleteRecipeの結果）
+    case recipeDeleted(id: UUID)
+
+    /// レシピ削除失敗（deleteRecipeの結果）
+    case recipeDeleteFailed(String)
+
+    /// 保存済みレシピを選択して表示
+    case selectSavedRecipe(Recipe)
 }

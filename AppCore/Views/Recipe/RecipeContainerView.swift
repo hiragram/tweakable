@@ -25,6 +25,7 @@ struct RecipeContainerView: View {
         RecipeView(
             recipe: store.state.recipe.currentRecipe,
             isLoading: store.state.recipe.isLoadingRecipe,
+            isSaving: store.state.recipe.isSavingRecipe,
             errorMessage: store.state.recipe.errorMessage,
             onIngredientTapped: { ingredient in
                 store.send(.recipe(.openSubstitutionSheet(ingredient: ingredient)))
@@ -41,6 +42,9 @@ struct RecipeContainerView: View {
             },
             onShoppingListTapped: {
                 // TODO: Navigate to shopping list screen (MVP requirement, separate task)
+            },
+            onSaveTapped: {
+                store.send(.recipe(.saveRecipe))
             }
         )
         .sheet(isPresented: $showsSubstitutionSheet) {
