@@ -4,9 +4,16 @@ import Foundation
 public struct MockRecipeExtractionService: RecipeExtractionServiceProtocol, Sendable {
 
     /// モックの動作モード
+    ///
+    /// UIテストでサービスの動作を制御するために使用する。
+    /// アプリの起動引数（`--mock-extraction-error` など）と連携して、
+    /// 特定のエラーシナリオをテスト可能にする。
     public enum MockBehavior: Sendable {
+        /// 正常動作 - レシピ抽出・置き換えとも成功
         case success
+        /// レシピ抽出時にエラーを発生させる
         case extractionError
+        /// 置き換え時にエラーを発生させる（抽出は成功）
         case substitutionError
     }
 

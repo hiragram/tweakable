@@ -12,17 +12,24 @@ import AppCore
 struct TweakableApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    /// 起動引数（一度だけ取得してキャッシュ）
+    private let launchArguments = ProcessInfo.processInfo.arguments
+
     /// UIテストモードかどうか
     private var isUITesting: Bool {
-        ProcessInfo.processInfo.arguments.contains("--uitesting")
+        launchArguments.contains("--uitesting")
     }
 
     /// UIテストのモック動作モード
+    ///
+    /// 起動引数に応じてモックサービスの動作を制御:
+    /// - `--mock-extraction-error`: レシピ抽出時にエラーを返す
+    /// - `--mock-substitution-error`: 置き換え時にエラーを返す
+    /// - なし: 正常動作
     private var mockBehavior: MockRecipeExtractionService.MockBehavior {
-        let args = ProcessInfo.processInfo.arguments
-        if args.contains("--mock-extraction-error") {
+        if launchArguments.contains("--mock-extraction-error") {
             return .extractionError
-        } else if args.contains("--mock-substitution-error") {
+        } else if launchArguments.contains("--mock-substitution-error") {
             return .substitutionError
         }
         return .success

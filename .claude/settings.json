@@ -37,6 +37,7 @@
       "Bash(ls:*)",
       "Skill(ios-team:smoke-test)",
       "Skill(code-review:review-pr)",
+      "Skill(code-review:review-local)",
       "mcp__github_inline_comment__create_inline_comment",
       "Bash(wc:*)",
       "mcp__supabase__list_tables",
