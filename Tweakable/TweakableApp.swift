@@ -17,11 +17,22 @@ struct TweakableApp: App {
         ProcessInfo.processInfo.arguments.contains("--uitesting")
     }
 
+    /// UIテストのモック動作モード
+    private var mockBehavior: MockRecipeExtractionService.MockBehavior {
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("--mock-extraction-error") {
+            return .extractionError
+        } else if args.contains("--mock-substitution-error") {
+            return .substitutionError
+        }
+        return .success
+    }
+
     var body: some Scene {
         WindowGroup {
             // バックエンドなしのスタンドアロンモード
             if isUITesting {
-                RootView(recipeExtractionService: MockRecipeExtractionService())
+                RootView(recipeExtractionService: MockRecipeExtractionService(behavior: mockBehavior))
             } else {
                 RootView()
             }

@@ -3,6 +3,30 @@ import Foundation
 /// UIテスト用のモックレシピ抽出サービス
 public struct MockRecipeExtractionService: RecipeExtractionServiceProtocol, Sendable {
 
+    /// モックの動作モード
+    public enum MockBehavior: Sendable {
+        case success
+        case extractionError
+        case substitutionError
+    }
+
+    /// モック用エラー
+    public enum MockError: Error, LocalizedError {
+        case extractionFailed
+        case substitutionFailed
+
+        public var errorDescription: String? {
+            switch self {
+            case .extractionFailed:
+                return "レシピの抽出に失敗しました（モックエラー）"
+            case .substitutionFailed:
+                return "置き換えに失敗しました（モックエラー）"
+            }
+        }
+    }
+
+    private let behavior: MockBehavior
+
     /// テスト用の固定レシピ
     public static let mockRecipe = Recipe(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
@@ -71,11 +95,18 @@ public struct MockRecipeExtractionService: RecipeExtractionServiceProtocol, Send
         sourceURL: URL(string: "https://example.com/test-recipe")
     )
 
-    public init() {}
+    public init(behavior: MockBehavior = .success) {
+        self.behavior = behavior
+    }
 
     public func extractRecipe(from url: URL) async throws -> Recipe {
         // 少し遅延を入れてローディング状態をテスト可能にする
         try await Task.sleep(for: .milliseconds(500))
+
+        if behavior == .extractionError {
+            throw MockError.extractionFailed
+        }
+
         return Self.mockRecipe
     }
 
@@ -86,6 +117,10 @@ public struct MockRecipeExtractionService: RecipeExtractionServiceProtocol, Send
     ) async throws -> Recipe {
         // 少し遅延を入れてローディング状態をテスト可能にする
         try await Task.sleep(for: .milliseconds(500))
+
+        if behavior == .substitutionError {
+            throw MockError.substitutionFailed
+        }
 
         var updatedRecipe = recipe
 

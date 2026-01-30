@@ -15,6 +15,8 @@ enum RecipeAccessibilityIDs {
 
     // RecipeView
     static let loadingView = "recipe_view_loading"
+    static let errorView = "recipe_view_error"
+    static let errorRetryButton = "recipe_button_retry"
     static func ingredientItem(_ index: Int) -> String { "recipe_button_ingredient_\(index)" }
     static func stepItem(_ index: Int) -> String { "recipe_button_step_\(index)" }
     static let shoppingListButton = "recipe_button_shoppingList"
@@ -24,6 +26,7 @@ enum RecipeAccessibilityIDs {
     static let promptTextField = "substitutionSheet_textField_prompt"
     static let submitButton = "substitutionSheet_button_submit"
     static let upgradeButton = "substitutionSheet_button_upgrade"
+    static let substitutionErrorText = "substitutionSheet_text_error"
 }
 
 // MARK: - UITestHelper
@@ -49,6 +52,13 @@ enum UITestHelper {
     static func waitForRecipeLoading(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
         let loadingView = app.otherElements[RecipeAccessibilityIDs.loadingView]
         return loadingView.waitForExistence(timeout: timeout)
+    }
+
+    /// エラー画面が表示されるまで待機
+    /// - Returns: エラー画面が表示されているかどうか
+    static func waitForRecipeError(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+        let errorView = app.otherElements[RecipeAccessibilityIDs.errorView]
+        return errorView.waitForExistence(timeout: timeout)
     }
 
     /// 置き換えシートが表示されるまで待機
