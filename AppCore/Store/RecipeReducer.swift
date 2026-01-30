@@ -19,26 +19,55 @@ public enum RecipeReducer {
 
         case .openSubstitutionSheet(let ingredient):
             state.substitutionTarget = .ingredient(ingredient)
+            state.originalRecipeSnapshot = state.currentRecipe
+            state.substitutionSheetMode = .input
 
         case .openSubstitutionSheetForStep(let step):
             state.substitutionTarget = .step(step)
+            state.originalRecipeSnapshot = state.currentRecipe
+            state.substitutionSheetMode = .input
 
         case .closeSubstitutionSheet:
             state.substitutionTarget = nil
+            state.previewRecipe = nil
+            state.originalRecipeSnapshot = nil
+            state.substitutionSheetMode = .input
 
         case .requestSubstitution:
             state.isProcessingSubstitution = true
             state.errorMessage = nil
+            state.substitutionSheetMode = .input
 
-        case .substitutionCompleted(let recipe):
-            state.currentRecipe = recipe
+        case .substitutionPreviewReady(let recipe):
+            state.previewRecipe = recipe
             state.isProcessingSubstitution = false
-            state.substitutionTarget = nil
+            state.substitutionSheetMode = .preview
 
         case .substitutionFailed(let message):
             state.errorMessage = message
             state.isProcessingSubstitution = false
             // シートは閉じない（リトライ可能にする）
+
+        case .approveSubstitution:
+            // previewRecipeがnilの場合はcurrentRecipeを上書きしない（防御的コード）
+            if let previewRecipe = state.previewRecipe {
+                state.currentRecipe = previewRecipe
+            }
+            state.substitutionTarget = nil
+            state.previewRecipe = nil
+            state.originalRecipeSnapshot = nil
+            state.substitutionSheetMode = .input
+
+        case .rejectSubstitution:
+            state.substitutionTarget = nil
+            state.previewRecipe = nil
+            state.originalRecipeSnapshot = nil
+            state.substitutionSheetMode = .input
+
+        case .requestAdditionalSubstitution:
+            state.isProcessingSubstitution = true
+            state.errorMessage = nil
+            state.substitutionSheetMode = .input
 
         case .clearError:
             state.errorMessage = nil

@@ -10,14 +10,25 @@ public struct RecipeState: Equatable, Sendable {
     /// レシピ読み込み中かどうか（loadRecipeでtrue、recipeLoaded/recipeLoadFailedでfalse）
     public var isLoadingRecipe: Bool = false
 
-    /// 置き換え処理中かどうか（requestSubstitutionでtrue、substitutionCompleted/substitutionFailedでfalse）
+    /// 置き換え処理中かどうか（requestSubstitution/requestAdditionalSubstitutionでtrue、substitutionPreviewReady/substitutionFailedでfalse）
     public var isProcessingSubstitution: Bool = false
 
     /// エラーメッセージ（recipeLoadFailed/substitutionFailedで設定、loadRecipe/requestSubstitution/clearErrorでクリア）
     public var errorMessage: String?
 
-    /// 置き換え対象（シート表示制御、openSubstitutionSheetで設定、closeSubstitutionSheet/substitutionCompleted/substitutionFailedでnil）
+    /// 置き換え対象（シート表示制御、openSubstitutionSheetで設定、closeSubstitutionSheet/approveSubstitution/rejectSubstitutionでnil）
     public var substitutionTarget: SubstitutionTarget?
+
+    // MARK: - Substitution Preview State
+
+    /// プレビュー中のレシピ（LLM結果を一時保持、承認前）
+    public var previewRecipe: Recipe?
+
+    /// 置き換え前のレシピのスナップショット（差分比較用）
+    public var originalRecipeSnapshot: Recipe?
+
+    /// 置き換えシートの表示モード
+    public var substitutionSheetMode: SubstitutionSheetMode = .input
 
     // MARK: - Persistence State
 
@@ -42,4 +53,14 @@ public struct RecipeState: Equatable, Sendable {
 public enum SubstitutionTarget: Equatable, Sendable {
     case ingredient(Ingredient)
     case step(CookingStep)
+}
+
+// MARK: - SubstitutionSheetMode
+
+/// 置き換えシートのモード
+public enum SubstitutionSheetMode: Equatable, Sendable {
+    /// 入力モード（初期、追加指示入力時）
+    case input
+    /// プレビューモード（LLM結果表示中）
+    case preview
 }
