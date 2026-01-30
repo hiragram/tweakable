@@ -5,121 +5,132 @@
 
 import XCTest
 
-// MARK: - Common AccessibilityIDs
+// MARK: - Recipe Accessibility IDs
 
-enum CommonAccessibilityIDs {
-    // HomeView
-    static let homeSettingsButton = "home_button_settings"
-    static let homeEnterScheduleButton = "home_button_enterSchedule"
-    static let homeGroupSelector = "home_menu_groupSelector"
-    static let homeCreateGroupMenuItem = "home_menu_createGroup"
-    static let homeDecideAssigneeButton = "home_button_decideAssignee"
-    static let homeAddWeatherLocationButton = "home_button_addWeatherLocation"
+enum RecipeAccessibilityIDs {
+    // RecipeHomeView
+    static let urlTextField = "recipeHome_textField_url"
+    static let extractButton = "recipeHome_button_extract"
+    static let clearButton = "recipeHome_button_clear"
 
-    // SettingsView
-    static let settingsDoneButton = "settings_button_done"
-    static let settingsMyAssignmentsButton = "settings_button_myAssignments"
-    static let settingsGroupSettingsButton = "settings_button_groupSettings"
-    static let settingsMemberListButton = "settings_button_memberList"
-    static let settingsAddLocationButton = "settings_button_addLocation"
-    static let settingsAboutButton = "settings_button_about"
+    // RecipeView
+    static let loadingView = "recipe_view_loading"
+    static func ingredientItem(_ index: Int) -> String { "recipe_button_ingredient_\(index)" }
+    static func stepItem(_ index: Int) -> String { "recipe_button_step_\(index)" }
+    static let shoppingListButton = "recipe_button_shoppingList"
+    static let modifiedBadge = "recipe_badge_modified"
 
-    // MyAssignmentsView
-    static let myAssignmentsDoneButton = "myAssignments_button_done"
-
-    // GroupSettingsView
-    static let groupSettingsJoinRequestsButton = "groupSettings_button_joinRequests"
-    static let groupSettingsInviteMemberButton = "groupSettings_button_inviteMember"
-    static let groupSettingsWeekdaySettingsButton = "groupSettings_button_weekdaySettings"
-    static let groupSettingsDeleteGroupButton = "groupSettings_button_deleteGroup"
-
-    // WeekdaySettingsView
-    static let weekdaySettingsDoneButton = "weekdaySettings_button_done"
-    static func weekdaySettingsToggle(weekday: String) -> String {
-        "weekdaySettings_toggle_\(weekday)"
-    }
-
-    // MemberListView
-    static let memberListCloseButton = "memberList_button_close"
-
-    // WeatherLocationEditView
-    static let weatherLocationCancelButton = "weatherLocationEdit_button_cancel"
-    static let weatherLocationSaveButton = "weatherLocationEdit_button_save"
-    static let weatherLocationLabelTextField = "weatherLocationEdit_textField_label"
-    static let weatherLocationDeleteButton = "weatherLocationEdit_button_delete"
-
-    // AboutView
-    static let aboutDoneButton = "about_button_done"
-    static let aboutLicenseButton = "about_button_license"
-
-    // WeeklyScheduleView
-    static let weeklyScheduleSubmitButton = "weeklySchedule_button_submit"
-    static func weeklyScheduleDropOffButton(dayIndex: Int) -> String {
-        "weeklySchedule_button_dropOff_day\(dayIndex)"
-    }
-    static func weeklySchedulePickUpButton(dayIndex: Int) -> String {
-        "weeklySchedule_button_pickUp_day\(dayIndex)"
-    }
-
-    // AssignmentPickerView
-    static let assignmentPickerSaveButton = "assignmentPicker_button_save"
-    static func assignmentPickerDayRow(dayIndex: Int) -> String {
-        "assignmentPicker_row_day\(dayIndex)"
-    }
-
-    // InviteMemberView
-    static let inviteMemberCloseButton = "inviteMember_button_close"
-    static let inviteMemberCopyUrlButton = "inviteMember_button_copyUrl"
-    static let inviteMemberShareButton = "inviteMember_button_share"
-
-    // JoinRequestListView
-    static let joinRequestListCloseButton = "joinRequestList_button_close"
-
-    // EmailInputView (Login)
-    static let emailInputTextField = "emailInput_textField_email"
-    static let emailInputSendOTPButton = "emailInput_button_sendOTP"
-
-    // OTPInputView (Login)
-    static let otpInputTextField = "otpInput_textField_otp"
-    static let otpInputVerifyButton = "otpInput_button_verify"
-    static let otpInputResendButton = "otpInput_button_resend"
+    // SubstitutionSheetView
+    static let promptTextField = "substitutionSheet_textField_prompt"
+    static let submitButton = "substitutionSheet_button_submit"
+    static let upgradeButton = "substitutionSheet_button_upgrade"
 }
 
+// MARK: - UITestHelper
+
 enum UITestHelper {
-    /// ログイン画面（メール入力）が表示されるまで待機
-    /// - Returns: ログイン画面に到達できたかどうか
-    static func waitForLoginScreen(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
-        let emailTextField = app.textFields[CommonAccessibilityIDs.emailInputTextField]
-        return emailTextField.waitForExistence(timeout: timeout)
+    /// レシピホーム画面（URL入力画面）が表示されるまで待機
+    /// - Returns: レシピホーム画面に到達できたかどうか
+    static func waitForRecipeHomeScreen(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
+        let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
+        return urlTextField.waitForExistence(timeout: timeout)
     }
 
-    /// OTP入力画面が表示されるまで待機
-    /// - Returns: OTP画面に到達できたかどうか
-    static func waitForOTPScreen(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
-        let otpTextField = app.textFields[CommonAccessibilityIDs.otpInputTextField]
-        return otpTextField.waitForExistence(timeout: timeout)
+    /// レシピ詳細画面が表示されるまで待機
+    /// - Returns: レシピ詳細画面に到達できたかどうか
+    static func waitForRecipeView(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
+        // ツールバーのショッピングリストボタンが表示されることを確認
+        let shoppingListButton = app.buttons[RecipeAccessibilityIDs.shoppingListButton]
+        return shoppingListButton.waitForExistence(timeout: timeout)
     }
 
-    /// ホーム画面が表示されるまで待機
-    /// - Returns: ホーム画面に到達できたかどうか
-    static func waitForHomeScreen(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
-        let settingsButton = app.buttons[CommonAccessibilityIDs.homeSettingsButton]
-        return settingsButton.waitForExistence(timeout: timeout)
+    /// ローディング画面が表示されるまで待機
+    /// - Returns: ローディング画面が表示されているかどうか
+    static func waitForRecipeLoading(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+        let loadingView = app.otherElements[RecipeAccessibilityIDs.loadingView]
+        return loadingView.waitForExistence(timeout: timeout)
     }
 
-    /// 設定画面を開く
-    static func openSettings(app: XCUIApplication) {
-        app.buttons[CommonAccessibilityIDs.homeSettingsButton].tap()
+    /// 置き換えシートが表示されるまで待機
+    /// - Returns: 置き換えシートが表示されているかどうか
+    static func waitForSubstitutionSheet(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+        // submitButtonまたはupgradeButtonが表示されることを確認
+        let submitButton = app.buttons[RecipeAccessibilityIDs.submitButton]
+        let upgradeButton = app.buttons[RecipeAccessibilityIDs.upgradeButton]
+
+        let startTime = Date()
+        while Date().timeIntervalSince(startTime) < timeout {
+            if submitButton.exists || upgradeButton.exists {
+                return true
+            }
+            Thread.sleep(forTimeInterval: 0.1)
+        }
+        return false
     }
 
-    /// スケジュール入力画面を開く
-    static func openScheduleInput(app: XCUIApplication) {
-        app.buttons[CommonAccessibilityIDs.homeEnterScheduleButton].tap()
+    /// URLを入力してレシピ抽出を開始
+    /// - Parameters:
+    ///   - app: XCUIApplication
+    ///   - url: 入力するURL文字列
+    static func extractRecipe(app: XCUIApplication, url: String) {
+        let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
+        urlTextField.tap()
+        urlTextField.typeText(url)
+
+        let extractButton = app.buttons[RecipeAccessibilityIDs.extractButton]
+        extractButton.tap()
     }
 
-    /// スワイプで前の画面に戻る
-    static func swipeBack(app: XCUIApplication) {
-        app.swipeRight()
+    /// 入力フィールドをクリア
+    static func clearURLField(app: XCUIApplication) {
+        let clearButton = app.buttons[RecipeAccessibilityIDs.clearButton]
+        if clearButton.exists {
+            clearButton.tap()
+        }
+    }
+
+    /// 材料をタップして置き換えシートを開く
+    /// - Parameters:
+    ///   - app: XCUIApplication
+    ///   - index: 材料のインデックス（0始まり）
+    static func tapIngredient(app: XCUIApplication, at index: Int) {
+        let ingredientButton = app.buttons[RecipeAccessibilityIDs.ingredientItem(index)]
+        ingredientButton.tap()
+    }
+
+    /// 調理工程をタップして置き換えシートを開く
+    /// - Parameters:
+    ///   - app: XCUIApplication
+    ///   - index: 工程のインデックス（0始まり）
+    static func tapStep(app: XCUIApplication, at index: Int) {
+        let stepButton = app.buttons[RecipeAccessibilityIDs.stepItem(index)]
+        stepButton.tap()
+    }
+
+    /// 置き換えプロンプトを入力して送信
+    /// - Parameters:
+    ///   - app: XCUIApplication
+    ///   - prompt: 置き換え指示のテキスト
+    static func submitSubstitution(app: XCUIApplication, prompt: String) {
+        // まずシートが開いていることを確認（submitButtonの存在で判断）
+        let submitButton = app.buttons[RecipeAccessibilityIDs.submitButton]
+        guard submitButton.waitForExistence(timeout: 5) else {
+            XCTFail("submitSubstitution: 送信ボタンが見つかりません")
+            return
+        }
+
+        // TextEditorはtextViewsで見つかる
+        let promptTextField = app.textViews[RecipeAccessibilityIDs.promptTextField]
+        guard promptTextField.waitForExistence(timeout: 3) else {
+            XCTFail("submitSubstitution: プロンプトフィールドが見つかりません")
+            return
+        }
+
+        promptTextField.tap()
+        promptTextField.typeText(prompt)
+
+        // 送信ボタンをタップ
+        submitButton.tap()
     }
 
     /// 要素が存在することを確認（タイムアウト付き）

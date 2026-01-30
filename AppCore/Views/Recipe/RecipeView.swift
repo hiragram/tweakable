@@ -234,7 +234,6 @@ struct RecipeView: View {
                     }
                 }
             }
-            .accessibilityIdentifier(RecipeAccessibilityID.ingredientsList)
         }
     }
 
@@ -290,7 +289,6 @@ struct RecipeView: View {
                     stepRow(step, index: index)
                 }
             }
-            .accessibilityIdentifier(RecipeAccessibilityID.stepsList)
         }
     }
 

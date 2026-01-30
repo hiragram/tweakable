@@ -1,0 +1,123 @@
+import Foundation
+
+/// UIテスト用のモックレシピ抽出サービス
+public struct MockRecipeExtractionService: RecipeExtractionServiceProtocol, Sendable {
+
+    /// テスト用の固定レシピ
+    public static let mockRecipe = Recipe(
+        id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
+        title: "テスト用チキンカレー",
+        description: "UIテスト用のサンプルレシピです。スパイシーで美味しいチキンカレーの作り方。",
+        imageURLs: [],
+        ingredientsInfo: Ingredients(
+            servings: "2人分",
+            items: [
+                Ingredient(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000010")!,
+                    name: "鶏もも肉",
+                    amount: "300g",
+                    isModified: false
+                ),
+                Ingredient(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000011")!,
+                    name: "玉ねぎ",
+                    amount: "1個",
+                    isModified: false
+                ),
+                Ingredient(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000012")!,
+                    name: "カレールー",
+                    amount: "4皿分",
+                    isModified: false
+                ),
+                Ingredient(
+                    id: UUID(uuidString: "00000000-0000-0000-0000-000000000013")!,
+                    name: "水",
+                    amount: "400ml",
+                    isModified: false
+                )
+            ]
+        ),
+        steps: [
+            CookingStep(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000020")!,
+                stepNumber: 1,
+                instruction: "鶏もも肉を一口大に切り、玉ねぎは薄切りにする。",
+                imageURLs: [],
+                isModified: false
+            ),
+            CookingStep(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000021")!,
+                stepNumber: 2,
+                instruction: "鍋に油を熱し、鶏肉を炒める。表面に焼き色がついたら玉ねぎを加えて炒める。",
+                imageURLs: [],
+                isModified: false
+            ),
+            CookingStep(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000022")!,
+                stepNumber: 3,
+                instruction: "水を加えて沸騰したらアクを取り、弱火で15分煮込む。",
+                imageURLs: [],
+                isModified: false
+            ),
+            CookingStep(
+                id: UUID(uuidString: "00000000-0000-0000-0000-000000000023")!,
+                stepNumber: 4,
+                instruction: "火を止めてカレールーを溶かし、再び弱火で5分煮込む。",
+                imageURLs: [],
+                isModified: false
+            )
+        ],
+        sourceURL: URL(string: "https://example.com/test-recipe")
+    )
+
+    public init() {}
+
+    public func extractRecipe(from url: URL) async throws -> Recipe {
+        // 少し遅延を入れてローディング状態をテスト可能にする
+        try await Task.sleep(for: .milliseconds(500))
+        return Self.mockRecipe
+    }
+
+    public func substituteRecipe(
+        recipe: Recipe,
+        target: SubstitutionTarget,
+        prompt: String
+    ) async throws -> Recipe {
+        // 少し遅延を入れてローディング状態をテスト可能にする
+        try await Task.sleep(for: .milliseconds(500))
+
+        var updatedRecipe = recipe
+
+        switch target {
+        case .ingredient(let ingredient):
+            // 材料を置き換え済みとしてマーク
+            if let index = updatedRecipe.ingredientsInfo.items.firstIndex(where: { $0.id == ingredient.id }) {
+                var modifiedIngredient = updatedRecipe.ingredientsInfo.items[index]
+                modifiedIngredient = Ingredient(
+                    id: modifiedIngredient.id,
+                    name: "置き換え済み: \(modifiedIngredient.name)",
+                    amount: modifiedIngredient.amount,
+                    isModified: true
+                )
+                updatedRecipe.ingredientsInfo.items[index] = modifiedIngredient
+            }
+
+        case .step(let step):
+            // 工程を置き換え済みとしてマーク
+            if let index = updatedRecipe.steps.firstIndex(where: { $0.id == step.id }) {
+                var modifiedStep = updatedRecipe.steps[index]
+                modifiedStep = CookingStep(
+                    id: modifiedStep.id,
+                    stepNumber: modifiedStep.stepNumber,
+                    instruction: "置き換え済み: \(modifiedStep.instruction)",
+                    imageURLs: modifiedStep.imageURLs,
+                    isModified: true
+                )
+                updatedRecipe.steps[index] = modifiedStep
+            }
+        }
+
+        return updatedRecipe
+    }
+}

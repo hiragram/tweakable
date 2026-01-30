@@ -12,10 +12,19 @@ import AppCore
 struct TweakableApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    /// UIテストモードかどうか
+    private var isUITesting: Bool {
+        ProcessInfo.processInfo.arguments.contains("--uitesting")
+    }
+
     var body: some Scene {
         WindowGroup {
             // バックエンドなしのスタンドアロンモード
-            RootView()
+            if isUITesting {
+                RootView(recipeExtractionService: MockRecipeExtractionService())
+            } else {
+                RootView()
+            }
         }
     }
 }
