@@ -20,6 +20,7 @@ public final class AppStore {
     private let userDefaults: any UserDefaultsProtocol
     private let recipeExtractionService: any RecipeExtractionServiceProtocol
     private let recipePersistenceService: any RecipePersistenceServiceProtocol
+    private let revenueCatService: any RevenueCatServiceProtocol
 
     // MARK: - Initialization
 
@@ -28,11 +29,13 @@ public final class AppStore {
         weatherService: any WeatherServiceProtocol = WeatherKitService(),
         userDefaults: any UserDefaultsProtocol = UserDefaults.standard,
         recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
-        recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil
+        recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil,
+        revenueCatService: any RevenueCatServiceProtocol = RevenueCatService()
     ) {
         self.networkMonitor = networkMonitor
         self.weatherService = weatherService
         self.userDefaults = userDefaults
+        self.revenueCatService = revenueCatService
 
         // RecipeExtractionService のデフォルト構成
         if let service = recipeExtractionService {
@@ -109,6 +112,9 @@ public final class AppStore {
         case .shoppingList(let shoppingListAction):
             await handleShoppingListSideEffects(shoppingListAction)
 
+        case .subscription(let subscriptionAction):
+            await handleSubscriptionSideEffects(subscriptionAction)
+
         case .setScreenState:
             // No side effects
             break
@@ -117,6 +123,9 @@ public final class AppStore {
 
     /// アプリ起動時の処理
     private func handleBoot() async {
+        // サブスクリプション状態を読み込む
+        send(.subscription(.loadSubscriptionStatus))
+
         // バックエンドなしのスタンドアロンモード
         // 認証なしで直接メイン画面へ
         send(.setScreenState(.main))
@@ -232,6 +241,10 @@ public final class AppStore {
             }
 
         case .requestSubstitution(let prompt):
+            guard state.subscription.isPremium else {
+                send(.recipe(.substitutionFailed(String(localized: "substitution_error_premium_required", bundle: .app))))
+                return
+            }
             guard let recipe = state.recipe.currentRecipe,
                   let target = state.recipe.substitutionTarget else {
                 send(.recipe(.substitutionFailed(String(localized: .substitutionErrorNoTarget))))
@@ -251,6 +264,10 @@ public final class AppStore {
             }
 
         case .requestAdditionalSubstitution(let prompt):
+            guard state.subscription.isPremium else {
+                send(.recipe(.substitutionFailed(String(localized: "substitution_error_premium_required", bundle: .app))))
+                return
+            }
             // previewRecipeをベースにLLM再呼び出し
             guard let previewRecipe = state.recipe.previewRecipe,
                   let target = state.recipe.substitutionTarget else {
@@ -366,6 +383,53 @@ public final class AppStore {
                 send(.shoppingList(.itemCheckedUpdated(itemID: itemID, isChecked: isChecked)))
             } catch {
                 send(.shoppingList(.itemCheckUpdateFailed(error.localizedDescription)))
+            }
+
+        default:
+            // その他のアクションは副作用なし
+            break
+        }
+    }
+
+    // MARK: - Subscription Side Effects
+
+    private func handleSubscriptionSideEffects(_ action: SubscriptionAction) async {
+        switch action {
+        case .loadSubscriptionStatus:
+            do {
+                let isPremium = try await revenueCatService.checkPremiumStatus()
+                send(.subscription(.subscriptionStatusLoaded(isPremium: isPremium)))
+            } catch {
+                send(.subscription(.subscriptionStatusLoadFailed(error.localizedDescription)))
+            }
+
+        case .loadPackages:
+            do {
+                let packages = try await revenueCatService.fetchPackages()
+                send(.subscription(.packagesLoaded(packages)))
+            } catch {
+                send(.subscription(.packagesLoadFailed(error.localizedDescription)))
+            }
+
+        case .purchase(let packageID):
+            do {
+                let result = try await revenueCatService.purchase(packageID: packageID)
+                switch result {
+                case .success:
+                    send(.subscription(.purchaseSucceeded))
+                case .cancelled:
+                    send(.subscription(.purchaseCancelled))
+                }
+            } catch {
+                send(.subscription(.purchaseFailed(error.localizedDescription)))
+            }
+
+        case .restorePurchases:
+            do {
+                let isPremium = try await revenueCatService.restorePurchases()
+                send(.subscription(.restoreSucceeded(isPremium: isPremium)))
+            } catch {
+                send(.subscription(.restoreFailed(error.localizedDescription)))
             }
 
         default:

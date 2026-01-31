@@ -21,11 +21,18 @@ public struct RootView: View {
 
     public init(
         networkMonitor: (any NetworkMonitorProtocol)? = nil,
-        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil
+        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
+        mockPremium: Bool = false
     ) {
+        // UIテスト用: mockPremiumがtrueの場合はMockRevenueCatServiceを使用
+        let revenueCatService: any RevenueCatServiceProtocol = mockPremium
+            ? MockRevenueCatService(isPremium: true)
+            : RevenueCatService()
+
         _store = State(initialValue: AppStore(
             networkMonitor: networkMonitor ?? NetworkMonitor(),
-            recipeExtractionService: recipeExtractionService
+            recipeExtractionService: recipeExtractionService,
+            revenueCatService: revenueCatService
         ))
     }
 

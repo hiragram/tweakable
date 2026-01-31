@@ -81,8 +81,8 @@ final class RecipeSubstitutionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（置き換えエラーモード）
-        app.launchArguments = ["--uitesting", "--mock-substitution-error"]
+        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー）
+        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機

@@ -23,6 +23,7 @@
 		CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
 		DA6A2692A88AD5190972A231 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
 		E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
+		E841C22F4BBB883589B14BFA /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = C03E64C161EA5B6A08E5C843 /* RevenueCat */; };
 		F0838EE2391BA63784534E94 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 113ECDF464E0599CE3E785C5 /* FirebaseRemoteConfig */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +119,7 @@
 				E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */,
 				22CECF98942BDB7CC608BC6B /* OpenAI in Frameworks */,
 				AF51FFB396EC6B71FA9581EA /* FirebaseRemoteConfig in Frameworks */,
+				E841C22F4BBB883589B14BFA /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +228,7 @@
 				B12A079B278B22C7A7973CBA /* FirebaseMessaging */,
 				63DA120AC5D8B714616ECCD6 /* OpenAI */,
 				452F108779437E0070A7DA52 /* FirebaseRemoteConfig */,
+				C03E64C161EA5B6A08E5C843 /* RevenueCat */,
 			);
 			productName = AppCore;
 			productReference = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */;
@@ -250,7 +253,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				605EE80A2EECE98A00201738 /* Tweakable */,
-				E33F31B86DD5A77104FCE345 /* Settings.bundle */,
+				E33F31B86DD5A77104FCE345 /* Tweakable/Settings.bundle */,
 			);
 			name = Tweakable;
 			packageProductDependencies = (
@@ -321,6 +324,7 @@
 				06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */,
 				AB11DA9A6686F30FB79D43C7 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				2B2419157E80069DE4CF9AEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				72A37E870C97F6EDB3D51D20 /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 605EE7FF2EECE98A00201738;
@@ -857,6 +861,14 @@
 				minimumVersion = 1.15.0;
 			};
 		};
+		72A37E870C97F6EDB3D51D20 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		8A75E4AA8EB890E920E2BDBE /* XCRemoteSwiftPackageReference "Prefire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/BarredEwe/Prefire.git";
@@ -925,6 +937,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FFD8AA2C7EED611BCBBA163 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		C03E64C161EA5B6A08E5C843 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 72A37E870C97F6EDB3D51D20 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
 		};
 		D0187CD4C05FEFADA34DFC5B /* LicensePlistBuildTool */ = {
 			isa = XCSwiftPackageProductDependency;

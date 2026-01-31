@@ -9,6 +9,7 @@ import UIKit
 import UserNotifications
 import FirebaseCore
 import FirebaseCrashlytics
+import RevenueCat
 
 public class AppDelegate: NSObject, UIApplicationDelegate {
 
@@ -26,10 +27,27 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         // Firebase初期化
         FirebaseApp.configure()
 
+        // RevenueCat初期化
+        configureRevenueCat()
+
         // プッシュ通知の登録
         registerForPushNotifications()
 
         return true
+    }
+
+    // MARK: - RevenueCat
+
+    private func configureRevenueCat() {
+        // RevenueCat Public API Key
+        let apiKey = "appl_nLhBICTcjClkCJWfwFLtDkBTmai"
+
+        #if DEBUG
+        Purchases.logLevel = .debug
+        #else
+        Purchases.logLevel = .error
+        #endif
+        Purchases.configure(withAPIKey: apiKey)
     }
 
     // MARK: - Push Notifications

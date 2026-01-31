@@ -8,17 +8,9 @@ struct RecipeContainerView: View {
     /// State for showing substitution sheet
     @State private var showsSubstitutionSheet = false
 
-    /// Whether the user is a premium subscriber
-    /// TODO: Implement RevenueCat integration for premium subscription check (MVP requirement)
+    /// Whether the user is a premium subscriber (from RevenueCat)
     private var isPremiumUser: Bool {
-        // SECURITY: This MUST be implemented before production release
-        #if DEBUG
-        return true  // Development only - REMOVE BEFORE SHIPPING
-        #else
-        // Production builds require RevenueCat integration
-        // This will cause a compile error until properly implemented
-        #error("RevenueCat integration required before production build")
-        #endif
+        store.state.subscription.isPremium
     }
 
     var body: some View {
@@ -61,7 +53,7 @@ struct RecipeContainerView: View {
                         store.send(.recipe(.requestSubstitution(prompt: prompt)))
                     },
                     onUpgradeTapped: {
-                        // TODO: Show RevenueCat paywall for premium subscription (MVP requirement, separate task)
+                        store.send(.subscription(.showPaywall))
                     },
                     onDismiss: {
                         store.send(.recipe(.closeSubstitutionSheet))
@@ -85,6 +77,12 @@ struct RecipeContainerView: View {
             if oldValue != nil && newValue == nil {
                 showsSubstitutionSheet = false
             }
+        }
+        .sheet(isPresented: .init(
+            get: { store.state.subscription.showsPaywall },
+            set: { if !$0 { store.send(.subscription(.hidePaywall)) } }
+        )) {
+            PaywallContainerView(store: store)
         }
     }
 }
