@@ -30,13 +30,13 @@ struct CreateShoppingListView: View {
                 VStack(spacing: ds.spacing.xl) {
                     // List name section
                     VStack(alignment: .leading, spacing: ds.spacing.sm) {
-                        Text("create_shopping_list_name_header", bundle: .app)
+                        Text(.createShoppingListNameHeader)
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(ds.colors.textSecondary.color)
 
                         TextField(
-                            String(localized: "create_shopping_list_name_placeholder", bundle: .app),
+                            String(localized: .createShoppingListNamePlaceholder),
                             text: $listName
                         )
                         .textFieldStyle(.plain)
@@ -48,7 +48,7 @@ struct CreateShoppingListView: View {
 
                     // Recipe selection section
                     VStack(alignment: .leading, spacing: ds.spacing.sm) {
-                        Text("create_shopping_list_recipes_header", bundle: .app)
+                        Text(.createShoppingListRecipesHeader)
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(ds.colors.textSecondary.color)
@@ -62,7 +62,7 @@ struct CreateShoppingListView: View {
                                 }
                             }
 
-                            Text("create_shopping_list_recipes_footer \(selectedRecipeIDs.count)", bundle: .app)
+                            Text(.createShoppingListRecipesFooter(selectedRecipeIDs.count))
                                 .font(.caption)
                                 .foregroundColor(ds.colors.textTertiary.color)
                         }
@@ -75,11 +75,11 @@ struct CreateShoppingListView: View {
                 .padding(.vertical, ds.spacing.md)
             }
             .accessibilityIdentifier(CreateShoppingListAccessibilityID.recipeList)
-            .navigationTitle(String(localized: "create_shopping_list_title", bundle: .app))
+            .navigationTitle(String(localized: .createShoppingListTitle))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "common_cancel", bundle: .app)) {
+                    Button(String(localized: .commonCancel)) {
                         onCancelTapped()
                     }
                     .accessibilityIdentifier(CreateShoppingListAccessibilityID.cancelButton)
@@ -92,7 +92,7 @@ struct CreateShoppingListView: View {
                         if isCreating {
                             ProgressView()
                         } else {
-                            Text("common_create", bundle: .app)
+                            Text(.commonCreate)
                         }
                     }
                     .disabled(listName.isEmpty || selectedRecipeIDs.isEmpty || isCreating)
@@ -110,7 +110,7 @@ struct CreateShoppingListView: View {
                 .font(.title)
                 .foregroundColor(ds.colors.textTertiary.color)
 
-            Text("create_shopping_list_no_recipes", bundle: .app)
+            Text(.createShoppingListNoRecipes)
                 .font(.subheadline)
                 .foregroundColor(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
