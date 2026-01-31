@@ -228,6 +228,16 @@ public final class AppStore {
 
     // MARK: - Recipe Side Effects
 
+    /// プレミアム機能の利用可否をチェックし、非プレミアムの場合はエラーを送信
+    /// - Returns: プレミアムユーザーの場合は `true`、非プレミアムの場合は `false`
+    private func requiresPremium() -> Bool {
+        guard state.subscription.isPremium else {
+            send(.recipe(.substitutionFailed(String(localized: "substitution_error_premium_required", bundle: .app))))
+            return false
+        }
+        return true
+    }
+
     private func handleRecipeSideEffects(_ action: RecipeAction) async {
         switch action {
         case .loadRecipe(let url):
@@ -241,10 +251,7 @@ public final class AppStore {
             }
 
         case .requestSubstitution(let prompt):
-            guard state.subscription.isPremium else {
-                send(.recipe(.substitutionFailed(String(localized: "substitution_error_premium_required", bundle: .app))))
-                return
-            }
+            guard requiresPremium() else { return }
             guard let recipe = state.recipe.currentRecipe,
                   let target = state.recipe.substitutionTarget else {
                 send(.recipe(.substitutionFailed(String(localized: .substitutionErrorNoTarget))))
@@ -264,10 +271,7 @@ public final class AppStore {
             }
 
         case .requestAdditionalSubstitution(let prompt):
-            guard state.subscription.isPremium else {
-                send(.recipe(.substitutionFailed(String(localized: "substitution_error_premium_required", bundle: .app))))
-                return
-            }
+            guard requiresPremium() else { return }
             // previewRecipeをベースにLLM再呼び出し
             guard let previewRecipe = state.recipe.previewRecipe,
                   let target = state.recipe.substitutionTarget else {
