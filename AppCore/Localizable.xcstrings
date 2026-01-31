@@ -799,6 +799,23 @@
       },
       "extractionState": "manual"
     },
+    "recipe_view_original_link": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View original recipe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元のレシピを見る"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "saved_recipes_button": {
       "localizations": {
         "en": {
