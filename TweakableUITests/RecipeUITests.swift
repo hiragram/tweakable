@@ -25,6 +25,7 @@ final class RecipeUITests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        app?.terminate()
         app = nil
     }
 
