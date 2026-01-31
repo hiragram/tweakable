@@ -5,6 +5,13 @@
 
 import XCTest
 
+// MARK: - Paywall Accessibility IDs
+
+enum PaywallAccessibilityIDs {
+    static let dismissButton = "paywall_button_dismiss"
+    static let restoreButton = "paywall_button_restore"
+}
+
 // MARK: - Recipe Accessibility IDs
 
 enum RecipeAccessibilityIDs {
@@ -189,5 +196,22 @@ enum UITestHelper {
             element.waitForExistence(timeout: timeout),
             message ?? defaultMessage
         )
+    }
+
+    // MARK: - Paywall Helpers
+
+    /// ペイウォール画面が表示されるまで待機
+    /// - Returns: ペイウォールが表示されているかどうか
+    static func waitForPaywall(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+        let dismissButton = app.buttons[PaywallAccessibilityIDs.dismissButton]
+        return dismissButton.waitForExistence(timeout: timeout)
+    }
+
+    /// ペイウォール画面を閉じる
+    static func dismissPaywall(app: XCUIApplication) {
+        let dismissButton = app.buttons[PaywallAccessibilityIDs.dismissButton]
+        if dismissButton.exists {
+            dismissButton.tap()
+        }
     }
 }
