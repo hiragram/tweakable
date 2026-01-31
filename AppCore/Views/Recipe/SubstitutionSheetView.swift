@@ -22,6 +22,7 @@ enum SubstitutionSheetAccessibilityID {
 struct SubstitutionSheetView: View {
     private let ds = DesignSystem.default
 
+    let store: AppStore
     let target: SubstitutionTarget
     let isProcessing: Bool
     let isPremiumUser: Bool
@@ -33,7 +34,6 @@ struct SubstitutionSheetView: View {
     let originalRecipe: Recipe?
 
     let onSubmit: (String) -> Void
-    let onUpgradeTapped: () -> Void
     let onDismiss: () -> Void
 
     // 新規追加: 確認アクション
@@ -70,6 +70,12 @@ struct SubstitutionSheetView: View {
                     .disabled(isProcessing)
                 }
             }
+        }
+        .sheet(isPresented: .init(
+            get: { store.state.subscription.showsPaywall },
+            set: { if !$0 { store.send(.subscription(.hidePaywall)) } }
+        )) {
+            PaywallContainerView(store: store)
         }
     }
 
@@ -474,7 +480,7 @@ struct SubstitutionSheetView: View {
                     .multilineTextAlignment(.center)
             }
 
-            Button(action: onUpgradeTapped) {
+            Button(action: { store.send(.subscription(.showPaywall)) }) {
                 HStack {
                     Image(systemName: "crown.fill")
                     Text(.substitutionButtonUpgrade)
@@ -554,6 +560,7 @@ private struct AddedItemView: View {
 
 #Preview("Input Mode - Premium - Ingredient") {
     SubstitutionSheetView(
+        store: AppStore(),
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
@@ -562,7 +569,6 @@ private struct AddedItemView: View {
         previewRecipe: nil,
         originalRecipe: nil,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},
@@ -573,6 +579,7 @@ private struct AddedItemView: View {
 
 #Preview("Input Mode - Premium - Step") {
     SubstitutionSheetView(
+        store: AppStore(),
         target: .step(CookingStep(stepNumber: 2, instruction: "フライパンに油を熱し、鶏肉を皮目から焼く")),
         isProcessing: false,
         isPremiumUser: true,
@@ -581,7 +588,6 @@ private struct AddedItemView: View {
         previewRecipe: nil,
         originalRecipe: nil,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},
@@ -592,6 +598,7 @@ private struct AddedItemView: View {
 
 #Preview("Input Mode - Processing") {
     SubstitutionSheetView(
+        store: AppStore(),
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: true,
         isPremiumUser: true,
@@ -600,7 +607,6 @@ private struct AddedItemView: View {
         previewRecipe: nil,
         originalRecipe: nil,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},
@@ -611,6 +617,7 @@ private struct AddedItemView: View {
 
 #Preview("Input Mode - Error") {
     SubstitutionSheetView(
+        store: AppStore(),
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
@@ -619,7 +626,6 @@ private struct AddedItemView: View {
         previewRecipe: nil,
         originalRecipe: nil,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},
@@ -630,6 +636,7 @@ private struct AddedItemView: View {
 
 #Preview("Input Mode - Free User") {
     SubstitutionSheetView(
+        store: AppStore(),
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: false,
@@ -638,7 +645,6 @@ private struct AddedItemView: View {
         previewRecipe: nil,
         originalRecipe: nil,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},
@@ -679,6 +685,7 @@ private struct AddedItemView: View {
     )
 
     return SubstitutionSheetView(
+        store: AppStore(),
         target: .ingredient(Ingredient(id: originalID, name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
@@ -687,7 +694,6 @@ private struct AddedItemView: View {
         previewRecipe: preview,
         originalRecipe: original,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},
@@ -716,6 +722,7 @@ private struct AddedItemView: View {
     )
 
     return SubstitutionSheetView(
+        store: AppStore(),
         target: .ingredient(Ingredient(id: originalID, name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
@@ -724,7 +731,6 @@ private struct AddedItemView: View {
         previewRecipe: preview,
         originalRecipe: original,
         onSubmit: { _ in },
-        onUpgradeTapped: {},
         onDismiss: {},
         onApprove: {},
         onReject: {},

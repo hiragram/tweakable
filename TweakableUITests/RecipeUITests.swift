@@ -277,6 +277,63 @@ final class RecipeUITests: XCTestCase {
     }
 }
 
+// MARK: - Free User Paywall Tests
+
+@MainActor
+final class FreeUserPaywallUITests: XCTestCase {
+    var app: XCUIApplication!
+
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+
+        app = XCUIApplication()
+        // UIテストモードで起動（無料ユーザーとしてモック、--mock-premiumなし）
+        app.launchArguments = ["--uitesting"]
+        app.launch()
+
+        // レシピホーム画面が表示されるまで待機
+        let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
+        try XCTSkipUnless(reachedHome, "レシピホーム画面に到達できませんでした")
+    }
+
+    override func tearDownWithError() throws {
+        app?.terminate()
+        app = nil
+    }
+
+    /// 無料ユーザーが置き換えシートでアップグレードボタンを押すと
+    /// ペイウォールがすぐに表示されることを確認
+    func testUpgradeButtonShowsPaywallImmediately() throws {
+        // レシピ詳細画面に遷移
+        UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
+        let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
+        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+
+        // 材料をタップして置き換えシートを開く
+        UITestHelper.tapIngredient(app: app, at: 0)
+        let sheetDisplayed = UITestHelper.waitForSubstitutionSheet(app: app)
+        try XCTSkipUnless(sheetDisplayed, "置き換えシートが表示されませんでした")
+
+        // アップグレードボタンが表示されることを確認（無料ユーザーなので）
+        let upgradeButton = app.buttons[RecipeAccessibilityIDs.upgradeButton]
+        XCTAssertTrue(upgradeButton.exists, "無料ユーザーにはアップグレードボタンが表示されること")
+
+        // アップグレードボタンをタップ
+        upgradeButton.tap()
+
+        // ペイウォールがすぐに表示されることを確認
+        let paywallDisplayed = UITestHelper.waitForPaywall(app: app)
+        XCTAssertTrue(paywallDisplayed, "アップグレードボタンをタップするとペイウォールが表示されること")
+
+        // ペイウォールを閉じる
+        UITestHelper.dismissPaywall(app: app)
+
+        // 置き換えシートに戻ることを確認
+        let sheetStillDisplayed = UITestHelper.waitForSubstitutionSheet(app: app)
+        XCTAssertTrue(sheetStillDisplayed, "ペイウォールを閉じると置き換えシートに戻ること")
+    }
+}
+
 // MARK: - XCUIElement Extension
 
 extension XCUIElement {

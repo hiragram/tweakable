@@ -42,6 +42,7 @@ struct RecipeContainerView: View {
         .sheet(isPresented: $showsSubstitutionSheet) {
             if let target = store.state.recipe.substitutionTarget {
                 SubstitutionSheetView(
+                    store: store,
                     target: target,
                     isProcessing: store.state.recipe.isProcessingSubstitution,
                     isPremiumUser: isPremiumUser,
@@ -51,9 +52,6 @@ struct RecipeContainerView: View {
                     originalRecipe: store.state.recipe.originalRecipeSnapshot,
                     onSubmit: { prompt in
                         store.send(.recipe(.requestSubstitution(prompt: prompt)))
-                    },
-                    onUpgradeTapped: {
-                        store.send(.subscription(.showPaywall))
                     },
                     onDismiss: {
                         store.send(.recipe(.closeSubstitutionSheet))
@@ -77,12 +75,6 @@ struct RecipeContainerView: View {
             if oldValue != nil && newValue == nil {
                 showsSubstitutionSheet = false
             }
-        }
-        .sheet(isPresented: .init(
-            get: { store.state.subscription.showsPaywall },
-            set: { if !$0 { store.send(.subscription(.hidePaywall)) } }
-        )) {
-            PaywallContainerView(store: store)
         }
     }
 }
