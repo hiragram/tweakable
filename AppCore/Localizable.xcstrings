@@ -1620,6 +1620,125 @@
     "閉じる": {
       "extractionState": "manual"
     },
+    "add_recipe_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Recipe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピを追加"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "add_recipe_subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste a recipe URL to extract ingredients and steps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピURLを貼り付けて\n材料と手順を抽出します"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "add_recipe_navigation_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Recipe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピを追加"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "my_recipes_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Recipes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マイレシピ"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "my_recipes_empty_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Recipes Yet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピがありません"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "my_recipes_empty_message": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your first recipe from a URL to start building your collection."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URLからレシピを追加して\nコレクションを始めましょう"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "my_recipes_empty_button": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Recipe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピを追加"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "paywall_title" : {
       "extractionState" : "manual",
       "localizations" : {
