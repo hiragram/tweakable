@@ -131,13 +131,14 @@ struct RecipeReducerTests {
     }
 
     @Test
-    func reduce_substitutionCompleted_updatesRecipeAndClosesSheet() {
+    func reduce_substitutionPreviewReady_setsPreviewAndChangesToPreviewMode() {
         var state = RecipeState()
         state.currentRecipe = makeSampleRecipe()
         state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
         state.isProcessingSubstitution = true
+        state.substitutionSheetMode = .input
 
-        let updatedRecipe = Recipe(
+        let previewRecipe = Recipe(
             title: "テスト料理",
             ingredientsInfo: Ingredients(
                 servings: "2人分",
@@ -152,11 +153,13 @@ struct RecipeReducerTests {
             ]
         )
 
-        RecipeReducer.reduce(state: &state, action: .substitutionCompleted(updatedRecipe))
+        RecipeReducer.reduce(state: &state, action: .substitutionPreviewReady(previewRecipe))
 
-        #expect(state.currentRecipe == updatedRecipe)
+        #expect(state.previewRecipe == previewRecipe)
         #expect(state.isProcessingSubstitution == false)
-        #expect(state.substitutionTarget == nil)
+        #expect(state.substitutionSheetMode == .preview)
+        // currentRecipeはまだ変更されない
+        #expect(state.currentRecipe != previewRecipe)
     }
 
     @Test
@@ -181,6 +184,146 @@ struct RecipeReducerTests {
 
         // シートは開いたままにする（substitutionTargetはnilにならない）
         #expect(state.substitutionTarget != nil)
+    }
+
+    // MARK: - Substitution Confirmation Tests
+
+    @Test
+    func reduce_openSubstitutionSheet_savesSnapshotAndSetsInputMode() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+        let ingredient = Ingredient(name: "鶏肉", amount: "200g")
+
+        RecipeReducer.reduce(state: &state, action: .openSubstitutionSheet(ingredient: ingredient))
+
+        #expect(state.substitutionTarget == .ingredient(ingredient))
+        #expect(state.originalRecipeSnapshot == recipe)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_openSubstitutionSheetForStep_savesSnapshotAndSetsInputMode() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+        let step = CookingStep(stepNumber: 1, instruction: "鶏肉を切る")
+
+        RecipeReducer.reduce(state: &state, action: .openSubstitutionSheetForStep(step: step))
+
+        #expect(state.substitutionTarget == .step(step))
+        #expect(state.originalRecipeSnapshot == recipe)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_approveSubstitution_updatesRecipeAndResetsState() {
+        var state = RecipeState()
+        let originalRecipe = makeSampleRecipe()
+        state.currentRecipe = originalRecipe
+        state.originalRecipeSnapshot = originalRecipe
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+
+        let previewRecipe = Recipe(
+            title: "テスト料理（更新後）",
+            ingredientsInfo: Ingredients(
+                servings: "2人分",
+                items: [
+                    Ingredient(name: "豚肉", amount: "200g", isModified: true)
+                ]
+            ),
+            steps: [CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true)]
+        )
+        state.previewRecipe = previewRecipe
+
+        RecipeReducer.reduce(state: &state, action: .approveSubstitution)
+
+        #expect(state.currentRecipe == previewRecipe)
+        #expect(state.substitutionTarget == nil)
+        #expect(state.previewRecipe == nil)
+        #expect(state.originalRecipeSnapshot == nil)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_approveSubstitution_whenPreviewRecipeIsNil_doesNotOverwriteCurrentRecipe() {
+        var state = RecipeState()
+        let originalRecipe = makeSampleRecipe()
+        state.currentRecipe = originalRecipe
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+        state.previewRecipe = nil  // 異常ケース: プレビューがないのにapprove
+
+        RecipeReducer.reduce(state: &state, action: .approveSubstitution)
+
+        // currentRecipeが消えないことを確認
+        #expect(state.currentRecipe == originalRecipe)
+        // 他の状態は通常どおりリセットされる
+        #expect(state.substitutionTarget == nil)
+        #expect(state.previewRecipe == nil)
+        #expect(state.originalRecipeSnapshot == nil)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_rejectSubstitution_discardsPreviewAndResetsState() {
+        var state = RecipeState()
+        let originalRecipe = makeSampleRecipe()
+        state.currentRecipe = originalRecipe
+        state.originalRecipeSnapshot = originalRecipe
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+
+        let previewRecipe = Recipe(
+            title: "テスト料理（更新後）",
+            ingredientsInfo: Ingredients(items: []),
+            steps: []
+        )
+        state.previewRecipe = previewRecipe
+
+        RecipeReducer.reduce(state: &state, action: .rejectSubstitution)
+
+        // currentRecipeは変更されない
+        #expect(state.currentRecipe == originalRecipe)
+        #expect(state.substitutionTarget == nil)
+        #expect(state.previewRecipe == nil)
+        #expect(state.originalRecipeSnapshot == nil)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_requestAdditionalSubstitution_setsProcessingAndInputMode() {
+        var state = RecipeState()
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+        state.previewRecipe = makeSampleRecipe()
+
+        RecipeReducer.reduce(state: &state, action: .requestAdditionalSubstitution(prompt: "もっと辛くして"))
+
+        #expect(state.isProcessingSubstitution == true)
+        #expect(state.errorMessage == nil)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_closeSubstitutionSheet_resetsAllSubstitutionState() {
+        var state = RecipeState()
+        let originalRecipe = makeSampleRecipe()
+        state.currentRecipe = originalRecipe
+        state.originalRecipeSnapshot = originalRecipe
+        state.previewRecipe = makeSampleRecipe()
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+
+        RecipeReducer.reduce(state: &state, action: .closeSubstitutionSheet)
+
+        #expect(state.substitutionTarget == nil)
+        #expect(state.previewRecipe == nil)
+        #expect(state.originalRecipeSnapshot == nil)
+        #expect(state.substitutionSheetMode == .input)
+        // currentRecipeは変更されない
+        #expect(state.currentRecipe == originalRecipe)
     }
 
     @Test

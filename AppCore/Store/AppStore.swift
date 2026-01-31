@@ -244,7 +244,27 @@ public final class AppStore {
                     target: target,
                     prompt: prompt
                 )
-                send(.recipe(.substitutionCompleted(updatedRecipe)))
+                send(.recipe(.substitutionPreviewReady(updatedRecipe)))
+            } catch {
+                let message = buildRecipeErrorMessage(error, context: .substitution)
+                send(.recipe(.substitutionFailed(message)))
+            }
+
+        case .requestAdditionalSubstitution(let prompt):
+            // previewRecipeをベースにLLM再呼び出し
+            guard let previewRecipe = state.recipe.previewRecipe,
+                  let target = state.recipe.substitutionTarget else {
+                send(.recipe(.substitutionFailed(String(localized: .substitutionErrorNoTarget))))
+                return
+            }
+
+            do {
+                let updatedRecipe = try await recipeExtractionService.substituteRecipe(
+                    recipe: previewRecipe,
+                    target: target,
+                    prompt: prompt
+                )
+                send(.recipe(.substitutionPreviewReady(updatedRecipe)))
             } catch {
                 let message = buildRecipeErrorMessage(error, context: .substitution)
                 send(.recipe(.substitutionFailed(message)))
