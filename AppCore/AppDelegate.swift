@@ -36,10 +36,10 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
 
     private func configureRevenueCat() {
         #if DEBUG
-        // Test Store API Key（開発用）
+        // Test Store API Key（開発用・サンドボックス環境）
         let apiKey = "test_YVcYsAXzHheuOIqLwOkFOutfggp"
         #else
-        // Production API Key
+        // Production API Key（本番環境）
         let apiKey = "appl_nLhBICTcjClkCJWfwFLtDkBTmai"
         #endif
 
