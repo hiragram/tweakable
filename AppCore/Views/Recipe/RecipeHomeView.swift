@@ -4,212 +4,302 @@ import SwiftUI
 // MARK: - Accessibility Identifiers
 
 enum RecipeHomeAccessibilityID {
-    static let urlTextField = "recipeHome_textField_url"
-    static let extractButton = "recipeHome_button_extract"
-    static let clearButton = "recipeHome_button_clear"
-    static let savedRecipesButton = "recipeHome_button_savedRecipes"
-    static let shoppingListsButton = "recipeHome_button_shoppingLists"
+    static let emptyView = "recipeHome_view_empty"
+    static let emptyAddButton = "recipeHome_button_emptyAdd"
+    static let grid = "recipeHome_grid"
+    static func recipeCard(_ id: UUID) -> String { "recipeHome_button_recipe_\(id.uuidString)" }
 }
 
 // MARK: - RecipeHomeView
 
-/// レシピURL入力画面
+/// マイレシピ一覧画面（2列グリッド表示）
 struct RecipeHomeView: View {
     private let ds = DesignSystem.default
 
-    @Binding var urlText: String
+    let recipes: [Recipe]
     let isLoading: Bool
-    let savedRecipesCount: Int
-    let shoppingListsCount: Int
-    let onExtractTapped: () -> Void
-    let onSavedRecipesTapped: () -> Void
-    let onShoppingListsTapped: () -> Void
+    let onRecipeTapped: (Recipe) -> Void
+    let onAddTapped: () -> Void
+
+    private let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: ds.spacing.xl) {
-                Spacer()
-                    .frame(height: ds.spacing.xl)
+        Group {
+            if isLoading {
+                loadingView
+            } else if recipes.isEmpty {
+                emptyView
+            } else {
+                recipeGridView
+            }
+        }
+    }
 
-                // App icon / illustration
-            Image(systemName: "fork.knife.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(ds.colors.primaryBrand.color)
+    // MARK: - Loading View
 
-            // Title
-            Text(.recipeHomeTitle)
-                .font(.title)
-                .fontWeight(.bold)
+    private var loadingView: some View {
+        ProgressView()
+    }
+
+    // MARK: - Empty View
+
+    private var emptyView: some View {
+        VStack(spacing: ds.spacing.lg) {
+            Spacer()
+
+            Image(systemName: "book.closed")
+                .font(.system(size: 60))
+                .foregroundColor(ds.colors.textTertiary.color)
+
+            Text(.myRecipesEmptyTitle)
+                .font(.title3)
+                .fontWeight(.semibold)
                 .foregroundColor(ds.colors.textPrimary.color)
 
-            // Subtitle
-            Text(.recipeHomeSubtitle)
+            Text(.myRecipesEmptyMessage)
                 .font(.body)
                 .foregroundColor(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, ds.spacing.lg)
+                .padding(.horizontal, ds.spacing.xl)
 
-            // Saved Recipes Button
-            if savedRecipesCount > 0 {
-                Button(action: onSavedRecipesTapped) {
-                    HStack(spacing: ds.spacing.sm) {
-                        Image(systemName: "bookmark.fill")
-                        Text(.savedRecipesButton)
-                        Spacer()
-                        Text("\(savedRecipesCount)")
-                            .font(.subheadline)
-                            .foregroundColor(ds.colors.textSecondary.color)
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(ds.colors.textTertiary.color)
-                    }
-                    .padding(ds.spacing.md)
-                    .background(ds.colors.backgroundSecondary.color)
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal, ds.spacing.lg)
-                .accessibilityIdentifier(RecipeHomeAccessibilityID.savedRecipesButton)
-            }
-
-            // Shopping Lists Button
-            Button(action: onShoppingListsTapped) {
-                HStack(spacing: ds.spacing.sm) {
-                    Image(systemName: "cart.fill")
-                    Text(.shoppingListsTitle)
-                    Spacer()
-                    if shoppingListsCount > 0 {
-                        Text("\(shoppingListsCount)")
-                            .font(.subheadline)
-                            .foregroundColor(ds.colors.textSecondary.color)
-                    }
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(ds.colors.textTertiary.color)
-                }
-                .padding(ds.spacing.md)
-                .background(ds.colors.backgroundSecondary.color)
-                .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-            }
-            .buttonStyle(.plain)
-            .padding(.horizontal, ds.spacing.lg)
-            .accessibilityIdentifier(RecipeHomeAccessibilityID.shoppingListsButton)
-
-                Spacer()
-                    .frame(height: ds.spacing.xl)
-
-                // URL input section
-            VStack(spacing: ds.spacing.md) {
+            Button(action: onAddTapped) {
                 HStack {
-                    TextField(
-                        String(localized: .recipeHomeUrlPlaceholder),
-                        text: $urlText
-                    )
-                    .textFieldStyle(.plain)
-                    .keyboardType(.URL)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .disabled(isLoading)
-                    .onSubmit {
-                        if !urlText.isEmpty && !isLoading {
-                            onExtractTapped()
-                        }
-                    }
-                    .accessibilityIdentifier(RecipeHomeAccessibilityID.urlTextField)
-
-                    if !urlText.isEmpty {
-                        Button(action: { urlText = "" }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(ds.colors.textTertiary.color)
-                        }
-                        .accessibilityIdentifier(RecipeHomeAccessibilityID.clearButton)
-                    }
+                    Image(systemName: "plus")
+                    Text(.myRecipesEmptyButton)
                 }
-                .padding(ds.spacing.md)
-                .background(ds.colors.backgroundSecondary.color)
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(.horizontal, ds.spacing.xl)
+                .padding(.vertical, ds.spacing.md)
+                .background(ds.colors.primaryBrand.color)
                 .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-
-                Button(action: onExtractTapped) {
-                    HStack {
-                        if isLoading {
-                            ProgressView()
-                                .tint(.white)
-                        } else {
-                            Image(systemName: "wand.and.stars")
-                        }
-                        Text(.recipeHomeExtractButton)
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(ds.spacing.md)
-                    .background(
-                        urlText.isEmpty || isLoading
-                            ? ds.colors.primaryBrand.color.opacity(0.5)
-                            : ds.colors.primaryBrand.color
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-                }
-                .disabled(urlText.isEmpty || isLoading)
-                .accessibilityIdentifier(RecipeHomeAccessibilityID.extractButton)
             }
-            .padding(.horizontal, ds.spacing.lg)
-            .padding(.bottom, ds.spacing.xl)
+            .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyAddButton)
+            .padding(.top, ds.spacing.md)
+
+            Spacer()
+        }
+        .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyView)
+    }
+
+    // MARK: - Recipe Grid View
+
+    private var recipeGridView: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(recipes) { recipe in
+                    recipeCard(recipe)
+                }
+            }
+            .padding(ds.spacing.md)
+        }
+        .accessibilityIdentifier(RecipeHomeAccessibilityID.grid)
+    }
+
+    private func recipeCard(_ recipe: Recipe) -> some View {
+        Button(action: { onRecipeTapped(recipe) }) {
+            VStack(alignment: .leading, spacing: ds.spacing.sm) {
+                // Thumbnail
+                recipeImage(recipe.imageURLs.first)
+                    .frame(height: 120)
+                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
+
+                // Title
+                Text(recipe.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(ds.colors.textPrimary.color)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+
+                // Meta info
+                HStack(spacing: ds.spacing.xs) {
+                    Label(
+                        "\(recipe.ingredientsInfo.items.count)",
+                        systemImage: "carrot.fill"
+                    )
+                    .font(.caption2)
+                    .foregroundColor(ds.colors.textTertiary.color)
+
+                    Label(
+                        "\(recipe.steps.count)",
+                        systemImage: "list.number"
+                    )
+                    .font(.caption2)
+                    .foregroundColor(ds.colors.textTertiary.color)
+                }
+            }
+            .padding(ds.spacing.sm)
+            .background(ds.colors.backgroundSecondary.color)
+            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(RecipeHomeAccessibilityID.recipeCard(recipe.id))
+    }
+
+    private func recipeImage(_ source: ImageSource?) -> some View {
+        Group {
+            if let source = source {
+                switch source {
+                case .remote(let url):
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .empty:
+                            placeholderImage
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        case .failure:
+                            placeholderImage
+                        @unknown default:
+                            placeholderImage
+                        }
+                    }
+                case .local(let fileURL):
+                    if let data = try? Data(contentsOf: fileURL),
+                       let uiImage = UIImage(data: data) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        placeholderImage
+                    }
+                case .uiImage(let uiImage):
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }
+            } else {
+                placeholderImage
             }
         }
+        .frame(maxWidth: .infinity)
+        .clipped()
+    }
+
+    private var placeholderImage: some View {
+        Rectangle()
+            .fill(ds.colors.backgroundTertiary.color)
+            .overlay {
+                Image(systemName: "fork.knife")
+                    .font(.title2)
+                    .foregroundColor(ds.colors.textTertiary.color)
+            }
     }
 }
 
 // MARK: - Preview
 
 #Preview("RecipeHome Empty") {
-    RecipeHomeView(
-        urlText: .constant(""),
-        isLoading: false,
-        savedRecipesCount: 0,
-        shoppingListsCount: 0,
-        onExtractTapped: {},
-        onSavedRecipesTapped: {},
-        onShoppingListsTapped: {}
-    )
-    .prefireEnabled()
-}
-
-#Preview("RecipeHome With URL") {
-    RecipeHomeView(
-        urlText: .constant("https://www.allrecipes.com/recipe/12345"),
-        isLoading: false,
-        savedRecipesCount: 0,
-        shoppingListsCount: 0,
-        onExtractTapped: {},
-        onSavedRecipesTapped: {},
-        onShoppingListsTapped: {}
-    )
+    NavigationStack {
+        RecipeHomeView(
+            recipes: [],
+            isLoading: false,
+            onRecipeTapped: { _ in },
+            onAddTapped: {}
+        )
+        .navigationTitle(String(localized: .myRecipesTitle))
+    }
     .prefireEnabled()
 }
 
 #Preview("RecipeHome Loading") {
-    RecipeHomeView(
-        urlText: .constant("https://www.allrecipes.com/recipe/12345"),
-        isLoading: true,
-        savedRecipesCount: 0,
-        shoppingListsCount: 0,
-        onExtractTapped: {},
-        onSavedRecipesTapped: {},
-        onShoppingListsTapped: {}
-    )
+    NavigationStack {
+        RecipeHomeView(
+            recipes: [],
+            isLoading: true,
+            onRecipeTapped: { _ in },
+            onAddTapped: {}
+        )
+        .navigationTitle(String(localized: .myRecipesTitle))
+    }
     .prefireEnabled()
 }
 
-#Preview("RecipeHome With Saved") {
-    RecipeHomeView(
-        urlText: .constant(""),
-        isLoading: false,
-        savedRecipesCount: 3,
-        shoppingListsCount: 2,
-        onExtractTapped: {},
-        onSavedRecipesTapped: {},
-        onShoppingListsTapped: {}
-    )
+#Preview("RecipeHome With Recipes") {
+    NavigationStack {
+        RecipeHomeView(
+            recipes: [
+                Recipe(
+                    title: "鶏の照り焼き",
+                    description: "甘辛いタレが食欲をそそる定番の照り焼きチキン。",
+                    imageURLs: [.previewPlaceholder()],
+                    ingredientsInfo: Ingredients(
+                        servings: "2人分",
+                        items: [
+                            Ingredient(name: "鶏もも肉", amount: "2枚"),
+                            Ingredient(name: "醤油", amount: "大さじ3"),
+                            Ingredient(name: "みりん", amount: "大さじ2")
+                        ]
+                    ),
+                    steps: [
+                        CookingStep(stepNumber: 1, instruction: "鶏もも肉を切る"),
+                        CookingStep(stepNumber: 2, instruction: "焼く")
+                    ]
+                ),
+                Recipe(
+                    title: "カレーライス",
+                    description: "家庭の定番カレー",
+                    imageURLs: [.previewPlaceholder(color: .systemBrown)],
+                    ingredientsInfo: Ingredients(
+                        servings: "4人分",
+                        items: [
+                            Ingredient(name: "豚肉", amount: "300g"),
+                            Ingredient(name: "玉ねぎ", amount: "2個"),
+                            Ingredient(name: "人参", amount: "1本"),
+                            Ingredient(name: "じゃがいも", amount: "2個"),
+                            Ingredient(name: "カレールー", amount: "1箱")
+                        ]
+                    ),
+                    steps: [
+                        CookingStep(stepNumber: 1, instruction: "野菜を切る"),
+                        CookingStep(stepNumber: 2, instruction: "肉を炒める"),
+                        CookingStep(stepNumber: 3, instruction: "野菜を加えて煮込む"),
+                        CookingStep(stepNumber: 4, instruction: "ルーを溶かす")
+                    ]
+                ),
+                Recipe(
+                    title: "肉じゃが",
+                    description: nil,
+                    imageURLs: [],
+                    ingredientsInfo: Ingredients(
+                        servings: "3人分",
+                        items: [
+                            Ingredient(name: "牛肉", amount: "200g"),
+                            Ingredient(name: "じゃがいも", amount: "3個")
+                        ]
+                    ),
+                    steps: [
+                        CookingStep(stepNumber: 1, instruction: "材料を切る"),
+                        CookingStep(stepNumber: 2, instruction: "煮込む")
+                    ]
+                ),
+                Recipe(
+                    title: "味噌汁",
+                    description: nil,
+                    imageURLs: [.previewPlaceholder(color: .systemOrange)],
+                    ingredientsInfo: Ingredients(
+                        servings: "2人分",
+                        items: [
+                            Ingredient(name: "味噌", amount: "大さじ2"),
+                            Ingredient(name: "豆腐", amount: "1/2丁")
+                        ]
+                    ),
+                    steps: [
+                        CookingStep(stepNumber: 1, instruction: "だしを取る"),
+                        CookingStep(stepNumber: 2, instruction: "味噌を溶く")
+                    ]
+                )
+            ],
+            isLoading: false,
+            onRecipeTapped: { _ in },
+            onAddTapped: {}
+        )
+        .navigationTitle(String(localized: .myRecipesTitle))
+    }
     .prefireEnabled()
 }

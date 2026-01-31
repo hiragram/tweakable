@@ -7,61 +7,66 @@ struct RecipeHomeContainerView: View {
     let store: AppStore
 
     @State private var urlText: String = ""
+    @State private var showingAddRecipe: Bool = false
     @State private var showingRecipe: Bool = false
-    @State private var showingSavedRecipes: Bool = false
-    @State private var showingRecipeFromSavedRecipes: Bool = false
     @State private var showingShoppingLists: Bool = false
     @State private var showingShoppingListDetail: Bool = false
 
     var body: some View {
         NavigationStack {
             RecipeHomeView(
-                urlText: $urlText,
-                isLoading: store.state.recipe.isLoadingRecipe,
-                savedRecipesCount: store.state.recipe.savedRecipes.count,
-                shoppingListsCount: store.state.shoppingList.shoppingLists.count,
-                onExtractTapped: {
-                    extractRecipe()
+                recipes: store.state.recipe.savedRecipes,
+                isLoading: store.state.recipe.isLoadingSavedRecipes,
+                onRecipeTapped: { recipe in
+                    store.send(.recipe(.selectSavedRecipe(recipe)))
+                    showingRecipe = true
                 },
-                onSavedRecipesTapped: {
-                    showingSavedRecipes = true
-                },
-                onShoppingListsTapped: {
-                    showingShoppingLists = true
+                onAddTapped: {
+                    showingAddRecipe = true
                 }
             )
-            .navigationTitle(String(localized: .recipeHomeNavigationTitle))
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(String(localized: .myRecipesTitle))
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    HStack(spacing: 16) {
+                        Button(action: { showingShoppingLists = true }) {
+                            Image(systemName: "cart")
+                        }
+                        .accessibilityIdentifier("recipeHome_button_shoppingLists")
+
+                        Button(action: { showingAddRecipe = true }) {
+                            Image(systemName: "plus")
+                        }
+                        .accessibilityIdentifier("recipeHome_button_add")
+                    }
+                }
+            }
             .navigationDestination(isPresented: $showingRecipe) {
                 RecipeContainerView(store: store)
-            }
-            .navigationDestination(isPresented: $showingSavedRecipes) {
-                SavedRecipesContainerView(
-                    store: store,
-                    onRecipeSelected: { _ in
-                        showingRecipeFromSavedRecipes = true
-                    }
-                )
-                .navigationDestination(isPresented: $showingRecipeFromSavedRecipes) {
-                    RecipeContainerView(store: store)
-                }
-            }
-            .onChange(of: showingRecipeFromSavedRecipes) { oldValue, newValue in
-                // 保存済みレシピの詳細画面から戻ったらレシピをクリア
-                if oldValue == true && newValue == false {
-                    store.send(.recipe(.clearRecipe))
-                }
             }
             .navigationDestination(isPresented: $showingShoppingLists) {
                 ShoppingListsContainerView(
                     store: store,
-                    onListSelected: { list in
+                    onListSelected: { _ in
                         showingShoppingListDetail = true
                     }
                 )
                 .navigationDestination(isPresented: $showingShoppingListDetail) {
                     ShoppingListDetailContainerView(store: store)
                 }
+            }
+            .sheet(isPresented: $showingAddRecipe) {
+                AddRecipeView(
+                    urlText: $urlText,
+                    isLoading: store.state.recipe.isLoadingRecipe,
+                    onExtractTapped: {
+                        extractRecipe()
+                    },
+                    onCloseTapped: {
+                        showingAddRecipe = false
+                    }
+                )
             }
             .alert(
                 String(localized: .recipeErrorTitle),
@@ -79,8 +84,10 @@ struct RecipeHomeContainerView: View {
                 }
             }
             .onChange(of: store.state.recipe.currentRecipe) { oldValue, newValue in
-                // レシピが読み込まれたら詳細画面へ遷移
+                // レシピが読み込まれたら詳細画面へ遷移し、シートを閉じる
                 if oldValue == nil && newValue != nil {
+                    showingAddRecipe = false
+                    urlText = ""
                     showingRecipe = true
                 }
             }
