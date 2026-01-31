@@ -17,6 +17,7 @@ enum RecipeAccessibilityID {
     static let shoppingListButton = "recipe_button_shoppingList"
     static let saveButton = "recipe_button_save"
     static let modifiedBadge = "recipe_badge_modified"
+    static let sourceURLLink = "recipe_link_sourceURL"
 }
 
 // MARK: - RecipeView
@@ -122,6 +123,20 @@ struct RecipeView: View {
                             .font(.body)
                             .foregroundColor(ds.colors.textSecondary.color)
                             .accessibilityIdentifier(RecipeAccessibilityID.recipeDescription)
+                    }
+
+                    // Source URL Link
+                    if let sourceURL = recipe.sourceURL {
+                        Link(destination: sourceURL) {
+                            HStack(spacing: ds.spacing.xs) {
+                                Image(systemName: "safari.fill")
+                                Text(.recipeViewOriginalLink)
+                            }
+                            .font(ds.typography.bodySmall.font)
+                            .foregroundColor(ds.colors.primaryBrand.color)
+                        }
+                        .padding(.top, ds.spacing.xxs)
+                        .accessibilityIdentifier(RecipeAccessibilityID.sourceURLLink)
                     }
 
                     // Ingredients Section
@@ -615,6 +630,37 @@ struct RecipeView: View {
         )
         .prefireEnabled()
     }
+}
+
+#Preview("With Recipe (With Source URL)") {
+    NavigationStack {
+        RecipeView(
+            recipe: Recipe(
+                title: "鶏の照り焼き",
+                description: "甘辛いタレが食欲をそそる定番の照り焼きチキン。",
+                imageURLs: [],
+                ingredientsInfo: Ingredients(
+                    servings: "2人分",
+                    items: [
+                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）")
+                    ]
+                ),
+                steps: [
+                    CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る")
+                ],
+                sourceURL: URL(string: "https://example.com/recipe")
+            ),
+            isLoading: false,
+            isSaving: false,
+            errorMessage: nil,
+            onIngredientTapped: { _ in },
+            onStepTapped: { _ in },
+            onRetryTapped: {},
+            onShoppingListTapped: {},
+            onSaveTapped: {}
+        )
+    }
+    .prefireEnabled()
 }
 
 // MARK: - RoundedCorner Shape
