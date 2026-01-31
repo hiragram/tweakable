@@ -1,3 +1,4 @@
+import Prefire
 import SwiftUI
 
 // MARK: - Accessibility Identifiers
@@ -612,6 +613,7 @@ struct RecipeView: View {
             onShoppingListTapped: {},
             onSaveTapped: {}
         )
+        .prefireEnabled()
     }
 }
 

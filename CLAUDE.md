@@ -59,6 +59,20 @@
 
 **注意**: 指摘が残っている状態でのプッシュは禁止。
 
+## CI（GitHub Actions）
+
+### コンフリクトがあるとCIは実行されない
+
+PRにmainブランチとのコンフリクトがある場合、GitHub ActionsのCIワークフローは開始されない。
+`gh pr checks` で "no checks reported" と表示される場合は、まずコンフリクトの有無を確認すること。
+
+```bash
+# コンフリクトの確認
+gh pr view --json mergeable
+```
+
+コンフリクトがある場合は、mainをマージするかリベースして解消してからプッシュし直す。
+
 ## レガシーView（Okumuka由来）
 
 `*_Okumuka` サフィックスが付いたViewは、元のOkumukaアプリから流用したコンポーネントです。
