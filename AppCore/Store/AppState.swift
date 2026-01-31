@@ -29,6 +29,9 @@ public struct AppState: Equatable, Sendable {
     /// 買い物リスト機能の状態
     public var shoppingList = ShoppingListState()
 
+    /// サブスクリプション機能の状態
+    public var subscription = SubscriptionState()
+
     public init() {}
 }
 

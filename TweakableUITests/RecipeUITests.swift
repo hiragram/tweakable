@@ -15,8 +15,8 @@ final class RecipeUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動
-        app.launchArguments = ["--uitesting"]
+        // UIテストモードで起動（プレミアムユーザーとしてモック）
+        app.launchArguments = ["--uitesting", "--mock-premium"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機

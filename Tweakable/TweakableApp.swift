@@ -20,6 +20,11 @@ struct TweakableApp: App {
         launchArguments.contains("--uitesting")
     }
 
+    /// UIテストでプレミアムユーザーとしてモックするかどうか
+    private var mockPremium: Bool {
+        launchArguments.contains("--mock-premium")
+    }
+
     /// UIテストのモック動作モード
     ///
     /// 起動引数に応じてモックサービスの動作を制御:
@@ -39,7 +44,10 @@ struct TweakableApp: App {
         WindowGroup {
             // バックエンドなしのスタンドアロンモード
             if isUITesting {
-                RootView(recipeExtractionService: MockRecipeExtractionService(behavior: mockBehavior))
+                RootView(
+                    recipeExtractionService: MockRecipeExtractionService(behavior: mockBehavior),
+                    mockPremium: mockPremium
+                )
             } else {
                 RootView()
             }
