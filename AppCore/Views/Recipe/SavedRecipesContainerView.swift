@@ -19,9 +19,6 @@ struct SavedRecipesContainerView: View {
                 store.send(.recipe(.deleteRecipe(id: id)))
             }
         )
-        .onAppear {
-            store.send(.recipe(.loadSavedRecipes))
-        }
     }
 }
 

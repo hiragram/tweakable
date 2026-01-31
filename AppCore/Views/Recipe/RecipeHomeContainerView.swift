@@ -9,6 +9,7 @@ struct RecipeHomeContainerView: View {
     @State private var urlText: String = ""
     @State private var showingRecipe: Bool = false
     @State private var showingSavedRecipes: Bool = false
+    @State private var showingRecipeFromSavedRecipes: Bool = false
     @State private var showingShoppingLists: Bool = false
     @State private var showingShoppingListDetail: Bool = false
 
@@ -37,11 +38,19 @@ struct RecipeHomeContainerView: View {
             .navigationDestination(isPresented: $showingSavedRecipes) {
                 SavedRecipesContainerView(
                     store: store,
-                    onRecipeSelected: { recipe in
-                        showingSavedRecipes = false
-                        showingRecipe = true
+                    onRecipeSelected: { _ in
+                        showingRecipeFromSavedRecipes = true
                     }
                 )
+                .navigationDestination(isPresented: $showingRecipeFromSavedRecipes) {
+                    RecipeContainerView(store: store)
+                }
+            }
+            .onChange(of: showingRecipeFromSavedRecipes) { oldValue, newValue in
+                // 保存済みレシピの詳細画面から戻ったらレシピをクリア
+                if oldValue == true && newValue == false {
+                    store.send(.recipe(.clearRecipe))
+                }
             }
             .navigationDestination(isPresented: $showingShoppingLists) {
                 ShoppingListsContainerView(
@@ -81,11 +90,7 @@ struct RecipeHomeContainerView: View {
                     store.send(.recipe(.clearRecipe))
                 }
             }
-            .onAppear {
-                // アプリ起動時に保存済みレシピと買い物リストを読み込む
-                store.send(.recipe(.loadSavedRecipes))
-                store.send(.shoppingList(.loadShoppingLists))
-            }
+            // 保存済みレシピと買い物リストのロードはRootView経由でbootアクションで行う
         }
     }
 

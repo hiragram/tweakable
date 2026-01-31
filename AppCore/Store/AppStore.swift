@@ -94,6 +94,9 @@ public final class AppStore {
     private func handleBoot() async {
         // サブスクリプション状態を読み込む
         send(.subscription(.loadSubscriptionStatus))
+        // 保存済みレシピと買い物リストを読み込む
+        send(.recipe(.loadSavedRecipes))
+        send(.shoppingList(.loadShoppingLists))
     }
 
     // MARK: - Recipe Side Effects

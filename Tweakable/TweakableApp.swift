@@ -25,6 +25,11 @@ struct TweakableApp: App {
         launchArguments.contains("--mock-premium")
     }
 
+    /// UIテストで保存済みレシピをモックするかどうか
+    private var mockSavedRecipes: Bool {
+        launchArguments.contains("--mock-saved-recipes")
+    }
+
     /// UIテストのモック動作モード
     ///
     /// 起動引数に応じてモックサービスの動作を制御:
@@ -46,6 +51,7 @@ struct TweakableApp: App {
             if isUITesting {
                 RootView(
                     recipeExtractionService: MockRecipeExtractionService(behavior: mockBehavior),
+                    recipePersistenceService: mockSavedRecipes ? MockRecipePersistenceService() : nil,
                     mockPremium: mockPremium
                 )
             } else {

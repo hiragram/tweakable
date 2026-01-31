@@ -19,6 +19,7 @@ enum RecipeAccessibilityIDs {
     static let urlTextField = "recipeHome_textField_url"
     static let extractButton = "recipeHome_button_extract"
     static let clearButton = "recipeHome_button_clear"
+    static let savedRecipesButton = "recipeHome_button_savedRecipes"
 
     // RecipeView
     static let loadingView = "recipe_view_loading"
@@ -41,6 +42,14 @@ enum RecipeAccessibilityIDs {
     static let requestMoreButton = "substitutionSheet_button_requestMore"
     static let additionalPromptTextField = "substitutionSheet_textField_additionalPrompt"
     static let sendMoreButton = "substitutionSheet_button_sendMore"
+}
+
+// MARK: - SavedRecipesList Accessibility IDs
+
+enum SavedRecipesListAccessibilityID {
+    static let list = "savedRecipesList_list"
+    static let emptyView = "savedRecipesList_view_empty"
+    static func recipeRow(_ id: String) -> String { "savedRecipesList_button_recipe_\(id)" }
 }
 
 // MARK: - UITestHelper
@@ -213,5 +222,32 @@ enum UITestHelper {
         if dismissButton.exists {
             dismissButton.tap()
         }
+    }
+
+    // MARK: - SavedRecipes Helpers
+
+    /// 保存済みレシピボタンをタップ
+    static func tapSavedRecipesButton(app: XCUIApplication) {
+        let savedRecipesButton = app.buttons[RecipeAccessibilityIDs.savedRecipesButton]
+        if savedRecipesButton.exists {
+            savedRecipesButton.tap()
+        }
+    }
+
+    /// 保存済みレシピ一覧画面が表示されるまで待機
+    /// - Returns: 保存済みレシピ一覧画面が表示されているかどうか
+    static func waitForSavedRecipesList(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
+        // リストまたは空ビューが表示されることを確認
+        let list = app.otherElements[SavedRecipesListAccessibilityID.list]
+        let emptyView = app.otherElements[SavedRecipesListAccessibilityID.emptyView]
+
+        let startTime = Date()
+        while Date().timeIntervalSince(startTime) < timeout {
+            if list.exists || emptyView.exists {
+                return true
+            }
+            Thread.sleep(forTimeInterval: 0.1)
+        }
+        return false
     }
 }
