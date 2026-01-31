@@ -102,7 +102,7 @@ public final class AppStore {
     /// - Returns: プレミアムユーザーの場合は `true`、非プレミアムの場合は `false`
     private func requiresPremium() -> Bool {
         guard state.subscription.isPremium else {
-            send(.recipe(.substitutionFailed(String(localized: "substitution_error_premium_required", bundle: .app))))
+            send(.recipe(.substitutionFailed(String(localized: .substitutionErrorPremiumRequired))))
             return false
         }
         return true

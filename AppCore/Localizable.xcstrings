@@ -1122,21 +1122,22 @@
       },
       "extractionState": "manual"
     },
-    "substitution_error_premium_required" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Premium subscription required for substitution feature"
+    "substitution_error_premium_required": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium subscription required for substitution feature"
           }
         },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "置き換え機能にはプレミアム登録が必要です"
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "置き換え機能にはプレミアム登録が必要です"
           }
         }
-      }
+      },
+      "extractionState": "manual"
     },
     "substitution_error_unexpected": {
       "localizations": {
