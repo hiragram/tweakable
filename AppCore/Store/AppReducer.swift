@@ -14,6 +14,9 @@ public enum AppReducer {
 
         case .shoppingList(let shoppingListAction):
             ShoppingListReducer.reduce(state: &state.shoppingList, action: shoppingListAction)
+
+        case .subscription(let subscriptionAction):
+            SubscriptionReducer.reduce(state: &state.subscription, action: subscriptionAction)
         }
     }
 }

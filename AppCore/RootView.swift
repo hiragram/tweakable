@@ -12,10 +12,17 @@ public struct RootView: View {
     @State private var store: AppStore
 
     public init(
-        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil
+        recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
+        mockPremium: Bool = false
     ) {
+        // UIテスト用: mockPremiumがtrueの場合はMockRevenueCatServiceを使用
+        let revenueCatService: any RevenueCatServiceProtocol = mockPremium
+            ? MockRevenueCatService(isPremium: true)
+            : RevenueCatService()
+
         _store = State(initialValue: AppStore(
-            recipeExtractionService: recipeExtractionService
+            recipeExtractionService: recipeExtractionService,
+            revenueCatService: revenueCatService
         ))
     }
 

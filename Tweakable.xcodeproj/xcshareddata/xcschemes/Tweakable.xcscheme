@@ -31,12 +31,24 @@
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES">
+            parallelizable = "YES"
+            useTestSelectionWhitelist = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6060BFE92F114CD30010E87A"
                BuildableName = "TweakableUITests.xctest"
                BlueprintName = "TweakableUITests"
+               ReferencedContainer = "container:Tweakable.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "13421E21D638B9A2AF490E9D"
+               BuildableName = "AppCoreTests.xctest"
+               BlueprintName = "AppCoreTests"
                ReferencedContainer = "container:Tweakable.xcodeproj">
             </BuildableReference>
          </TestableReference>

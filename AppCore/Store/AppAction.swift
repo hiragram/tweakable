@@ -10,4 +10,7 @@ public enum AppAction: Sendable {
 
     /// 買い物リスト機能のアクション
     case shoppingList(ShoppingListAction)
+
+    /// サブスクリプション機能のアクション
+    case subscription(SubscriptionAction)
 }
