@@ -65,32 +65,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install xcbeautify
-        run: |
-          if ! command -v xcbeautify &> /dev/null; then
-            brew install xcbeautify
-          fi
-
       - name: Run E2E Tests
-        run: |
-          set -o pipefail
-          xcodebuild test \
-            -project Tweakable.xcodeproj \
-            -scheme TweakableUITests \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
-            -resultBundlePath E2ETestResults.xcresult \
-            CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path e2e-test-reports
-
-      - name: Publish E2E test results
-        uses: mikepenz/action-junit-report@v5
-        if: always()
+        uses: sersoft-gmbh/xcodebuild-action@v4
         with:
-          report_paths: 'e2e-test-reports/junit.xml'
-          include_passed: true
-          detailed_summary: true
-          annotate_only: true
-          check_name: 'E2E Test Results'
+          project: Tweakable.xcodeproj
+          scheme: TweakableUITests
+          destination: 'platform=iOS Simulator,name=iPhone 17'
+          action: test
+          result-bundle-path: E2ETestResults.xcresult
+          build-settings: CODE_SIGNING_ALLOWED=NO
+          retry-tests-on-failure: true
+          test-iterations: 3
+          parallel-testing-enabled: false
 
       - name: Upload E2E test results
         uses: actions/upload-artifact@v4
