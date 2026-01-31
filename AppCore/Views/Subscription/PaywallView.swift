@@ -2,6 +2,8 @@ import SwiftUI
 
 /// Paywall UI for premium subscription
 struct PaywallView: View {
+    private let ds = DesignSystem.default
+
     /// Available packages to display
     let packages: [SubscriptionPackage]
 
@@ -25,7 +27,7 @@ struct PaywallView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            VStack(spacing: ds.spacing.lg) {
                 // Header
                 headerSection
 
@@ -40,10 +42,10 @@ struct PaywallView: View {
                 // Error message
                 if let errorMessage {
                     Text(errorMessage)
-                        .font(.caption)
-                        .foregroundStyle(.red)
+                        .font(ds.typography.captionLarge.font)
+                        .foregroundStyle(ds.colors.error.color)
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                        .padding(.horizontal, ds.spacing.md)
                 }
 
                 // Restore button
@@ -52,7 +54,7 @@ struct PaywallView: View {
                 // Terms
                 termsSection
             }
-            .padding()
+            .padding(ds.spacing.md)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -60,7 +62,7 @@ struct PaywallView: View {
                         onDismiss()
                     } label: {
                         Image(systemName: "xmark")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(ds.colors.textSecondary.color)
                     }
                     .accessibilityIdentifier("paywall_button_dismiss")
                 }
@@ -71,18 +73,18 @@ struct PaywallView: View {
     // MARK: - Header Section
 
     private var headerSection: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: ds.spacing.sm) {
             Image(systemName: "star.fill")
                 .font(.system(size: 60))
-                .foregroundStyle(.yellow)
+                .foregroundStyle(ds.colors.secondaryBrand.color)
 
             Text(String(localized: "paywall_title", bundle: .app))
-                .font(.title)
-                .fontWeight(.bold)
+                .font(ds.typography.displayMedium.font)
+                .foregroundColor(ds.colors.textPrimary.color)
 
             Text(String(localized: "paywall_subtitle", bundle: .app))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(ds.typography.bodyMedium.font)
+                .foregroundStyle(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
         }
     }
@@ -90,23 +92,24 @@ struct PaywallView: View {
     // MARK: - Features Section
 
     private var featuresSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: ds.spacing.sm) {
             featureRow(icon: "arrow.triangle.swap", text: String(localized: "paywall_feature_substitution", bundle: .app))
             featureRow(icon: "wand.and.stars", text: String(localized: "paywall_feature_ai", bundle: .app))
             featureRow(icon: "infinity", text: String(localized: "paywall_feature_unlimited", bundle: .app))
         }
-        .padding()
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(ds.spacing.md)
+        .background(ds.colors.backgroundSecondary.color)
+        .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
     }
 
     private func featureRow(icon: String, text: String) -> some View {
-        HStack(spacing: 12) {
+        HStack(spacing: ds.spacing.sm) {
             Image(systemName: icon)
-                .foregroundStyle(.blue)
-                .frame(width: 24)
+                .foregroundStyle(ds.colors.primaryBrand.color)
+                .frame(width: ds.layout.iconSize)
             Text(text)
-                .font(.subheadline)
+                .font(ds.typography.bodyMedium.font)
+                .foregroundColor(ds.colors.textPrimary.color)
             Spacer()
         }
     }
@@ -114,7 +117,7 @@ struct PaywallView: View {
     // MARK: - Packages Section
 
     private var packagesSection: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: ds.spacing.sm) {
             ForEach(packages) { package in
                 packageButton(package)
             }
@@ -126,24 +129,25 @@ struct PaywallView: View {
             onPurchase(package.id)
         } label: {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: ds.spacing.xxs) {
                     Text(package.localizedTitle)
-                        .font(.headline)
+                        .font(ds.typography.headlineLarge.font)
+                        .foregroundColor(ds.colors.textPrimary.color)
                     Text(package.localizedPriceString)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(ds.typography.bodyMedium.font)
+                        .foregroundStyle(ds.colors.textSecondary.color)
                 }
                 Spacer()
                 if isPurchasing {
                     ProgressView()
                 } else {
                     Image(systemName: "chevron.right")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(ds.colors.textTertiary.color)
                 }
             }
-            .padding()
-            .background(Color(.tertiarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .padding(ds.spacing.md)
+            .background(ds.colors.backgroundTertiary.color)
+            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
         }
         .disabled(isPurchasing || isRestoring)
         .accessibilityIdentifier("paywall_button_purchase_\(package.id)")
@@ -159,8 +163,8 @@ struct PaywallView: View {
                 ProgressView()
             } else {
                 Text(String(localized: "paywall_restore", bundle: .app))
-                    .font(.subheadline)
-                    .foregroundStyle(.blue)
+                    .font(ds.typography.bodyMedium.font)
+                    .foregroundStyle(ds.colors.primaryBrand.color)
             }
         }
         .disabled(isPurchasing || isRestoring)
@@ -171,8 +175,8 @@ struct PaywallView: View {
 
     private var termsSection: some View {
         Text(String(localized: "paywall_terms", bundle: .app))
-            .font(.caption2)
-            .foregroundStyle(.secondary)
+            .font(ds.typography.captionSmall.font)
+            .foregroundStyle(ds.colors.textTertiary.color)
             .multilineTextAlignment(.center)
     }
 }
