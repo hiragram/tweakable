@@ -94,6 +94,9 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
             You are a cooking expert. Modify the given recipe based on the user's request.
 
             IMPORTANT RULES:
+            - Each ingredient and step has a unique ID in brackets like [id: xxx-xxx-xxx]
+            - When modifying an item, KEEP THE SAME ID in the response
+            - When adding a NEW item (that didn't exist before), generate a new UUID
             - Modify the specified ingredient or step according to the user's request
             - When an ingredient is changed, also adjust related cooking steps if necessary
             - Set isModified: true for any changed ingredients or steps
@@ -146,13 +149,15 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
         components.append("Ingredients:")
         for ingredient in recipe.ingredientsInfo.items {
             let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
-            components.append("- \(ingredient.name): \(amount)")
+            // UUIDを含めて、LLMがIDを保持できるようにする
+            components.append("- [id: \(ingredient.id.uuidString)] \(ingredient.name): \(amount)")
         }
 
         components.append("")
         components.append("Steps:")
         for step in recipe.steps {
-            components.append("\(step.stepNumber). \(step.instruction)")
+            // UUIDを含めて、LLMがIDを保持できるようにする
+            components.append("[id: \(step.id.uuidString)] \(step.stepNumber). \(step.instruction)")
         }
 
         return components.joined(separator: "\n")

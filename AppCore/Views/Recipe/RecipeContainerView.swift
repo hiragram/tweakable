@@ -54,6 +54,9 @@ struct RecipeContainerView: View {
                     isProcessing: store.state.recipe.isProcessingSubstitution,
                     isPremiumUser: isPremiumUser,
                     errorMessage: store.state.recipe.errorMessage,
+                    sheetMode: store.state.recipe.substitutionSheetMode,
+                    previewRecipe: store.state.recipe.previewRecipe,
+                    originalRecipe: store.state.recipe.originalRecipeSnapshot,
                     onSubmit: { prompt in
                         store.send(.recipe(.requestSubstitution(prompt: prompt)))
                     },
@@ -63,6 +66,15 @@ struct RecipeContainerView: View {
                     onDismiss: {
                         store.send(.recipe(.closeSubstitutionSheet))
                         showsSubstitutionSheet = false
+                    },
+                    onApprove: {
+                        store.send(.recipe(.approveSubstitution))
+                    },
+                    onReject: {
+                        store.send(.recipe(.rejectSubstitution))
+                    },
+                    onRequestMore: { prompt in
+                        store.send(.recipe(.requestAdditionalSubstitution(prompt: prompt)))
                     }
                 )
                 .presentationDetents([.medium, .large])

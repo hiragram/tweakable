@@ -4,11 +4,12 @@ import Foundation
 ///
 /// ## アクションフロー
 /// - レシピ読み込み: loadRecipe → (recipeLoaded | recipeLoadFailed)
-/// - 置き換え処理: openSubstitutionSheet/openSubstitutionSheetForStep → requestSubstitution → (substitutionCompleted | substitutionFailed)
+/// - 置き換え処理: openSubstitutionSheet/openSubstitutionSheetForStep → requestSubstitution → (substitutionPreviewReady | substitutionFailed) → (approveSubstitution | rejectSubstitution | requestAdditionalSubstitution)
 ///
 /// ## 副作用を持つアクション
 /// - loadRecipe: LLM APIを呼び出してURLからレシピを抽出
 /// - requestSubstitution: LLM APIを呼び出して食材/工程を置き換え
+/// - requestAdditionalSubstitution: LLM APIを呼び出して追加の置き換え指示を処理
 public enum RecipeAction: Sendable {
     // MARK: - Loading
 
@@ -34,14 +35,25 @@ public enum RecipeAction: Sendable {
 
     // MARK: - Substitution Processing
 
-    /// 置き換えをリクエスト（副作用: LLM API呼び出し → substitutionCompleted or substitutionFailed）
+    /// 置き換えをリクエスト（副作用: LLM API呼び出し → substitutionPreviewReady or substitutionFailed）
     case requestSubstitution(prompt: String)
 
-    /// 置き換え完了（requestSubstitutionの結果、シートを閉じる）
-    case substitutionCompleted(Recipe)
+    /// 置き換え結果のプレビュー準備完了（requestSubstitutionの結果、プレビューモードに遷移）
+    case substitutionPreviewReady(Recipe)
 
-    /// 置き換え失敗（requestSubstitutionの結果、シートを閉じる）
+    /// 置き換え失敗（requestSubstitutionの結果）
     case substitutionFailed(String)
+
+    // MARK: - Substitution Confirmation
+
+    /// 置き換えを承認（currentRecipeを更新してシートを閉じる）
+    case approveSubstitution
+
+    /// 置き換えを却下（プレビューを破棄してシートを閉じる）
+    case rejectSubstitution
+
+    /// 追加の置き換え指示をリクエスト（副作用: LLM API呼び出し → substitutionPreviewReady or substitutionFailed）
+    case requestAdditionalSubstitution(prompt: String)
 
     // MARK: - Clear
 

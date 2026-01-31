@@ -27,6 +27,13 @@ enum RecipeAccessibilityIDs {
     static let submitButton = "substitutionSheet_button_submit"
     static let upgradeButton = "substitutionSheet_button_upgrade"
     static let substitutionErrorText = "substitutionSheet_text_error"
+
+    // SubstitutionSheetView - Preview Mode
+    static let approveButton = "substitutionSheet_button_approve"
+    static let rejectButton = "substitutionSheet_button_reject"
+    static let requestMoreButton = "substitutionSheet_button_requestMore"
+    static let additionalPromptTextField = "substitutionSheet_textField_additionalPrompt"
+    static let sendMoreButton = "substitutionSheet_button_sendMore"
 }
 
 // MARK: - UITestHelper
@@ -115,6 +122,34 @@ enum UITestHelper {
     static func tapStep(app: XCUIApplication, at index: Int) {
         let stepButton = app.buttons[RecipeAccessibilityIDs.stepItem(index)]
         stepButton.tap()
+    }
+
+    /// 置き換えシートのプレビューモードが表示されるまで待機
+    /// - Returns: プレビューモードが表示されているかどうか
+    static func waitForSubstitutionPreview(app: XCUIApplication, timeout: TimeInterval = 10) -> Bool {
+        // approveButton（これでOK）が表示されることを確認
+        let approveButton = app.buttons[RecipeAccessibilityIDs.approveButton]
+        return approveButton.waitForExistence(timeout: timeout)
+    }
+
+    /// プレビューモードで「これでOK」をタップして置き換えを承認
+    static func approveSubstitution(app: XCUIApplication) {
+        let approveButton = app.buttons[RecipeAccessibilityIDs.approveButton]
+        guard approveButton.waitForExistence(timeout: 5) else {
+            XCTFail("approveSubstitution: 承認ボタンが見つかりません")
+            return
+        }
+        approveButton.tap()
+    }
+
+    /// プレビューモードで「やっぱりやめる」をタップして置き換えを却下
+    static func rejectSubstitution(app: XCUIApplication) {
+        let rejectButton = app.buttons[RecipeAccessibilityIDs.rejectButton]
+        guard rejectButton.waitForExistence(timeout: 5) else {
+            XCTFail("rejectSubstitution: 却下ボタンが見つかりません")
+            return
+        }
+        rejectButton.tap()
     }
 
     /// 置き換えプロンプトを入力して送信

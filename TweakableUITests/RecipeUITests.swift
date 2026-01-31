@@ -91,11 +91,10 @@ final class RecipeUITests: XCTestCase {
         urlTextField.tap()
         urlTextField.typeText("https://example.com/recipe")
 
-        // キーボードを閉じる（Returnキーではなく画面タップ）
-        app.tap()
-
-        // 抽出ボタンが有効になっていることを確認
+        // 抽出ボタンが有効になっていることを確認（キーボードを閉じずに直接確認）
         let extractButton = app.buttons[RecipeAccessibilityIDs.extractButton]
+        // 少し待機してボタン状態が更新されるのを待つ
+        _ = extractButton.waitForExistence(timeout: 2)
         XCTAssertTrue(extractButton.isEnabled, "抽出ボタンが有効であること")
 
         // 抽出ボタンをタップ
@@ -245,7 +244,7 @@ final class RecipeUITests: XCTestCase {
         XCTAssertTrue(submitButton.exists, "送信ボタンが存在すること")
     }
 
-    /// 置き換えフローが完了することを確認
+    /// 置き換えフローが完了することを確認（プレビュー確認フロー対応）
     func testSubstitutionFlow() throws {
         // レシピ詳細画面に遷移して材料をタップ
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
@@ -259,11 +258,17 @@ final class RecipeUITests: XCTestCase {
         // 置き換え指示を入力して送信
         UITestHelper.submitSubstitution(app: app, prompt: "豚肉に変えて")
 
-        // シートが閉じてレシピ詳細画面に戻る（モックは即座に完了）
-        // submitButtonが消えたことでシートが閉じたことを確認
-        let submitButton = app.buttons[RecipeAccessibilityIDs.submitButton]
-        let sheetDismissed = submitButton.waitForNonExistence(timeout: 5)
-        XCTAssertTrue(sheetDismissed, "置き換え完了後にシートが閉じること")
+        // プレビューモードに遷移することを確認（「これでOK」ボタンが表示される）
+        let previewDisplayed = UITestHelper.waitForSubstitutionPreview(app: app, timeout: 10)
+        XCTAssertTrue(previewDisplayed, "置き換え後にプレビューモードに遷移すること")
+
+        // 「これでOK」をタップして置き換えを承認
+        UITestHelper.approveSubstitution(app: app)
+
+        // シートが閉じてレシピ詳細画面に戻る
+        let approveButton = app.buttons[RecipeAccessibilityIDs.approveButton]
+        let sheetDismissed = approveButton.waitForNonExistence(timeout: 5)
+        XCTAssertTrue(sheetDismissed, "承認後にシートが閉じること")
 
         // 修正バッジが表示される
         let modifiedBadge = app.staticTexts[RecipeAccessibilityIDs.modifiedBadge]

@@ -12,33 +12,56 @@ public struct RecipeResponse: Codable, Sendable, JSONSchemaConvertible {
     public let steps: [StepResponse]
 
     public struct IngredientResponse: Codable, Sendable, JSONSchemaConvertible {
+        /// 食材のUUID（置き換え時にIDを保持するため）
+        public let id: String?
         public let name: String
         public let amount: String?
         public let isModified: Bool?
 
-        public init(name: String, amount: String? = nil, isModified: Bool? = nil) {
+        public init(id: String? = nil, name: String, amount: String? = nil, isModified: Bool? = nil) {
+            self.id = id
             self.name = name
             self.amount = amount
             self.isModified = isModified
         }
 
-        public static let example = IngredientResponse(name: "玉ねぎ", amount: "2個", isModified: false)
+        public static let example = IngredientResponse(
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "玉ねぎ",
+            amount: "2個",
+            isModified: false
+        )
     }
 
     public struct StepResponse: Codable, Sendable, JSONSchemaConvertible {
+        /// 工程のUUID（置き換え時にIDを保持するため）
+        public let id: String?
         public let stepNumber: Int
         public let instruction: String
         public let imageURLs: [String]?
         public let isModified: Bool?
 
-        public init(stepNumber: Int, instruction: String, imageURLs: [String]? = nil, isModified: Bool? = nil) {
+        public init(
+            id: String? = nil,
+            stepNumber: Int,
+            instruction: String,
+            imageURLs: [String]? = nil,
+            isModified: Bool? = nil
+        ) {
+            self.id = id
             self.stepNumber = stepNumber
             self.instruction = instruction
             self.imageURLs = imageURLs
             self.isModified = isModified
         }
 
-        public static let example = StepResponse(stepNumber: 1, instruction: "野菜を切る", imageURLs: ["https://example.com/step1.jpg"], isModified: false)
+        public static let example = StepResponse(
+            id: "550e8400-e29b-41d4-a716-446655440001",
+            stepNumber: 1,
+            instruction: "野菜を切る",
+            imageURLs: ["https://example.com/step1.jpg"],
+            isModified: false
+        )
     }
 
     // JSONSchemaConvertibleの要件
@@ -69,11 +92,17 @@ extension RecipeResponse {
             ingredientsInfo: Ingredients(
                 servings: servings,
                 items: ingredients.map {
-                    Ingredient(name: $0.name, amount: $0.amount, isModified: $0.isModified ?? false)
+                    Ingredient(
+                        id: $0.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
+                        name: $0.name,
+                        amount: $0.amount,
+                        isModified: $0.isModified ?? false
+                    )
                 }
             ),
             steps: steps.map {
                 CookingStep(
+                    id: $0.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
                     stepNumber: $0.stepNumber,
                     instruction: $0.instruction,
                     imageURLs: $0.imageURLs?.compactMap { URL(string: $0) }.map { .remote(url: $0) } ?? [],
