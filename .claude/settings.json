@@ -52,7 +52,8 @@
       "Bash(*|grep:*)",
       "Bash(find:*)",
       "Bash(git restore:*)",
-      "Write(/tmp/**)"
+      "Write(/tmp/**)",
+      "mcp__revenuecat"
     ],
     "deny": [
       "Bash(supabase:*)",

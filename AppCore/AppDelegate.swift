@@ -35,8 +35,13 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
     // MARK: - RevenueCat
 
     private func configureRevenueCat() {
-        // RevenueCat Public API Key
+        #if DEBUG
+        // Test Store API Key（開発用）
+        let apiKey = "test_YVcYsAXzHheuOIqLwOkFOutfggp"
+        #else
+        // Production API Key
         let apiKey = "appl_nLhBICTcjClkCJWfwFLtDkBTmai"
+        #endif
 
         #if DEBUG
         Purchases.logLevel = .debug
