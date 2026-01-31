@@ -1603,6 +1603,7 @@
       "extractionState": "manual"
     },
     "paywall_title" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1619,6 +1620,7 @@
       }
     },
     "paywall_subtitle" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1635,6 +1637,7 @@
       }
     },
     "paywall_feature_substitution" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1651,6 +1654,7 @@
       }
     },
     "paywall_feature_ai" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1667,6 +1671,7 @@
       }
     },
     "paywall_feature_unlimited" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1683,6 +1688,7 @@
       }
     },
     "paywall_restore" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1699,6 +1705,7 @@
       }
     },
     "paywall_terms" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
