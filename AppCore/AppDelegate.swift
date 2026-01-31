@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import UserNotifications
 import FirebaseCore
 import FirebaseCrashlytics
 import RevenueCat
@@ -30,9 +29,6 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         // RevenueCat初期化
         configureRevenueCat()
 
-        // プッシュ通知の登録
-        registerForPushNotifications()
-
         return true
     }
 
@@ -48,51 +44,6 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         Purchases.logLevel = .error
         #endif
         Purchases.configure(withAPIKey: apiKey)
-    }
-
-    // MARK: - Push Notifications
-
-    private func registerForPushNotifications() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-            if let error = error {
-                print("Push notification authorization error: \(error)")
-                return
-            }
-
-            if granted {
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            }
-        }
-    }
-
-    public func application(
-        _ application: UIApplication,
-        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
-    ) {
-        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
-        let token = tokenParts.joined()
-        print("Device Token: \(token)")
-        // バックエンドなし - トークン保存は不要
-    }
-
-    public func application(
-        _ application: UIApplication,
-        didFailToRegisterForRemoteNotificationsWithError error: Error
-    ) {
-        print("Failed to register for remote notifications: \(error)")
-    }
-
-    // MARK: - Remote Notifications
-
-    public func application(
-        _ application: UIApplication,
-        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
-    ) {
-        // バックエンドなし - リモート通知は使用しない
-        completionHandler(.noData)
     }
 
     // MARK: - Quick Actions (Home Screen Shortcuts)
