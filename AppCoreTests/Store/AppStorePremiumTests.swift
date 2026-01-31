@@ -137,4 +137,65 @@ struct AppStorePremiumTests {
         #expect(store.state.recipe.errorMessage?.contains("Premium") == true ||
                 store.state.recipe.errorMessage?.contains("プレミアム") == true)
     }
+
+    // MARK: - Auto-Save on Substitution Approval Tests
+
+    @Test("保存済みレシピをカスタマイズして承認すると自動保存される")
+    func approveSubstitution_whenRecipeIsSaved_triggersAutoSave() async {
+        // Arrange
+        let mockPersistenceService = MockRecipePersistenceService()
+        let store = AppStore(
+            recipeExtractionService: MockRecipeExtractionService(),
+            recipePersistenceService: mockPersistenceService,
+            revenueCatService: MockRevenueCatServiceForTests()
+        )
+
+        // 保存済みレシピを作成（savedRecipesにも存在する状態）
+        let recipe = makeSampleRecipe()
+        store.send(.recipe(.savedRecipesLoaded([recipe])))
+        store.send(.recipe(.selectSavedRecipe(recipe)))
+
+        // 置き換えプレビューを準備（カスタマイズ結果）
+        var modifiedRecipe = recipe
+        modifiedRecipe.ingredientsInfo.items[0] = Ingredient(name: "豚もも肉", amount: "300g", isModified: true)
+        store.send(.recipe(.substitutionPreviewReady(modifiedRecipe)))
+
+        // Act - 置き換えを承認
+        store.send(.recipe(.approveSubstitution))
+
+        // 副作用が実行されるまで待機
+        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+
+        // Assert - 自動保存が呼ばれる
+        #expect(mockPersistenceService.saveRecipeCallCount == 1)
+    }
+
+    @Test("未保存の新規レシピをカスタマイズして承認しても自動保存されない")
+    func approveSubstitution_whenRecipeIsNotSaved_doesNotTriggerAutoSave() async {
+        // Arrange
+        let mockPersistenceService = MockRecipePersistenceService()
+        let store = AppStore(
+            recipeExtractionService: MockRecipeExtractionService(),
+            recipePersistenceService: mockPersistenceService,
+            revenueCatService: MockRevenueCatServiceForTests()
+        )
+
+        // 新規レシピを読み込み（savedRecipesには含まれない）
+        let recipe = makeSampleRecipe()
+        store.send(.recipe(.recipeLoaded(recipe)))
+
+        // 置き換えプレビューを準備
+        var modifiedRecipe = recipe
+        modifiedRecipe.ingredientsInfo.items[0] = Ingredient(name: "豚もも肉", amount: "300g", isModified: true)
+        store.send(.recipe(.substitutionPreviewReady(modifiedRecipe)))
+
+        // Act - 置き換えを承認
+        store.send(.recipe(.approveSubstitution))
+
+        // 副作用が実行されるまで待機
+        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+
+        // Assert - 自動保存は呼ばれない
+        #expect(mockPersistenceService.saveRecipeCallCount == 0)
+    }
 }

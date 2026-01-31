@@ -189,6 +189,14 @@ public final class AppStore {
                 send(.recipe(.recipeDeleteFailed(error.localizedDescription)))
             }
 
+        case .approveSubstitution:
+            // 保存済みレシピのカスタマイズなら自動保存
+            // currentRecipe が savedRecipes に存在するか確認
+            if let currentRecipe = state.recipe.currentRecipe,
+               state.recipe.savedRecipes.contains(where: { $0.id == currentRecipe.id }) {
+                send(.recipe(.saveRecipe))
+            }
+
         default:
             // その他のアクションは副作用なし
             break
