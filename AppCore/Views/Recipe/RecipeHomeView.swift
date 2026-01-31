@@ -36,13 +36,13 @@ struct RecipeHomeView: View {
                 .foregroundStyle(ds.colors.primaryBrand.color)
 
             // Title
-            Text("recipe_home_title", bundle: .app)
+            Text(.recipeHomeTitle)
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(ds.colors.textPrimary.color)
 
             // Subtitle
-            Text("recipe_home_subtitle", bundle: .app)
+            Text(.recipeHomeSubtitle)
                 .font(.body)
                 .foregroundColor(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
@@ -53,7 +53,7 @@ struct RecipeHomeView: View {
                 Button(action: onSavedRecipesTapped) {
                     HStack(spacing: ds.spacing.sm) {
                         Image(systemName: "bookmark.fill")
-                        Text("saved_recipes_button", bundle: .app)
+                        Text(.savedRecipesButton)
                         Spacer()
                         Text("\(savedRecipesCount)")
                             .font(.subheadline)
@@ -75,7 +75,7 @@ struct RecipeHomeView: View {
             Button(action: onShoppingListsTapped) {
                 HStack(spacing: ds.spacing.sm) {
                     Image(systemName: "cart.fill")
-                    Text("shopping_lists_title", bundle: .app)
+                    Text(.shoppingListsTitle)
                     Spacer()
                     if shoppingListsCount > 0 {
                         Text("\(shoppingListsCount)")
@@ -101,7 +101,7 @@ struct RecipeHomeView: View {
             VStack(spacing: ds.spacing.md) {
                 HStack {
                     TextField(
-                        String(localized: "recipe_home_url_placeholder", bundle: .app),
+                        String(localized: .recipeHomeUrlPlaceholder),
                         text: $urlText
                     )
                     .textFieldStyle(.plain)
@@ -136,7 +136,7 @@ struct RecipeHomeView: View {
                         } else {
                             Image(systemName: "wand.and.stars")
                         }
-                        Text("recipe_home_extract_button", bundle: .app)
+                        Text(.recipeHomeExtractButton)
                     }
                     .font(.headline)
                     .foregroundColor(.white)

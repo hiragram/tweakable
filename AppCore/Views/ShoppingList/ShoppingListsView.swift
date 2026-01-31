@@ -32,7 +32,7 @@ struct ShoppingListsView: View {
                 listView
             }
         }
-        .navigationTitle(String(localized: "shopping_lists_title", bundle: .app))
+        .navigationTitle(String(localized: .shoppingListsTitle))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: onCreateTapped) {
@@ -57,11 +57,11 @@ struct ShoppingListsView: View {
                 .font(.system(size: 48))
                 .foregroundColor(ds.colors.textTertiary.color)
 
-            Text("shopping_lists_empty_title", bundle: .app)
+            Text(.shoppingListsEmptyTitle)
                 .font(.headline)
                 .foregroundColor(ds.colors.textPrimary.color)
 
-            Text("shopping_lists_empty_message", bundle: .app)
+            Text(.shoppingListsEmptyMessage)
                 .font(.body)
                 .foregroundColor(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
@@ -69,7 +69,7 @@ struct ShoppingListsView: View {
             Button(action: onCreateTapped) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
-                    Text("shopping_lists_create_button", bundle: .app)
+                    Text(.shoppingListsCreateButton)
                 }
                 .font(.headline)
                 .foregroundColor(.white)
@@ -119,7 +119,7 @@ struct ShoppingListsView: View {
                     HStack(spacing: ds.spacing.sm) {
                         // Item count
                         Label(
-                            String(localized: "shopping_lists_item_count \(list.items.count)", bundle: .app),
+                            String(localized: .shoppingListsItemCount(list.items.count)),
                             systemImage: "checkmark.circle"
                         )
                         .font(.caption)
@@ -127,7 +127,7 @@ struct ShoppingListsView: View {
 
                         // Recipe count
                         Label(
-                            String(localized: "shopping_lists_recipe_count \(list.recipeIDs.count)", bundle: .app),
+                            String(localized: .shoppingListsRecipeCount(list.recipeIDs.count)),
                             systemImage: "fork.knife"
                         )
                         .font(.caption)

@@ -63,7 +63,7 @@ struct SubstitutionSheetView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(String(localized: "substitution_button_cancel", bundle: .app)) {
+                    Button(String(localized: .substitutionButtonCancel)) {
                         onDismiss()
                     }
                     .disabled(isProcessing)
@@ -75,9 +75,9 @@ struct SubstitutionSheetView: View {
     private var navigationTitle: String {
         switch sheetMode {
         case .input:
-            return String(localized: "substitution_title", bundle: .app)
+            return String(localized: .substitutionTitle)
         case .preview:
-            return String(localized: "substitution_preview_title", bundle: .app)
+            return String(localized: .substitutionPreviewTitle)
         }
     }
 
@@ -127,7 +127,7 @@ struct SubstitutionSheetView: View {
                 // 変更された食材
                 let ingredientDiffs = modifiedIngredients
                 if !ingredientDiffs.isEmpty {
-                    Text("substitution_section_ingredients", bundle: .app)
+                    Text(.substitutionSectionIngredients)
                         .font(.headline)
                         .foregroundColor(ds.colors.textPrimary.color)
 
@@ -142,7 +142,7 @@ struct SubstitutionSheetView: View {
                 // 変更された工程
                 let stepDiffs = modifiedSteps
                 if !stepDiffs.isEmpty {
-                    Text("substitution_section_steps", bundle: .app)
+                    Text(.substitutionSectionSteps)
                         .font(.headline)
                         .foregroundColor(ds.colors.textPrimary.color)
                         .padding(.top, ingredientDiffs.isEmpty ? 0 : ds.spacing.md)
@@ -158,7 +158,7 @@ struct SubstitutionSheetView: View {
                 // 新規追加された食材
                 let addedIngredients = self.addedIngredients
                 if !addedIngredients.isEmpty {
-                    Text("substitution_section_added_ingredients", bundle: .app)
+                    Text(.substitutionSectionAddedIngredients)
                         .font(.headline)
                         .foregroundColor(ds.colors.textPrimary.color)
                         .padding(.top, (ingredientDiffs.isEmpty && stepDiffs.isEmpty) ? 0 : ds.spacing.md)
@@ -171,7 +171,7 @@ struct SubstitutionSheetView: View {
                 // 新規追加された工程
                 let addedSteps = self.addedSteps
                 if !addedSteps.isEmpty {
-                    Text("substitution_section_added_steps", bundle: .app)
+                    Text(.substitutionSectionAddedSteps)
                         .font(.headline)
                         .foregroundColor(ds.colors.textPrimary.color)
                         .padding(.top, addedIngredients.isEmpty ? ds.spacing.md : 0)
@@ -242,7 +242,7 @@ struct SubstitutionSheetView: View {
 
     private var additionalInputSection: some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            Text("substitution_additional_prompt_label", bundle: .app)
+            Text(.substitutionAdditionalPromptLabel)
                 .font(.headline)
                 .foregroundColor(ds.colors.textPrimary.color)
 
@@ -257,7 +257,7 @@ struct SubstitutionSheetView: View {
                 )
                 .overlay(alignment: .topLeading) {
                     if additionalPromptText.isEmpty {
-                        Text("substitution_additional_placeholder", bundle: .app)
+                        Text(.substitutionAdditionalPlaceholder)
                             .foregroundColor(ds.colors.textTertiary.color)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 12)
@@ -276,10 +276,10 @@ struct SubstitutionSheetView: View {
                     HStack(spacing: ds.spacing.sm) {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        Text("substitution_processing", bundle: .app)
+                        Text(.substitutionProcessing)
                     }
                 } else {
-                    Text("substitution_button_send_more", bundle: .app)
+                    Text(.substitutionButtonSendMore)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -305,7 +305,7 @@ struct SubstitutionSheetView: View {
         VStack(spacing: ds.spacing.sm) {
             // これでOK（プライマリ）
             Button(action: onApprove) {
-                Text("substitution_button_approve", bundle: .app)
+                Text(.substitutionButtonApprove)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, ds.spacing.sm)
                     .foregroundColor(.white)
@@ -318,7 +318,7 @@ struct SubstitutionSheetView: View {
             // やっぱりやめる / 修正させる（セカンダリ、横並び）
             HStack(spacing: ds.spacing.sm) {
                 Button(action: onReject) {
-                    Text("substitution_button_reject", bundle: .app)
+                    Text(.substitutionButtonReject)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, ds.spacing.sm)
                         .foregroundColor(ds.colors.textPrimary.color)
@@ -333,7 +333,7 @@ struct SubstitutionSheetView: View {
                         showsAdditionalInput = true
                     }
                 }) {
-                    Text("substitution_button_request_more", bundle: .app)
+                    Text(.substitutionButtonRequestMore)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, ds.spacing.sm)
                         .foregroundColor(ds.colors.textPrimary.color)
@@ -350,7 +350,7 @@ struct SubstitutionSheetView: View {
 
     private var targetInfoSection: some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
-            Text("substitution_section_target", bundle: .app)
+            Text(.substitutionSectionTarget)
                 .font(.headline)
                 .foregroundColor(ds.colors.textPrimary.color)
 
@@ -388,7 +388,7 @@ struct SubstitutionSheetView: View {
     private var premiumUserContent: some View {
         VStack(spacing: ds.spacing.md) {
             VStack(alignment: .leading, spacing: ds.spacing.sm) {
-                Text("substitution_prompt_label", bundle: .app)
+                Text(.substitutionPromptLabel)
                     .font(.headline)
                     .foregroundColor(ds.colors.textPrimary.color)
 
@@ -403,7 +403,7 @@ struct SubstitutionSheetView: View {
                     )
                     .overlay(alignment: .topLeading) {
                         if promptText.isEmpty {
-                            Text("substitution_placeholder", bundle: .app)
+                            Text(.substitutionPlaceholder)
                                 .foregroundColor(ds.colors.textTertiary.color)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 12)
@@ -430,10 +430,10 @@ struct SubstitutionSheetView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .accessibilityIdentifier(SubstitutionSheetAccessibilityID.loadingIndicator)
-                        Text("substitution_processing", bundle: .app)
+                        Text(.substitutionProcessing)
                     }
                 } else {
-                    Text("substitution_button_submit", bundle: .app)
+                    Text(.substitutionButtonSubmit)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -462,12 +462,12 @@ struct SubstitutionSheetView: View {
                     .font(.system(size: 48))
                     .foregroundColor(ds.colors.primaryBrand.color)
 
-                Text("substitution_premium_title", bundle: .app)
+                Text(.substitutionPremiumTitle)
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(ds.colors.textPrimary.color)
 
-                Text("substitution_premium_description", bundle: .app)
+                Text(.substitutionPremiumDescription)
                     .font(.body)
                     .foregroundColor(ds.colors.textSecondary.color)
                     .multilineTextAlignment(.center)
@@ -476,7 +476,7 @@ struct SubstitutionSheetView: View {
             Button(action: onUpgradeTapped) {
                 HStack {
                     Image(systemName: "crown.fill")
-                    Text("substitution_button_upgrade", bundle: .app)
+                    Text(.substitutionButtonUpgrade)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, ds.spacing.sm)
@@ -501,7 +501,7 @@ private struct DiffItemView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: ds.spacing.xs) {
             HStack(spacing: ds.spacing.sm) {
-                Text("substitution_change_before", bundle: .app)
+                Text(.substitutionChangeBefore)
                     .font(.caption)
                     .foregroundColor(ds.colors.textTertiary.color)
                 Text(beforeText)
@@ -511,7 +511,7 @@ private struct DiffItemView: View {
             }
 
             HStack(spacing: ds.spacing.sm) {
-                Text("substitution_change_after", bundle: .app)
+                Text(.substitutionChangeAfter)
                     .font(.caption)
                     .foregroundColor(ds.colors.primaryBrand.color)
                 Text(afterText)
@@ -613,7 +613,7 @@ private struct AddedItemView: View {
         target: .ingredient(Ingredient(name: "鶏肉", amount: "200g")),
         isProcessing: false,
         isPremiumUser: true,
-        errorMessage: String(localized: "substitution_error_failed", bundle: .app),
+        errorMessage: String(localized: .substitutionErrorFailed),
         sheetMode: .input,
         previewRecipe: nil,
         originalRecipe: nil,
