@@ -1,3 +1,4 @@
+import Prefire
 import SwiftUI
 
 // MARK: - RecipeSkeletonView
