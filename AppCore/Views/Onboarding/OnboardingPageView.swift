@@ -28,8 +28,9 @@ struct OnboardingPageView: View {
         VStack(spacing: ds.spacing.lg) {
             Spacer()
 
-            if let imageName {
-                Image(imageName)
+            if let imageName,
+               let uiImage = UIImage(named: imageName, in: .app, with: nil) {
+                Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: 280, maxHeight: 280)
