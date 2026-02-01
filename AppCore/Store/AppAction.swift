@@ -13,4 +13,9 @@ public enum AppAction: Sendable {
 
     /// サブスクリプション機能のアクション
     case subscription(SubscriptionAction)
+
+    #if DEBUG
+    /// デバッグ機能のアクション
+    case debug(DebugAction)
+    #endif
 }

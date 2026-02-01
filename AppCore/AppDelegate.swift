@@ -36,16 +36,19 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
 
     private func configureRevenueCat() {
         #if DEBUG
-        // Test Store API Key（開発用・サンドボックス環境）
-        let apiKey = "test_YVcYsAXzHheuOIqLwOkFOutfggp"
+        // DEBUGビルドでは DebugSettings から Store 設定を読み取る
+        let apiKey: String
+        if DebugSettings.shared.useTestStore {
+            // Test Store API Key（開発用・サンドボックス環境）
+            apiKey = "test_YVcYsAXzHheuOIqLwOkFOutfggp"
+        } else {
+            // App Store API Key（本番環境）
+            apiKey = "appl_nLhBICTcjClkCJWfwFLtDkBTmai"
+        }
+        Purchases.logLevel = .debug
         #else
         // Production API Key（本番環境）
         let apiKey = "appl_nLhBICTcjClkCJWfwFLtDkBTmai"
-        #endif
-
-        #if DEBUG
-        Purchases.logLevel = .debug
-        #else
         Purchases.logLevel = .error
         #endif
         Purchases.configure(withAPIKey: apiKey)

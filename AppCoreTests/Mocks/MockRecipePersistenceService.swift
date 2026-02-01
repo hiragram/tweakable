@@ -125,4 +125,15 @@ public final class MockRecipePersistenceService: RecipePersistenceServiceProtoco
         if let error = errorToThrow { throw error }
         // Mockでは実際の更新は行わない
     }
+
+    // MARK: - Debug Operations
+
+    public var deleteAllDataCallCount = 0
+
+    public func deleteAllData() async throws {
+        deleteAllDataCallCount += 1
+        if let error = errorToThrow { throw error }
+        savedRecipes.removeAll()
+        shoppingLists.removeAll()
+    }
 }

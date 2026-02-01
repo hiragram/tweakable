@@ -11,5 +11,10 @@ public struct AppState: Equatable, Sendable {
     /// サブスクリプション機能の状態
     public var subscription = SubscriptionState()
 
+    #if DEBUG
+    /// デバッグ機能の状態
+    public var debug = DebugState()
+    #endif
+
     public init() {}
 }

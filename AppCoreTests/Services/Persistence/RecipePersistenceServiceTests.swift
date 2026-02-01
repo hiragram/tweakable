@@ -230,4 +230,32 @@ struct RecipePersistenceServiceTests {
         let item = reloaded?.items.first { $0.id == itemID }
         #expect(item?.isChecked == true)
     }
+
+    // MARK: - Debug Operations Tests
+
+    @Test
+    func deleteAllData_removesAllRecipesAndShoppingLists() async throws {
+        let service = try makeService()
+
+        // レシピを保存
+        let recipe1 = makeSampleRecipe(title: "レシピ1")
+        let recipe2 = makeSampleRecipe(title: "レシピ2")
+        try await service.saveRecipe(recipe1)
+        try await service.saveRecipe(recipe2)
+
+        // 買い物リストを作成
+        _ = try await service.createShoppingList(name: "リスト1", recipeIDs: [recipe1.id])
+        _ = try await service.createShoppingList(name: "リスト2", recipeIDs: [recipe2.id])
+
+        // 全削除
+        try await service.deleteAllData()
+
+        // レシピが空になっていること
+        let recipes = try await service.loadAllRecipes()
+        #expect(recipes.isEmpty)
+
+        // 買い物リストも空になっていること
+        let lists = try await service.loadAllShoppingLists()
+        #expect(lists.isEmpty)
+    }
 }

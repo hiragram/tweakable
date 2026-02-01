@@ -262,6 +262,28 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
         }
     }
 
+    // MARK: - Debug Operations
+
+    @MainActor
+    public func deleteAllData() async throws {
+        let context = modelContainer.mainContext
+
+        // 親モデルを個別に取得して削除（カスケードで子も削除される）
+        // ShoppingListを削除するとitemsとbreakdownsもカスケード削除される
+        let shoppingLists = try context.fetch(FetchDescriptor<PersistedShoppingList>())
+        for list in shoppingLists {
+            context.delete(list)
+        }
+
+        // Recipeを削除するとingredientsとstepsもカスケード削除される
+        let recipes = try context.fetch(FetchDescriptor<PersistedRecipe>())
+        for recipe in recipes {
+            context.delete(recipe)
+        }
+
+        try context.save()
+    }
+
     /// PersistedShoppingListをDTOに変換
     private func shoppingListToDTO(_ list: PersistedShoppingList) -> ShoppingListDTO {
         let itemDTOs = list.items.map { item in

@@ -38,4 +38,9 @@ public protocol RecipePersistenceServiceProtocol: Sendable {
 
     /// 買い物アイテムのチェック状態を更新する
     func updateShoppingItemChecked(itemID: UUID, isChecked: Bool) async throws
+
+    // MARK: - Debug Operations
+
+    /// 全てのデータを削除する（デバッグ用）
+    func deleteAllData() async throws
 }
