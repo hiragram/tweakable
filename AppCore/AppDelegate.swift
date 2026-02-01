@@ -54,19 +54,20 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
         Purchases.configure(withAPIKey: apiKey)
     }
 
-    // MARK: - Quick Actions (Home Screen Shortcuts)
+    // MARK: - Scene Configuration
 
+    #if DEBUG
     public func application(
         _ application: UIApplication,
-        performActionFor shortcutItem: UIApplicationShortcutItem,
-        completionHandler: @escaping (Bool) -> Void
-    ) {
-        switch shortcutItem.type {
-        case "app.hiragram.Tweakable.debugMenu":
-            NotificationCenter.default.post(name: Self.debugMenuShortcutNotification, object: nil)
-            completionHandler(true)
-        default:
-            completionHandler(false)
-        }
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        let configuration = UISceneConfiguration(
+            name: nil,
+            sessionRole: connectingSceneSession.role
+        )
+        configuration.delegateClass = SceneDelegate.self
+        return configuration
     }
+    #endif
 }
