@@ -1858,6 +1858,142 @@
         }
       }
     },
+    "onboarding_page1_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Personal Cookbook"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなただけの料理本"
+          }
+        }
+      }
+    },
+    "onboarding_page1_subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just paste a recipe URL from anywhere on the web to save it as your favorite. AI translates foreign recipes into your language automatically."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web上にあるレシピのURLを貼るだけで、あなたのお気に入りのレシピとして登録できます。外国語で書かれたレシピも、AIがあなたの言語に翻訳します。"
+          }
+        }
+      }
+    },
+    "onboarding_page2_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make It Your Own"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなた好みにアレンジ"
+          }
+        }
+      }
+    },
+    "onboarding_page2_subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Religion, allergies, preferences, what's in your fridge—whatever the reason. Swap ingredients, simplify steps, and let AI customize recipes just for you."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "宗教、アレルギー、好み、冷蔵庫の在庫…、理由は様々です。食材を別のものに変えたり、簡単な調理方法にしたり、AIがあなた好みにアレンジします。"
+          }
+        }
+      }
+    },
+    "onboarding_page3_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One List, All Ingredients"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1つの買い物リストに"
+          }
+        }
+      }
+    },
+    "onboarding_page3_subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select multiple recipes and get a combined shopping list instantly. No more jumping back and forth between recipes to check what you need."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複数のレシピを選択して、まとめた買い物リストを自動で作ります。それぞれのレシピを何度も行き来して材料を確認する必要はありません。"
+          }
+        }
+      }
+    },
+    "onboarding_next": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次へ"
+          }
+        }
+      }
+    },
+    "onboarding_get_started": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Started"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はじめる"
+          }
+        }
+      }
+    },
     "debug_menu_title": {
       "extractionState": "manual",
       "localizations": {
