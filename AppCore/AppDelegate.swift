@@ -9,6 +9,7 @@ import UIKit
 import FirebaseCore
 import FirebaseCrashlytics
 import RevenueCat
+import TipKit
 
 public class AppDelegate: NSObject, UIApplicationDelegate {
 
@@ -28,6 +29,9 @@ public class AppDelegate: NSObject, UIApplicationDelegate {
 
         // RevenueCat初期化
         configureRevenueCat()
+
+        // TipKit初期化
+        TipKitConfiguration.configure()
 
         return true
     }

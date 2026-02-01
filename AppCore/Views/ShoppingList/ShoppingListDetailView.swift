@@ -1,5 +1,6 @@
 import Prefire
 import SwiftUI
+import TipKit
 
 // MARK: - Accessibility Identifiers
 
@@ -72,6 +73,9 @@ struct ShoppingListDetailView: View {
     private var listView: some View {
         ScrollView {
             VStack(spacing: ds.spacing.lg) {
+                TipView(ShoppingListCheckoffTip())
+                    .padding(.horizontal, ds.spacing.sm)
+
                 let (groupedItems, sortedCategories) = groupedItemsByCategory
 
                 ForEach(sortedCategories, id: \.self) { category in

@@ -3,6 +3,7 @@ import os
 import RevenueCat
 import SwiftData
 import SwiftUI
+import TipKit
 
 private let actionLogger = Logger(subsystem: "com.tweakable.app", category: "Actions")
 
@@ -123,6 +124,7 @@ public final class AppStore {
             do {
                 let recipe = try await recipeExtractionService.extractRecipe(from: url)
                 send(.recipe(.recipeLoaded(recipe)))
+                TipEvents.recipeAdded.sendDonation()
             } catch {
                 let message = buildRecipeErrorMessage(error, context: .load)
                 print("RecipeExtractionError: \(message)")
@@ -144,6 +146,13 @@ public final class AppStore {
                     prompt: prompt
                 )
                 send(.recipe(.substitutionPreviewReady(updatedRecipe)))
+                // 置き換え対象によってイベントを発火
+                switch target {
+                case .ingredient:
+                    TipEvents.ingredientSubstituted.sendDonation()
+                case .step:
+                    TipEvents.stepSubstituted.sendDonation()
+                }
             } catch {
                 let message = buildRecipeErrorMessage(error, context: .substitution)
                 send(.recipe(.substitutionFailed(message)))
@@ -165,6 +174,13 @@ public final class AppStore {
                     prompt: prompt
                 )
                 send(.recipe(.substitutionPreviewReady(updatedRecipe)))
+                // 置き換え対象によってイベントを発火
+                switch target {
+                case .ingredient:
+                    TipEvents.ingredientSubstituted.sendDonation()
+                case .step:
+                    TipEvents.stepSubstituted.sendDonation()
+                }
             } catch {
                 let message = buildRecipeErrorMessage(error, context: .substitution)
                 send(.recipe(.substitutionFailed(message)))
@@ -175,6 +191,7 @@ public final class AppStore {
             do {
                 try await recipePersistenceService.saveRecipe(recipe)
                 send(.recipe(.recipeSaved(recipe)))
+                TipEvents.recipeSaved.sendDonation()
             } catch {
                 send(.recipe(.recipeSaveFailed(error.localizedDescription)))
             }
@@ -257,6 +274,7 @@ public final class AppStore {
             do {
                 let list = try await recipePersistenceService.createShoppingList(name: name, recipeIDs: recipeIDs)
                 send(.shoppingList(.shoppingListCreated(list)))
+                TipEvents.shoppingListCreated.sendDonation()
             } catch {
                 send(.shoppingList(.shoppingListCreateFailed(error.localizedDescription)))
             }
@@ -273,6 +291,9 @@ public final class AppStore {
             do {
                 try await recipePersistenceService.updateShoppingItemChecked(itemID: itemID, isChecked: isChecked)
                 send(.shoppingList(.itemCheckedUpdated(itemID: itemID, isChecked: isChecked)))
+                if isChecked {
+                    TipEvents.shoppingListItemChecked.sendDonation()
+                }
             } catch {
                 send(.shoppingList(.itemCheckUpdateFailed(error.localizedDescription)))
             }
@@ -287,6 +308,9 @@ public final class AppStore {
 
     private func handleSubscriptionSideEffects(_ action: SubscriptionAction) async {
         switch action {
+        case .showPaywall:
+            TipEvents.paywallViewed.sendDonation()
+
         case .loadSubscriptionStatus:
             do {
                 let isPremium = try await revenueCatService.checkPremiumStatus()

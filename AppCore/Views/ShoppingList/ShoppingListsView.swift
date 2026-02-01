@@ -1,5 +1,6 @@
 import Prefire
 import SwiftUI
+import TipKit
 
 // MARK: - Accessibility Identifiers
 
@@ -66,6 +67,9 @@ struct ShoppingListsView: View {
                 .font(.body)
                 .foregroundColor(ds.colors.textSecondary.color)
                 .multilineTextAlignment(.center)
+
+            TipView(CreateShoppingListTip())
+                .padding(.horizontal, ds.spacing.md)
 
             Button(action: onCreateTapped) {
                 HStack {

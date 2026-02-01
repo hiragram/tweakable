@@ -1,5 +1,6 @@
 #if DEBUG
 import SwiftUI
+import TipKit
 
 /// デバッグメニュービュー
 /// RevenueCatのStore切り替え、ユーザーリセット、データ全削除を提供
@@ -14,6 +15,8 @@ struct DebugMenuView: View {
     @State private var showSwitchStoreAlert = false
     @State private var showResetUserAlert = false
     @State private var showDeleteDataAlert = false
+    @State private var showTipResetAlert = false
+    @State private var tipResetCompleted = false
 
     // MARK: - Private
 
@@ -51,6 +54,9 @@ struct DebugMenuView: View {
 
                     // Data Section
                     dataSection
+
+                    // TipKit Section
+                    tipKitSection
                 }
                 .padding(theme.spacing.md)
             }
@@ -194,6 +200,47 @@ struct DebugMenuView: View {
                     showDeleteDataAlert = true
                 }
             )
+        }
+    }
+
+    // MARK: - TipKit Section
+
+    private var tipKitSection: some View {
+        SettingsSection(
+            header: "debug_menu_tipkit_section",
+            footer: "debug_menu_tipkit_reset_footer"
+        ) {
+            SettingsRow(
+                icon: "lightbulb",
+                title: "debug_menu_tipkit_reset",
+                isLoading: false,
+                accessibilityIdentifier: "debugMenu_button_resetTips",
+                action: {
+                    showTipResetAlert = true
+                }
+            )
+        }
+        .alert(
+            Text("debug_menu_tipkit_reset_alert_title", bundle: .app),
+            isPresented: $showTipResetAlert
+        ) {
+            Button(String(localized: "cancel", bundle: .app), role: .cancel) {}
+            Button(String(localized: "debug_menu_tipkit_reset_alert_confirm", bundle: .app)) {
+                Task {
+                    try? Tips.resetDatastore()
+                    tipResetCompleted = true
+                }
+            }
+        } message: {
+            Text("debug_menu_tipkit_reset_alert_message", bundle: .app)
+        }
+        .alert(
+            Text("debug_menu_tipkit_reset_complete_title", bundle: .app),
+            isPresented: $tipResetCompleted
+        ) {
+            Button(String(localized: "ok", bundle: .app)) {}
+        } message: {
+            Text("debug_menu_tipkit_reset_complete_message", bundle: .app)
         }
     }
 }
