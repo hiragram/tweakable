@@ -6,7 +6,18 @@
 import TipKit
 
 enum TipKitConfiguration {
+    /// UIテスト中はTipを無効化するためのフラグ
+    /// Launch Argumentsで `-disableTips` を渡すとTipが表示されなくなる
+    private static var isTipsDisabled: Bool {
+        ProcessInfo.processInfo.arguments.contains("-disableTips")
+    }
+
     static func configure() {
+        // UIテスト中はTipを無効化
+        guard !isTipsDisabled else {
+            return
+        }
+
         do {
             #if DEBUG
             // DEBUGビルドでは即時表示

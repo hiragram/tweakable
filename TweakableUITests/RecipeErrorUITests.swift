@@ -17,8 +17,8 @@ final class RecipeExtractionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（抽出エラーモード）
-        app.launchArguments = ["--uitesting", "--mock-extraction-error"]
+        // UIテストモードで起動（抽出エラーモード、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-extraction-error", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
@@ -81,8 +81,8 @@ final class RecipeSubstitutionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー）
-        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium"]
+        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
