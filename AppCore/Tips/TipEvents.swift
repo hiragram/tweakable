@@ -7,9 +7,10 @@ import TipKit
 
 /// TipKitのイベント定義
 ///
-/// 各イベントはTipの無効化条件として使用される。
+/// 各イベントはTipの表示条件として使用される。
+/// 各Tipは対応するイベントのdonation数が0の時に表示される。
 /// アクション完了時に `sendDonation()` を呼び出すことで、
-/// そのイベントに紐づくTipが非表示になる。
+/// donation数が1以上になり、そのイベントに紐づくTipが非表示になる。
 enum TipEvents {
     // MARK: - Recipe Events
 
