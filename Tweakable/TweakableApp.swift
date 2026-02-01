@@ -15,6 +15,21 @@ struct TweakableApp: App {
     /// 起動引数（一度だけ取得してキャッシュ）
     private let launchArguments = ProcessInfo.processInfo.arguments
 
+    init() {
+        #if DEBUG
+        // デバッグビルドでホーム画面クイックアクションを登録
+        UIApplication.shared.shortcutItems = [
+            UIApplicationShortcutItem(
+                type: "app.hiragram.Tweakable.debugMenu",
+                localizedTitle: "Debug Menu",
+                localizedSubtitle: nil,
+                icon: UIApplicationShortcutIcon(systemImageName: "ladybug"),
+                userInfo: nil
+            )
+        ]
+        #endif
+    }
+
     /// UIテストモードかどうか
     private var isUITesting: Bool {
         launchArguments.contains("--uitesting")

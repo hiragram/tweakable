@@ -115,4 +115,10 @@ public final class MockRecipePersistenceService: RecipePersistenceServiceProtoco
     public func updateShoppingItemChecked(itemID: UUID, isChecked: Bool) async throws {
         // No-op
     }
+
+    // MARK: - Debug Operations
+
+    public func deleteAllData() async throws {
+        // No-op for mock
+    }
 }

@@ -1,5 +1,6 @@
 import Foundation
 import os
+import RevenueCat
 import SwiftData
 import SwiftUI
 
@@ -87,6 +88,11 @@ public final class AppStore {
 
         case .subscription(let subscriptionAction):
             await handleSubscriptionSideEffects(subscriptionAction)
+
+        #if DEBUG
+        case .debug(let debugAction):
+            await handleDebugSideEffects(debugAction)
+        #endif
         }
     }
 
@@ -191,7 +197,8 @@ public final class AppStore {
 
         case .approveSubstitution:
             // 保存済みレシピのカスタマイズなら自動保存
-            // currentRecipe が savedRecipes に存在するか確認
+            // Reducer実行後、previewRecipe は currentRecipe に移動済みなので
+            // currentRecipe（承認後のレシピ）が savedRecipes に存在するか確認
             if let currentRecipe = state.recipe.currentRecipe,
                state.recipe.savedRecipes.contains(where: { $0.id == currentRecipe.id }) {
                 send(.recipe(.saveRecipe))
@@ -322,4 +329,42 @@ public final class AppStore {
             break
         }
     }
+
+    // MARK: - Debug Side Effects
+
+    #if DEBUG
+    private func handleDebugSideEffects(_ action: DebugAction) async {
+        switch action {
+        case .switchStore(let useTestStore):
+            // UserDefaultsに設定を保存
+            DebugSettings.shared.useTestStore = useTestStore
+            send(.debug(.storeSwitched))
+
+        case .resetUser:
+            do {
+                _ = try await Purchases.shared.logOut()
+                send(.debug(.userReset))
+                // サブスクリプション状態を再読み込み
+                send(.subscription(.loadSubscriptionStatus))
+            } catch {
+                send(.debug(.operationFailed(error.localizedDescription)))
+            }
+
+        case .deleteAllData:
+            do {
+                try await recipePersistenceService.deleteAllData()
+                send(.debug(.dataDeleted))
+                // リストを空にリロード
+                send(.recipe(.savedRecipesLoaded([])))
+                send(.shoppingList(.shoppingListsLoaded([])))
+            } catch {
+                send(.debug(.operationFailed(error.localizedDescription)))
+            }
+
+        default:
+            // その他のアクションは副作用なし
+            break
+        }
+    }
+    #endif
 }

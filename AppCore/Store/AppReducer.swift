@@ -17,6 +17,11 @@ public enum AppReducer {
 
         case .subscription(let subscriptionAction):
             SubscriptionReducer.reduce(state: &state.subscription, action: subscriptionAction)
+
+        #if DEBUG
+        case .debug(let debugAction):
+            DebugReducer.reduce(state: &state.debug, action: debugAction)
+        #endif
         }
     }
 }

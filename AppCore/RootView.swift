@@ -11,6 +11,10 @@ import SwiftUI
 public struct RootView: View {
     @State private var store: AppStore
 
+    #if DEBUG
+    @State private var showDebugMenu = false
+    #endif
+
     public init(
         recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
         recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil,
@@ -33,6 +37,16 @@ public struct RootView: View {
             .onAppear {
                 store.send(.boot)
             }
+            #if DEBUG
+            .onReceive(NotificationCenter.default.publisher(
+                for: AppDelegate.debugMenuShortcutNotification
+            )) { _ in
+                showDebugMenu = true
+            }
+            .sheet(isPresented: $showDebugMenu) {
+                DebugMenuView(store: store)
+            }
+            #endif
     }
 }
 
