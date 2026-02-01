@@ -1,3 +1,4 @@
+#if DEBUG
 import Foundation
 
 /// デバッグ機能のReducer
@@ -36,3 +37,4 @@ public enum DebugReducer {
         }
     }
 }
+#endif

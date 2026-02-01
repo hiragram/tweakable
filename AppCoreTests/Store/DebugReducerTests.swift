@@ -1,3 +1,4 @@
+#if DEBUG
 import Testing
 @testable import AppCore
 
@@ -131,3 +132,4 @@ struct DebugReducerTests {
         #expect(state.errorMessage == nil)
     }
 }
+#endif

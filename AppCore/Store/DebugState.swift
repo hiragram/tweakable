@@ -1,3 +1,4 @@
+#if DEBUG
 import Foundation
 
 /// デバッグ機能の状態
@@ -22,3 +23,4 @@ public struct DebugState: Equatable, Sendable {
 
     public init() {}
 }
+#endif

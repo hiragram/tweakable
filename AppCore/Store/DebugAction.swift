@@ -1,3 +1,4 @@
+#if DEBUG
 import Foundation
 
 /// デバッグ機能のアクション
@@ -34,3 +35,4 @@ public enum DebugAction: Sendable {
     /// エラーをクリア
     case clearError
 }
+#endif
