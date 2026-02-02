@@ -23,6 +23,9 @@ struct RecipeHomeContainerView: View {
                 },
                 onAddTapped: {
                     showingAddRecipe = true
+                },
+                onDeleteConfirmed: { id in
+                    store.send(.recipe(.deleteRecipe(id: id)))
                 }
             )
             .navigationTitle(String(localized: .myRecipesTitle))
