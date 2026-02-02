@@ -313,12 +313,8 @@ struct SubstitutionSheetView: View {
             // これでOK（プライマリ）
             Button(action: onApprove) {
                 Text(.substitutionButtonApprove)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, ds.spacing.sm)
-                    .foregroundColor(.white)
-                    .background(ds.colors.primaryBrand.color)
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
             }
+            .buttonStyle(PrimaryButtonStyle())
             .disabled(isProcessing)
             .accessibilityIdentifier(SubstitutionSheetAccessibilityID.approveButton)
 
@@ -326,12 +322,8 @@ struct SubstitutionSheetView: View {
             HStack(spacing: ds.spacing.sm) {
                 Button(action: onReject) {
                     Text(.substitutionButtonReject)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, ds.spacing.sm)
-                        .foregroundColor(ds.colors.textPrimary.color)
-                        .background(ds.colors.backgroundSecondary.color)
-                        .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
                 }
+                .buttonStyle(FilledSecondaryButtonStyle())
                 .disabled(isProcessing)
                 .accessibilityIdentifier(SubstitutionSheetAccessibilityID.rejectButton)
 
@@ -341,12 +333,8 @@ struct SubstitutionSheetView: View {
                     }
                 }) {
                     Text(.substitutionButtonRequestMore)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, ds.spacing.sm)
-                        .foregroundColor(ds.colors.textPrimary.color)
-                        .background(ds.colors.backgroundSecondary.color)
-                        .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
                 }
+                .buttonStyle(FilledSecondaryButtonStyle())
                 .disabled(isProcessing || showsAdditionalInput)
                 .accessibilityIdentifier(SubstitutionSheetAccessibilityID.requestMoreButton)
             }
