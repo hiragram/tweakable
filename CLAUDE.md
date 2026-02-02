@@ -11,6 +11,10 @@
 - ハッカソン概要: @docs/hackathon.md
 - ハッカソンの題材となる要件: @docs/briefs.md
 - このプロジェクトで作るアプリの要件・MVP: @docs/mvp.md
+- 勝つためのガイド: @docs/winning-guide.md
+- 提出ガイド: @docs/submission-guide.md
+- RevenueCat統合ガイド: @docs/revenuecat-integration.md
+- パートナーツール（Shipping Container）: @docs/shipping-container.md
 
 ## [重要]このプロジェクトの背景
 
