@@ -9,6 +9,7 @@ enum RecipeHomeAccessibilityID {
     static let emptyAddButton = "recipeHome_button_emptyAdd"
     static let grid = "recipeHome_grid"
     static func recipeCard(_ id: UUID) -> String { "recipeHome_button_recipe_\(id.uuidString)" }
+    static func deleteButton(_ id: UUID) -> String { "recipeHome_button_delete_\(id.uuidString)" }
 }
 
 // MARK: - RecipeHomeView
@@ -21,6 +22,10 @@ struct RecipeHomeView: View {
     let isLoading: Bool
     let onRecipeTapped: (Recipe) -> Void
     let onAddTapped: () -> Void
+    let onDeleteConfirmed: (UUID) -> Void
+
+    @State private var showDeleteConfirmation: Bool = false
+    @State private var recipeToDelete: UUID?
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -35,6 +40,21 @@ struct RecipeHomeView: View {
                 emptyView
             } else {
                 recipeGridView
+            }
+        }
+        .confirmationDialog(
+            String(localized: .recipeDeleteConfirmationTitle),
+            isPresented: $showDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(String(localized: .commonDelete), role: .destructive) {
+                if let id = recipeToDelete {
+                    onDeleteConfirmed(id)
+                }
+                recipeToDelete = nil
+            }
+            Button(String(localized: .commonCancel), role: .cancel) {
+                recipeToDelete = nil
             }
         }
     }
@@ -140,6 +160,15 @@ struct RecipeHomeView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.recipeCard(recipe.id))
+        .contextMenu {
+            Button(role: .destructive) {
+                recipeToDelete = recipe.id
+                showDeleteConfirmation = true
+            } label: {
+                Label(String(localized: .commonDelete), systemImage: "trash")
+            }
+            .accessibilityIdentifier(RecipeHomeAccessibilityID.deleteButton(recipe.id))
+        }
     }
 
     private func recipeImage(_ source: ImageSource?) -> some View {
@@ -202,7 +231,8 @@ struct RecipeHomeView: View {
             recipes: [],
             isLoading: false,
             onRecipeTapped: { _ in },
-            onAddTapped: {}
+            onAddTapped: {},
+            onDeleteConfirmed: { _ in }
         )
         .navigationTitle(String(localized: .myRecipesTitle))
     }
@@ -215,7 +245,8 @@ struct RecipeHomeView: View {
             recipes: [],
             isLoading: true,
             onRecipeTapped: { _ in },
-            onAddTapped: {}
+            onAddTapped: {},
+            onDeleteConfirmed: { _ in }
         )
         .navigationTitle(String(localized: .myRecipesTitle))
     }
@@ -299,7 +330,8 @@ struct RecipeHomeView: View {
             ],
             isLoading: false,
             onRecipeTapped: { _ in },
-            onAddTapped: {}
+            onAddTapped: {},
+            onDeleteConfirmed: { _ in }
         )
         .navigationTitle(String(localized: .myRecipesTitle))
     }

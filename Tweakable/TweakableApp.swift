@@ -45,11 +45,6 @@ struct TweakableApp: App {
         launchArguments.contains("--mock-saved-recipes")
     }
 
-    /// UIテストでオンボーディングをスキップするかどうか
-    private var skipOnboarding: Bool {
-        launchArguments.contains("--skip-onboarding")
-    }
-
     /// UIテストのモック動作モード
     ///
     /// 起動引数に応じてモックサービスの動作を制御:
@@ -73,7 +68,7 @@ struct TweakableApp: App {
                     recipeExtractionService: MockRecipeExtractionService(behavior: mockBehavior),
                     recipePersistenceService: mockSavedRecipes ? MockRecipePersistenceService() : nil,
                     mockPremium: mockPremium,
-                    skipOnboarding: skipOnboarding
+                    skipOnboarding: true  // UIテストではオンボーディングをスキップ
                 )
             } else {
                 RootView()

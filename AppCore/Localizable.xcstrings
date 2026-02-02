@@ -267,6 +267,23 @@
       },
       "extractionState": "manual"
     },
+    "common_delete": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "common_pick_up": {
       "localizations": {
         "en": {
@@ -675,6 +692,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "予期しないエラーが発生しました"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_delete_confirmation_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this recipe?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このレシピを削除しますか？"
           }
         }
       },

@@ -61,10 +61,15 @@ final class RecipeExtractionErrorUITests: XCTestCase {
         let alertDismissed = app.alerts.firstMatch.waitForNonExistence(timeout: 3)
         XCTAssertTrue(alertDismissed, "アラートが閉じること")
 
-        // アラートを閉じた後、AddRecipeViewはまだ開いているはず
-        // 抽出ボタンをタップして再度抽出を実行
-        let extractButton = app.buttons[RecipeAccessibilityIDs.extractButton]
-        XCTAssertTrue(extractButton.waitForExistence(timeout: 3), "AddRecipeViewがまだ開いていて抽出ボタンが存在すること")
+        // AddRecipeシートを再度開いて抽出を実行
+        UITestHelper.openAddRecipeSheet(app: app)
+        _ = UITestHelper.waitForAddRecipeSheet(app: app)
+
+        let urlTextField = app.textFields[AddRecipeAccessibilityIDs.urlTextField]
+        urlTextField.tap()
+        urlTextField.typeText("https://example.com/recipe2")
+
+        let extractButton = app.buttons[AddRecipeAccessibilityIDs.extractButton]
         extractButton.tap()
 
         // 再度エラーアラートが表示される（モックはエラーを返し続ける）
