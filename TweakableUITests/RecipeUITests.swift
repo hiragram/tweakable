@@ -21,7 +21,7 @@ final class RecipeUITests: XCTestCase {
 
         // レシピホーム画面が表示されるまで待機
         let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
-        try XCTSkipUnless(reachedHome, "レシピホーム画面に到達できませんでした")
+        XCTAssertTrue(reachedHome, "レシピホーム画面に到達できませんでした")
     }
 
     override func tearDownWithError() throws {
@@ -150,7 +150,7 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // 最初の材料が存在する
         let firstIngredient = app.buttons[RecipeAccessibilityIDs.ingredientItem(0)]
@@ -170,7 +170,7 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // モックデータには4つの材料がある
         for i in 0..<4 {
@@ -184,7 +184,7 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // モックデータには4つの工程がある
         for i in 0..<4 {
@@ -200,7 +200,7 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // 最初の材料をタップ
         UITestHelper.tapIngredient(app: app, at: 0)
@@ -215,7 +215,7 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // 最初の工程をタップ
         UITestHelper.tapStep(app: app, at: 0)
@@ -230,11 +230,11 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移して材料をタップ
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         UITestHelper.tapIngredient(app: app, at: 0)
         let sheetDisplayed = UITestHelper.waitForSubstitutionSheet(app: app)
-        try XCTSkipUnless(sheetDisplayed, "置き換えシートが表示されませんでした")
+        XCTAssertTrue(sheetDisplayed, "置き換えシートが表示されませんでした")
 
         // プロンプト入力フィールドが存在する
         let promptTextField = app.textViews[RecipeAccessibilityIDs.promptTextField]
@@ -250,11 +250,11 @@ final class RecipeUITests: XCTestCase {
         // レシピ詳細画面に遷移して材料をタップ
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         UITestHelper.tapIngredient(app: app, at: 0)
         let sheetDisplayed = UITestHelper.waitForSubstitutionSheet(app: app)
-        try XCTSkipUnless(sheetDisplayed, "置き換えシートが表示されませんでした")
+        XCTAssertTrue(sheetDisplayed, "置き換えシートが表示されませんでした")
 
         // 置き換え指示を入力して送信
         UITestHelper.submitSubstitution(app: app, prompt: "豚肉に変えて")
@@ -293,7 +293,7 @@ final class FreeUserPaywallUITests: XCTestCase {
 
         // レシピホーム画面が表示されるまで待機
         let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
-        try XCTSkipUnless(reachedHome, "レシピホーム画面に到達できませんでした")
+        XCTAssertTrue(reachedHome, "レシピホーム画面に到達できませんでした")
     }
 
     override func tearDownWithError() throws {
@@ -307,12 +307,12 @@ final class FreeUserPaywallUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // 材料をタップして置き換えシートを開く
         UITestHelper.tapIngredient(app: app, at: 0)
         let sheetDisplayed = UITestHelper.waitForSubstitutionSheet(app: app)
-        try XCTSkipUnless(sheetDisplayed, "置き換えシートが表示されませんでした")
+        XCTAssertTrue(sheetDisplayed, "置き換えシートが表示されませんでした")
 
         // アップグレードボタンが表示されることを確認（無料ユーザーなので）
         let upgradeButton = app.buttons[RecipeAccessibilityIDs.upgradeButton]
@@ -350,7 +350,7 @@ final class SavedRecipesNavigationUITests: XCTestCase {
 
         // レシピホーム画面が表示されるまで待機
         let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
-        try XCTSkipUnless(reachedHome, "レシピホーム画面に到達できませんでした")
+        XCTAssertTrue(reachedHome, "レシピホーム画面に到達できませんでした")
     }
 
     override func tearDownWithError() throws {
