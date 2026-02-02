@@ -1,4 +1,4 @@
 options:
-  xcodeprojPath: "Okumuka.xcodeproj"
+  xcodeprojPath: "Tweakable.xcodeproj"
   prefix: Acknowledgements
   singlePage: true
