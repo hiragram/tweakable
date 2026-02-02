@@ -1,5 +1,6 @@
 import Prefire
 import SwiftUI
+import TipKit
 
 // MARK: - Accessibility Identifiers
 
@@ -168,6 +169,7 @@ struct RecipeView: View {
                             Image(systemName: "square.and.arrow.down")
                         }
                     }
+                    .popoverTip(SaveRecipeTip())
                     .disabled(isSaving)
                     .accessibilityIdentifier(RecipeAccessibilityID.saveButton)
 
@@ -257,7 +259,12 @@ struct RecipeView: View {
             VStack(spacing: 0) {
                 ForEach(ingredientsInfo.items.indices, id: \.self) { index in
                     let ingredient = ingredientsInfo.items[index]
-                    ingredientRow(ingredient, index: index)
+                    if index == 0 {
+                        ingredientRow(ingredient, index: index)
+                            .popoverTip(IngredientSubstitutionTip())
+                    } else {
+                        ingredientRow(ingredient, index: index)
+                    }
 
                     if index < ingredientsInfo.items.count - 1 {
                         Divider()
@@ -317,7 +324,12 @@ struct RecipeView: View {
             VStack(spacing: ds.spacing.sm) {
                 ForEach(steps.indices, id: \.self) { index in
                     let step = steps[index]
-                    stepRow(step, index: index)
+                    if index == 0 {
+                        stepRow(step, index: index)
+                            .popoverTip(StepSubstitutionTip())
+                    } else {
+                        stepRow(step, index: index)
+                    }
                 }
             }
         }

@@ -15,8 +15,8 @@ final class RecipeUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（プレミアムユーザーとしてモック）
-        app.launchArguments = ["--uitesting", "--mock-premium"]
+        // UIテストモードで起動（プレミアムユーザーとしてモック、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-premium", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
@@ -287,8 +287,8 @@ final class FreeUserPaywallUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（無料ユーザーとしてモック、--mock-premiumなし）
-        app.launchArguments = ["--uitesting"]
+        // UIテストモードで起動（無料ユーザーとしてモック、--mock-premiumなし、Tipは無効化）
+        app.launchArguments = ["--uitesting", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
@@ -344,8 +344,8 @@ final class SavedRecipesNavigationUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（プレミアムユーザーとしてモック、保存済みレシピあり）
-        app.launchArguments = ["--uitesting", "--mock-premium", "--mock-saved-recipes"]
+        // UIテストモードで起動（プレミアムユーザーとしてモック、保存済みレシピあり、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-premium", "--mock-saved-recipes", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機

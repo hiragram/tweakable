@@ -1,5 +1,6 @@
 import Prefire
 import SwiftUI
+import TipKit
 
 // MARK: - Accessibility Identifiers
 
@@ -77,6 +78,7 @@ struct RecipeHomeView: View {
                 .background(ds.colors.primaryBrand.color)
                 .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
             }
+            .popoverTip(AddRecipeButtonTip())
             .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyAddButton)
             .padding(.top, ds.spacing.md)
 
