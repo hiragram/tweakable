@@ -15,10 +15,14 @@ enum PaywallAccessibilityIDs {
 // MARK: - Recipe Accessibility IDs
 
 enum RecipeAccessibilityIDs {
-    // RecipeHomeView
-    static let urlTextField = "recipeHome_textField_url"
-    static let extractButton = "recipeHome_button_extract"
-    static let clearButton = "recipeHome_button_clear"
+    // RecipeHomeView (Empty State)
+    static let emptyView = "recipeHome_view_empty"
+    static let emptyAddButton = "recipeHome_button_emptyAdd"
+
+    // AddRecipeView
+    static let urlTextField = "addRecipe_textField_url"
+    static let extractButton = "addRecipe_button_extract"
+    static let clearButton = "addRecipe_button_clear"
     static let savedRecipesButton = "recipeHome_button_savedRecipes"
 
     // RecipeView
@@ -55,9 +59,31 @@ enum SavedRecipesListAccessibilityID {
 // MARK: - UITestHelper
 
 enum UITestHelper {
-    /// レシピホーム画面（URL入力画面）が表示されるまで待機
+    /// レシピホーム画面（マイレシピ画面）が表示されるまで待機
     /// - Returns: レシピホーム画面に到達できたかどうか
     static func waitForRecipeHomeScreen(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
+        // Empty State の「+ レシピを追加」ボタンか、レシピがある場合のグリッドを待機
+        let emptyAddButton = app.buttons[RecipeAccessibilityIDs.emptyAddButton]
+        return emptyAddButton.waitForExistence(timeout: timeout)
+    }
+
+    /// 「+ レシピを追加」ボタンをタップしてAddRecipeViewを開く
+    static func openAddRecipeView(app: XCUIApplication) {
+        let emptyAddButton = app.buttons[RecipeAccessibilityIDs.emptyAddButton]
+        if emptyAddButton.exists {
+            emptyAddButton.tap()
+        } else {
+            // ナビゲーションバーの追加ボタンをタップ（レシピがある場合）
+            let navAddButton = app.navigationBars.buttons["addRecipe_button_nav"]
+            if navAddButton.exists {
+                navAddButton.tap()
+            }
+        }
+    }
+
+    /// AddRecipeView（URL入力シート）が表示されるまで待機
+    /// - Returns: AddRecipeViewに到達できたかどうか
+    static func waitForAddRecipeView(app: XCUIApplication, timeout: TimeInterval = 5) -> Bool {
         let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
         return urlTextField.waitForExistence(timeout: timeout)
     }
@@ -105,7 +131,14 @@ enum UITestHelper {
     /// - Parameters:
     ///   - app: XCUIApplication
     ///   - url: 入力するURL文字列
+    /// - Note: RecipeHomeView（Empty State）からAddRecipeViewを開き、URLを入力して抽出を開始
     static func extractRecipe(app: XCUIApplication, url: String) {
+        // AddRecipeViewを開く
+        openAddRecipeView(app: app)
+
+        // AddRecipeViewが表示されるまで待機
+        _ = waitForAddRecipeView(app: app)
+
         let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
         urlTextField.tap()
         urlTextField.typeText(url)

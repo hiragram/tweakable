@@ -17,8 +17,8 @@ final class RecipeExtractionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（抽出エラーモード、Tipは無効化）
-        app.launchArguments = ["--uitesting", "--mock-extraction-error", "-disableTips"]
+        // UIテストモードで起動（抽出エラーモード、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-extraction-error", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
@@ -61,8 +61,10 @@ final class RecipeExtractionErrorUITests: XCTestCase {
         let alertDismissed = app.alerts.firstMatch.waitForNonExistence(timeout: 3)
         XCTAssertTrue(alertDismissed, "アラートが閉じること")
 
+        // アラートを閉じた後、AddRecipeViewはまだ開いているはず
         // 抽出ボタンをタップして再度抽出を実行
         let extractButton = app.buttons[RecipeAccessibilityIDs.extractButton]
+        XCTAssertTrue(extractButton.waitForExistence(timeout: 3), "AddRecipeViewがまだ開いていて抽出ボタンが存在すること")
         extractButton.tap()
 
         // 再度エラーアラートが表示される（モックはエラーを返し続ける）
@@ -81,8 +83,8 @@ final class RecipeSubstitutionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー、Tipは無効化）
-        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium", "-disableTips"]
+        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
