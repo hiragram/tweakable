@@ -67,7 +67,8 @@ struct TweakableApp: App {
                 RootView(
                     recipeExtractionService: MockRecipeExtractionService(behavior: mockBehavior),
                     recipePersistenceService: mockSavedRecipes ? MockRecipePersistenceService() : nil,
-                    mockPremium: mockPremium
+                    mockPremium: mockPremium,
+                    skipOnboarding: true  // UIテストではオンボーディングをスキップ
                 )
             } else {
                 RootView()

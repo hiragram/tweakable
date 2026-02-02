@@ -12,6 +12,9 @@ public struct RootView: View {
     @State private var store: AppStore
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
+    /// UIテストでオンボーディングをスキップするかどうか
+    private let skipOnboarding: Bool
+
     #if DEBUG
     @State private var showDebugMenu = false
     #endif
@@ -19,8 +22,10 @@ public struct RootView: View {
     public init(
         recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
         recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil,
-        mockPremium: Bool = false
+        mockPremium: Bool = false,
+        skipOnboarding: Bool = false
     ) {
+        self.skipOnboarding = skipOnboarding
         // UIテスト用: mockPremiumがtrueの場合はMockRevenueCatServiceを使用
         let revenueCatService: any RevenueCatServiceProtocol = mockPremium
             ? MockRevenueCatService(isPremium: true)
@@ -49,7 +54,7 @@ public struct RootView: View {
             }
             #endif
             .fullScreenCover(isPresented: .init(
-                get: { !hasCompletedOnboarding },
+                get: { !hasCompletedOnboarding && !skipOnboarding },
                 set: { if !$0 { hasCompletedOnboarding = true } }
             )) {
                 OnboardingView(onComplete: {
