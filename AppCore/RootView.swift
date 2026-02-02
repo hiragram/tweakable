@@ -10,6 +10,7 @@ import SwiftUI
 /// アプリのルートビュー
 public struct RootView: View {
     @State private var store: AppStore
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     #if DEBUG
     @State private var showDebugMenu = false
@@ -47,6 +48,14 @@ public struct RootView: View {
                 DebugMenuView(store: store)
             }
             #endif
+            .fullScreenCover(isPresented: .init(
+                get: { !hasCompletedOnboarding },
+                set: { if !$0 { hasCompletedOnboarding = true } }
+            )) {
+                OnboardingView(onComplete: {
+                    hasCompletedOnboarding = true
+                })
+            }
     }
 }
 
