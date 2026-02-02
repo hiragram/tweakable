@@ -17,13 +17,13 @@ final class RecipeExtractionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（抽出エラーモード、Tipは無効化）
-        app.launchArguments = ["--uitesting", "--mock-extraction-error", "-disableTips"]
+        // UIテストモードで起動（抽出エラーモード、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-extraction-error", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
         let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
-        try XCTSkipUnless(reachedHome, "レシピホーム画面に到達できませんでした")
+        XCTAssertTrue(reachedHome, "レシピホーム画面に到達できませんでした")
     }
 
     override func tearDownWithError() throws {
@@ -52,7 +52,7 @@ final class RecipeExtractionErrorUITests: XCTestCase {
 
         // エラーアラートが表示される
         let alertExists = app.alerts.firstMatch.waitForExistence(timeout: 10)
-        try XCTSkipUnless(alertExists, "エラーアラートが表示されませんでした")
+        XCTAssertTrue(alertExists, "エラーアラートが表示されませんでした")
 
         // OKボタンをタップしてアラートを閉じる
         app.alerts.buttons.firstMatch.tap()
@@ -61,8 +61,10 @@ final class RecipeExtractionErrorUITests: XCTestCase {
         let alertDismissed = app.alerts.firstMatch.waitForNonExistence(timeout: 3)
         XCTAssertTrue(alertDismissed, "アラートが閉じること")
 
+        // アラートを閉じた後、AddRecipeViewはまだ開いているはず
         // 抽出ボタンをタップして再度抽出を実行
         let extractButton = app.buttons[RecipeAccessibilityIDs.extractButton]
+        XCTAssertTrue(extractButton.waitForExistence(timeout: 3), "AddRecipeViewがまだ開いていて抽出ボタンが存在すること")
         extractButton.tap()
 
         // 再度エラーアラートが表示される（モックはエラーを返し続ける）
@@ -81,13 +83,13 @@ final class RecipeSubstitutionErrorUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー、Tipは無効化）
-        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium", "-disableTips"]
+        // UIテストモードで起動（置き換えエラーモード + プレミアムユーザー、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-substitution-error", "--mock-premium", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
         let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
-        try XCTSkipUnless(reachedHome, "レシピホーム画面に到達できませんでした")
+        XCTAssertTrue(reachedHome, "レシピホーム画面に到達できませんでした")
     }
 
     override func tearDownWithError() throws {
@@ -100,12 +102,12 @@ final class RecipeSubstitutionErrorUITests: XCTestCase {
         // レシピ詳細画面に遷移
         UITestHelper.extractRecipe(app: app, url: "https://example.com/recipe")
         let reachedRecipeView = UITestHelper.waitForRecipeView(app: app, timeout: 10)
-        try XCTSkipUnless(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
+        XCTAssertTrue(reachedRecipeView, "レシピ詳細画面に到達できませんでした")
 
         // 材料をタップしてシートを開く
         UITestHelper.tapIngredient(app: app, at: 0)
         let sheetDisplayed = UITestHelper.waitForSubstitutionSheet(app: app)
-        try XCTSkipUnless(sheetDisplayed, "置き換えシートが表示されませんでした")
+        XCTAssertTrue(sheetDisplayed, "置き換えシートが表示されませんでした")
 
         // 置き換えを実行
         UITestHelper.submitSubstitution(app: app, prompt: "豚肉に変えて")
