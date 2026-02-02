@@ -54,7 +54,7 @@ struct ColorPalette {
 // MARK: - Default Instance
 
 extension ColorPalette {
-    static let `default`: ColorPalette = .midnightBistro
+    static let `default`: ColorPalette = .berryBlast
 
     // MARK: - Sage Kitchen (Mediterranean Herb Garden & Terracotta)
 

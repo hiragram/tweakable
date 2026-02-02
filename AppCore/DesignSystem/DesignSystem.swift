@@ -285,12 +285,7 @@ struct DesignSystem_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(themes, id: \.name) { theme in
             DesignSystemPreview(theme: theme)
-                .preferredColorScheme(.light)
-                .previewDisplayName("\(theme.name) - Light")
-
-            DesignSystemPreview(theme: theme)
-                .preferredColorScheme(.dark)
-                .previewDisplayName("\(theme.name) - Dark")
+                .previewDisplayName("\(theme.name)")
         }
     }
 }
