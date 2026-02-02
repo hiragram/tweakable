@@ -11,6 +11,7 @@ struct RecipeHomeContainerView: View {
     @State private var showingRecipe: Bool = false
     @State private var showingShoppingLists: Bool = false
     @State private var showingShoppingListDetail: Bool = false
+    @State private var isLoadingRecipe: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -59,7 +60,7 @@ struct RecipeHomeContainerView: View {
             .sheet(isPresented: $showingAddRecipe) {
                 AddRecipeView(
                     urlText: $urlText,
-                    isLoading: store.state.recipe.isLoadingRecipe,
+                    isLoading: $isLoadingRecipe,
                     onExtractTapped: {
                         extractRecipe()
                     },
@@ -67,6 +68,9 @@ struct RecipeHomeContainerView: View {
                         showingAddRecipe = false
                     }
                 )
+            }
+            .onChange(of: store.state.recipe.isLoadingRecipe) { _, newValue in
+                isLoadingRecipe = newValue
             }
             .alert(
                 String(localized: .recipeErrorTitle),

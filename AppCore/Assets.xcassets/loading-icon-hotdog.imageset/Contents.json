@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "loading-icon-hotdog.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

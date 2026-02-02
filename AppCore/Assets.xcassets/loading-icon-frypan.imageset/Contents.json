@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "loading-icon-frypan.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

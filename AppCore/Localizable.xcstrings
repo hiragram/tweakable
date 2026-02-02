@@ -816,6 +816,74 @@
       },
       "extractionState": "manual"
     },
+    "recipe_loading_message_1": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading recipe..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピを読み込んでいます..."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_loading_message_2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyzing ingredients..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "材料を分析中..."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_loading_message_3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organizing cooking steps..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "調理工程を整理しています..."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_loading_message_4": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almost done..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう少しで完了です..."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "saved_recipes_button": {
       "localizations": {
         "en": {

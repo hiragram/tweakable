@@ -17,104 +17,116 @@ struct AddRecipeView: View {
     private let ds = DesignSystem.default
 
     @Binding var urlText: String
-    let isLoading: Bool
+    @Binding var isLoading: Bool
     let onExtractTapped: () -> Void
     let onCloseTapped: () -> Void
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: ds.spacing.xl) {
-                Spacer()
-                    .frame(height: ds.spacing.xl)
-
-                // Icon
-                Image(systemName: "link.badge.plus")
-                    .font(.system(size: 60))
-                    .foregroundStyle(ds.colors.primaryBrand.color)
-
-                // Title
-                Text(.addRecipeTitle)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(ds.colors.textPrimary.color)
-
-                // Subtitle
-                Text(.addRecipeSubtitle)
-                    .font(.body)
-                    .foregroundColor(ds.colors.textSecondary.color)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, ds.spacing.lg)
-
-                Spacer()
-
-                // URL input section
-                VStack(spacing: ds.spacing.md) {
-                    HStack {
-                        TextField(
-                            String(localized: .recipeHomeUrlPlaceholder),
-                            text: $urlText
-                        )
-                        .textFieldStyle(.plain)
-                        .keyboardType(.URL)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .disabled(isLoading)
-                        .onSubmit {
-                            if !urlText.isEmpty && !isLoading {
-                                onExtractTapped()
-                            }
+            inputFormContent
+                .navigationTitle(String(localized: .addRecipeNavigationTitle))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(action: onCloseTapped) {
+                            Image(systemName: "xmark")
                         }
-                        .accessibilityIdentifier(AddRecipeAccessibilityID.urlTextField)
-
-                        if !urlText.isEmpty {
-                            Button(action: { urlText = "" }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(ds.colors.textTertiary.color)
-                            }
-                            .accessibilityIdentifier(AddRecipeAccessibilityID.clearButton)
-                        }
+                        .accessibilityIdentifier(AddRecipeAccessibilityID.closeButton)
                     }
-                    .padding(ds.spacing.md)
-                    .background(ds.colors.backgroundSecondary.color)
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-
-                    Button(action: onExtractTapped) {
-                        HStack {
-                            if isLoading {
-                                ProgressView()
-                                    .tint(.white)
-                            } else {
-                                Image(systemName: "wand.and.stars")
-                            }
-                            Text(.recipeHomeExtractButton)
-                        }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(ds.spacing.md)
-                        .background(
-                            urlText.isEmpty || isLoading
-                                ? ds.colors.primaryBrand.color.opacity(0.5)
-                                : ds.colors.primaryBrand.color
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
-                    }
-                    .disabled(urlText.isEmpty || isLoading)
-                    .accessibilityIdentifier(AddRecipeAccessibilityID.extractButton)
                 }
+                .navigationDestination(isPresented: $isLoading) {
+                    RecipeLoadingView()
+                        .navigationTitle(String(localized: .addRecipeNavigationTitle))
+                        .navigationBarTitleDisplayMode(.inline)
+                        .navigationBarBackButtonHidden(true)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button(action: onCloseTapped) {
+                                    Image(systemName: "xmark")
+                                }
+                                .accessibilityIdentifier(AddRecipeAccessibilityID.closeButton)
+                            }
+                        }
+                }
+        }
+    }
+
+    private var inputFormContent: some View {
+        VStack(spacing: ds.spacing.xl) {
+            Spacer()
+                .frame(height: ds.spacing.xl)
+
+            // Icon
+            Image(systemName: "link.badge.plus")
+                .font(.system(size: 60))
+                .foregroundStyle(ds.colors.primaryBrand.color)
+
+            // Title
+            Text(.addRecipeTitle)
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(ds.colors.textPrimary.color)
+
+            // Subtitle
+            Text(.addRecipeSubtitle)
+                .font(.body)
+                .foregroundColor(ds.colors.textSecondary.color)
+                .multilineTextAlignment(.center)
                 .padding(.horizontal, ds.spacing.lg)
-                .padding(.bottom, ds.spacing.xl)
-            }
-            .navigationTitle(String(localized: .addRecipeNavigationTitle))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: onCloseTapped) {
-                        Image(systemName: "xmark")
+
+            Spacer()
+
+            // URL input section
+            VStack(spacing: ds.spacing.md) {
+                HStack {
+                    TextField(
+                        String(localized: .recipeHomeUrlPlaceholder),
+                        text: $urlText
+                    )
+                    .textFieldStyle(.plain)
+                    .keyboardType(.URL)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .onSubmit {
+                        if !urlText.isEmpty {
+                            onExtractTapped()
+                        }
                     }
-                    .accessibilityIdentifier(AddRecipeAccessibilityID.closeButton)
+                    .accessibilityIdentifier(AddRecipeAccessibilityID.urlTextField)
+
+                    if !urlText.isEmpty {
+                        Button(action: { urlText = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(ds.colors.textTertiary.color)
+                        }
+                        .accessibilityIdentifier(AddRecipeAccessibilityID.clearButton)
+                    }
                 }
+                .padding(ds.spacing.md)
+                .background(ds.colors.backgroundSecondary.color)
+                .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+
+                Button(action: onExtractTapped) {
+                    HStack {
+                        Image(systemName: "wand.and.stars")
+                        Text(.recipeHomeExtractButton)
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(ds.spacing.md)
+                    .background(
+                        urlText.isEmpty
+                            ? ds.colors.primaryBrand.color.opacity(0.5)
+                            : ds.colors.primaryBrand.color
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+                }
+                .disabled(urlText.isEmpty)
+                .accessibilityIdentifier(AddRecipeAccessibilityID.extractButton)
             }
+            .padding(.horizontal, ds.spacing.lg)
+            .padding(.bottom, ds.spacing.xl)
         }
     }
 }
@@ -124,7 +136,7 @@ struct AddRecipeView: View {
 #Preview("AddRecipe Empty") {
     AddRecipeView(
         urlText: .constant(""),
-        isLoading: false,
+        isLoading: .constant(false),
         onExtractTapped: {},
         onCloseTapped: {}
     )
@@ -134,17 +146,7 @@ struct AddRecipeView: View {
 #Preview("AddRecipe With URL") {
     AddRecipeView(
         urlText: .constant("https://www.allrecipes.com/recipe/12345"),
-        isLoading: false,
-        onExtractTapped: {},
-        onCloseTapped: {}
-    )
-    .prefireEnabled()
-}
-
-#Preview("AddRecipe Loading") {
-    AddRecipeView(
-        urlText: .constant("https://www.allrecipes.com/recipe/12345"),
-        isLoading: true,
+        isLoading: .constant(false),
         onExtractTapped: {},
         onCloseTapped: {}
     )
