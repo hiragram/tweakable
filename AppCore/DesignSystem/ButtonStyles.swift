@@ -82,6 +82,32 @@ struct TertiaryButtonStyle: ButtonStyle {
     }
 }
 
+// MARK: - Filled Secondary Button Style
+
+struct FilledSecondaryButtonStyle: ButtonStyle {
+    let theme: DesignSystem
+    @Environment(\.isEnabled) private var isEnabled
+
+    init(theme: DesignSystem = .default) {
+        self.theme = theme
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(theme.typography.buttonLarge.font)
+            .foregroundColor(isEnabled ? theme.colors.textPrimary.color : theme.colors.textPrimary.color.opacity(0.5))
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(
+                RoundedRectangle(cornerRadius: theme.cornerRadius.sm)
+                    .fill(isEnabled ? theme.colors.backgroundSecondary.color : theme.colors.backgroundSecondary.color.opacity(0.5))
+            )
+            .contentShape(RoundedRectangle(cornerRadius: theme.cornerRadius.sm))
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(configuration.isPressed ? .none : .spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
+    }
+}
+
 // MARK: - Destructive Button Style
 
 struct DestructiveButtonStyle: ButtonStyle {
