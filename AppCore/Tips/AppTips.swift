@@ -24,6 +24,11 @@ struct AddRecipeButtonTip: Tip {
 
     var rules: [Rule] {
         [
+            // オンボーディングが完了していること
+            #Rule(TipEvents.onboardingCompleted) {
+                $0.donations.count >= 1
+            },
+            // レシピをまだ追加していないこと
             #Rule(TipEvents.recipeAdded) {
                 $0.donations.count == 0
             }

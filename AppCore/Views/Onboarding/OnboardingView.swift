@@ -1,4 +1,5 @@
 import SwiftUI
+import TipKit
 
 /// Onboarding flow with 3 pages introducing the app's features
 struct OnboardingView: View {
@@ -80,6 +81,7 @@ struct OnboardingView: View {
             .accessibilityIdentifier("onboarding_button_next")
         } else {
             Button {
+                TipEvents.onboardingCompleted.sendDonation()
                 onComplete()
             } label: {
                 Text(.onboardingGetStarted)
