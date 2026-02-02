@@ -12,6 +12,14 @@ public struct RootView: View {
     @State private var store: AppStore
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
+    /// UIテスト用: オンボーディングを強制的にスキップするフラグ
+    private let forceSkipOnboarding: Bool
+
+    /// オンボーディングを表示すべきかどうか
+    private var shouldShowOnboarding: Bool {
+        !forceSkipOnboarding && !hasCompletedOnboarding
+    }
+
     #if DEBUG
     @State private var showDebugMenu = false
     #endif
@@ -19,8 +27,11 @@ public struct RootView: View {
     public init(
         recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
         recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil,
-        mockPremium: Bool = false
+        mockPremium: Bool = false,
+        skipOnboarding: Bool = false
     ) {
+        self.forceSkipOnboarding = skipOnboarding
+
         // UIテスト用: mockPremiumがtrueの場合はMockRevenueCatServiceを使用
         let revenueCatService: any RevenueCatServiceProtocol = mockPremium
             ? MockRevenueCatService(isPremium: true)
@@ -34,7 +45,7 @@ public struct RootView: View {
     }
 
     public var body: some View {
-        RecipeHomeContainerView(store: store)
+        content
             .onAppear {
                 store.send(.boot)
             }
@@ -48,14 +59,17 @@ public struct RootView: View {
                 DebugMenuView(store: store)
             }
             #endif
-            .fullScreenCover(isPresented: .init(
-                get: { !hasCompletedOnboarding },
-                set: { if !$0 { hasCompletedOnboarding = true } }
-            )) {
-                OnboardingView(onComplete: {
-                    hasCompletedOnboarding = true
-                })
-            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if shouldShowOnboarding {
+            OnboardingView(onComplete: {
+                hasCompletedOnboarding = true
+            })
+        } else {
+            RecipeHomeContainerView(store: store)
+        }
     }
 }
 

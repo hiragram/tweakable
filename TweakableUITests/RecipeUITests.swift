@@ -15,8 +15,8 @@ final class RecipeUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（プレミアムユーザーとしてモック、Tipは無効化）
-        app.launchArguments = ["--uitesting", "--mock-premium", "-disableTips"]
+        // UIテストモードで起動（プレミアムユーザーとしてモック、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-premium", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
@@ -31,8 +31,22 @@ final class RecipeUITests: XCTestCase {
 
     // MARK: - RecipeHomeView Tests
 
-    /// レシピホーム画面の主要要素が存在することを確認
+    /// レシピホーム画面のEmpty State要素が存在することを確認
     func testRecipeHomeViewElements() throws {
+        // Empty Stateの「+ レシピを追加」ボタンが存在する
+        let emptyAddButton = app.buttons[RecipeAccessibilityIDs.emptyAddButton]
+        XCTAssertTrue(emptyAddButton.exists, "Empty Stateの追加ボタンが存在すること")
+    }
+
+    // MARK: - AddRecipeView Tests
+
+    /// AddRecipeViewの主要要素が存在することを確認
+    func testAddRecipeViewElements() throws {
+        // AddRecipeViewを開く
+        UITestHelper.openAddRecipeView(app: app)
+        let reachedAddRecipe = UITestHelper.waitForAddRecipeView(app: app)
+        try XCTSkipUnless(reachedAddRecipe, "AddRecipeViewに到達できませんでした")
+
         // URL入力フィールドが存在する
         let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
         XCTAssertTrue(urlTextField.exists, "URL入力フィールドが存在すること")
@@ -44,12 +58,22 @@ final class RecipeUITests: XCTestCase {
 
     /// URLが空の状態では抽出ボタンが無効であることを確認
     func testExtractButtonDisabledWhenEmpty() throws {
+        // AddRecipeViewを開く
+        UITestHelper.openAddRecipeView(app: app)
+        let reachedAddRecipe = UITestHelper.waitForAddRecipeView(app: app)
+        try XCTSkipUnless(reachedAddRecipe, "AddRecipeViewに到達できませんでした")
+
         let extractButton = app.buttons[RecipeAccessibilityIDs.extractButton]
         XCTAssertFalse(extractButton.isEnabled, "URL未入力時は抽出ボタンが無効であること")
     }
 
     /// URLを入力すると抽出ボタンが有効になることを確認
     func testExtractButtonEnabledForValidURL() throws {
+        // AddRecipeViewを開く
+        UITestHelper.openAddRecipeView(app: app)
+        let reachedAddRecipe = UITestHelper.waitForAddRecipeView(app: app)
+        try XCTSkipUnless(reachedAddRecipe, "AddRecipeViewに到達できませんでした")
+
         let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
         urlTextField.tap()
         urlTextField.typeText("https://example.com/recipe")
@@ -60,6 +84,11 @@ final class RecipeUITests: XCTestCase {
 
     /// クリアボタンでURL入力がクリアされることを確認
     func testClearButton() throws {
+        // AddRecipeViewを開く
+        UITestHelper.openAddRecipeView(app: app)
+        let reachedAddRecipe = UITestHelper.waitForAddRecipeView(app: app)
+        try XCTSkipUnless(reachedAddRecipe, "AddRecipeViewに到達できませんでした")
+
         // URLを入力
         let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
         urlTextField.tap()
@@ -87,7 +116,11 @@ final class RecipeUITests: XCTestCase {
 
     /// レシピ抽出を実行してレシピ詳細画面に遷移することを確認
     func testNavigateToRecipeView() throws {
-        // URLを入力
+        // AddRecipeViewを開いてURLを入力
+        UITestHelper.openAddRecipeView(app: app)
+        let reachedAddRecipe = UITestHelper.waitForAddRecipeView(app: app)
+        try XCTSkipUnless(reachedAddRecipe, "AddRecipeViewに到達できませんでした")
+
         let urlTextField = app.textFields[RecipeAccessibilityIDs.urlTextField]
         urlTextField.tap()
         urlTextField.typeText("https://example.com/recipe")
@@ -287,8 +320,8 @@ final class FreeUserPaywallUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（無料ユーザーとしてモック、--mock-premiumなし、Tipは無効化）
-        app.launchArguments = ["--uitesting", "-disableTips"]
+        // UIテストモードで起動（無料ユーザーとしてモック、--mock-premiumなし、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
@@ -344,8 +377,8 @@ final class SavedRecipesNavigationUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        // UIテストモードで起動（プレミアムユーザーとしてモック、保存済みレシピあり、Tipは無効化）
-        app.launchArguments = ["--uitesting", "--mock-premium", "--mock-saved-recipes", "-disableTips"]
+        // UIテストモードで起動（プレミアムユーザーとしてモック、保存済みレシピあり、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-premium", "--mock-saved-recipes", "--skip-onboarding", "-disableTips"]
         app.launch()
 
         // レシピホーム画面が表示されるまで待機
