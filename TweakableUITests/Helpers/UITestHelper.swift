@@ -147,6 +147,7 @@ enum UITestHelper {
     /// - Parameters:
     ///   - app: XCUIApplication
     ///   - url: 入力するURL文字列
+    /// - Note: RecipeHomeView（Empty State）からAddRecipeViewを開き、URLを入力して抽出を開始
     static func extractRecipe(app: XCUIApplication, url: String) {
         // 空状態の場合、まずシートを開く
         let urlTextField = app.textFields[AddRecipeAccessibilityIDs.urlTextField]
