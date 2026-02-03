@@ -34,7 +34,7 @@
 			<key>UIApplicationShortcutItemType</key>
 			<string>app.hiragram.Tweakable.debugMenu</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>デバッグメニュー</string>
+			<string>Debug Menu</string>
 			<key>UIApplicationShortcutItemIconSymbolName</key>
 			<string>hammer</string>
 		</dict>
