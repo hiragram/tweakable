@@ -38,9 +38,6 @@ public struct RecipeState: Equatable, Sendable {
     /// 保存済みレシピを読み込み中かどうか
     public var isLoadingSavedRecipes: Bool = false
 
-    /// レシピ保存中かどうか
-    public var isSavingRecipe: Bool = false
-
     /// レシピ削除中かどうか
     public var isDeletingRecipe: Bool = false
 

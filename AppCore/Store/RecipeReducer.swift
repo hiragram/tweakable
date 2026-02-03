@@ -82,10 +82,9 @@ public enum RecipeReducer {
         // MARK: - Persistence
 
         case .saveRecipe:
-            state.isSavingRecipe = true
+            break
 
         case .recipeSaved(let recipe):
-            state.isSavingRecipe = false
             // 既存のレシピを更新、なければ追加
             if let index = state.savedRecipes.firstIndex(where: { $0.id == recipe.id }) {
                 state.savedRecipes[index] = recipe
@@ -94,7 +93,6 @@ public enum RecipeReducer {
             }
 
         case .recipeSaveFailed(let message):
-            state.isSavingRecipe = false
             state.errorMessage = message
 
         case .loadSavedRecipes:

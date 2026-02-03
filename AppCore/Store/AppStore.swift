@@ -124,6 +124,7 @@ public final class AppStore {
             do {
                 let recipe = try await recipeExtractionService.extractRecipe(from: url)
                 send(.recipe(.recipeLoaded(recipe)))
+                send(.recipe(.saveRecipe))
                 TipEvents.recipeAdded.sendDonation()
             } catch {
                 let message = buildRecipeErrorMessage(error, context: .load)
