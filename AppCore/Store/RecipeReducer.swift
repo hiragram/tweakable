@@ -82,6 +82,7 @@ public enum RecipeReducer {
         // MARK: - Persistence
 
         case .saveRecipe:
+            // 副作用のトリガーのみ（実際の保存処理はAppStore.handleRecipeSideEffects内）
             break
 
         case .recipeSaved(let recipe):

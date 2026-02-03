@@ -124,6 +124,7 @@ public final class AppStore {
             do {
                 let recipe = try await recipeExtractionService.extractRecipe(from: url)
                 send(.recipe(.recipeLoaded(recipe)))
+                // レシピ解析完了時に自動保存（ユーザーが明示的に保存操作をしなくても、保存済みレシピ一覧で確認できるようにする）
                 send(.recipe(.saveRecipe))
                 TipEvents.recipeAdded.sendDonation()
             } catch {
