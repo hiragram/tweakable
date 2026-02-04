@@ -51,7 +51,12 @@ public enum RecipeReducer {
         case .approveSubstitution:
             // previewRecipeがnilの場合はcurrentRecipeを上書きしない（防御的コード）
             if let previewRecipe = state.previewRecipe {
-                state.currentRecipe = previewRecipe
+                if let currentRecipe = state.currentRecipe {
+                    // LLM結果にはimageURLsやidが含まれないため、元レシピから引き継ぐ
+                    state.currentRecipe = previewRecipe.preservingIdentity(from: currentRecipe)
+                } else {
+                    state.currentRecipe = previewRecipe
+                }
             }
             state.substitutionTarget = nil
             state.previewRecipe = nil

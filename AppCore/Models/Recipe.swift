@@ -29,6 +29,19 @@ public struct Recipe: Equatable, Sendable, Identifiable {
         self.steps = steps
         self.sourceURL = sourceURL
     }
+
+    /// LLM置き換え結果に元レシピのIDと画像URLを引き継ぐ
+    public func preservingIdentity(from original: Recipe) -> Recipe {
+        Recipe(
+            id: original.id,
+            title: title,
+            description: description,
+            imageURLs: original.imageURLs,
+            ingredientsInfo: ingredientsInfo,
+            steps: steps,
+            sourceURL: sourceURL
+        )
+    }
 }
 
 // MARK: - Ingredients
