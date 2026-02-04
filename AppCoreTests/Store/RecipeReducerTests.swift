@@ -440,25 +440,24 @@ struct RecipeReducerTests {
     // MARK: - Save Recipe Tests
 
     @Test
-    func reduce_saveRecipe_setsSavingState() {
+    func reduce_saveRecipe_doesNotChangeState() {
         var state = RecipeState()
         state.currentRecipe = makeSampleRecipe()
+        let stateBefore = state
 
         RecipeReducer.reduce(state: &state, action: .saveRecipe)
 
-        #expect(state.isSavingRecipe == true)
+        #expect(state == stateBefore)
     }
 
     @Test
-    func reduce_recipeSaved_clearsStateAndAddsToSaved() {
+    func reduce_recipeSaved_addsToSaved() {
         var state = RecipeState()
-        state.isSavingRecipe = true
         let recipe = makeSampleRecipe()
         state.currentRecipe = recipe
 
         RecipeReducer.reduce(state: &state, action: .recipeSaved(recipe))
 
-        #expect(state.isSavingRecipe == false)
         #expect(state.savedRecipes.contains { $0.id == recipe.id })
     }
 
@@ -473,7 +472,6 @@ struct RecipeReducerTests {
             steps: []
         )
         state.savedRecipes = [originalRecipe]
-        state.isSavingRecipe = true
 
         let updatedRecipe = Recipe(
             id: recipeID,
@@ -484,20 +482,17 @@ struct RecipeReducerTests {
 
         RecipeReducer.reduce(state: &state, action: .recipeSaved(updatedRecipe))
 
-        #expect(state.isSavingRecipe == false)
         #expect(state.savedRecipes.count == 1)
         #expect(state.savedRecipes.first?.title == "更新後のタイトル")
         #expect(state.savedRecipes.first?.ingredientsInfo.items.count == 1)
     }
 
     @Test
-    func reduce_recipeSaveFailed_setsErrorAndClearsSaving() {
+    func reduce_recipeSaveFailed_setsError() {
         var state = RecipeState()
-        state.isSavingRecipe = true
 
         RecipeReducer.reduce(state: &state, action: .recipeSaveFailed("保存に失敗しました"))
 
-        #expect(state.isSavingRecipe == false)
         #expect(state.errorMessage == "保存に失敗しました")
     }
 

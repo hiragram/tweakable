@@ -84,29 +84,6 @@ struct StepSubstitutionTip: Tip {
     }
 }
 
-/// レシピ保存Tip
-struct SaveRecipeTip: Tip {
-    var title: Text {
-        Text(.tipSaveRecipeTitle)
-    }
-
-    var message: Text? {
-        Text(.tipSaveRecipeMessage)
-    }
-
-    var image: Image? {
-        Image(systemName: "square.and.arrow.down")
-    }
-
-    var rules: [Rule] {
-        [
-            #Rule(TipEvents.recipeSaved) {
-                $0.donations.count == 0
-            }
-        ]
-    }
-}
-
 // MARK: - Shopping List Tips
 
 /// 買い物リスト作成Tip（空の状態で表示）

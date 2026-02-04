@@ -138,6 +138,68 @@ struct AppStorePremiumTests {
                 store.state.recipe.errorMessage?.contains("プレミアム") == true)
     }
 
+    // MARK: - Auto-Save on Recipe Load Tests
+
+    @Test("レシピ読み込み成功後に自動保存がトリガーされる")
+    func loadRecipe_onSuccess_triggersAutoSave() async {
+        // Arrange
+        let mockPersistenceService = MockRecipePersistenceService()
+        let mockRecipeService = MockRecipeExtractionService()
+        mockRecipeService.recipeToReturn = makeSampleRecipe()
+
+        let store = AppStore(
+            recipeExtractionService: mockRecipeService,
+            recipePersistenceService: mockPersistenceService,
+            revenueCatService: MockRevenueCatServiceForTests()
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act
+        store.send(.recipe(.loadRecipe(url: url)))
+
+        // 副作用が実行されるまで待機
+        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+
+        // Assert
+        #expect(mockPersistenceService.saveRecipeCallCount == 1)
+        #expect(store.state.recipe.currentRecipe != nil)
+    }
+
+    @Test("レシピ読み込み成功後の自動保存が失敗してもレシピは読み込まれている")
+    func loadRecipe_whenAutoSaveFails_recipeStillLoaded() async {
+        // Arrange
+        let mockPersistenceService = MockRecipePersistenceService()
+        let mockRecipeService = MockRecipeExtractionService()
+        mockRecipeService.recipeToReturn = makeSampleRecipe()
+
+        let store = AppStore(
+            recipeExtractionService: mockRecipeService,
+            recipePersistenceService: mockPersistenceService,
+            revenueCatService: MockRevenueCatServiceForTests()
+        )
+
+        // saveRecipeが呼ばれた時にエラーを投げるようにする
+        // ただしextractRecipeは成功させたいので、saveRecipe呼び出し時のみエラーにする
+        // MockRecipePersistenceServiceのerrorToThrowはsave時にも使われる
+        mockPersistenceService.errorToThrow = NSError(domain: "test", code: -1)
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act
+        store.send(.recipe(.loadRecipe(url: url)))
+
+        // 副作用が実行されるまで待機
+        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+
+        // Assert - レシピは読み込まれている
+        #expect(store.state.recipe.currentRecipe != nil)
+        // 保存は試みられた
+        #expect(mockPersistenceService.saveRecipeCallCount == 1)
+        // 保存失敗のエラーがある
+        #expect(store.state.recipe.errorMessage != nil)
+    }
+
     // MARK: - Auto-Save on Substitution Approval Tests
 
     @Test("保存済みレシピをカスタマイズして承認すると自動保存される")

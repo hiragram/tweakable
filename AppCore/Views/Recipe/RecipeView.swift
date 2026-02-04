@@ -1,6 +1,5 @@
 import Prefire
 import SwiftUI
-import TipKit
 
 // MARK: - Accessibility Identifiers
 
@@ -15,8 +14,6 @@ enum RecipeAccessibilityID {
     static func ingredientItem(_ index: Int) -> String { "recipe_button_ingredient_\(index)" }
     static let stepsList = "recipe_list_steps"
     static func stepItem(_ index: Int) -> String { "recipe_button_step_\(index)" }
-    static let shoppingListButton = "recipe_button_shoppingList"
-    static let saveButton = "recipe_button_save"
     static let modifiedBadge = "recipe_badge_modified"
     static let sourceURLLink = "recipe_link_sourceURL"
 }
@@ -28,14 +25,11 @@ struct RecipeView: View {
 
     let recipe: Recipe?
     let isLoading: Bool
-    let isSaving: Bool
     let errorMessage: String?
 
     let onIngredientTapped: (Ingredient) -> Void
     let onStepTapped: (CookingStep) -> Void
     let onRetryTapped: () -> Void
-    let onShoppingListTapped: () -> Void
-    let onSaveTapped: () -> Void
 
     @State private var isTitleVisible: Bool = true
 
@@ -159,27 +153,6 @@ struct RecipeView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(isTitleVisible ? "" : recipe.title)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 16) {
-                    Button(action: onSaveTapped) {
-                        if isSaving {
-                            ProgressView()
-                        } else {
-                            Image(systemName: "square.and.arrow.down")
-                        }
-                    }
-                    .popoverTip(SaveRecipeTip())
-                    .disabled(isSaving)
-                    .accessibilityIdentifier(RecipeAccessibilityID.saveButton)
-
-                    Button(action: onShoppingListTapped) {
-                        Image(systemName: "cart")
-                    }
-                    .accessibilityIdentifier(RecipeAccessibilityID.shoppingListButton)
-                }
-            }
-        }
     }
 
     // MARK: - Hero Image
@@ -442,13 +415,10 @@ struct RecipeView: View {
         RecipeView(
             recipe: nil,
             isLoading: true,
-            isSaving: false,
             errorMessage: nil,
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
     }
     .prefireEnabled()
@@ -459,13 +429,10 @@ struct RecipeView: View {
         RecipeView(
             recipe: nil,
             isLoading: false,
-            isSaving: false,
             errorMessage: String(localized: .recipeErrorLoadFailed),
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
     }
     .prefireEnabled()
@@ -496,13 +463,10 @@ struct RecipeView: View {
                 ]
             ),
             isLoading: false,
-            isSaving: false,
             errorMessage: nil,
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
     }
     .prefireEnabled()
@@ -532,13 +496,10 @@ struct RecipeView: View {
                 ]
             ),
             isLoading: false,
-            isSaving: false,
             errorMessage: nil,
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
     }
     .prefireEnabled()
@@ -582,13 +543,10 @@ struct RecipeView: View {
                 ]
             ),
             isLoading: false,
-            isSaving: false,
             errorMessage: nil,
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
     }
     .prefireEnabled()
@@ -632,13 +590,10 @@ struct RecipeView: View {
                 ]
             ),
             isLoading: false,
-            isSaving: false,
             errorMessage: nil,
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
         .prefireEnabled()
     }
@@ -663,13 +618,10 @@ struct RecipeView: View {
                 sourceURL: URL(string: "https://example.com/recipe")
             ),
             isLoading: false,
-            isSaving: false,
             errorMessage: nil,
             onIngredientTapped: { _ in },
             onStepTapped: { _ in },
-            onRetryTapped: {},
-            onShoppingListTapped: {},
-            onSaveTapped: {}
+            onRetryTapped: {}
         )
     }
     .prefireEnabled()
