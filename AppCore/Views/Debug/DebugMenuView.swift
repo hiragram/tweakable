@@ -15,6 +15,8 @@ struct DebugMenuView: View {
     @State private var showSwitchStoreAlert = false
     @State private var showResetUserAlert = false
     @State private var showDeleteDataAlert = false
+    @State private var showResetSeedDataAlert = false
+    @State private var seedDataResetCompleted = false
     @State private var showTipResetAlert = false
     @State private var tipResetCompleted = false
 
@@ -200,6 +202,38 @@ struct DebugMenuView: View {
                     showDeleteDataAlert = true
                 }
             )
+
+            SettingsDivider()
+
+            SettingsRow(
+                icon: "arrow.counterclockwise",
+                title: LocalizedStringKey("Reset Seed Data Flag"),
+                isLoading: isProcessing,
+                accessibilityIdentifier: "debugMenu_button_resetSeedData",
+                action: {
+                    showResetSeedDataAlert = true
+                }
+            )
+        }
+        .alert(
+            Text("Reset Seed Data"),
+            isPresented: $showResetSeedDataAlert
+        ) {
+            Button(String(localized: "cancel", bundle: .app), role: .cancel) {}
+            Button("Reset", role: .destructive) {
+                store.send(.debug(.resetSeedData))
+                seedDataResetCompleted = true
+            }
+        } message: {
+            Text("Seed data flag will be reset. Restart the app to re-inject seed data.")
+        }
+        .alert(
+            Text("Seed Data Reset"),
+            isPresented: $seedDataResetCompleted
+        ) {
+            Button(String(localized: "ok", bundle: .app)) {}
+        } message: {
+            Text("Restart the app to re-inject seed data.")
         }
     }
 
