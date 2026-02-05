@@ -198,10 +198,10 @@ struct SubstitutionSheetView: View {
         guard let preview = previewRecipe,
               let original = originalRecipe else { return [] }
 
-        return preview.ingredientsInfo.items
+        return preview.ingredientsInfo.allItems
             .filter { $0.isModified }
             .compactMap { newIngredient in
-                guard let originalIngredient = original.ingredientsInfo.items.first(where: { $0.id == newIngredient.id }) else {
+                guard let originalIngredient = original.ingredientsInfo.allItems.first(where: { $0.id == newIngredient.id }) else {
                     return nil
                 }
                 return (original: originalIngredient, new: newIngredient)
@@ -212,10 +212,10 @@ struct SubstitutionSheetView: View {
         guard let preview = previewRecipe,
               let original = originalRecipe else { return [] }
 
-        return preview.steps
+        return preview.allSteps
             .filter { $0.isModified }
             .compactMap { newStep in
-                guard let originalStep = original.steps.first(where: { $0.id == newStep.id }) else {
+                guard let originalStep = original.allSteps.first(where: { $0.id == newStep.id }) else {
                     return nil
                 }
                 return (original: originalStep, new: newStep)
@@ -226,16 +226,16 @@ struct SubstitutionSheetView: View {
         guard let preview = previewRecipe,
               let original = originalRecipe else { return [] }
 
-        let originalIDs = Set(original.ingredientsInfo.items.map { $0.id })
-        return preview.ingredientsInfo.items.filter { !originalIDs.contains($0.id) }
+        let originalIDs = Set(original.ingredientsInfo.allItems.map { $0.id })
+        return preview.ingredientsInfo.allItems.filter { !originalIDs.contains($0.id) }
     }
 
     private var addedSteps: [CookingStep] {
         guard let preview = previewRecipe,
               let original = originalRecipe else { return [] }
 
-        let originalIDs = Set(original.steps.map { $0.id })
-        return preview.steps.filter { !originalIDs.contains($0.id) }
+        let originalIDs = Set(original.allSteps.map { $0.id })
+        return preview.allSteps.filter { !originalIDs.contains($0.id) }
     }
 
     private func formatIngredient(_ ingredient: Ingredient) -> String {
@@ -647,28 +647,36 @@ private struct AddedItemView: View {
         title: "唐揚げ",
         ingredientsInfo: Ingredients(
             servings: "2人分",
-            items: [
-                Ingredient(id: originalID, name: "鶏肉", amount: "200g"),
-                Ingredient(name: "塩", amount: "少々")
+            sections: [
+                IngredientSection(items: [
+                    Ingredient(id: originalID, name: "鶏肉", amount: "200g"),
+                    Ingredient(name: "塩", amount: "少々")
+                ])
             ]
         ),
-        steps: [
-            CookingStep(stepNumber: 1, instruction: "鶏肉を一口大に切る"),
-            CookingStep(stepNumber: 2, instruction: "塩をふる")
+        stepSections: [
+            CookingStepSection(items: [
+                CookingStep(stepNumber: 1, instruction: "鶏肉を一口大に切る"),
+                CookingStep(stepNumber: 2, instruction: "塩をふる")
+            ])
         ]
     )
     let preview = Recipe(
         title: "唐揚げ",
         ingredientsInfo: Ingredients(
             servings: "2人分",
-            items: [
-                Ingredient(id: originalID, name: "豚肉", amount: "200g", isModified: true),
-                Ingredient(name: "塩", amount: "少々")
+            sections: [
+                IngredientSection(items: [
+                    Ingredient(id: originalID, name: "豚肉", amount: "200g", isModified: true),
+                    Ingredient(name: "塩", amount: "少々")
+                ])
             ]
         ),
-        steps: [
-            CookingStep(stepNumber: 1, instruction: "豚肉を一口大に切る", isModified: true),
-            CookingStep(stepNumber: 2, instruction: "塩をふる")
+        stepSections: [
+            CookingStepSection(items: [
+                CookingStep(stepNumber: 1, instruction: "豚肉を一口大に切る", isModified: true),
+                CookingStep(stepNumber: 2, instruction: "塩をふる")
+            ])
         ]
     )
 
@@ -696,17 +704,21 @@ private struct AddedItemView: View {
         title: "唐揚げ",
         ingredientsInfo: Ingredients(
             servings: "2人分",
-            items: [Ingredient(id: originalID, name: "鶏肉", amount: "200g")]
+            sections: [
+                IngredientSection(items: [Ingredient(id: originalID, name: "鶏肉", amount: "200g")])
+            ]
         ),
-        steps: []
+        stepSections: []
     )
     let preview = Recipe(
         title: "唐揚げ",
         ingredientsInfo: Ingredients(
             servings: "2人分",
-            items: [Ingredient(id: originalID, name: "豚肉", amount: "200g", isModified: true)]
+            sections: [
+                IngredientSection(items: [Ingredient(id: originalID, name: "豚肉", amount: "200g", isModified: true)])
+            ]
         ),
-        steps: []
+        stepSections: []
     )
 
     return SubstitutionSheetView(

@@ -14,13 +14,17 @@ struct OpenAIClientTests {
             description: "テスト用のレシピです",
             imageURLs: ["https://example.com/image.jpg"],
             servings: "2人分",
-            ingredients: [
-                .init(name: "玉ねぎ", amount: "1個"),
-                .init(name: "にんじん", amount: "1本")
+            ingredientSections: [
+                .init(ingredients: [
+                    .init(name: "玉ねぎ", amount: "1個"),
+                    .init(name: "にんじん", amount: "1本")
+                ])
             ],
-            steps: [
-                .init(stepNumber: 1, instruction: "野菜を切る", imageURLs: nil),
-                .init(stepNumber: 2, instruction: "炒める", imageURLs: ["https://example.com/step2.jpg"])
+            stepSections: [
+                .init(steps: [
+                    .init(stepNumber: 1, instruction: "野菜を切る", imageURLs: nil),
+                    .init(stepNumber: 2, instruction: "炒める", imageURLs: ["https://example.com/step2.jpg"])
+                ])
             ]
         )
 
@@ -30,12 +34,12 @@ struct OpenAIClientTests {
         #expect(recipe.description == "テスト用のレシピです")
         #expect(recipe.imageURLs.count == 1)
         #expect(recipe.ingredientsInfo.servings == "2人分")
-        #expect(recipe.ingredientsInfo.items.count == 2)
-        #expect(recipe.ingredientsInfo.items[0].name == "玉ねぎ")
-        #expect(recipe.ingredientsInfo.items[0].amount == "1個")
-        #expect(recipe.steps.count == 2)
-        #expect(recipe.steps[0].instruction == "野菜を切る")
-        #expect(recipe.steps[1].imageURLs.count == 1)
+        #expect(recipe.ingredientsInfo.allItems.count == 2)
+        #expect(recipe.ingredientsInfo.allItems[0].name == "玉ねぎ")
+        #expect(recipe.ingredientsInfo.allItems[0].amount == "1個")
+        #expect(recipe.allSteps.count == 2)
+        #expect(recipe.allSteps[0].instruction == "野菜を切る")
+        #expect(recipe.allSteps[1].imageURLs.count == 1)
         #expect(recipe.sourceURL?.absoluteString == "https://example.com/recipe")
     }
 
@@ -264,8 +268,8 @@ struct OpenAIClientTests {
             {
                 "description": "Test",
                 "imageURLs": [],
-                "ingredients": [],
-                "steps": []
+                "ingredientSections": [],
+                "stepSections": []
             }
             """
 
@@ -290,11 +294,11 @@ struct OpenAIClientTests {
                 "description": "A test recipe",
                 "imageURLs": ["https://example.com/image.jpg"],
                 "servings": "4人分",
-                "ingredients": [
-                    {"name": "Flour", "amount": "2 cups"}
+                "ingredientSections": [
+                    {"ingredients": [{"name": "Flour", "amount": "2 cups"}]}
                 ],
-                "steps": [
-                    {"stepNumber": 1, "instruction": "Mix ingredients", "imageURLs": []}
+                "stepSections": [
+                    {"steps": [{"stepNumber": 1, "instruction": "Mix ingredients", "imageURLs": []}]}
                 ]
             }
             """
@@ -302,8 +306,8 @@ struct OpenAIClientTests {
         let recipe = try OpenAIClient.testableDecodeRecipe(content: validJson, sourceURL: sourceURL)
 
         #expect(recipe.title == "Test Recipe")
-        #expect(recipe.ingredientsInfo.items.count == 1)
-        #expect(recipe.steps.count == 1)
+        #expect(recipe.ingredientsInfo.allItems.count == 1)
+        #expect(recipe.allSteps.count == 1)
     }
 
     // MARK: - prepareContent Tests
@@ -427,31 +431,35 @@ struct OpenAIClientTests {
             description: nil,
             imageURLs: [],
             servings: "2人分",
-            ingredients: [
-                .init(name: "豚肉", amount: "200g", isModified: true),
-                .init(name: "塩", amount: "少々", isModified: false),
-                .init(name: "こしょう", amount: "少々")  // isModifiedなし（nil）
+            ingredientSections: [
+                .init(ingredients: [
+                    .init(name: "豚肉", amount: "200g", isModified: true),
+                    .init(name: "塩", amount: "少々", isModified: false),
+                    .init(name: "こしょう", amount: "少々")  // isModifiedなし（nil）
+                ])
             ],
-            steps: [
-                .init(stepNumber: 1, instruction: "豚肉を切る", imageURLs: nil, isModified: true),
-                .init(stepNumber: 2, instruction: "塩をふる", imageURLs: nil, isModified: false),
-                .init(stepNumber: 3, instruction: "焼く", imageURLs: nil)  // isModifiedなし（nil）
+            stepSections: [
+                .init(steps: [
+                    .init(stepNumber: 1, instruction: "豚肉を切る", imageURLs: nil, isModified: true),
+                    .init(stepNumber: 2, instruction: "塩をふる", imageURLs: nil, isModified: false),
+                    .init(stepNumber: 3, instruction: "焼く", imageURLs: nil)  // isModifiedなし（nil）
+                ])
             ]
         )
 
         let recipe = response.toRecipe(sourceURL: URL(string: "https://example.com")!)
 
         // isModified: true が保持される
-        #expect(recipe.ingredientsInfo.items[0].isModified == true)
-        #expect(recipe.steps[0].isModified == true)
+        #expect(recipe.ingredientsInfo.allItems[0].isModified == true)
+        #expect(recipe.allSteps[0].isModified == true)
 
         // isModified: false が保持される
-        #expect(recipe.ingredientsInfo.items[1].isModified == false)
-        #expect(recipe.steps[1].isModified == false)
+        #expect(recipe.ingredientsInfo.allItems[1].isModified == false)
+        #expect(recipe.allSteps[1].isModified == false)
 
         // isModified: nil は false にデフォルト
-        #expect(recipe.ingredientsInfo.items[2].isModified == false)
-        #expect(recipe.steps[2].isModified == false)
+        #expect(recipe.ingredientsInfo.allItems[2].isModified == false)
+        #expect(recipe.allSteps[2].isModified == false)
     }
 
     @Test
@@ -463,23 +471,31 @@ struct OpenAIClientTests {
                 "description": null,
                 "imageURLs": [],
                 "servings": "2人分",
-                "ingredients": [
-                    {"name": "豚肉", "amount": "200g", "isModified": true},
-                    {"name": "塩", "amount": "少々", "isModified": false}
+                "ingredientSections": [
+                    {
+                        "ingredients": [
+                            {"name": "豚肉", "amount": "200g", "isModified": true},
+                            {"name": "塩", "amount": "少々", "isModified": false}
+                        ]
+                    }
                 ],
-                "steps": [
-                    {"stepNumber": 1, "instruction": "豚肉を切る", "imageURLs": [], "isModified": true},
-                    {"stepNumber": 2, "instruction": "塩をふる", "imageURLs": [], "isModified": false}
+                "stepSections": [
+                    {
+                        "steps": [
+                            {"stepNumber": 1, "instruction": "豚肉を切る", "imageURLs": [], "isModified": true},
+                            {"stepNumber": 2, "instruction": "塩をふる", "imageURLs": [], "isModified": false}
+                        ]
+                    }
                 ]
             }
             """
 
         let recipe = try OpenAIClient.testableDecodeRecipe(content: jsonWithModified, sourceURL: sourceURL)
 
-        #expect(recipe.ingredientsInfo.items[0].isModified == true)
-        #expect(recipe.ingredientsInfo.items[1].isModified == false)
-        #expect(recipe.steps[0].isModified == true)
-        #expect(recipe.steps[1].isModified == false)
+        #expect(recipe.ingredientsInfo.allItems[0].isModified == true)
+        #expect(recipe.ingredientsInfo.allItems[1].isModified == false)
+        #expect(recipe.allSteps[0].isModified == true)
+        #expect(recipe.allSteps[1].isModified == false)
     }
 
     // MARK: - substituteRecipe Tests
@@ -490,8 +506,14 @@ struct OpenAIClientTests {
         let client = OpenAIClient(configurationService: mockConfig)
         let recipe = Recipe(
             title: "テスト料理",
-            ingredientsInfo: Ingredients(items: [Ingredient(name: "鶏肉", amount: "200g")]),
-            steps: [CookingStep(stepNumber: 1, instruction: "鶏肉を切る")]
+            ingredientsInfo: Ingredients(
+                sections: [
+                    IngredientSection(items: [Ingredient(name: "鶏肉", amount: "200g")])
+                ]
+            ),
+            stepSections: [
+                CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "鶏肉を切る")])
+            ]
         )
 
         await #expect(throws: OpenAIClientError.apiKeyNotConfigured) {

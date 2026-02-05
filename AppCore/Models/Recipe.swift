@@ -9,7 +9,7 @@ public struct Recipe: Equatable, Sendable, Identifiable {
     public let description: String?
     public let imageURLs: [ImageSource]
     public var ingredientsInfo: Ingredients
-    public var steps: [CookingStep]
+    public var stepSections: [CookingStepSection]
     public let sourceURL: URL?
 
     public init(
@@ -18,7 +18,7 @@ public struct Recipe: Equatable, Sendable, Identifiable {
         description: String? = nil,
         imageURLs: [ImageSource] = [],
         ingredientsInfo: Ingredients,
-        steps: [CookingStep],
+        stepSections: [CookingStepSection],
         sourceURL: URL? = nil
     ) {
         self.id = id
@@ -26,8 +26,13 @@ public struct Recipe: Equatable, Sendable, Identifiable {
         self.description = description
         self.imageURLs = imageURLs
         self.ingredientsInfo = ingredientsInfo
-        self.steps = steps
+        self.stepSections = stepSections
         self.sourceURL = sourceURL
+    }
+
+    /// 全調理工程をフラットに取得（後方互換性のため）
+    public var allSteps: [CookingStep] {
+        stepSections.flatMap { $0.items }
     }
 }
 
@@ -37,14 +42,40 @@ public struct Recipe: Equatable, Sendable, Identifiable {
 public struct Ingredients: Equatable, Sendable {
     /// 何人分の材料か
     public let servings: String?
-    /// 材料リスト
-    public var items: [Ingredient]
+    /// 材料セクションリスト
+    public var sections: [IngredientSection]
 
     public init(
         servings: String? = nil,
-        items: [Ingredient]
+        sections: [IngredientSection]
     ) {
         self.servings = servings
+        self.sections = sections
+    }
+
+    /// 全材料をフラットに取得（後方互換性のため）
+    public var allItems: [Ingredient] {
+        sections.flatMap { $0.items }
+    }
+}
+
+// MARK: - IngredientSection
+
+/// 材料セクション
+public struct IngredientSection: Equatable, Sendable, Identifiable {
+    public let id: UUID
+    /// セクション見出し（nilの場合は見出しなしで表示）
+    public let header: String?
+    /// このセクションの材料リスト
+    public var items: [Ingredient]
+
+    public init(
+        id: UUID = UUID(),
+        header: String? = nil,
+        items: [Ingredient]
+    ) {
+        self.id = id
+        self.header = header
         self.items = items
     }
 }
@@ -69,6 +100,27 @@ public struct Ingredient: Equatable, Sendable, Identifiable {
         self.name = name
         self.amount = amount
         self.isModified = isModified
+    }
+}
+
+// MARK: - CookingStepSection
+
+/// 調理工程セクション
+public struct CookingStepSection: Equatable, Sendable, Identifiable {
+    public let id: UUID
+    /// セクション見出し（nilの場合は見出しなしで表示）
+    public let header: String?
+    /// このセクションの調理工程リスト
+    public var items: [CookingStep]
+
+    public init(
+        id: UUID = UUID(),
+        header: String? = nil,
+        items: [CookingStep]
+    ) {
+        self.id = id
+        self.header = header
+        self.items = items
     }
 }
 

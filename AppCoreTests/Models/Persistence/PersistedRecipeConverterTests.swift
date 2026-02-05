@@ -11,7 +11,9 @@ struct PersistedRecipeConverterTests {
     private func makeInMemoryContainer() throws -> ModelContainer {
         let schema = Schema([
             PersistedRecipe.self,
+            PersistedIngredientSection.self,
             PersistedIngredient.self,
+            PersistedCookingStepSection.self,
             PersistedCookingStep.self,
             PersistedShoppingList.self,
             PersistedShoppingListItem.self,
@@ -48,44 +50,58 @@ struct PersistedRecipeConverterTests {
     }
 
     @Test
-    func toDomain_convertsIngredients() throws {
+    func toDomain_convertsIngredientSections() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
         let persisted = PersistedRecipe(id: UUID(), title: "テスト")
-        let ingredient1 = PersistedIngredient(name: "鶏肉", amount: "200g")
-        let ingredient2 = PersistedIngredient(name: "塩", amount: "小さじ1", isModified: true)
-        persisted.ingredients = [ingredient1, ingredient2]
+
+        // セクションを作成
+        let section = PersistedIngredientSection(header: "メイン材料", sortOrder: 0)
+        let ingredient1 = PersistedIngredient(name: "鶏肉", amount: "200g", sortOrder: 0)
+        let ingredient2 = PersistedIngredient(name: "塩", amount: "小さじ1", isModified: true, sortOrder: 1)
+        section.ingredients = [ingredient1, ingredient2]
+        persisted.ingredientSections = [section]
+
         context.insert(persisted)
 
         let domain = persisted.toDomain()
 
-        #expect(domain.ingredientsInfo.items.count == 2)
-        #expect(domain.ingredientsInfo.items[0].name == "鶏肉")
-        #expect(domain.ingredientsInfo.items[0].amount == "200g")
-        #expect(domain.ingredientsInfo.items[0].isModified == false)
-        #expect(domain.ingredientsInfo.items[1].name == "塩")
-        #expect(domain.ingredientsInfo.items[1].isModified == true)
+        #expect(domain.ingredientsInfo.sections.count == 1)
+        #expect(domain.ingredientsInfo.sections[0].header == "メイン材料")
+        #expect(domain.ingredientsInfo.allItems.count == 2)
+        #expect(domain.ingredientsInfo.allItems[0].name == "鶏肉")
+        #expect(domain.ingredientsInfo.allItems[0].amount == "200g")
+        #expect(domain.ingredientsInfo.allItems[0].isModified == false)
+        #expect(domain.ingredientsInfo.allItems[1].name == "塩")
+        #expect(domain.ingredientsInfo.allItems[1].isModified == true)
     }
 
     @Test
-    func toDomain_convertsCookingSteps() throws {
+    func toDomain_convertsCookingStepSections() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
         let persisted = PersistedRecipe(id: UUID(), title: "テスト")
-        let step1 = PersistedCookingStep(stepNumber: 1, instruction: "材料を切る")
-        let step2 = PersistedCookingStep(stepNumber: 2, instruction: "炒める", isModified: true)
-        persisted.steps = [step1, step2]
+
+        // セクションを作成
+        let section = PersistedCookingStepSection(header: "下準備", sortOrder: 0)
+        let step1 = PersistedCookingStep(stepNumber: 1, instruction: "材料を切る", sortOrder: 0)
+        let step2 = PersistedCookingStep(stepNumber: 2, instruction: "炒める", isModified: true, sortOrder: 1)
+        section.steps = [step1, step2]
+        persisted.stepSections = [section]
+
         context.insert(persisted)
 
         let domain = persisted.toDomain()
 
-        #expect(domain.steps.count == 2)
-        #expect(domain.steps[0].stepNumber == 1)
-        #expect(domain.steps[0].instruction == "材料を切る")
-        #expect(domain.steps[1].stepNumber == 2)
-        #expect(domain.steps[1].isModified == true)
+        #expect(domain.stepSections.count == 1)
+        #expect(domain.stepSections[0].header == "下準備")
+        #expect(domain.allSteps.count == 2)
+        #expect(domain.allSteps[0].stepNumber == 1)
+        #expect(domain.allSteps[0].instruction == "材料を切る")
+        #expect(domain.allSteps[1].stepNumber == 2)
+        #expect(domain.allSteps[1].isModified == true)
     }
 
     @Test
@@ -123,8 +139,8 @@ struct PersistedRecipeConverterTests {
             id: id,
             title: "ドメインレシピ",
             description: "説明文",
-            ingredientsInfo: Ingredients(servings: "2人分", items: []),
-            steps: [],
+            ingredientsInfo: Ingredients(servings: "2人分", sections: []),
+            stepSections: [],
             sourceURL: URL(string: "https://example.com/recipe")
         )
 
@@ -139,56 +155,64 @@ struct PersistedRecipeConverterTests {
 
     @Test
     @MainActor
-    func fromDomain_convertsIngredients() throws {
+    func fromDomain_convertsIngredientSections() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
         let ingredients = Ingredients(
             servings: nil,
-            items: [
-                Ingredient(name: "玉ねぎ", amount: "1個"),
-                Ingredient(name: "にんにく", amount: "2片", isModified: true)
+            sections: [
+                IngredientSection(header: "野菜", items: [
+                    Ingredient(name: "玉ねぎ", amount: "1個"),
+                    Ingredient(name: "にんにく", amount: "2片", isModified: true)
+                ])
             ]
         )
         let domain = Recipe(
             id: UUID(),
             title: "テスト",
             ingredientsInfo: ingredients,
-            steps: []
+            stepSections: []
         )
 
         let persisted = PersistedRecipe.from(domain, context: context)
 
-        #expect(persisted.ingredients.count == 2)
-        #expect(persisted.ingredients[0].name == "玉ねぎ")
-        #expect(persisted.ingredients[0].amount == "1個")
-        #expect(persisted.ingredients[1].name == "にんにく")
-        #expect(persisted.ingredients[1].isModified == true)
+        #expect(persisted.ingredientSections.count == 1)
+        #expect(persisted.ingredientSections[0].header == "野菜")
+        #expect(persisted.ingredientSections[0].ingredients.count == 2)
+        #expect(persisted.ingredientSections[0].ingredients[0].name == "玉ねぎ")
+        #expect(persisted.ingredientSections[0].ingredients[0].amount == "1個")
+        #expect(persisted.ingredientSections[0].ingredients[1].name == "にんにく")
+        #expect(persisted.ingredientSections[0].ingredients[1].isModified == true)
     }
 
     @Test
     @MainActor
-    func fromDomain_convertsCookingSteps() throws {
+    func fromDomain_convertsCookingStepSections() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
         let domain = Recipe(
             id: UUID(),
             title: "テスト",
-            ingredientsInfo: Ingredients(items: []),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "下準備"),
-                CookingStep(stepNumber: 2, instruction: "調理", isModified: true)
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: [
+                CookingStepSection(header: "調理", items: [
+                    CookingStep(stepNumber: 1, instruction: "下準備"),
+                    CookingStep(stepNumber: 2, instruction: "調理", isModified: true)
+                ])
             ]
         )
 
         let persisted = PersistedRecipe.from(domain, context: context)
 
-        #expect(persisted.steps.count == 2)
-        #expect(persisted.steps[0].stepNumber == 1)
-        #expect(persisted.steps[0].instruction == "下準備")
-        #expect(persisted.steps[1].stepNumber == 2)
-        #expect(persisted.steps[1].isModified == true)
+        #expect(persisted.stepSections.count == 1)
+        #expect(persisted.stepSections[0].header == "調理")
+        #expect(persisted.stepSections[0].steps.count == 2)
+        #expect(persisted.stepSections[0].steps[0].stepNumber == 1)
+        #expect(persisted.stepSections[0].steps[0].instruction == "下準備")
+        #expect(persisted.stepSections[0].steps[1].stepNumber == 2)
+        #expect(persisted.stepSections[0].steps[1].isModified == true)
     }
 
     @Test
@@ -204,8 +228,8 @@ struct PersistedRecipeConverterTests {
                 .remote(url: URL(string: "https://example.com/a.jpg")!),
                 .remote(url: URL(string: "https://example.com/b.jpg")!)
             ],
-            ingredientsInfo: Ingredients(items: []),
-            steps: []
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
         )
 
         let persisted = PersistedRecipe.from(domain, context: context)
@@ -229,8 +253,8 @@ struct PersistedRecipeConverterTests {
                 .local(fileURL: URL(fileURLWithPath: "/tmp/local.jpg")),
                 .uiImage(UIImage())
             ],
-            ingredientsInfo: Ingredients(items: []),
-            steps: []
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
         )
 
         let persisted = PersistedRecipe.from(domain, context: context)
@@ -256,14 +280,18 @@ struct PersistedRecipeConverterTests {
             imageURLs: [.remote(url: URL(string: "https://example.com/img.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "3人分",
-                items: [
-                    Ingredient(name: "豚肉", amount: "300g", isModified: false),
-                    Ingredient(name: "醤油", amount: "大さじ2", isModified: true)
+                sections: [
+                    IngredientSection(header: "メイン", items: [
+                        Ingredient(name: "豚肉", amount: "300g", isModified: false),
+                        Ingredient(name: "醤油", amount: "大さじ2", isModified: true)
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "切る"),
-                CookingStep(stepNumber: 2, instruction: "焼く", isModified: true)
+            stepSections: [
+                CookingStepSection(header: "調理工程", items: [
+                    CookingStep(stepNumber: 1, instruction: "切る"),
+                    CookingStep(stepNumber: 2, instruction: "焼く", isModified: true)
+                ])
             ],
             sourceURL: URL(string: "https://example.com/recipe")
         )
@@ -276,8 +304,10 @@ struct PersistedRecipeConverterTests {
         #expect(restored.title == original.title)
         #expect(restored.description == original.description)
         #expect(restored.ingredientsInfo.servings == original.ingredientsInfo.servings)
-        #expect(restored.ingredientsInfo.items.count == original.ingredientsInfo.items.count)
-        #expect(restored.steps.count == original.steps.count)
+        #expect(restored.ingredientsInfo.sections.count == original.ingredientsInfo.sections.count)
+        #expect(restored.ingredientsInfo.allItems.count == original.ingredientsInfo.allItems.count)
+        #expect(restored.stepSections.count == original.stepSections.count)
+        #expect(restored.allSteps.count == original.allSteps.count)
         #expect(restored.sourceURL == original.sourceURL)
     }
 }

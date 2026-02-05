@@ -36,32 +36,60 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
             }
             existing.updatedAt = Date()
 
-            // 材料を更新
-            existing.ingredients.forEach { context.delete($0) }
-            existing.ingredients = recipe.ingredientsInfo.items.map { item in
-                PersistedIngredient(
-                    id: item.id,
-                    name: item.name,
-                    amount: item.amount,
-                    isModified: item.isModified
+            // 材料セクションを更新
+            for section in existing.ingredientSections {
+                for ingredient in section.ingredients {
+                    context.delete(ingredient)
+                }
+                context.delete(section)
+            }
+            existing.ingredientSections = recipe.ingredientsInfo.sections.enumerated().map { sectionIndex, section in
+                let persistedIngredients = section.items.enumerated().map { itemIndex, item in
+                    PersistedIngredient(
+                        id: item.id,
+                        name: item.name,
+                        amount: item.amount,
+                        isModified: item.isModified,
+                        sortOrder: itemIndex
+                    )
+                }
+                return PersistedIngredientSection(
+                    id: section.id,
+                    header: section.header,
+                    sortOrder: sectionIndex,
+                    ingredients: persistedIngredients
                 )
             }
 
-            // 工程を更新
-            existing.steps.forEach { context.delete($0) }
-            existing.steps = recipe.steps.map { step in
-                let imageURLStrings = step.imageURLs.compactMap { imageSource -> String? in
-                    if case .remote(let url) = imageSource {
-                        return url.absoluteString
-                    }
-                    return nil
+            // 工程セクションを更新
+            for section in existing.stepSections {
+                for step in section.steps {
+                    context.delete(step)
                 }
-                return PersistedCookingStep(
-                    id: step.id,
-                    stepNumber: step.stepNumber,
-                    instruction: step.instruction,
-                    imageURLStrings: imageURLStrings,
-                    isModified: step.isModified
+                context.delete(section)
+            }
+            existing.stepSections = recipe.stepSections.enumerated().map { sectionIndex, section in
+                let persistedSteps = section.items.enumerated().map { itemIndex, step in
+                    let imageURLStrings = step.imageURLs.compactMap { imageSource -> String? in
+                        if case .remote(let url) = imageSource {
+                            return url.absoluteString
+                        }
+                        return nil
+                    }
+                    return PersistedCookingStep(
+                        id: step.id,
+                        stepNumber: step.stepNumber,
+                        instruction: step.instruction,
+                        imageURLStrings: imageURLStrings,
+                        isModified: step.isModified,
+                        sortOrder: itemIndex
+                    )
+                }
+                return PersistedCookingStepSection(
+                    id: section.id,
+                    header: section.header,
+                    sortOrder: sectionIndex,
+                    steps: persistedSteps
                 )
             }
         } else {
@@ -230,10 +258,12 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
         var ingredientMap: [String: [(amount: String?, recipeID: UUID, recipeTitle: String)]] = [:]
 
         for recipe in recipes {
-            for ingredient in recipe.ingredients {
-                let key = ingredient.name.lowercased()
-                let entry = (amount: ingredient.amount, recipeID: recipe.id, recipeTitle: recipe.title)
-                ingredientMap[key, default: []].append(entry)
+            for section in recipe.ingredientSections {
+                for ingredient in section.ingredients {
+                    let key = ingredient.name.lowercased()
+                    let entry = (amount: ingredient.amount, recipeID: recipe.id, recipeTitle: recipe.title)
+                    ingredientMap[key, default: []].append(entry)
+                }
             }
         }
 

@@ -12,14 +12,18 @@ struct RecipeReducerTests {
             title: "テスト料理",
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "鶏肉", amount: "200g"),
-                    Ingredient(name: "塩", amount: "少々")
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "鶏肉", amount: "200g"),
+                        Ingredient(name: "塩", amount: "少々")
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "鶏肉を切る"),
-                CookingStep(stepNumber: 2, instruction: "塩をふる")
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "鶏肉を切る"),
+                    CookingStep(stepNumber: 2, instruction: "塩をふる")
+                ])
             ],
             sourceURL: URL(string: "https://example.com/recipe")
         )
@@ -142,14 +146,18 @@ struct RecipeReducerTests {
             title: "テスト料理",
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "豚肉", amount: "200g", isModified: true),
-                    Ingredient(name: "塩", amount: "少々")
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "豚肉", amount: "200g", isModified: true),
+                        Ingredient(name: "塩", amount: "少々")
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true),
-                CookingStep(stepNumber: 2, instruction: "塩をふる")
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true),
+                    CookingStep(stepNumber: 2, instruction: "塩をふる")
+                ])
             ]
         )
 
@@ -229,11 +237,17 @@ struct RecipeReducerTests {
             title: "テスト料理（更新後）",
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "豚肉", amount: "200g", isModified: true)
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "豚肉", amount: "200g", isModified: true)
+                    ])
                 ]
             ),
-            steps: [CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true)]
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true)
+                ])
+            ]
         )
         state.previewRecipe = previewRecipe
 
@@ -277,8 +291,8 @@ struct RecipeReducerTests {
 
         let previewRecipe = Recipe(
             title: "テスト料理（更新後）",
-            ingredientsInfo: Ingredients(items: []),
-            steps: []
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
         )
         state.previewRecipe = previewRecipe
 
@@ -383,14 +397,14 @@ struct RecipeReducerTests {
         let recipe3 = Recipe(
             id: id,
             title: "テスト",
-            ingredientsInfo: Ingredients(items: []),
-            steps: []
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
         )
         let recipe4 = Recipe(
             id: id,
             title: "テスト",
-            ingredientsInfo: Ingredients(items: []),
-            steps: []
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
         )
         #expect(recipe3 == recipe4)
     }
@@ -468,23 +482,23 @@ struct RecipeReducerTests {
         let originalRecipe = Recipe(
             id: recipeID,
             title: "元のタイトル",
-            ingredientsInfo: Ingredients(items: []),
-            steps: []
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
         )
         state.savedRecipes = [originalRecipe]
 
         let updatedRecipe = Recipe(
             id: recipeID,
             title: "更新後のタイトル",
-            ingredientsInfo: Ingredients(items: [Ingredient(name: "鶏肉", amount: "200g")]),
-            steps: []
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "鶏肉", amount: "200g")])]),
+            stepSections: []
         )
 
         RecipeReducer.reduce(state: &state, action: .recipeSaved(updatedRecipe))
 
         #expect(state.savedRecipes.count == 1)
         #expect(state.savedRecipes.first?.title == "更新後のタイトル")
-        #expect(state.savedRecipes.first?.ingredientsInfo.items.count == 1)
+        #expect(state.savedRecipes.first?.ingredientsInfo.allItems.count == 1)
     }
 
     @Test

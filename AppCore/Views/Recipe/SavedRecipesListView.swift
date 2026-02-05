@@ -99,14 +99,14 @@ struct SavedRecipesListView: View {
 
                     HStack(spacing: ds.spacing.sm) {
                         Label(
-                            "\(recipe.ingredientsInfo.items.count)",
+                            "\(recipe.ingredientsInfo.allItems.count)",
                             systemImage: "carrot.fill"
                         )
                         .font(.caption)
                         .foregroundColor(ds.colors.textTertiary.color)
 
                         Label(
-                            "\(recipe.steps.count)",
+                            "\(recipe.allSteps.count)",
                             systemImage: "list.number"
                         )
                         .font(.caption)
@@ -214,15 +214,19 @@ struct SavedRecipesListView: View {
                     imageURLs: [],
                     ingredientsInfo: Ingredients(
                         servings: "2人分",
-                        items: [
-                            Ingredient(name: "鶏もも肉", amount: "2枚"),
-                            Ingredient(name: "醤油", amount: "大さじ3"),
-                            Ingredient(name: "みりん", amount: "大さじ2")
+                        sections: [
+                            IngredientSection(items: [
+                                Ingredient(name: "鶏もも肉", amount: "2枚"),
+                                Ingredient(name: "醤油", amount: "大さじ3"),
+                                Ingredient(name: "みりん", amount: "大さじ2")
+                            ])
                         ]
                     ),
-                    steps: [
-                        CookingStep(stepNumber: 1, instruction: "鶏もも肉を切る"),
-                        CookingStep(stepNumber: 2, instruction: "焼く")
+                    stepSections: [
+                        CookingStepSection(items: [
+                            CookingStep(stepNumber: 1, instruction: "鶏もも肉を切る"),
+                            CookingStep(stepNumber: 2, instruction: "焼く")
+                        ])
                     ]
                 ),
                 Recipe(
@@ -231,19 +235,23 @@ struct SavedRecipesListView: View {
                     imageURLs: [],
                     ingredientsInfo: Ingredients(
                         servings: "4人分",
-                        items: [
-                            Ingredient(name: "豚肉", amount: "300g"),
-                            Ingredient(name: "玉ねぎ", amount: "2個"),
-                            Ingredient(name: "人参", amount: "1本"),
-                            Ingredient(name: "じゃがいも", amount: "2個"),
-                            Ingredient(name: "カレールー", amount: "1箱")
+                        sections: [
+                            IngredientSection(items: [
+                                Ingredient(name: "豚肉", amount: "300g"),
+                                Ingredient(name: "玉ねぎ", amount: "2個"),
+                                Ingredient(name: "人参", amount: "1本"),
+                                Ingredient(name: "じゃがいも", amount: "2個"),
+                                Ingredient(name: "カレールー", amount: "1箱")
+                            ])
                         ]
                     ),
-                    steps: [
-                        CookingStep(stepNumber: 1, instruction: "野菜を切る"),
-                        CookingStep(stepNumber: 2, instruction: "肉を炒める"),
-                        CookingStep(stepNumber: 3, instruction: "野菜を加えて煮込む"),
-                        CookingStep(stepNumber: 4, instruction: "ルーを溶かす")
+                    stepSections: [
+                        CookingStepSection(items: [
+                            CookingStep(stepNumber: 1, instruction: "野菜を切る"),
+                            CookingStep(stepNumber: 2, instruction: "肉を炒める"),
+                            CookingStep(stepNumber: 3, instruction: "野菜を加えて煮込む"),
+                            CookingStep(stepNumber: 4, instruction: "ルーを溶かす")
+                        ])
                     ]
                 )
             ],

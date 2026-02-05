@@ -13,14 +13,18 @@ struct ShoppingListReducerTests {
             title: title,
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "鶏肉", amount: "200g"),
-                    Ingredient(name: "塩", amount: "少々")
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "鶏肉", amount: "200g"),
+                        Ingredient(name: "塩", amount: "少々")
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "鶏肉を切る"),
-                CookingStep(stepNumber: 2, instruction: "塩をふる")
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "鶏肉を切る"),
+                    CookingStep(stepNumber: 2, instruction: "塩をふる")
+                ])
             ],
             sourceURL: URL(string: "https://example.com/recipe")
         )

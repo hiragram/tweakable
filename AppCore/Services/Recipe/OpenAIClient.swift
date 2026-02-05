@@ -103,6 +103,7 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
             - Keep isModified: false for unchanged items
             - Keep the recipe structure intact (all required fields)
             - Preserve ALL other ingredients and steps that are not affected by the change
+            - PRESERVE the section structure: keep ingredientSections and stepSections with their headers
 
             \(languageInstruction)
             """
@@ -147,17 +148,29 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
 
         components.append("")
         components.append("Ingredients:")
-        for ingredient in recipe.ingredientsInfo.items {
-            let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
-            // UUIDを含めて、LLMがIDを保持できるようにする
-            components.append("- [id: \(ingredient.id.uuidString)] \(ingredient.name): \(amount)")
+        for section in recipe.ingredientsInfo.sections {
+            if let header = section.header {
+                components.append("")
+                components.append("[Section: \(header)]")
+            }
+            for ingredient in section.items {
+                let amount = ingredient.amount ?? Self.amountNotSpecifiedPlaceholder
+                // UUIDを含めて、LLMがIDを保持できるようにする
+                components.append("- [id: \(ingredient.id.uuidString)] \(ingredient.name): \(amount)")
+            }
         }
 
         components.append("")
         components.append("Steps:")
-        for step in recipe.steps {
-            // UUIDを含めて、LLMがIDを保持できるようにする
-            components.append("[id: \(step.id.uuidString)] \(step.stepNumber). \(step.instruction)")
+        for section in recipe.stepSections {
+            if let header = section.header {
+                components.append("")
+                components.append("[Section: \(header)]")
+            }
+            for step in section.items {
+                // UUIDを含めて、LLMがIDを保持できるようにする
+                components.append("[id: \(step.id.uuidString)] \(step.stepNumber). \(step.instruction)")
+            }
         }
 
         return components.joined(separator: "\n")
@@ -238,6 +251,11 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
             - Extract ALL cooking steps - do not summarize or combine steps
             - Keep the original detail level of each step's instructions
             - If an ingredient has no amount specified, use the amount field as null
+
+            SECTION GROUPING:
+            - If the recipe has distinct sections (e.g., "For the Dough", "For the Sauce", "For the Topping"), preserve them:
+              - Use ingredientSections/stepSections arrays with header field set to the section name
+            - If the recipe has NO sections (ingredients/steps are just a flat list), use a single section with header: null
 
             \(languageInstruction)
             """
