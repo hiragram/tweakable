@@ -251,7 +251,7 @@ struct RecipeView: View {
             VStack(spacing: 0) {
                 ForEach(Array(section.items.enumerated()), id: \.element.id) { itemIndex, ingredient in
                     // 全体のインデックスを計算（Tip表示用）
-                    let globalIndex = calculateGlobalIngredientIndex(sectionIndex: sectionIndex, itemIndex: itemIndex, sections: [])
+                    let globalIndex = calculateGlobalIndex(sectionIndex: sectionIndex, itemIndex: itemIndex)
                     if sectionIndex == 0 && itemIndex == 0 {
                         ingredientRow(ingredient, index: globalIndex)
                             .popoverTip(IngredientSubstitutionTip())
@@ -268,10 +268,11 @@ struct RecipeView: View {
         }
     }
 
-    /// セクション内のインデックスからグローバルインデックスを計算
-    private func calculateGlobalIngredientIndex(sectionIndex: Int, itemIndex: Int, sections: [IngredientSection]) -> Int {
-        // アクセシビリティID用のインデックス計算は現在はsectionIndex * 100 + itemIndexでユニークにする
-        return sectionIndex * 100 + itemIndex
+    /// セクションとアイテムのインデックスからアクセシビリティID用のグローバルインデックスを計算
+    private static let maxItemsPerSection = 100
+
+    private func calculateGlobalIndex(sectionIndex: Int, itemIndex: Int) -> Int {
+        return sectionIndex * Self.maxItemsPerSection + itemIndex
     }
 
     private func ingredientRow(_ ingredient: Ingredient, index: Int) -> some View {
@@ -341,7 +342,7 @@ struct RecipeView: View {
 
             VStack(spacing: ds.spacing.sm) {
                 ForEach(Array(section.items.enumerated()), id: \.element.id) { itemIndex, step in
-                    let globalIndex = sectionIndex * 100 + itemIndex
+                    let globalIndex = calculateGlobalIndex(sectionIndex: sectionIndex, itemIndex: itemIndex)
                     if sectionIndex == 0 && itemIndex == 0 {
                         stepRow(step, index: globalIndex)
                             .popoverTip(StepSubstitutionTip())

@@ -264,6 +264,131 @@ struct PersistedRecipeConverterTests {
         #expect(persisted.imageURLStrings[0] == "https://example.com/a.jpg")
     }
 
+    // MARK: - Multiple Sections Tests
+
+    @Test
+    func toDomain_convertsMultipleIngredientSections() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let persisted = PersistedRecipe(id: UUID(), title: "ピザ")
+
+        let doughSection = PersistedIngredientSection(header: "For the Dough", sortOrder: 0)
+        doughSection.ingredients = [
+            PersistedIngredient(name: "小麦粉", amount: "200g", sortOrder: 0),
+            PersistedIngredient(name: "水", amount: "100ml", sortOrder: 1)
+        ]
+
+        let sauceSection = PersistedIngredientSection(header: "For the Sauce", sortOrder: 1)
+        sauceSection.ingredients = [
+            PersistedIngredient(name: "トマト", amount: "3個", sortOrder: 0)
+        ]
+
+        // 逆順で挿入してsortOrderで正しくソートされることを検証
+        persisted.ingredientSections = [sauceSection, doughSection]
+
+        context.insert(persisted)
+
+        let domain = persisted.toDomain()
+
+        #expect(domain.ingredientsInfo.sections.count == 2)
+        #expect(domain.ingredientsInfo.sections[0].header == "For the Dough")
+        #expect(domain.ingredientsInfo.sections[0].items.count == 2)
+        #expect(domain.ingredientsInfo.sections[0].items[0].name == "小麦粉")
+        #expect(domain.ingredientsInfo.sections[0].items[1].name == "水")
+        #expect(domain.ingredientsInfo.sections[1].header == "For the Sauce")
+        #expect(domain.ingredientsInfo.sections[1].items.count == 1)
+        #expect(domain.ingredientsInfo.allItems.count == 3)
+    }
+
+    @Test
+    func toDomain_convertsMultipleCookingStepSections() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let persisted = PersistedRecipe(id: UUID(), title: "ピザ")
+
+        let prepSection = PersistedCookingStepSection(header: "下準備", sortOrder: 0)
+        prepSection.steps = [
+            PersistedCookingStep(stepNumber: 1, instruction: "生地をこねる", sortOrder: 0),
+            PersistedCookingStep(stepNumber: 2, instruction: "30分寝かせる", sortOrder: 1)
+        ]
+
+        let cookSection = PersistedCookingStepSection(header: "焼き上げ", sortOrder: 1)
+        cookSection.steps = [
+            PersistedCookingStep(stepNumber: 3, instruction: "オーブンで焼く", sortOrder: 0)
+        ]
+
+        // 逆順で挿入してsortOrderで正しくソートされることを検証
+        persisted.stepSections = [cookSection, prepSection]
+
+        context.insert(persisted)
+
+        let domain = persisted.toDomain()
+
+        #expect(domain.stepSections.count == 2)
+        #expect(domain.stepSections[0].header == "下準備")
+        #expect(domain.stepSections[0].items.count == 2)
+        #expect(domain.stepSections[0].items[0].instruction == "生地をこねる")
+        #expect(domain.stepSections[0].items[1].instruction == "30分寝かせる")
+        #expect(domain.stepSections[1].header == "焼き上げ")
+        #expect(domain.stepSections[1].items.count == 1)
+        #expect(domain.allSteps.count == 3)
+    }
+
+    @Test
+    @MainActor
+    func roundTrip_preservesMultipleSections() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let original = Recipe(
+            id: UUID(),
+            title: "カプレーゼピザ",
+            ingredientsInfo: Ingredients(
+                servings: "2人分",
+                sections: [
+                    IngredientSection(header: "For the Dough", items: [
+                        Ingredient(name: "小麦粉", amount: "200g"),
+                        Ingredient(name: "水", amount: "100ml")
+                    ]),
+                    IngredientSection(header: "For the Sauce", items: [
+                        Ingredient(name: "トマト", amount: "3個")
+                    ]),
+                    IngredientSection(header: "For the Topping", items: [
+                        Ingredient(name: "モッツァレラ", amount: "1個"),
+                        Ingredient(name: "バジル", amount: "適量")
+                    ])
+                ]
+            ),
+            stepSections: [
+                CookingStepSection(header: "生地", items: [
+                    CookingStep(stepNumber: 1, instruction: "生地をこねる")
+                ]),
+                CookingStepSection(header: "焼き上げ", items: [
+                    CookingStep(stepNumber: 2, instruction: "オーブンで焼く")
+                ])
+            ]
+        )
+
+        let persisted = PersistedRecipe.from(original, context: context)
+        let restored = persisted.toDomain()
+
+        #expect(restored.ingredientsInfo.sections.count == 3)
+        #expect(restored.ingredientsInfo.sections[0].header == "For the Dough")
+        #expect(restored.ingredientsInfo.sections[0].items.count == 2)
+        #expect(restored.ingredientsInfo.sections[1].header == "For the Sauce")
+        #expect(restored.ingredientsInfo.sections[1].items.count == 1)
+        #expect(restored.ingredientsInfo.sections[2].header == "For the Topping")
+        #expect(restored.ingredientsInfo.sections[2].items.count == 2)
+        #expect(restored.ingredientsInfo.allItems.count == 5)
+
+        #expect(restored.stepSections.count == 2)
+        #expect(restored.stepSections[0].header == "生地")
+        #expect(restored.stepSections[1].header == "焼き上げ")
+        #expect(restored.allSteps.count == 2)
+    }
+
     // MARK: - Round Trip Tests
 
     @Test

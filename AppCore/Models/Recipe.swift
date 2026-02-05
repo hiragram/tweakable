@@ -30,7 +30,7 @@ public struct Recipe: Equatable, Sendable, Identifiable {
         self.sourceURL = sourceURL
     }
 
-    /// 全調理工程をフラットに取得（後方互換性のため）
+    /// 全調理工程をフラットに取得（セクション構造を無視してフラットリストが必要な場合に使用）
     public var allSteps: [CookingStep] {
         stepSections.flatMap { $0.items }
     }
@@ -66,7 +66,7 @@ public struct Ingredients: Equatable, Sendable {
         self.sections = sections
     }
 
-    /// 全材料をフラットに取得（後方互換性のため）
+    /// 全材料をフラットに取得（セクション構造を無視してフラットリストが必要な場合に使用）
     public var allItems: [Ingredient] {
         sections.flatMap { $0.items }
     }
