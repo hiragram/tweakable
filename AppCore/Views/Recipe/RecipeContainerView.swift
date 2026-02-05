@@ -8,9 +8,26 @@ struct RecipeContainerView: View {
     /// State for showing substitution sheet
     @State private var showsSubstitutionSheet = false
 
+    /// State for showing category assignment sheet
+    @State private var showsCategoryAssignment = false
+    @State private var showingAddCategoryFromAssignment = false
+    @State private var newCategoryNameFromAssignment = ""
+
     /// Whether the user is a premium subscriber (from RevenueCat)
     private var isPremiumUser: Bool {
         store.state.subscription.isPremium
+    }
+
+    /// 現在のレシピに割り当てられているカテゴリIDのSet
+    private var assignedCategoryIDs: Set<UUID> {
+        guard let recipeID = store.state.recipe.currentRecipe?.id else { return [] }
+        var result: Set<UUID> = []
+        for (categoryID, recipeIDs) in store.state.recipe.categoryRecipeMap {
+            if recipeIDs.contains(recipeID) {
+                result.insert(categoryID)
+            }
+        }
+        return result
     }
 
     var body: some View {
@@ -68,6 +85,60 @@ struct RecipeContainerView: View {
             if oldValue != nil && newValue == nil {
                 showsSubstitutionSheet = false
             }
+        }
+        .toolbar {
+            if store.state.recipe.currentRecipe != nil && !store.state.recipe.categories.isEmpty {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showsCategoryAssignment = true
+                    } label: {
+                        Image(systemName: "folder.badge.plus")
+                    }
+                    .accessibilityIdentifier("recipe_button_assignCategory")
+                }
+            }
+        }
+        .sheet(isPresented: $showsCategoryAssignment) {
+            NavigationStack {
+                CategoryAssignmentView(
+                    categories: store.state.recipe.categories,
+                    assignedCategoryIDs: assignedCategoryIDs,
+                    onToggleCategory: { categoryID, shouldAdd in
+                        guard let recipeID = store.state.recipe.currentRecipe?.id else { return }
+                        if shouldAdd {
+                            store.send(.recipe(.addRecipeToCategory(recipeID: recipeID, categoryID: categoryID)))
+                        } else {
+                            store.send(.recipe(.removeRecipeFromCategory(recipeID: recipeID, categoryID: categoryID)))
+                        }
+                    },
+                    onAddCategoryTapped: {
+                        newCategoryNameFromAssignment = ""
+                        showingAddCategoryFromAssignment = true
+                    }
+                )
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(String(localized: .commonOk)) {
+                            showsCategoryAssignment = false
+                        }
+                        .accessibilityIdentifier("categoryAssignment_button_done")
+                    }
+                }
+                .alert(
+                    String(localized: .categoryAddTitle),
+                    isPresented: $showingAddCategoryFromAssignment
+                ) {
+                    TextField(String(localized: .categoryAddPlaceholder), text: $newCategoryNameFromAssignment)
+                    Button(String(localized: .commonCreate)) {
+                        let name = newCategoryNameFromAssignment.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if !name.isEmpty {
+                            store.send(.recipe(.createCategory(name: name)))
+                        }
+                    }
+                    Button(String(localized: .commonCancel), role: .cancel) {}
+                }
+            }
+            .presentationDetents([.medium])
         }
     }
 }

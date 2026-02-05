@@ -11,7 +11,8 @@ public enum ModelContainerProvider {
             PersistedCookingStep.self,
             PersistedShoppingList.self,
             PersistedShoppingListItem.self,
-            PersistedShoppingListItemBreakdown.self
+            PersistedShoppingListItemBreakdown.self,
+            PersistedRecipeCategory.self
         ])
     }
 

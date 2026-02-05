@@ -125,6 +125,77 @@ public enum RecipeReducer {
         case .recipeDeleteFailed(let message):
             state.isDeletingRecipe = false
             state.errorMessage = message
+
+        // MARK: - Category
+
+        case .loadCategories:
+            state.isLoadingCategories = true
+
+        case .categoriesLoaded(let categories, let categoryRecipeMap):
+            state.categories = categories
+            state.categoryRecipeMap = categoryRecipeMap
+            state.isLoadingCategories = false
+
+        case .categoriesLoadFailed(let message):
+            state.isLoadingCategories = false
+            state.errorMessage = message
+
+        case .createCategory:
+            // 副作用トリガーのみ
+            break
+
+        case .categoryCreated(let category):
+            state.categories.append(category)
+
+        case .categoryCreateFailed(let message):
+            state.errorMessage = message
+
+        case .renameCategory:
+            // 副作用トリガーのみ
+            break
+
+        case .categoryRenamed(let category):
+            if let index = state.categories.firstIndex(where: { $0.id == category.id }) {
+                state.categories[index] = category
+            }
+
+        case .categoryRenameFailed(let message):
+            state.errorMessage = message
+
+        case .deleteCategory:
+            // 副作用トリガーのみ
+            break
+
+        case .categoryDeleted(let id):
+            state.categories.removeAll { $0.id == id }
+            state.categoryRecipeMap.removeValue(forKey: id)
+            if state.selectedCategoryFilter == id {
+                state.selectedCategoryFilter = nil
+            }
+
+        case .categoryDeleteFailed(let message):
+            state.errorMessage = message
+
+        case .addRecipeToCategory:
+            // 副作用トリガーのみ
+            break
+
+        case .removeRecipeFromCategory:
+            // 副作用トリガーのみ
+            break
+
+        case .recipeCategoryUpdated(let recipeID, let categoryID, let added):
+            if added {
+                state.categoryRecipeMap[categoryID, default: []].insert(recipeID)
+            } else {
+                state.categoryRecipeMap[categoryID]?.remove(recipeID)
+            }
+
+        case .recipeCategoryUpdateFailed(let message):
+            state.errorMessage = message
+
+        case .selectCategoryFilter(let id):
+            state.selectedCategoryFilter = id
         }
     }
 }

@@ -94,4 +94,61 @@ public enum RecipeAction: Sendable {
 
     /// 保存済みレシピを選択して表示
     case selectSavedRecipe(Recipe)
+
+    // MARK: - Category CRUD
+
+    /// カテゴリ一覧を読み込む（副作用: PersistenceService呼び出し → categoriesLoaded or categoriesLoadFailed）
+    case loadCategories
+
+    /// カテゴリ読み込み成功
+    case categoriesLoaded([RecipeCategory], categoryRecipeMap: [UUID: Set<UUID>])
+
+    /// カテゴリ読み込み失敗
+    case categoriesLoadFailed(String)
+
+    /// カテゴリを作成する（副作用: PersistenceService呼び出し → categoryCreated or categoryCreateFailed）
+    case createCategory(name: String)
+
+    /// カテゴリ作成成功
+    case categoryCreated(RecipeCategory)
+
+    /// カテゴリ作成失敗
+    case categoryCreateFailed(String)
+
+    /// カテゴリ名を変更する（副作用: PersistenceService呼び出し → categoryRenamed or categoryRenameFailed）
+    case renameCategory(id: UUID, newName: String)
+
+    /// カテゴリ名変更成功
+    case categoryRenamed(RecipeCategory)
+
+    /// カテゴリ名変更失敗
+    case categoryRenameFailed(String)
+
+    /// カテゴリを削除する（副作用: PersistenceService呼び出し → categoryDeleted or categoryDeleteFailed）
+    case deleteCategory(id: UUID)
+
+    /// カテゴリ削除成功
+    case categoryDeleted(id: UUID)
+
+    /// カテゴリ削除失敗
+    case categoryDeleteFailed(String)
+
+    // MARK: - Recipe ↔ Category
+
+    /// レシピをカテゴリに追加する（副作用: PersistenceService呼び出し → recipeCategoryUpdated or recipeCategoryUpdateFailed）
+    case addRecipeToCategory(recipeID: UUID, categoryID: UUID)
+
+    /// レシピをカテゴリから削除する（副作用: PersistenceService呼び出し → recipeCategoryUpdated or recipeCategoryUpdateFailed）
+    case removeRecipeFromCategory(recipeID: UUID, categoryID: UUID)
+
+    /// レシピのカテゴリ紐付け更新成功
+    case recipeCategoryUpdated(recipeID: UUID, categoryID: UUID, added: Bool)
+
+    /// レシピのカテゴリ紐付け更新失敗
+    case recipeCategoryUpdateFailed(String)
+
+    // MARK: - Category Filter
+
+    /// カテゴリフィルタを変更
+    case selectCategoryFilter(UUID?)
 }

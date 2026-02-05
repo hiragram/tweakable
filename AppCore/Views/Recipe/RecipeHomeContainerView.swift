@@ -12,10 +12,21 @@ struct RecipeHomeContainerView: View {
     @State private var showingShoppingLists: Bool = false
     @State private var showingShoppingListDetail: Bool = false
 
+    // Category management state
+    @State private var showingAddCategory: Bool = false
+    @State private var newCategoryName: String = ""
+    @State private var showingRenameCategory: Bool = false
+    @State private var renameCategoryName: String = ""
+    @State private var categoryToManage: RecipeCategory?
+    @State private var showingCategoryActions: Bool = false
+    @State private var showingDeleteCategoryConfirmation: Bool = false
+
     var body: some View {
         NavigationStack {
             RecipeHomeView(
-                recipes: store.state.recipe.savedRecipes,
+                recipes: store.state.recipe.filteredRecipes,
+                categories: store.state.recipe.categories,
+                selectedCategoryID: store.state.recipe.selectedCategoryFilter,
                 isLoading: store.state.recipe.isLoadingSavedRecipes,
                 onRecipeTapped: { recipe in
                     store.send(.recipe(.selectSavedRecipe(recipe)))
@@ -26,6 +37,17 @@ struct RecipeHomeContainerView: View {
                 },
                 onDeleteConfirmed: { id in
                     store.send(.recipe(.deleteRecipe(id: id)))
+                },
+                onCategoryTapped: { categoryID in
+                    store.send(.recipe(.selectCategoryFilter(categoryID)))
+                },
+                onAddCategoryTapped: {
+                    newCategoryName = ""
+                    showingAddCategory = true
+                },
+                onCategoryLongPressed: { category in
+                    categoryToManage = category
+                    showingCategoryActions = true
                 }
             )
             .navigationTitle(String(localized: .myRecipesTitle))
@@ -99,6 +121,63 @@ struct RecipeHomeContainerView: View {
                 if oldValue == true && newValue == false {
                     store.send(.recipe(.clearRecipe))
                 }
+            }
+            // カテゴリ作成アラート
+            .alert(
+                String(localized: .categoryAddTitle),
+                isPresented: $showingAddCategory
+            ) {
+                TextField(String(localized: .categoryAddPlaceholder), text: $newCategoryName)
+                Button(String(localized: .commonCreate)) {
+                    let name = newCategoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !name.isEmpty {
+                        store.send(.recipe(.createCategory(name: name)))
+                    }
+                }
+                Button(String(localized: .commonCancel), role: .cancel) {}
+            }
+            // カテゴリ操作メニュー（長押し）
+            .confirmationDialog(
+                categoryToManage?.name ?? "",
+                isPresented: $showingCategoryActions,
+                titleVisibility: .visible
+            ) {
+                Button(String(localized: .categoryRename)) {
+                    renameCategoryName = categoryToManage?.name ?? ""
+                    showingRenameCategory = true
+                }
+                Button(String(localized: .commonDelete), role: .destructive) {
+                    showingDeleteCategoryConfirmation = true
+                }
+                Button(String(localized: .commonCancel), role: .cancel) {}
+            }
+            // カテゴリ名変更アラート
+            .alert(
+                String(localized: .categoryRenameTitle),
+                isPresented: $showingRenameCategory
+            ) {
+                TextField(String(localized: .categoryAddPlaceholder), text: $renameCategoryName)
+                Button(String(localized: .commonOk)) {
+                    let name = renameCategoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !name.isEmpty, let category = categoryToManage {
+                        store.send(.recipe(.renameCategory(id: category.id, newName: name)))
+                    }
+                }
+                Button(String(localized: .commonCancel), role: .cancel) {}
+            }
+            // カテゴリ削除確認
+            .alert(
+                String(localized: .categoryDeleteTitle),
+                isPresented: $showingDeleteCategoryConfirmation
+            ) {
+                Button(String(localized: .commonDelete), role: .destructive) {
+                    if let category = categoryToManage {
+                        store.send(.recipe(.deleteCategory(id: category.id)))
+                    }
+                }
+                Button(String(localized: .commonCancel), role: .cancel) {}
+            } message: {
+                Text(.categoryDeleteMessage)
             }
             // 保存済みレシピと買い物リストのロードはRootView経由でbootアクションで行う
         }

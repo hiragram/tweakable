@@ -43,6 +43,10 @@ public final class PersistedRecipe {
     @Relationship(inverse: \PersistedShoppingList.recipes)
     public var shoppingLists: [PersistedShoppingList]
 
+    /// カテゴリとの関連（多対多）
+    @Relationship(deleteRule: .nullify)
+    public var categories: [PersistedRecipeCategory]
+
     public init(
         id: UUID = UUID(),
         title: String,
@@ -53,7 +57,8 @@ public final class PersistedRecipe {
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
         ingredients: [PersistedIngredient] = [],
-        steps: [PersistedCookingStep] = []
+        steps: [PersistedCookingStep] = [],
+        categories: [PersistedRecipeCategory] = []
     ) {
         self.id = id
         self.title = title
@@ -66,6 +71,7 @@ public final class PersistedRecipe {
         self.ingredients = ingredients
         self.steps = steps
         self.shoppingLists = []
+        self.categories = categories
     }
 }
 

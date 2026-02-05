@@ -101,8 +101,9 @@ public final class AppStore {
     private func handleBoot() async {
         // サブスクリプション状態を読み込む
         send(.subscription(.loadSubscriptionStatus))
-        // 保存済みレシピと買い物リストを読み込む
+        // 保存済みレシピと買い物リストとカテゴリを読み込む
         send(.recipe(.loadSavedRecipes))
+        send(.recipe(.loadCategories))
         send(.shoppingList(.loadShoppingLists))
     }
 
@@ -221,6 +222,56 @@ public final class AppStore {
             if let currentRecipe = state.recipe.currentRecipe,
                state.recipe.savedRecipes.contains(where: { $0.id == currentRecipe.id }) {
                 send(.recipe(.saveRecipe))
+            }
+
+        // MARK: Category Side Effects
+
+        case .loadCategories:
+            do {
+                let result = try await recipePersistenceService.loadAllCategories()
+                send(.recipe(.categoriesLoaded(result.categories, categoryRecipeMap: result.categoryRecipeMap)))
+            } catch {
+                send(.recipe(.categoriesLoadFailed(error.localizedDescription)))
+            }
+
+        case .createCategory(let name):
+            do {
+                let category = try await recipePersistenceService.createCategory(name: name)
+                send(.recipe(.categoryCreated(category)))
+            } catch {
+                send(.recipe(.categoryCreateFailed(error.localizedDescription)))
+            }
+
+        case .renameCategory(let id, let newName):
+            do {
+                let category = try await recipePersistenceService.renameCategory(id: id, newName: newName)
+                send(.recipe(.categoryRenamed(category)))
+            } catch {
+                send(.recipe(.categoryRenameFailed(error.localizedDescription)))
+            }
+
+        case .deleteCategory(let id):
+            do {
+                try await recipePersistenceService.deleteCategory(id: id)
+                send(.recipe(.categoryDeleted(id: id)))
+            } catch {
+                send(.recipe(.categoryDeleteFailed(error.localizedDescription)))
+            }
+
+        case .addRecipeToCategory(let recipeID, let categoryID):
+            do {
+                try await recipePersistenceService.addRecipeToCategory(recipeID: recipeID, categoryID: categoryID)
+                send(.recipe(.recipeCategoryUpdated(recipeID: recipeID, categoryID: categoryID, added: true)))
+            } catch {
+                send(.recipe(.recipeCategoryUpdateFailed(error.localizedDescription)))
+            }
+
+        case .removeRecipeFromCategory(let recipeID, let categoryID):
+            do {
+                try await recipePersistenceService.removeRecipeFromCategory(recipeID: recipeID, categoryID: categoryID)
+                send(.recipe(.recipeCategoryUpdated(recipeID: recipeID, categoryID: categoryID, added: false)))
+            } catch {
+                send(.recipe(.recipeCategoryUpdateFailed(error.localizedDescription)))
             }
 
         default:
@@ -382,6 +433,7 @@ public final class AppStore {
                 send(.debug(.dataDeleted))
                 // リストを空にリロード
                 send(.recipe(.savedRecipesLoaded([])))
+                send(.recipe(.categoriesLoaded([], categoryRecipeMap: [:])))
                 send(.shoppingList(.shoppingListsLoaded([])))
             } catch {
                 send(.debug(.operationFailed(error.localizedDescription)))
