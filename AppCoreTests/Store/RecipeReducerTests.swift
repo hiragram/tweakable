@@ -253,11 +253,83 @@ struct RecipeReducerTests {
 
         RecipeReducer.reduce(state: &state, action: .approveSubstitution)
 
-        #expect(state.currentRecipe == previewRecipe)
+        // 置き換え内容が反映されていること
+        #expect(state.currentRecipe?.title == previewRecipe.title)
+        #expect(state.currentRecipe?.ingredientsInfo == previewRecipe.ingredientsInfo)
+        #expect(state.currentRecipe?.stepSections == previewRecipe.stepSections)
+        // 元レシピのIDが保持されていること
+        #expect(state.currentRecipe?.id == originalRecipe.id)
         #expect(state.substitutionTarget == nil)
         #expect(state.previewRecipe == nil)
         #expect(state.originalRecipeSnapshot == nil)
         #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func reduce_approveSubstitution_preservesImageURLsFromCurrentRecipe() {
+        var state = RecipeState()
+        let imageURLs: [ImageSource] = [
+            // swiftlint:disable:next force_unwrapping
+            .remote(url: URL(string: "https://example.com/image.jpg")!)
+        ]
+        let originalRecipe = Recipe(
+            title: "テスト料理",
+            imageURLs: imageURLs,
+            ingredientsInfo: Ingredients(
+                servings: "2人分",
+                sections: [IngredientSection(items: [Ingredient(name: "鶏肉", amount: "200g")])]
+            ),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "鶏肉を切る")])],
+            sourceURL: URL(string: "https://example.com/recipe")
+        )
+        state.currentRecipe = originalRecipe
+        state.originalRecipeSnapshot = originalRecipe
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+
+        // LLMからの結果（imageURLsなし、新しいID）
+        let previewRecipe = Recipe(
+            title: "テスト料理",
+            imageURLs: [],
+            ingredientsInfo: Ingredients(
+                servings: "2人分",
+                sections: [IngredientSection(items: [Ingredient(name: "豚肉", amount: "200g", isModified: true)])]
+            ),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true)])]
+        )
+        state.previewRecipe = previewRecipe
+
+        RecipeReducer.reduce(state: &state, action: .approveSubstitution)
+
+        #expect(state.currentRecipe?.imageURLs == imageURLs)
+        #expect(state.currentRecipe?.ingredientsInfo.allItems.first?.name == "豚肉")
+        #expect(state.currentRecipe?.allSteps.first?.instruction == "豚肉を切る")
+    }
+
+    @Test
+    func reduce_approveSubstitution_preservesRecipeID() {
+        var state = RecipeState()
+        let originalID = UUID()
+        let originalRecipe = Recipe(
+            id: originalID,
+            title: "テスト料理",
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "鶏肉", amount: "200g")])]),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "鶏肉を切る")])]
+        )
+        state.currentRecipe = originalRecipe
+        state.substitutionTarget = .ingredient(Ingredient(name: "鶏肉", amount: "200g"))
+        state.substitutionSheetMode = .preview
+
+        let previewRecipe = Recipe(
+            title: "テスト料理",
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "豚肉", amount: "200g", isModified: true)])]),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "豚肉を切る", isModified: true)])]
+        )
+        state.previewRecipe = previewRecipe
+
+        RecipeReducer.reduce(state: &state, action: .approveSubstitution)
+
+        #expect(state.currentRecipe?.id == originalID)
     }
 
     @Test

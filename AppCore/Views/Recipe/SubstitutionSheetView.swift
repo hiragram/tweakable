@@ -289,15 +289,7 @@ struct SubstitutionSheetView: View {
                     Text(.substitutionButtonSendMore)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, ds.spacing.sm)
-            .foregroundColor(.white)
-            .background(
-                additionalPromptText.isEmpty || isProcessing
-                    ? ds.colors.textTertiary.color
-                    : ds.colors.primaryBrand.color
-            )
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+            .buttonStyle(PrimaryButtonStyle())
             .disabled(additionalPromptText.isEmpty || isProcessing)
             .accessibilityIdentifier(SubstitutionSheetAccessibilityID.sendMoreButton)
         }
@@ -431,15 +423,7 @@ struct SubstitutionSheetView: View {
                     Text(.substitutionButtonSubmit)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, ds.spacing.sm)
-            .foregroundColor(.white)
-            .background(
-                promptText.isEmpty || isProcessing
-                    ? ds.colors.textTertiary.color
-                    : ds.colors.primaryBrand.color
-            )
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+            .buttonStyle(PrimaryButtonStyle())
             .disabled(promptText.isEmpty || isProcessing)
             .accessibilityIdentifier(SubstitutionSheetAccessibilityID.submitButton)
         }
@@ -473,12 +457,8 @@ struct SubstitutionSheetView: View {
                     Image(systemName: "crown.fill")
                     Text(.substitutionButtonUpgrade)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, ds.spacing.sm)
-                .foregroundColor(.white)
-                .background(ds.colors.primaryBrand.color)
-                .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
             }
+            .buttonStyle(PrimaryButtonStyle())
             .accessibilityIdentifier(SubstitutionSheetAccessibilityID.upgradeButton)
         }
         .padding(ds.spacing.md)
