@@ -102,18 +102,14 @@ public final class AppStore {
 
     /// アプリ起動時の処理
     private func handleBoot() async {
-        // シードデータ投入（初回のみ）
-        // handleBoot()の呼び出し元はブロックしないが、Task内ではseedIfNeeded完了後にレシピ・カテゴリを再読み込みする
-        Task {
-            await seedDataService.seedIfNeeded()
-            send(.recipe(.loadSavedRecipes))
-            send(.recipe(.loadCategories))
-        }
-
-        // サブスクリプション状態を読み込む
+        // サブスクリプション状態と買い物リストを先に読み込む（シードデータ投入を待たない）
         send(.subscription(.loadSubscriptionStatus))
-        // 買い物リストを読み込む
         send(.shoppingList(.loadShoppingLists))
+
+        // シードデータ投入（初回のみ）完了後にレシピ・カテゴリを読み込む
+        await seedDataService.seedIfNeeded()
+        send(.recipe(.loadSavedRecipes))
+        send(.recipe(.loadCategories))
     }
 
     // MARK: - Recipe Side Effects
