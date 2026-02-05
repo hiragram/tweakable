@@ -2,7 +2,7 @@ import Foundation
 
 /// シードデータ（初期レシピ）を提供する
 /// SeedDataServiceからのみ使用される内部専用のデータプロバイダ
-public enum SeedData {
+enum SeedData {
     /// シードデータのカテゴリ名
     static let categoryName = "Eitan"
 

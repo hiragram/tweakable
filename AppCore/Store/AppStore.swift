@@ -102,8 +102,8 @@ public final class AppStore {
 
     /// アプリ起動時の処理
     private func handleBoot() async {
-        // シードデータ投入（初回のみ、handleBootをブロックせずTaskで非同期実行）
-        // Task内でseedIfNeeded完了を待ってからレシピ・カテゴリを再読み込みする
+        // シードデータ投入（初回のみ）
+        // handleBoot()の呼び出し元はブロックしないが、Task内ではseedIfNeeded完了後にレシピ・カテゴリを再読み込みする
         Task {
             await seedDataService.seedIfNeeded()
             send(.recipe(.loadSavedRecipes))
