@@ -6,17 +6,19 @@ private let logger = Logger(subsystem: "com.tweakable.app", category: "SeedData"
 /// シードデータ投入サービス
 public final class SeedDataService: @unchecked Sendable {
     private let persistenceService: any RecipePersistenceServiceProtocol
+    private let userDefaults: UserDefaults
 
     /// UserDefaultsキー
-    private static let hasSeedDataLoadedKey = "hasSeedDataLoaded"
+    static let hasSeedDataLoadedKey = "hasSeedDataLoaded"
 
-    public init(persistenceService: any RecipePersistenceServiceProtocol) {
+    public init(persistenceService: any RecipePersistenceServiceProtocol, userDefaults: UserDefaults = .standard) {
         self.persistenceService = persistenceService
+        self.userDefaults = userDefaults
     }
 
     /// シードデータが投入済みかどうか
     public var hasSeedDataLoaded: Bool {
-        UserDefaults.standard.bool(forKey: Self.hasSeedDataLoadedKey)
+        userDefaults.bool(forKey: Self.hasSeedDataLoadedKey)
     }
 
     /// シードデータを投入する（未投入の場合のみ）
@@ -52,7 +54,7 @@ public final class SeedDataService: @unchecked Sendable {
             }
 
             // フラグを更新
-            UserDefaults.standard.set(true, forKey: Self.hasSeedDataLoadedKey)
+            userDefaults.set(true, forKey: Self.hasSeedDataLoadedKey)
             logger.info("Seed data injection completed: \(recipes.count) recipes")
         } catch {
             // シードデータ投入失敗はクリティカルではない
@@ -63,8 +65,8 @@ public final class SeedDataService: @unchecked Sendable {
 
     #if DEBUG
     /// デバッグ用: シードデータフラグをリセットする
-    public static func resetSeedFlag() {
-        UserDefaults.standard.removeObject(forKey: hasSeedDataLoadedKey)
+    public static func resetSeedFlag(userDefaults: UserDefaults = .standard) {
+        userDefaults.removeObject(forKey: hasSeedDataLoadedKey)
         logger.info("Seed data flag reset")
     }
     #endif
