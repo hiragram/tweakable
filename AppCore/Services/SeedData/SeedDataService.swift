@@ -58,7 +58,7 @@ public final class SeedDataService: @unchecked Sendable {
             logger.info("Seed data injection completed: \(recipes.count) recipes")
         } catch {
             // シードデータ投入失敗はクリティカルではない
-            // 次回起動時に再試行される
+            // 次回起動時に全レシピを再試行する（saveRecipeはupsert動作のため重複なし）
             logger.error("Failed to seed data: \(error.localizedDescription)")
         }
     }
