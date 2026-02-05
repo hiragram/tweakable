@@ -19,10 +19,15 @@ struct RecipeHomeView: View {
     private let ds = DesignSystem.default
 
     let recipes: [Recipe]
+    let categories: [RecipeCategory]
+    let selectedCategoryID: UUID?
     let isLoading: Bool
     let onRecipeTapped: (Recipe) -> Void
     let onAddTapped: () -> Void
     let onDeleteConfirmed: (UUID) -> Void
+    let onCategoryTapped: (UUID?) -> Void
+    let onAddCategoryTapped: () -> Void
+    let onCategoryLongPressed: (RecipeCategory) -> Void
 
     @State private var showDeleteConfirmation: Bool = false
     @State private var recipeToDelete: UUID?
@@ -107,16 +112,88 @@ struct RecipeHomeView: View {
         .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyView)
     }
 
+    // MARK: - Category Filter Chips
+
+    private var categoryChipsView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: ds.spacing.xs) {
+                // 「すべて」チップ
+                categoryChip(
+                    label: String(localized: .categoryAll),
+                    isSelected: selectedCategoryID == nil,
+                    accessibilityID: "recipeHome_button_categoryAll"
+                ) {
+                    onCategoryTapped(nil)
+                }
+
+                // カテゴリチップ
+                ForEach(categories) { category in
+                    categoryChip(
+                        label: category.name,
+                        isSelected: selectedCategoryID == category.id,
+                        accessibilityID: "recipeHome_button_category_\(category.id.uuidString)"
+                    ) {
+                        onCategoryTapped(category.id)
+                    }
+                    .onLongPressGesture {
+                        onCategoryLongPressed(category)
+                    }
+                }
+
+                // 「+」追加ボタン
+                Button(action: onAddCategoryTapped) {
+                    Image(systemName: "plus")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundColor(ds.colors.textSecondary.color)
+                        .padding(.horizontal, ds.spacing.sm)
+                        .padding(.vertical, ds.spacing.xs)
+                        .background(ds.colors.backgroundSecondary.color)
+                        .clipShape(Capsule())
+                }
+                .accessibilityIdentifier("recipeHome_button_addCategory")
+            }
+            .padding(.horizontal, ds.spacing.md)
+        }
+    }
+
+    private func categoryChip(
+        label: String,
+        isSelected: Bool,
+        accessibilityID: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Text(label)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(isSelected ? .white : ds.colors.textPrimary.color)
+                .padding(.horizontal, ds.spacing.sm)
+                .padding(.vertical, ds.spacing.xs)
+                .background(isSelected ? ds.colors.primaryBrand.color : ds.colors.backgroundSecondary.color)
+                .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(accessibilityID)
+    }
+
     // MARK: - Recipe Grid View
 
     private var recipeGridView: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 16) {
-                ForEach(recipes) { recipe in
-                    recipeCard(recipe)
+            VStack(spacing: ds.spacing.sm) {
+                if !categories.isEmpty {
+                    categoryChipsView
                 }
+
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(recipes) { recipe in
+                        recipeCard(recipe)
+                    }
+                }
+                .padding(.horizontal, ds.spacing.md)
             }
-            .padding(ds.spacing.md)
+            .padding(.vertical, ds.spacing.sm)
         }
         .accessibilityIdentifier(RecipeHomeAccessibilityID.grid)
     }
@@ -229,10 +306,15 @@ struct RecipeHomeView: View {
     NavigationStack {
         RecipeHomeView(
             recipes: [],
+            categories: [],
+            selectedCategoryID: nil,
             isLoading: false,
             onRecipeTapped: { _ in },
             onAddTapped: {},
-            onDeleteConfirmed: { _ in }
+            onDeleteConfirmed: { _ in },
+            onCategoryTapped: { _ in },
+            onAddCategoryTapped: {},
+            onCategoryLongPressed: { _ in }
         )
         .navigationTitle(String(localized: .myRecipesTitle))
     }
@@ -243,10 +325,15 @@ struct RecipeHomeView: View {
     NavigationStack {
         RecipeHomeView(
             recipes: [],
+            categories: [],
+            selectedCategoryID: nil,
             isLoading: true,
             onRecipeTapped: { _ in },
             onAddTapped: {},
-            onDeleteConfirmed: { _ in }
+            onDeleteConfirmed: { _ in },
+            onCategoryTapped: { _ in },
+            onAddCategoryTapped: {},
+            onCategoryLongPressed: { _ in }
         )
         .navigationTitle(String(localized: .myRecipesTitle))
     }
@@ -328,10 +415,20 @@ struct RecipeHomeView: View {
                     ]
                 )
             ],
+            categories: [
+                RecipeCategory(name: "和食"),
+                RecipeCategory(name: "中華"),
+                RecipeCategory(name: "メイン"),
+                RecipeCategory(name: "スープ")
+            ],
+            selectedCategoryID: nil,
             isLoading: false,
             onRecipeTapped: { _ in },
             onAddTapped: {},
-            onDeleteConfirmed: { _ in }
+            onDeleteConfirmed: { _ in },
+            onCategoryTapped: { _ in },
+            onAddCategoryTapped: {},
+            onCategoryLongPressed: { _ in }
         )
         .navigationTitle(String(localized: .myRecipesTitle))
     }

@@ -39,6 +39,26 @@ public protocol RecipePersistenceServiceProtocol: Sendable {
     /// 買い物アイテムのチェック状態を更新する
     func updateShoppingItemChecked(itemID: UUID, isChecked: Bool) async throws
 
+    // MARK: - Category Operations
+
+    /// 全カテゴリとレシピ紐付けマップを取得する
+    func loadAllCategories() async throws -> (categories: [RecipeCategory], categoryRecipeMap: [UUID: Set<UUID>])
+
+    /// カテゴリを作成する
+    func createCategory(name: String) async throws -> RecipeCategory
+
+    /// カテゴリ名を変更する
+    func renameCategory(id: UUID, newName: String) async throws -> RecipeCategory
+
+    /// カテゴリを削除する（レシピは削除しない）
+    func deleteCategory(id: UUID) async throws
+
+    /// レシピをカテゴリに追加する
+    func addRecipeToCategory(recipeID: UUID, categoryID: UUID) async throws
+
+    /// レシピをカテゴリから削除する
+    func removeRecipeFromCategory(recipeID: UUID, categoryID: UUID) async throws
+
     // MARK: - Debug Operations
 
     /// 全てのデータを削除する（デバッグ用）

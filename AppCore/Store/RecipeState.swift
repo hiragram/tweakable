@@ -41,7 +41,40 @@ public struct RecipeState: Equatable, Sendable {
     /// レシピ削除中かどうか
     public var isDeletingRecipe: Bool = false
 
+    // MARK: - Category State
+
+    /// 全カテゴリ一覧
+    public var categories: [RecipeCategory] = []
+
+    /// カテゴリとレシピの紐付け（カテゴリID → レシピIDのセット）
+    public var categoryRecipeMap: [UUID: Set<UUID>] = [:]
+
+    /// カテゴリ読み込み中かどうか
+    public var isLoadingCategories: Bool = false
+
+    /// 現在選択中のカテゴリフィルタ（nilなら全レシピ表示）
+    public var selectedCategoryFilter: UUID? = nil
+
     public init() {}
+}
+
+// MARK: - Category Computed Properties
+
+extension RecipeState {
+    /// フィルタ適用後のレシピ一覧
+    public var filteredRecipes: [Recipe] {
+        guard let categoryID = selectedCategoryFilter else {
+            return savedRecipes
+        }
+        let recipeIDs = categoryRecipeMap[categoryID] ?? []
+        return savedRecipes.filter { recipeIDs.contains($0.id) }
+    }
+
+    /// どのカテゴリにも属さないレシピ
+    public var uncategorizedRecipes: [Recipe] {
+        let allCategorizedIDs = Set(categoryRecipeMap.values.flatMap { $0 })
+        return savedRecipes.filter { !allCategorizedIDs.contains($0.id) }
+    }
 }
 
 // MARK: - SubstitutionTarget

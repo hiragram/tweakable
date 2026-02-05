@@ -116,6 +116,32 @@ public final class MockRecipePersistenceService: RecipePersistenceServiceProtoco
         // No-op
     }
 
+    // MARK: - Category Operations
+
+    public func loadAllCategories() async throws -> (categories: [RecipeCategory], categoryRecipeMap: [UUID: Set<UUID>]) {
+        (categories: [], categoryRecipeMap: [:])
+    }
+
+    public func createCategory(name: String) async throws -> RecipeCategory {
+        RecipeCategory(name: name)
+    }
+
+    public func renameCategory(id: UUID, newName: String) async throws -> RecipeCategory {
+        RecipeCategory(id: id, name: newName)
+    }
+
+    public func deleteCategory(id: UUID) async throws {
+        // No-op for mock
+    }
+
+    public func addRecipeToCategory(recipeID: UUID, categoryID: UUID) async throws {
+        // No-op for mock
+    }
+
+    public func removeRecipeFromCategory(recipeID: UUID, categoryID: UUID) async throws {
+        // No-op for mock
+    }
+
     // MARK: - Debug Operations
 
     public func deleteAllData() async throws {

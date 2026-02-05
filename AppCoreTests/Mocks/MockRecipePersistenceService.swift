@@ -126,6 +126,61 @@ public final class MockRecipePersistenceService: RecipePersistenceServiceProtoco
         // Mockでは実際の更新は行わない
     }
 
+    // MARK: - Category Operations
+
+    public var categories: [UUID: RecipeCategory] = [:]
+    public var categoryRecipeMap: [UUID: Set<UUID>] = [:]
+    public var loadAllCategoriesCallCount = 0
+    public var createCategoryCallCount = 0
+    public var renameCategoryCallCount = 0
+    public var deleteCategoryCallCount = 0
+    public var addRecipeToCategoryCallCount = 0
+    public var removeRecipeFromCategoryCallCount = 0
+
+    public func loadAllCategories() async throws -> (categories: [RecipeCategory], categoryRecipeMap: [UUID: Set<UUID>]) {
+        loadAllCategoriesCallCount += 1
+        if let error = errorToThrow { throw error }
+        return (categories: Array(categories.values), categoryRecipeMap: categoryRecipeMap)
+    }
+
+    public func createCategory(name: String) async throws -> RecipeCategory {
+        createCategoryCallCount += 1
+        if let error = errorToThrow { throw error }
+        let category = RecipeCategory(name: name)
+        categories[category.id] = category
+        return category
+    }
+
+    public func renameCategory(id: UUID, newName: String) async throws -> RecipeCategory {
+        renameCategoryCallCount += 1
+        if let error = errorToThrow { throw error }
+        guard let existing = categories[id] else {
+            throw NSError(domain: "MockError", code: 404)
+        }
+        let renamed = RecipeCategory(id: id, name: newName, createdAt: existing.createdAt)
+        categories[id] = renamed
+        return renamed
+    }
+
+    public func deleteCategory(id: UUID) async throws {
+        deleteCategoryCallCount += 1
+        if let error = errorToThrow { throw error }
+        categories.removeValue(forKey: id)
+        categoryRecipeMap.removeValue(forKey: id)
+    }
+
+    public func addRecipeToCategory(recipeID: UUID, categoryID: UUID) async throws {
+        addRecipeToCategoryCallCount += 1
+        if let error = errorToThrow { throw error }
+        categoryRecipeMap[categoryID, default: []].insert(recipeID)
+    }
+
+    public func removeRecipeFromCategory(recipeID: UUID, categoryID: UUID) async throws {
+        removeRecipeFromCategoryCallCount += 1
+        if let error = errorToThrow { throw error }
+        categoryRecipeMap[categoryID]?.remove(recipeID)
+    }
+
     // MARK: - Debug Operations
 
     public var deleteAllDataCallCount = 0
@@ -135,5 +190,7 @@ public final class MockRecipePersistenceService: RecipePersistenceServiceProtoco
         if let error = errorToThrow { throw error }
         savedRecipes.removeAll()
         shoppingLists.removeAll()
+        categories.removeAll()
+        categoryRecipeMap.removeAll()
     }
 }
