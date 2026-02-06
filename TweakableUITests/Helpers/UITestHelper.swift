@@ -30,7 +30,7 @@ enum RecipeAccessibilityIDs {
     static let errorRetryButton = "recipe_button_retry"
     static func ingredientItem(_ index: Int) -> String { "recipe_button_ingredient_\(index)" }
     static func stepItem(_ index: Int) -> String { "recipe_button_step_\(index)" }
-    static let shoppingListButton = "recipe_button_shoppingList"
+    static let sourceURLLink = "recipe_link_sourceURL"
     static let modifiedBadge = "recipe_badge_modified"
 
     // SubstitutionSheetView
@@ -89,9 +89,9 @@ enum UITestHelper {
     /// レシピ詳細画面が表示されるまで待機
     /// - Returns: レシピ詳細画面に到達できたかどうか
     static func waitForRecipeView(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
-        // ツールバーのショッピングリストボタンが表示されることを確認
-        let shoppingListButton = app.buttons[RecipeAccessibilityIDs.shoppingListButton]
-        return shoppingListButton.waitForExistence(timeout: timeout)
+        // 最初の材料ボタンが表示されることを確認（レシピデータのロード完了を示す）
+        let firstIngredient = app.buttons[RecipeAccessibilityIDs.ingredientItem(0)]
+        return firstIngredient.waitForExistence(timeout: timeout)
     }
 
     /// ローディング画面が表示されるまで待機
