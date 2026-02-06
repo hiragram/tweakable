@@ -22,12 +22,14 @@ jobs:
             brew install xcbeautify
           fi
 
-      - name: Clean build
+      - name: Clean DerivedData and build
         run: |
+          rm -rf /tmp/CIDerivedData
           xcodebuild clean \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -derivedDataPath /tmp/CIDerivedData \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Run tests
@@ -37,6 +39,7 @@ jobs:
             -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -derivedDataPath /tmp/CIDerivedData \
             -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \
             CODE_SIGNING_ALLOWED=NO \
