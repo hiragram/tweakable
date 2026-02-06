@@ -276,32 +276,44 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Mango-Pomegranate-Pistachio-Squares.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "9人分",
-                items: [
-                    Ingredient(name: "無塩むきピスタチオ", amount: "340グラム"),
-                    Ingredient(name: "砂糖", amount: "60ミリリットル"),
-                    Ingredient(name: "コーシャソルト", amount: "1.25ミリリットル"),
-                    Ingredient(name: "卵", amount: "1個"),
-                    Ingredient(name: "溶かしバター", amount: "30ミリリットル"),
-                    Ingredient(name: "砂糖", amount: "120ミリリットル"),
-                    Ingredient(name: "コーンスターチ", amount: "15ミリリットル"),
-                    Ingredient(name: "卵", amount: "3個"),
-                    Ingredient(name: "マンゴーピューレ（裏ごし済み）", amount: "240ミリリットル（マンゴー約3個分）"),
-                    Ingredient(name: "レモン汁", amount: "60ミリリットル（大きめのレモン約1個分）"),
-                    Ingredient(name: "ザクロジュース", amount: "240ミリリットル（分けて使用）"),
-                    Ingredient(name: "粉ゼラチン", amount: "約7グラム"),
-                    Ingredient(name: "砂糖", amount: "15ミリリットル"),
+                sections: [
+                    IngredientSection(header: "ピスタチオクラスト用", items: [
+                        Ingredient(name: "無塩むきピスタチオ", amount: "340グラム"),
+                        Ingredient(name: "砂糖", amount: "60ミリリットル"),
+                        Ingredient(name: "コーシャソルト", amount: "1.25ミリリットル"),
+                        Ingredient(name: "卵", amount: "1個"),
+                        Ingredient(name: "溶かしバター", amount: "30ミリリットル"),
+                    ]),
+                    IngredientSection(header: "マンゴーフィリング用", items: [
+                        Ingredient(name: "砂糖", amount: "120ミリリットル"),
+                        Ingredient(name: "コーンスターチ", amount: "15ミリリットル"),
+                        Ingredient(name: "卵", amount: "3個"),
+                        Ingredient(name: "マンゴーピューレ（裏ごし済み）", amount: "240ミリリットル（マンゴー約3個分）"),
+                        Ingredient(name: "レモン汁", amount: "60ミリリットル（大きめのレモン約1個分）"),
+                    ]),
+                    IngredientSection(header: "ザクロゼリー用", items: [
+                        Ingredient(name: "ザクロジュース", amount: "240ミリリットル（分けて使用）"),
+                        Ingredient(name: "粉ゼラチン", amount: "約7グラム"),
+                        Ingredient(name: "砂糖", amount: "15ミリリットル"),
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "20センチ四方の型にクッキングシートを敷く。取り出しやすいよう四辺にはみ出しを残す。"),
-                CookingStep(stepNumber: 2, instruction: "フードプロセッサーでピスタチオを約30秒細かく砕く。砂糖60ミリリットルと塩を加えてパルスで混ぜ、卵1個と溶かしバターを加えてまとまるまで撹拌する。平らなコップの底を使い、生地を型に均一にしっかり押し付ける。フィリングを準備する間、冷蔵庫で冷やす。"),
-                CookingStep(stepNumber: 3, instruction: "オーブンを180℃に予熱する。"),
-                CookingStep(stepNumber: 4, instruction: "ボウルに砂糖120ミリリットル、コーンスターチ、卵3個、マンゴーピューレ、レモン汁を入れ、1〜2分しっかり混ぜ合わせる。冷やしておいたピスタチオクラストの上に流し入れる。"),
-                CookingStep(stepNumber: 5, instruction: "35〜40分焼く。マンゴーフィリングがほぼ固まり、中央がわずかに揺れる程度になればOK。室温まで冷ましてから、冷蔵庫で最低2時間（または一晩）冷やす。"),
-                CookingStep(stepNumber: 6, instruction: "小さなボウルにザクロジュース60ミリリットルを入れ、ゼラチンを表面に均一にふり入れる。ふやかしておく。"),
-                CookingStep(stepNumber: 7, instruction: "小鍋に残りのザクロジュース180ミリリットルと砂糖15ミリリットルを入れ、沸騰させる。ふやかしたゼラチンに注ぎ、完全に溶けるまで混ぜる。液状のまま冷めるまで約20分冷蔵庫で冷やす。"),
-                CookingStep(stepNumber: 8, instruction: "冷えたザクロ液を泡立て器でよく混ぜ、固まりかけたゼラチンをなじませる。マンゴー層の上に均一に流し入れ、冷蔵庫で最低2時間、ゼリーが完全に固まるまで冷やす。"),
-                CookingStep(stepNumber: 9, instruction: "クッキングシートのはみ出し部分を持って型から取り出す。9等分にカットする。冷蔵保存。"),
+            stepSections: [
+                CookingStepSection(header: "ピスタチオクラスト", items: [
+                    CookingStep(stepNumber: 1, instruction: "20センチ四方の型にクッキングシートを敷く。取り出しやすいよう四辺にはみ出しを残す。"),
+                    CookingStep(stepNumber: 2, instruction: "フードプロセッサーでピスタチオを約30秒細かく砕く。砂糖60ミリリットルと塩を加えてパルスで混ぜ、卵1個と溶かしバターを加えてまとまるまで撹拌する。平らなコップの底を使い、生地を型に均一にしっかり押し付ける。フィリングを準備する間、冷蔵庫で冷やす。"),
+                ]),
+                CookingStepSection(header: "マンゴーカード", items: [
+                    CookingStep(stepNumber: 3, instruction: "オーブンを180℃に予熱する。"),
+                    CookingStep(stepNumber: 4, instruction: "ボウルに砂糖120ミリリットル、コーンスターチ、卵3個、マンゴーピューレ、レモン汁を入れ、1〜2分しっかり混ぜ合わせる。冷やしておいたピスタチオクラストの上に流し入れる。"),
+                    CookingStep(stepNumber: 5, instruction: "35〜40分焼く。マンゴーフィリングがほぼ固まり、中央がわずかに揺れる程度になればOK。室温まで冷ましてから、冷蔵庫で最低2時間（または一晩）冷やす。"),
+                ]),
+                CookingStepSection(header: "ザクロゼリー", items: [
+                    CookingStep(stepNumber: 6, instruction: "小さなボウルにザクロジュース60ミリリットルを入れ、ゼラチンを表面に均一にふり入れる。ふやかしておく。"),
+                    CookingStep(stepNumber: 7, instruction: "小鍋に残りのザクロジュース180ミリリットルと砂糖15ミリリットルを入れ、沸騰させる。ふやかしたゼラチンに注ぎ、完全に溶けるまで混ぜる。液状のまま冷めるまで約20分冷蔵庫で冷やす。"),
+                    CookingStep(stepNumber: 8, instruction: "冷えたザクロ液を泡立て器でよく混ぜ、固まりかけたゼラチンをなじませる。マンゴー層の上に均一に流し入れ、冷蔵庫で最低2時間、ゼリーが完全に固まるまで冷やす。"),
+                    CookingStep(stepNumber: 9, instruction: "クッキングシートのはみ出し部分を持って型から取り出す。9等分にカットする。冷蔵保存。"),
+                ])
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/07/25/mango-pomegranate-pistachio-squares/")
         ),
@@ -370,32 +382,52 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/04/Parmesan-Truffle-Fries-With-Roasted-Garlic-Aioli-4x5-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
-                    Ingredient(name: "にんにく（大・みじん切り）", amount: "6片"),
-                    Ingredient(name: "サラダ油などの中性オイル", amount: "60ミリリットル"),
-                    Ingredient(name: "コーシャーソルト", amount: "適量"),
-                    Ingredient(name: "卵黄", amount: "2個分"),
-                    Ingredient(name: "レモン汁", amount: "ティースプーン2杯"),
-                    Ingredient(name: "ウスターソース", amount: "ティースプーン½杯"),
-                    Ingredient(name: "ホットソース", amount: "適量"),
-                    Ingredient(name: "黒こしょう（挽きたて）", amount: "適量"),
-                    Ingredient(name: "植物油（揚げ油用）", amount: nil),
-                    Ingredient(name: "ラセットポテト（洗って約6ミリメートル幅のマッチ棒状に切る）", amount: "4個"),
-                    Ingredient(name: "パルメザンチーズ（すりおろし）", amount: "60ミリリットル"),
-                    Ingredient(name: "バジル（細切り）", amount: "テーブルスプーン2杯"),
-                    Ingredient(name: "黒トリュフオイル", amount: "ティースプーン1杯"),
-                    Ingredient(name: "コーシャーソルト", amount: "適量"),
-                    Ingredient(name: "黒こしょう（挽きたて）", amount: "適量"),
+                sections: [
+                    IngredientSection(
+                        header: "ローストガーリックアイオリの材料",
+                        items: [
+                            Ingredient(name: "にんにく（大・みじん切り）", amount: "6片"),
+                            Ingredient(name: "サラダ油などの中性オイル", amount: "60ミリリットル"),
+                            Ingredient(name: "コーシャーソルト", amount: "適量"),
+                            Ingredient(name: "卵黄", amount: "2個分"),
+                            Ingredient(name: "レモン汁", amount: "ティースプーン2杯"),
+                            Ingredient(name: "ウスターソース", amount: "ティースプーン½杯"),
+                            Ingredient(name: "ホットソース", amount: "適量"),
+                            Ingredient(name: "黒こしょう（挽きたて）", amount: "適量"),
+                        ]
+                    ),
+                    IngredientSection(
+                        header: "パルメザントリュフフライの材料",
+                        items: [
+                            Ingredient(name: "植物油（揚げ油用）", amount: nil),
+                            Ingredient(name: "ラセットポテト（洗って約6ミリメートル幅のマッチ棒状に切る）", amount: "4個"),
+                            Ingredient(name: "パルメザンチーズ（すりおろし）", amount: "60ミリリットル"),
+                            Ingredient(name: "バジル（細切り）", amount: "テーブルスプーン2杯"),
+                            Ingredient(name: "黒トリュフオイル", amount: "ティースプーン1杯"),
+                            Ingredient(name: "コーシャーソルト", amount: "適量"),
+                            Ingredient(name: "黒こしょう（挽きたて）", amount: "適量"),
+                        ]
+                    ),
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "小鍋に中性オイルとみじん切りにしたにんにくを入れ、中弱火で約3分間、にんにくがうっすらきつね色になるまで加熱する。"),
-                CookingStep(stepNumber: 2, instruction: "耐熱計量カップの上に細かい網のザルをセットする。にんにくとオイルをザルに通し、にんにくはボウルに移す。オイルは冷蔵庫で10分以上冷ます。"),
-                CookingStep(stepNumber: 3, instruction: "にんにくの入ったボウルを、タオルを敷いた鍋の上に安定させて置く。卵黄、レモン汁、ウスターソース、ホットソース、こしょうを加える。冷ましたオイルを最初は数滴ずつ、徐々に細い糸状に増やしながら加え、マヨネーズ状に乳化するまで泡立て器でよく混ぜる。固すぎる場合はぬるま湯を少量加えて調整する。"),
-                CookingStep(stepNumber: 4, instruction: "天板2枚にキッチンペーパーを敷いておく。"),
-                CookingStep(stepNumber: 5, instruction: "深めのフライパンに約4センチメートルの植物油を入れ、175℃に熱する。ポテトを数回に分けて3〜4分、端が色づくまで揚げる。天板に取り出し、バッチの間に油の温度を確認する。"),
-                CookingStep(stepNumber: 6, instruction: "油の温度を200℃に上げる。一度揚げたポテトを再度1〜2分、全体がカリッときつね色になるまで揚げる。きれいなキッチンペーパーに取り出す。"),
-                CookingStep(stepNumber: 7, instruction: "熱々のフライをボウルに入れ、すりおろしたパルメザンチーズ、細切りバジル、黒トリュフオイルを加えてよく絡める。塩とこしょうで味を調え、ガーリックアイオリを添えてすぐに提供する。"),
+            stepSections: [
+                CookingStepSection(
+                    header: "ローストガーリックアイオリの作り方",
+                    items: [
+                        CookingStep(stepNumber: 1, instruction: "小鍋に中性オイルとみじん切りにしたにんにくを入れ、中弱火で約3分間、にんにくがうっすらきつね色になるまで加熱する。"),
+                        CookingStep(stepNumber: 2, instruction: "耐熱計量カップの上に細かい網のザルをセットする。にんにくとオイルをザルに通し、にんにくはボウルに移す。オイルは冷蔵庫で10分以上冷ます。"),
+                        CookingStep(stepNumber: 3, instruction: "にんにくの入ったボウルを、タオルを敷いた鍋の上に安定させて置く。卵黄、レモン汁、ウスターソース、ホットソース、こしょうを加える。冷ましたオイルを最初は数滴ずつ、徐々に細い糸状に増やしながら加え、マヨネーズ状に乳化するまで泡立て器でよく混ぜる。固すぎる場合はぬるま湯を少量加えて調整する。"),
+                    ]
+                ),
+                CookingStepSection(
+                    header: "パルメザントリュフフライの作り方",
+                    items: [
+                        CookingStep(stepNumber: 4, instruction: "天板2枚にキッチンペーパーを敷いておく。"),
+                        CookingStep(stepNumber: 5, instruction: "深めのフライパンに約4センチメートルの植物油を入れ、175℃に熱する。ポテトを数回に分けて3〜4分、端が色づくまで揚げる。天板に取り出し、バッチの間に油の温度を確認する。"),
+                        CookingStep(stepNumber: 6, instruction: "油の温度を200℃に上げる。一度揚げたポテトを再度1〜2分、全体がカリッときつね色になるまで揚げる。きれいなキッチンペーパーに取り出す。"),
+                        CookingStep(stepNumber: 7, instruction: "熱々のフライをボウルに入れ、すりおろしたパルメザンチーズ、細切りバジル、黒トリュフオイルを加えてよく絡める。塩とこしょうで味を調え、ガーリックアイオリを添えてすぐに提供する。"),
+                    ]
+                ),
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/05/09/parmesan-truffle-fries-with-quick-garlic-aioli/")
         ),
@@ -406,30 +438,42 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/12/Latkes-with-Beet-Cured-Salmon-Lox-1-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
-                    Ingredient(name: "皮付きサーモン（中央部分）", amount: "約450グラム"),
-                    Ingredient(name: "小さめのビーツ（皮をむいて細かくすりおろす）", amount: "2個"),
-                    Ingredient(name: "フレッシュディル（粗く刻む）", amount: "60ミリリットル"),
-                    Ingredient(name: "コーシャーソルト", amount: "大さじ3"),
-                    Ingredient(name: "砂糖", amount: "大さじ1½"),
-                    Ingredient(name: "黒こしょう（挽きたて）", amount: nil),
-                    Ingredient(name: "サラダ油（植物油またはグレープシードオイル）", amount: nil),
-                    Ingredient(name: "ラセットポテト", amount: "約1.1キログラム（中4〜5個）"),
-                    Ingredient(name: "玉ねぎ（大）", amount: "1個"),
-                    Ingredient(name: "溶き卵", amount: "2個"),
-                    Ingredient(name: "薄力粉", amount: "大さじ2"),
-                    Ingredient(name: "コーシャーソルト", amount: "適量"),
-                    Ingredient(name: "黒こしょう（挽きたて）", amount: nil),
-                    Ingredient(name: "サワークリーム", amount: nil),
-                    Ingredient(name: "フレッシュディル", amount: nil),
+                sections: [
+                    IngredientSection(header: "ビーツ漬けサーモン用", items: [
+                        Ingredient(name: "皮付きサーモン（中央部分）", amount: "約450グラム"),
+                        Ingredient(name: "小さめのビーツ（皮をむいて細かくすりおろす）", amount: "2個"),
+                        Ingredient(name: "フレッシュディル（粗く刻む）", amount: "60ミリリットル"),
+                        Ingredient(name: "コーシャーソルト", amount: "大さじ3"),
+                        Ingredient(name: "砂糖", amount: "大さじ1½"),
+                        Ingredient(name: "黒こしょう（挽きたて）", amount: nil),
+                    ]),
+                    IngredientSection(header: "ラトケス用", items: [
+                        Ingredient(name: "サラダ油（植物油またはグレープシードオイル）", amount: nil),
+                        Ingredient(name: "ラセットポテト", amount: "約1.1キログラム（中4〜5個）"),
+                        Ingredient(name: "玉ねぎ（大）", amount: "1個"),
+                        Ingredient(name: "溶き卵", amount: "2個"),
+                        Ingredient(name: "薄力粉", amount: "大さじ2"),
+                        Ingredient(name: "コーシャーソルト", amount: "適量"),
+                        Ingredient(name: "黒こしょう（挽きたて）", amount: nil),
+                    ]),
+                    IngredientSection(header: "ガーニッシュ", items: [
+                        Ingredient(name: "サワークリーム", amount: nil),
+                        Ingredient(name: "フレッシュディル", amount: nil),
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "すりおろしたビーツ、ディル、塩、砂糖、こしょうを混ぜてキュア液を作る。サーモン全体にまんべんなく塗り、クッキングシートでしっかり包んで冷蔵庫に入れ、重しを乗せて3〜4日間寝かせる。2日目にサーモンを裏返す。"),
-                CookingStep(stepNumber: 2, instruction: "サーモンからキュア液を取り除き、繊維に逆らって薄くスライスする。残りのサーモンはラップで包んで冷蔵保存（4〜5日保存可能）。"),
-                CookingStep(stepNumber: 3, instruction: "ボウルにティータオルを敷き、じゃがいもと玉ねぎをすりおろす。タオルで包んで余分な水分をしっかり絞る。絞った液を少し置き、上澄みを捨てて底に沈んだ白いでんぷんを残す。すりおろした野菜と溶き卵、薄力粉、塩を混ぜ合わせる。"),
-                CookingStep(stepNumber: 4, instruction: "フライパンに油を入れ、中強火で熱する。ポテト生地を約120ミリリットルずつ取り、厚さ約1.3センチメートルの円形に整え、6〜7分きつね色になるまで揚げ焼きにする。裏返して同様に焼く。ペーパータオルに移し、塩をたっぷり振る。"),
-                CookingStep(stepNumber: 5, instruction: "ラトケスの上にビーツキュアサーモンを2〜3枚のせ、サワークリームをひとさじ添え、フレッシュディルと挽きたてこしょうを散らす。"),
+            stepSections: [
+                CookingStepSection(header: "ビーツ漬けサーモン", items: [
+                    CookingStep(stepNumber: 1, instruction: "すりおろしたビーツ、ディル、塩、砂糖、こしょうを混ぜてキュア液を作る。サーモン全体にまんべんなく塗り、クッキングシートでしっかり包んで冷蔵庫に入れ、重しを乗せて3〜4日間寝かせる。2日目にサーモンを裏返す。"),
+                    CookingStep(stepNumber: 2, instruction: "サーモンからキュア液を取り除き、繊維に逆らって薄くスライスする。残りのサーモンはラップで包んで冷蔵保存（4〜5日保存可能）。"),
+                ]),
+                CookingStepSection(header: "ラトケス", items: [
+                    CookingStep(stepNumber: 3, instruction: "ボウルにティータオルを敷き、じゃがいもと玉ねぎをすりおろす。タオルで包んで余分な水分をしっかり絞る。絞った液を少し置き、上澄みを捨てて底に沈んだ白いでんぷんを残す。すりおろした野菜と溶き卵、薄力粉、塩を混ぜ合わせる。"),
+                    CookingStep(stepNumber: 4, instruction: "フライパンに油を入れ、中強火で熱する。ポテト生地を約120ミリリットルずつ取り、厚さ約1.3センチメートルの円形に整え、6〜7分きつね色になるまで揚げ焼きにする。裏返して同様に焼く。ペーパータオルに移し、塩をたっぷり振る。"),
+                ]),
+                CookingStepSection(header: "盛り付け", items: [
+                    CookingStep(stepNumber: 5, instruction: "ラトケスの上にビーツキュアサーモンを2〜3枚のせ、サワークリームをひとさじ添え、フレッシュディルと挽きたてこしょうを散らす。"),
+                ])
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/12/14/latkes-with-beet-cured-salmon-lox/")
         ),
@@ -440,43 +484,59 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/02/Pani-Poori-Low-Res.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
-                    Ingredient(name: "セモリナ粉", amount: "1カップ"),
-                    Ingredient(name: "ベーキングソーダ", amount: "小さじ1/8"),
-                    Ingredient(name: "薄力粉", amount: "大さじ1"),
-                    Ingredient(name: "塩（生地用）", amount: "小さじ1/4"),
-                    Ingredient(name: "水", amount: "大さじ6"),
-                    Ingredient(name: "油（生地用）", amount: "小さじ1"),
-                    Ingredient(name: "揚げ油", amount: nil),
-                    Ingredient(name: "じゃがいも（中）", amount: "4個"),
-                    Ingredient(name: "チリパウダー", amount: "小さじ1/4"),
-                    Ingredient(name: "クミン", amount: "小さじ1/2"),
-                    Ingredient(name: "コリアンダー", amount: "小さじ1/2"),
-                    Ingredient(name: "チャートマサラ", amount: "小さじ1"),
-                    Ingredient(name: "塩（ポテト用）", amount: "小さじ1/2"),
-                    Ingredient(name: "パクチー（刻み）", amount: "大さじ2"),
-                    Ingredient(name: "パクチー", amount: "1/2カップ"),
-                    Ingredient(name: "ミントの葉", amount: "1/2カップ"),
-                    Ingredient(name: "青唐辛子", amount: "2〜3本"),
-                    Ingredient(name: "しょうが（皮をむく）", amount: "2.5センチ"),
-                    Ingredient(name: "レモン果汁", amount: "1個分"),
-                    Ingredient(name: "タマリンドペースト", amount: "大さじ3"),
-                    Ingredient(name: "ブラウンシュガーまたはジャガリー", amount: "大さじ3"),
-                    Ingredient(name: "チャートマサラ（お好みで）", amount: "小さじ1"),
-                    Ingredient(name: "塩", amount: "ひとつまみ"),
-                    Ingredient(name: "タマリンドチャツネ", amount: nil),
-                    Ingredient(name: "ザクロの実", amount: nil),
-                    Ingredient(name: "赤玉ねぎ", amount: nil),
-                    Ingredient(name: "フレッシュパクチー", amount: nil),
+                sections: [
+                    IngredientSection(header: "プーリの生地用", items: [
+                        Ingredient(name: "セモリナ粉", amount: "1カップ"),
+                        Ingredient(name: "ベーキングソーダ", amount: "小さじ1/8"),
+                        Ingredient(name: "薄力粉", amount: "大さじ1"),
+                        Ingredient(name: "塩（生地用）", amount: "小さじ1/4"),
+                        Ingredient(name: "水", amount: "大さじ6"),
+                        Ingredient(name: "油（生地用）", amount: "小さじ1"),
+                        Ingredient(name: "揚げ油", amount: nil),
+                    ]),
+                    IngredientSection(header: "アルー・マサラ用", items: [
+                        Ingredient(name: "じゃがいも（中）", amount: "4個"),
+                        Ingredient(name: "チリパウダー", amount: "小さじ1/4"),
+                        Ingredient(name: "クミン", amount: "小さじ1/2"),
+                        Ingredient(name: "コリアンダー", amount: "小さじ1/2"),
+                        Ingredient(name: "チャートマサラ", amount: "小さじ1"),
+                        Ingredient(name: "塩（ポテト用）", amount: "小さじ1/2"),
+                        Ingredient(name: "パクチー（刻み）", amount: "大さじ2"),
+                    ]),
+                    IngredientSection(header: "パニプーリ水用", items: [
+                        Ingredient(name: "パクチー", amount: "1/2カップ"),
+                        Ingredient(name: "ミントの葉", amount: "1/2カップ"),
+                        Ingredient(name: "青唐辛子", amount: "2〜3本"),
+                        Ingredient(name: "しょうが（皮をむく）", amount: "2.5センチ"),
+                        Ingredient(name: "レモン果汁", amount: "1個分"),
+                        Ingredient(name: "タマリンドペースト", amount: "大さじ3"),
+                        Ingredient(name: "ブラウンシュガーまたはジャガリー", amount: "大さじ3"),
+                        Ingredient(name: "チャートマサラ（お好みで）", amount: "小さじ1"),
+                        Ingredient(name: "塩", amount: "ひとつまみ"),
+                    ]),
+                    IngredientSection(header: "ガーニッシュ用", items: [
+                        Ingredient(name: "タマリンドチャツネ", amount: nil),
+                        Ingredient(name: "ザクロの実", amount: nil),
+                        Ingredient(name: "赤玉ねぎ", amount: nil),
+                        Ingredient(name: "フレッシュパクチー", amount: nil),
+                    ]),
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "ボウルにセモリナ粉、ベーキングソーダ、薄力粉、塩を入れて混ぜる。水と油を加え、なめらかで弾力が出るまでこねる。1時間休ませる。"),
-                CookingStep(stepNumber: 2, instruction: "生地を約3ミリの薄さに伸ばし、直径5センチの丸型で抜く。"),
-                CookingStep(stepNumber: 3, instruction: "油を200℃に熱し、生地を揚げる。ぷっくり膨らんできつね色になったら取り出し、油を切る。"),
-                CookingStep(stepNumber: 4, instruction: "パクチー、ミントの葉、青唐辛子、しょうが、レモン果汁をミキサーでなめらかになるまで撹拌する。タマリンドペースト、ブラウンシュガー、チャートマサラ、塩ひとつまみを加えて混ぜ、冷水4カップを加えて冷やす。"),
-                CookingStep(stepNumber: 5, instruction: "じゃがいもを1センチ角に切り、柔らかくなるまで茹でる。水を切り、チリパウダー、クミン、コリアンダー、チャートマサラ、塩、刻みパクチーを加えて和える。"),
-                CookingStep(stepNumber: 6, instruction: "プーリのシェルに穴を開け、スパイスポテトを詰める。ミントウォーター、刻んだ赤玉ねぎ、タマリンドチャツネ、ザクロの実、フレッシュパクチーをトッピングし、すぐに提供する。"),
+            stepSections: [
+                CookingStepSection(header: "プーリ生地", items: [
+                    CookingStep(stepNumber: 1, instruction: "ボウルにセモリナ粉、ベーキングソーダ、薄力粉、塩を入れて混ぜる。水と油を加え、なめらかで弾力が出るまでこねる。1時間休ませる。"),
+                    CookingStep(stepNumber: 2, instruction: "生地を約3ミリの薄さに伸ばし、直径5センチの丸型で抜く。"),
+                    CookingStep(stepNumber: 3, instruction: "油を200℃に熱し、生地を揚げる。ぷっくり膨らんできつね色になったら取り出し、油を切る。"),
+                ]),
+                CookingStepSection(header: "水", items: [
+                    CookingStep(stepNumber: 4, instruction: "パクチー、ミントの葉、青唐辛子、しょうが、レモン果汁をミキサーでなめらかになるまで撹拌する。タマリンドペースト、ブラウンシュガー、チャートマサラ、塩ひとつまみを加えて混ぜ、冷水4カップを加えて冷やす。"),
+                ]),
+                CookingStepSection(header: "じゃがいも", items: [
+                    CookingStep(stepNumber: 5, instruction: "じゃがいもを1センチ角に切り、柔らかくなるまで茹でる。水を切り、チリパウダー、クミン、コリアンダー、チャートマサラ、塩、刻みパクチーを加えて和える。"),
+                ]),
+                CookingStepSection(header: "組み立て", items: [
+                    CookingStep(stepNumber: 6, instruction: "プーリのシェルに穴を開け、スパイスポテトを詰める。ミントウォーター、刻んだ赤玉ねぎ、タマリンドチャツネ、ザクロの実、フレッシュパクチーをトッピングし、すぐに提供する。"),
+                ]),
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/02/08/pani-poori-from-scratch/")
         ),
@@ -487,36 +547,46 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/03/Apple-Pie-Buns-2-LOW-RES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "6個分",
-                items: [
-                    Ingredient(name: "牛乳", amount: "120ミリリットル"),
-                    Ingredient(name: "グラニュー糖", amount: "50グラム"),
-                    Ingredient(name: "ドライイースト", amount: "1袋（約7グラム）"),
-                    Ingredient(name: "バター（角切り・室温に戻す）", amount: "60グラム"),
-                    Ingredient(name: "卵（室温に戻す）", amount: "1個"),
-                    Ingredient(name: "塩", amount: "小さじ¼"),
-                    Ingredient(name: "薄力粉", amount: "250グラム"),
-                    Ingredient(name: "アップルバター", amount: "120ミリリットル"),
-                    Ingredient(name: "ダークブラウンシュガー", amount: "大さじ2"),
-                    Ingredient(name: "シナモン", amount: "小さじ¼"),
-                    Ingredient(name: "クローブパウダー", amount: "小さじ⅛"),
-                    Ingredient(name: "オールスパイスパウダー", amount: "小さじ⅛"),
-                    Ingredient(name: "ナツメグ（すりおろし）", amount: "少々"),
-                    Ingredient(name: "塩", amount: "少々"),
-                    Ingredient(name: "くるみ（細かく刻む）", amount: "60グラム"),
-                    Ingredient(name: "グラニュー糖（キャラメル用）", amount: "150グラム"),
-                    Ingredient(name: "有塩バター（冷たいまま角切り）", amount: "60グラム"),
-                    Ingredient(name: "りんご（ピンクレディー・皮をむき芯を取り薄切り）", amount: "1個"),
-                    Ingredient(name: "溶き卵（塗り用）", amount: "1個"),
+                sections: [
+                    IngredientSection(header: "生地用", items: [
+                        Ingredient(name: "牛乳", amount: "120ミリリットル"),
+                        Ingredient(name: "グラニュー糖", amount: "50グラム"),
+                        Ingredient(name: "ドライイースト", amount: "1袋（約7グラム）"),
+                        Ingredient(name: "バター（角切り・室温に戻す）", amount: "60グラム"),
+                        Ingredient(name: "卵（室温に戻す）", amount: "1個"),
+                        Ingredient(name: "塩", amount: "小さじ¼"),
+                        Ingredient(name: "薄力粉", amount: "250グラム"),
+                    ]),
+                    IngredientSection(header: "フィリング用", items: [
+                        Ingredient(name: "アップルバター", amount: "120ミリリットル"),
+                        Ingredient(name: "ダークブラウンシュガー", amount: "大さじ2"),
+                        Ingredient(name: "シナモン", amount: "小さじ¼"),
+                        Ingredient(name: "クローブパウダー", amount: "小さじ⅛"),
+                        Ingredient(name: "オールスパイスパウダー", amount: "小さじ⅛"),
+                        Ingredient(name: "ナツメグ（すりおろし）", amount: "少々"),
+                        Ingredient(name: "塩", amount: "少々"),
+                        Ingredient(name: "くるみ（細かく刻む）", amount: "60グラム"),
+                    ]),
+                    IngredientSection(header: "キャラメルアップル用", items: [
+                        Ingredient(name: "グラニュー糖（キャラメル用）", amount: "150グラム"),
+                        Ingredient(name: "有塩バター（冷たいまま角切り）", amount: "60グラム"),
+                        Ingredient(name: "りんご（ピンクレディー・皮をむき芯を取り薄切り）", amount: "1個"),
+                    ]),
+                    IngredientSection(header: "その他", items: [
+                        Ingredient(name: "溶き卵（塗り用）", amount: "1個"),
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "牛乳を32〜40℃に温め、スタンドミキサーのボウルに砂糖・イーストと合わせる。5〜10分置いて泡立つまで待つ。"),
-                CookingStep(stepNumber: 2, instruction: "室温に戻したバター、卵、塩を加える。低速で粉を少しずつ加えて生地をまとめ、中高速で5分間こねて滑らかで弾力のある生地にする。"),
-                CookingStep(stepNumber: 3, instruction: "生地を丸めて油を塗ったボウルに入れ、ラップをかけて1時間、2倍の大きさになるまで発酵させる。"),
-                CookingStep(stepNumber: 4, instruction: "フィリングを作る。アップルバターにブラウンシュガー、シナモン、クローブ、オールスパイス、ナツメグ、塩を混ぜ合わせる。"),
-                CookingStep(stepNumber: 5, instruction: "生地を25×30センチメートルの長方形に伸ばし、フィリングを均一に塗り、くるみを散らしてきつく巻く。6等分に切る。直径23センチメートルのパイ皿に油を塗る。"),
-                CookingStep(stepNumber: 6, instruction: "キャラメルを作る。砂糖を中強火で4分間触らずに加熱し、1〜2分かき混ぜて濃い琥珀色にする。火を止めて冷たいバターを加えて混ぜる。パイ皿に流し入れ、りんごのスライスを並べ、その上にバンズを切り口を上にして置く。ホイルをかけて30分発酵させる。"),
-                CookingStep(stepNumber: 7, instruction: "オーブンを190℃に予熱する。バンズに溶き卵を塗り、25分間きつね色になるまで焼く。15〜30分冷ましてから、サービングプレートにひっくり返す。"),
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "牛乳を32〜40℃に温め、スタンドミキサーのボウルに砂糖・イーストと合わせる。5〜10分置いて泡立つまで待つ。"),
+                    CookingStep(stepNumber: 2, instruction: "室温に戻したバター、卵、塩を加える。低速で粉を少しずつ加えて生地をまとめ、中高速で5分間こねて滑らかで弾力のある生地にする。"),
+                    CookingStep(stepNumber: 3, instruction: "生地を丸めて油を塗ったボウルに入れ、ラップをかけて1時間、2倍の大きさになるまで発酵させる。"),
+                    CookingStep(stepNumber: 4, instruction: "フィリングを作る。アップルバターにブラウンシュガー、シナモン、クローブ、オールスパイス、ナツメグ、塩を混ぜ合わせる。"),
+                    CookingStep(stepNumber: 5, instruction: "生地を25×30センチメートルの長方形に伸ばし、フィリングを均一に塗り、くるみを散らしてきつく巻く。6等分に切る。直径23センチメートルのパイ皿に油を塗る。"),
+                    CookingStep(stepNumber: 6, instruction: "キャラメルを作る。砂糖を中強火で4分間触らずに加熱し、1〜2分かき混ぜて濃い琥珀色にする。火を止めて冷たいバターを加えて混ぜる。パイ皿に流し入れ、りんごのスライスを並べ、その上にバンズを切り口を上にして置く。ホイルをかけて30分発酵させる。"),
+                    CookingStep(stepNumber: 7, instruction: "オーブンを190℃に予熱する。バンズに溶き卵を塗り、25分間きつね色になるまで焼く。15〜30分冷ましてから、サービングプレートにひっくり返す。"),
+                ])
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/03/24/caramel-apple-pie-sticky-buns/")
         ),
@@ -598,37 +668,54 @@ extension SeedData {
             ingredientsInfo: Ingredients(
                 servings: "4〜6人分",
                 items: [
-                    Ingredient(name: "キュウリ（カービー種）、3ミリ厚にスライス", amount: "3本"),
-                    Ingredient(name: "玉ねぎ（薄切り）", amount: "½カップ"),
-                    Ingredient(name: "ホワイトビネガー", amount: "1カップ"),
-                    Ingredient(name: "セロリシード", amount: "小さじ1"),
-                    Ingredient(name: "マスタードシード", amount: "小さじ2"),
-                    Ingredient(name: "砂糖", amount: "½カップ"),
-                    Ingredient(name: "コーシャーソルト", amount: "小さじ1"),
-                    Ingredient(name: "ターメリック", amount: "小さじ¼"),
-                    Ingredient(name: "氷", amount: "1カップ"),
-                    Ingredient(name: "ディジョンマスタード", amount: "¼カップ"),
-                    Ingredient(name: "粒マスタード", amount: "大さじ2"),
-                    Ingredient(name: "はちみつ", amount: "¼カップ"),
-                    Ingredient(name: "にんにく（すりおろし）", amount: "4片"),
-                    Ingredient(name: "フランクスレッドホットソース", amount: "½カップ"),
-                    Ingredient(name: "コチュジャン", amount: "大さじ2〜4"),
-                    Ingredient(name: "バター（植物性推奨）", amount: "大さじ2"),
-                    Ingredient(name: "鶏肉（骨なしむね肉またはもも肉）", amount: "約900グラム"),
-                    Ingredient(name: "コーンスターチまたは片栗粉", amount: "1カップ"),
+                    IngredientSection(header: "ピクル用", items: [
+                        Ingredient(name: "キュウリ（カービー種）、3ミリ厚にスライス", amount: "3本"),
+                        Ingredient(name: "玉ねぎ（薄切り）", amount: "½カップ"),
+                        Ingredient(name: "ホワイトビネガー", amount: "1カップ"),
+                        Ingredient(name: "セロリシード", amount: "小さじ1"),
+                        Ingredient(name: "マスタードシード", amount: "小さじ2"),
+                        Ingredient(name: "砂糖", amount: "½カップ"),
+                        Ingredient(name: "コーシャーソルト", amount: "小さじ1"),
+                        Ingredient(name: "ターメリック", amount: "小さじ¼"),
+                    ]),
+                    IngredientSection(header: "ハニーマスタードソース用", items: [
+                        Ingredient(name: "ディジョンマスタード", amount: "¼カップ"),
+                        Ingredient(name: "粒マスタード", amount: "大さじ2"),
+                        Ingredient(name: "はちみつ", amount: "¼カップ"),
+                        Ingredient(name: "にんにく（すりおろし）", amount: "4片"),
+                    ]),
+                    IngredientSection(header: "バッファローソース用", items: [
+                        Ingredient(name: "フランクスレッドホットソース", amount: "½カップ"),
+                        Ingredient(name: "コチュジャン", amount: "大さじ2〜4"),
+                        Ingredient(name: "バター（植物性推奨）", amount: "大さじ2"),
+                    ]),
+                    IngredientSection(header: "チキン用", items: [
+                        Ingredient(name: "鶏肉（骨なしむね肉またはもも肉）", amount: "約900グラム"),
+                        Ingredient(name: "コーンスターチまたは片栗粉", amount: "1カップ"),
+                    ])
                 ]
             ),
             steps: [
-                CookingStep(stepNumber: 1, instruction: "スライスしたキュウリと薄切り玉ねぎをボウルに合わせ、1クォートサイズの容器に移す。"),
-                CookingStep(stepNumber: 2, instruction: "鍋にマスタードシードとセロリシードを入れ、弱火で30秒〜1分、香りが立つまで炒る。ビネガー、砂糖、塩を加え、溶けるまで煮立たせたら火を止める。"),
-                CookingStep(stepNumber: 3, instruction: "氷を加えて混ぜ、溶けたらピクルスの上に注ぐ。蓋をして冷蔵庫で最低12時間漬ける。"),
-                CookingStep(stepNumber: 4, instruction: "浅いボウルにディジョンマスタード、粒マスタード、はちみつ、すりおろしにんにくを入れてよく混ぜ、ハニーマスタードソースを作る。"),
-                CookingStep(stepNumber: 5, instruction: "別の浅いボウルにフランクスレッドホットソース、コチュジャン、バターを入れてよく混ぜ、バッファローソースを作る。"),
-                CookingStep(stepNumber: 6, instruction: "天板2枚にペーパータオルを敷く。ダッチオーブンに植物油を約7センチの深さまで入れ、160℃に熱する。"),
-                CookingStep(stepNumber: 7, instruction: "スターチに大さじ2の水を加え、小石状のかたまりができるまで混ぜる。鶏肉を一口大に切り、スターチをまぶす。"),
-                CookingStep(stepNumber: 8, instruction: "鶏肉を数回に分けて3〜4分揚げ、端がうっすらきつね色になったら1枚目の天板に取り出す。"),
-                CookingStep(stepNumber: 9, instruction: "油の温度を200℃に上げ、鶏肉を再度2〜3分揚げてきつね色にする。2枚目の天板に取り出し、塩をふる。"),
-                CookingStep(stepNumber: 10, instruction: "揚げたての鶏肉を2種のソースのボウルに分け入れ、しっかり絡める。自家製ピクルスを添えて温かいうちにいただく。"),
+                CookingStepSection(header: "ピクル作り", items: [
+                    CookingStep(stepNumber: 1, instruction: "スライスしたキュウリと薄切り玉ねぎをボウルに合わせ、1クォートサイズの容器に移す。"),
+                    CookingStep(stepNumber: 2, instruction: "鍋にマスタードシードとセロリシードを入れ、弱火で30秒〜1分、香りが立つまで炒る。ビネガー、砂糖、塩を加え、溶けるまで煮立たせたら火を止める。"),
+                    CookingStep(stepNumber: 3, instruction: "氷を加えて混ぜ、溶けたらピクルスの上に注ぐ。蓋をして冷蔵庫で最低12時間漬ける。"),
+                ]),
+                CookingStepSection(header: "ハニーマスタードソース作り", items: [
+                    CookingStep(stepNumber: 4, instruction: "浅いボウルにディジョンマスタード、粒マスタード、はちみつ、すりおろしにんにくを入れてよく混ぜ、ハニーマスタードソースを作る。"),
+                ]),
+                CookingStepSection(header: "バッファローソース作り", items: [
+                    CookingStep(stepNumber: 5, instruction: "別の浅いボウルにフランクスレッドホットソース、コチュジャン、バターを入れてよく混ぜ、バッファローソースを作る。"),
+                ]),
+                CookingStepSection(header: "チキン調理", items: [
+                    CookingStep(stepNumber: 6, instruction: "天板2枚にペーパータオルを敷く。ダッチオーブンに植物油を約7センチの深さまで入れ、160℃に熱する。"),
+                    CookingStep(stepNumber: 7, instruction: "スターチに大さじ2の水を加え、小石状のかたまりができるまで混ぜる。鶏肉を一口大に切り、スターチをまぶす。"),
+                    CookingStep(stepNumber: 8, instruction: "鶏肉を数回に分けて3〜4分揚げ、端がうっすらきつね色になったら1枚目の天板に取り出す。"),
+                    CookingStep(stepNumber: 9, instruction: "油の温度を200℃に上げ、鶏肉を再度2〜3分揚げてきつね色にする。2枚目の天板に取り出し、塩をふる。"),
+                ]),
+                CookingStepSection(header: "盛り付けと提供", items: [
+                    CookingStep(stepNumber: 10, instruction: "揚げたての鶏肉を2種のソースのボウルに分け入れ、しっかり絡める。自家製ピクルスを添えて温かいうちにいただく。"),
+                ])
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/12/09/popcorn-chicken-two-ways-with-homemade-pickles/")
         ),
@@ -637,24 +724,31 @@ extension SeedData {
             title: "マッシュルームとグリッツ",
             description: "南部料理の定番シュリンプ＆グリッツを植物ベースにアレンジ。ピンクオイスターマッシュルームとクリーミーなチェダーグリッツの組み合わせ。",
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/10/Mushrooms-_Shrimp_-Grits-1.jpg")!)],
-            ingredientsInfo: Ingredients(servings: "4人分", items: [
-                Ingredient(name: "石挽きグリッツ", amount: "1カップ"),
-                Ingredient(name: "ハーフアンドハーフ", amount: "1カップ"),
-                Ingredient(name: "バター", amount: "大さじ2"),
-                Ingredient(name: "シャープホワイトチェダーチーズ（すりおろし）", amount: "1カップ（100グラム）"),
-                Ingredient(name: "塩・黒こしょう", amount: "適量"),
-                Ingredient(name: "バター（分けて使う）", amount: "大さじ4"),
-                Ingredient(name: "ピンクオイスターマッシュルーム（一口大にカット）", amount: "約1リットル"),
-                Ingredient(name: "赤パプリカ（細かく刻む）", amount: "1個（180グラム）"),
-                Ingredient(name: "スキャリオン（白い部分は細かく刻み、緑の部分は斜め切り）", amount: "1束（100グラム）"),
-                Ingredient(name: "ローマトマト（細かく刻む）", amount: "1個（75グラム）"),
-                Ingredient(name: "にんにく（みじん切り）", amount: "3片（15グラム）"),
-                Ingredient(name: "スモークパプリカ", amount: "小さじ½"),
-                Ingredient(name: "カイエンペッパー", amount: "小さじ⅛"),
-                Ingredient(name: "薄力粉", amount: "大さじ1"),
-                Ingredient(name: "野菜ブイヨン", amount: "1カップ"),
-                Ingredient(name: "レモン汁", amount: "仕上げ用"),
-            ]),
+            ingredientsInfo: Ingredients(
+                servings: "4人分",
+                sections: [
+                    IngredientSection(header: "グリッツ用", items: [
+                        Ingredient(name: "石挽きグリッツ", amount: "1カップ"),
+                        Ingredient(name: "ハーフアンドハーフ", amount: "1カップ"),
+                        Ingredient(name: "バター", amount: "大さじ2"),
+                        Ingredient(name: "シャープホワイトチェダーチーズ（すりおろし）", amount: "1カップ（100グラム）"),
+                        Ingredient(name: "塩・黒こしょう", amount: "適量"),
+                    ]),
+                    IngredientSection(header: "マッシュルーム用", items: [
+                        Ingredient(name: "バター（分けて使う）", amount: "大さじ4"),
+                        Ingredient(name: "ピンクオイスターマッシュルーム（一口大にカット）", amount: "約1リットル"),
+                        Ingredient(name: "赤パプリカ（細かく刻む）", amount: "1個（180グラム）"),
+                        Ingredient(name: "スキャリオン（白い部分は細かく刻み、緑の部分は斜め切り）", amount: "1束（100グラム）"),
+                        Ingredient(name: "ローマトマト（細かく刻む）", amount: "1個（75グラム）"),
+                        Ingredient(name: "にんにく（みじん切り）", amount: "3片（15グラム）"),
+                        Ingredient(name: "スモークパプリカ", amount: "小さじ½"),
+                        Ingredient(name: "カイエンペッパー", amount: "小さじ⅛"),
+                        Ingredient(name: "薄力粉", amount: "大さじ1"),
+                        Ingredient(name: "野菜ブイヨン", amount: "1カップ"),
+                        Ingredient(name: "レモン汁", amount: "仕上げ用"),
+                    ])
+                ]
+            ),
             steps: [
                 CookingStep(stepNumber: 1, instruction: "塩を加えた湯を沸騰させ、グリッツをゆっくりと加えながら絶えずかき混ぜる。火を弱めて約1分間混ぜ続け、とろみがついたらハーフアンドハーフをゆっくり加える。弱火にして15〜20分、時々かき混ぜながらクリーミーになるまで煮る。チェダーチーズを4回に分けて加え、その都度よく混ぜる。バターを加え、黒こしょうで味を調え、塩加減を整える。蓋をして置いておく。"),
                 CookingStep(stepNumber: 2, instruction: "大きなスキレットにバター大さじ1を中強火で熱する。マッシュルームを重ならないように並べ、片面約1分ずつ焼き色をつける。バッチに分けて焼き、必要に応じてバターを追加する。焼けたら皿に取り出す。"),
