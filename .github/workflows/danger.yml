@@ -1,93 +1,13 @@
-name: Test
+name: Danger
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  test:
-    runs-on: self-hosted
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install xcbeautify
-        run: |
-          if ! command -v xcbeautify &> /dev/null; then
-            brew install xcbeautify
-          fi
-
-      - name: Clean build
-        run: |
-          xcodebuild clean \
-            -project Tweakable.xcodeproj \
-            -scheme AppCore \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
-            CODE_SIGNING_ALLOWED=NO
-
-      - name: Run tests
-        run: |
-          set -o pipefail
-          xcodebuild test \
-            -project Tweakable.xcodeproj \
-            -scheme AppCore \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
-            -resultBundlePath TestResults.xcresult \
-            CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path test-reports
-
-      - name: Publish test results
-        uses: mikepenz/action-junit-report@v5
-        if: always()
-        with:
-          report_paths: 'test-reports/junit.xml'
-          include_passed: true
-          detailed_summary: true
-          annotate_only: true
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: TestResults
-          path: TestResults.xcresult
-
-  e2e-test:
-    runs-on: self-hosted
-    needs: test
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run E2E Tests
-        uses: sersoft-gmbh/xcodebuild-action@v4
-        with:
-          project: Tweakable.xcodeproj
-          scheme: TweakableUITests
-          destination: 'platform=iOS Simulator,name=iPhone 17'
-          action: test
-          result-bundle-path: E2ETestResults.xcresult
-          build-settings: CODE_SIGNING_ALLOWED=NO
-          retry-tests-on-failure: true
-          test-iterations: 3
-          parallel-testing-enabled: false
-
-      - name: Upload E2E test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: E2ETestResults
-          path: E2ETestResults.xcresult
-
   danger:
     runs-on: self-hosted
-    if: github.event_name == 'pull_request'
     permissions:
       contents: read
       pull-requests: write

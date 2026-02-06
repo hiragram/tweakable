@@ -1,0 +1,90 @@
+name: E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  e2e-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E Tests
+        uses: sersoft-gmbh/xcodebuild-action@v4
+        with:
+          project: Tweakable.xcodeproj
+          scheme: TweakableUITests
+          destination: 'platform=iOS Simulator,name=iPhone 17'
+          action: test
+          result-bundle-path: E2ETestResults.xcresult
+          build-settings: CODE_SIGNING_ALLOWED=NO
+          retry-tests-on-failure: true
+          test-iterations: 3
+          parallel-testing-enabled: false
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: E2ETestResults
+          path: E2ETestResults.xcresult
+
+  create-fix-issue:
+    runs-on: self-hosted
+    needs: e2e-test
+    if: failure()
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check for existing open fix issue
+        id: check-issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing=$(gh issue list \
+            --repo ${{ github.repository }} \
+            --label "auto-fix,e2e-test-failure" \
+            --state open \
+            --limit 1 \
+            --json number \
+            --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            echo "Existing open issue found: #$existing, skipping creation"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "No existing open issue found, will create one"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create fix issue
+        if: steps.check-issue.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo ${{ github.repository }} \
+            --title "[Auto] E2E test failure on main (${{ github.sha }})" \
+            --label "auto-fix,e2e-test-failure" \
+            --body "$(cat <<'EOF'
+          @claude mainブランチでE2Eテスト（TweakableUITestsスキーム）が失敗しました。
+
+          **Commit**: ${{ github.sha }}
+          **Workflow Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          以下の手順で修正してください:
+          1. 上記のWorkflow Runリンクからテスト失敗のログを確認する
+          2. 失敗原因を特定する
+          3. 修正ブランチを作成して修正をプッシュする
+          4. mainブランチへのPRを作成する
+
+          注意:
+          - 修正はmainブランチに直接プッシュしないこと
+          - PRを作成すること
+          - テストが通ることを確認すること
+          EOF
+          )"

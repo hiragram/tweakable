@@ -1,0 +1,111 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install xcbeautify
+        run: |
+          if ! command -v xcbeautify &> /dev/null; then
+            brew install xcbeautify
+          fi
+
+      - name: Clean build
+        run: |
+          xcodebuild clean \
+            -project Tweakable.xcodeproj \
+            -scheme AppCore \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project Tweakable.xcodeproj \
+            -scheme AppCore \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -resultBundlePath TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | xcbeautify --report junit --report-path test-reports
+
+      - name: Publish test results
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: 'test-reports/junit.xml'
+          include_passed: true
+          detailed_summary: true
+          annotate_only: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+
+  create-fix-issue:
+    runs-on: self-hosted
+    needs: test
+    if: failure()
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check for existing open fix issue
+        id: check-issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing=$(gh issue list \
+            --repo ${{ github.repository }} \
+            --label "auto-fix,unit-test-failure" \
+            --state open \
+            --limit 1 \
+            --json number \
+            --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            echo "Existing open issue found: #$existing, skipping creation"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "No existing open issue found, will create one"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create fix issue
+        if: steps.check-issue.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo ${{ github.repository }} \
+            --title "[Auto] Unit test failure on main (${{ github.sha }})" \
+            --label "auto-fix,unit-test-failure" \
+            --body "$(cat <<'EOF'
+          @claude mainブランチでユニットテスト（AppCoreスキーム）が失敗しました。
+
+          **Commit**: ${{ github.sha }}
+          **Workflow Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          以下の手順で修正してください:
+          1. 上記のWorkflow Runリンクからテスト失敗のログを確認する
+          2. 失敗原因を特定する
+          3. 修正ブランチを作成して修正をプッシュする
+          4. mainブランチへのPRを作成する
+
+          注意:
+          - 修正はmainブランチに直接プッシュしないこと
+          - PRを作成すること
+          - テストが通ることを確認すること
+          EOF
+          )"
