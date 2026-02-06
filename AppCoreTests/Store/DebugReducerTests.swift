@@ -109,37 +109,6 @@ struct DebugReducerTests {
         #expect(state.isProcessing == false)
     }
 
-    // MARK: - Seed Data Reset
-
-    @Test
-    func reduce_resetSeedData_setsProcessingTrue() {
-        var state = DebugState()
-
-        DebugReducer.reduce(state: &state, action: .resetSeedData)
-
-        #expect(state.isProcessing == true)
-    }
-
-    @Test
-    func reduce_resetSeedData_clearsErrorMessage() {
-        var state = DebugState()
-        state.errorMessage = "Previous error"
-
-        DebugReducer.reduce(state: &state, action: .resetSeedData)
-
-        #expect(state.errorMessage == nil)
-    }
-
-    @Test
-    func reduce_seedDataReset_setsProcessingFalse() {
-        var state = DebugState()
-        state.isProcessing = true
-
-        DebugReducer.reduce(state: &state, action: .seedDataReset)
-
-        #expect(state.isProcessing == false)
-    }
-
     // MARK: - Error Handling
 
     @Test

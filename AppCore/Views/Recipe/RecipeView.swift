@@ -1,3 +1,4 @@
+import NukeUI
 import Prefire
 import SwiftUI
 
@@ -161,15 +162,15 @@ struct RecipeView: View {
         Group {
             switch source {
             case .remote(let url):
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
+                LazyImage(url: url) { state in
+                    if state.isLoading {
                         Rectangle()
                             .fill(ds.colors.backgroundSecondary.color)
                             .frame(height: 300)
-                    case .success(let image):
+                            .overlay { ProgressView() }
+                    } else if let image = state.image {
                         heroImageContent(image)
-                    case .failure:
+                    } else {
                         Rectangle()
                             .fill(ds.colors.backgroundSecondary.color)
                             .frame(height: 300)
@@ -178,8 +179,6 @@ struct RecipeView: View {
                                     .font(.largeTitle)
                                     .foregroundColor(ds.colors.textTertiary.color)
                             }
-                    @unknown default:
-                        EmptyView()
                     }
                 }
             case .local(let fileURL):
@@ -402,22 +401,20 @@ struct RecipeView: View {
                 Group {
                     switch source {
                     case .remote(let url):
-                        AsyncImage(url: url) { phase in
-                            switch phase {
-                            case .empty:
+                        LazyImage(url: url) { state in
+                            if state.isLoading {
                                 Rectangle()
                                     .fill(ds.colors.backgroundTertiary.color)
                                     .aspectRatio(4 / 3, contentMode: .fit)
-                            case .success(let image):
+                                    .overlay { ProgressView() }
+                            } else if let image = state.image {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                            case .failure:
+                            } else {
                                 Rectangle()
                                     .fill(ds.colors.backgroundTertiary.color)
                                     .aspectRatio(4 / 3, contentMode: .fit)
-                            @unknown default:
-                                EmptyView()
                             }
                         }
                     case .local(let fileURL):
@@ -610,6 +607,8 @@ struct RecipeView: View {
     .prefireEnabled()
 }
 
+// Note: スナップショットテスト対象外（.prefireEnabled()なし）
+// 理由: リモートURL画像を使用するため、ネットワーク依存でスナップショットテストが不安定になる
 #Preview("With Recipe (Remote Hero Image)") {
     NavigationStack {
         RecipeView(
@@ -657,7 +656,6 @@ struct RecipeView: View {
             onStepTapped: { _ in },
             onRetryTapped: {}
         )
-        .prefireEnabled()
     }
 }
 

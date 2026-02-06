@@ -4,7 +4,7 @@ import UIKit
 /// 画像ソースの種別を表すenum
 ///
 /// ## ユースケース
-/// - `remote`: レシピサイトから取得した画像URL（AsyncImageで非同期表示）
+/// - `remote`: レシピサイトから取得した画像URL（NukeUI LazyImageで非同期表示、キャッシュあり）
 /// - `local`: デバイスに保存された画像ファイル（同期的にImageで表示）
 /// - `uiImage`: Preview/テスト用に直接UIImageを渡す場合
 ///
