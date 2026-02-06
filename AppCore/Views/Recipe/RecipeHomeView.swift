@@ -1,3 +1,4 @@
+import NukeUI
 import Prefire
 import SwiftUI
 import TipKit
@@ -253,17 +254,18 @@ struct RecipeHomeView: View {
             if let source = source {
                 switch source {
                 case .remote(let url):
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .empty:
+                    LazyImage(url: url) { state in
+                        if state.isLoading {
                             placeholderImage
-                        case .success(let image):
+                                .overlay {
+                                    ProgressView()
+                                        .scaleEffect(0.8)
+                                }
+                        } else if let image = state.image {
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                        case .failure:
-                            placeholderImage
-                        @unknown default:
+                        } else {
                             placeholderImage
                         }
                     }

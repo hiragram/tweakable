@@ -1,3 +1,4 @@
+import NukeUI
 import SwiftUI
 
 /// ブラー背景付き画像コンポーネント（Instagram Reels風）
@@ -77,12 +78,15 @@ struct BlurredBackgroundImage: View {
 }
 
 #Preview("Async Remote Image") {
-    AsyncImage(url: URL(string: "https://img-global-jp.cpcdn.com/recipes/a74bad56b72e6dab/1280x1280sq80/photo.webp")!) { phase in
-        switch phase {
-        case .success(let image):
+    LazyImage(url: URL(string: "https://img-global-jp.cpcdn.com/recipes/a74bad56b72e6dab/1280x1280sq80/photo.webp")!) { state in
+        if let image = state.image {
             BlurredBackgroundImage(image: image, height: 400)
-        default:
+        } else if state.isLoading {
+            ProgressView()
+                .frame(height: 400)
+        } else {
             Color.clear
+                .frame(height: 400)
         }
     }
 }

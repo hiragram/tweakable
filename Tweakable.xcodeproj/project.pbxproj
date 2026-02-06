@@ -25,6 +25,7 @@
 		E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
 		E841C22F4BBB883589B14BFA /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = C03E64C161EA5B6A08E5C843 /* RevenueCat */; };
 		F0838EE2391BA63784534E94 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 113ECDF464E0599CE3E785C5 /* FirebaseRemoteConfig */; };
+		A1B2C3D4E5F60718192A3B4C /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = D4E5F6071819A1B2C3D42A3B /* NukeUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +121,7 @@
 				22CECF98942BDB7CC608BC6B /* OpenAI in Frameworks */,
 				AF51FFB396EC6B71FA9581EA /* FirebaseRemoteConfig in Frameworks */,
 				E841C22F4BBB883589B14BFA /* RevenueCat in Frameworks */,
+				A1B2C3D4E5F60718192A3B4C /* NukeUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +231,7 @@
 				63DA120AC5D8B714616ECCD6 /* OpenAI */,
 				452F108779437E0070A7DA52 /* FirebaseRemoteConfig */,
 				C03E64C161EA5B6A08E5C843 /* RevenueCat */,
+				D4E5F6071819A1B2C3D42A3B /* NukeUI */,
 			);
 			productName = AppCore;
 			productReference = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */;
@@ -325,6 +328,7 @@
 				AB11DA9A6686F30FB79D43C7 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				2B2419157E80069DE4CF9AEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				72A37E870C97F6EDB3D51D20 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+				F1A2B3C4D5E6071829304A5B /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 605EE7FF2EECE98A00201738;
@@ -885,6 +889,14 @@
 				minimumVersion = 0.4.7;
 			};
 		};
+		F1A2B3C4D5E6071829304A5B /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -947,6 +959,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 06285D44EC74D49A1E9C4C5A /* XCRemoteSwiftPackageReference "LicensePlist" */;
 			productName = "plugin:LicensePlistBuildTool";
+		};
+		D4E5F6071819A1B2C3D42A3B /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1A2B3C4D5E6071829304A5B /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
