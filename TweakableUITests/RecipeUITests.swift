@@ -194,6 +194,9 @@ final class RecipeUITests: XCTestCase {
         let firstStep = app.buttons[RecipeAccessibilityIDs.stepItem(0)]
         XCTAssertTrue(firstStep.exists, "調理工程が存在すること")
 
+        // 買い物リストボタンが存在する
+        let shoppingListButton = app.buttons[RecipeAccessibilityIDs.shoppingListButton]
+        XCTAssertTrue(shoppingListButton.exists, "買い物リストボタンが存在すること")
     }
 
     /// 材料の数がモックデータと一致することを確認

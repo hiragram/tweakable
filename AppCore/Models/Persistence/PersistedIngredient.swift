@@ -17,18 +17,23 @@ public final class PersistedIngredient {
     /// LLM APIによる置き換え処理で変更されたか
     public var isModified: Bool
 
-    /// 属するレシピ（逆参照）
-    public var recipe: PersistedRecipe?
+    /// 材料の並び順（セクション内）
+    public var sortOrder: Int
+
+    /// 属するセクション（逆参照）
+    public var section: PersistedIngredientSection?
 
     public init(
         id: UUID = UUID(),
         name: String,
         amount: String? = nil,
-        isModified: Bool = false
+        isModified: Bool = false,
+        sortOrder: Int = 0
     ) {
         self.id = id
         self.name = name
         self.amount = amount
         self.isModified = isModified
+        self.sortOrder = sortOrder
     }
 }

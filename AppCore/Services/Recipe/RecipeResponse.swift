@@ -8,8 +8,33 @@ public struct RecipeResponse: Codable, Sendable, JSONSchemaConvertible {
     public let description: String?
     public let imageURLs: [String]
     public let servings: String?
-    public let ingredients: [IngredientResponse]
-    public let steps: [StepResponse]
+    public let ingredientSections: [IngredientSectionResponse]
+    public let stepSections: [StepSectionResponse]
+
+    // MARK: - IngredientSectionResponse
+
+    public struct IngredientSectionResponse: Codable, Sendable, JSONSchemaConvertible {
+        /// セクションのUUID（置き換え時にIDを保持するため）
+        public let id: String?
+        /// セクション見出し（nilの場合は見出しなしで表示）
+        public let header: String?
+        /// このセクションの材料リスト
+        public let ingredients: [IngredientResponse]
+
+        public init(id: String? = nil, header: String? = nil, ingredients: [IngredientResponse]) {
+            self.id = id
+            self.header = header
+            self.ingredients = ingredients
+        }
+
+        public static let example = IngredientSectionResponse(
+            id: "550e8400-e29b-41d4-a716-446655440010",
+            header: "For the Dough",
+            ingredients: [IngredientResponse.example]
+        )
+    }
+
+    // MARK: - IngredientResponse
 
     public struct IngredientResponse: Codable, Sendable, JSONSchemaConvertible {
         /// 食材のUUID（置き換え時にIDを保持するため）
@@ -32,6 +57,31 @@ public struct RecipeResponse: Codable, Sendable, JSONSchemaConvertible {
             isModified: false
         )
     }
+
+    // MARK: - StepSectionResponse
+
+    public struct StepSectionResponse: Codable, Sendable, JSONSchemaConvertible {
+        /// セクションのUUID（置き換え時にIDを保持するため）
+        public let id: String?
+        /// セクション見出し（nilの場合は見出しなしで表示）
+        public let header: String?
+        /// このセクションの調理工程リスト
+        public let steps: [StepResponse]
+
+        public init(id: String? = nil, header: String? = nil, steps: [StepResponse]) {
+            self.id = id
+            self.header = header
+            self.steps = steps
+        }
+
+        public static let example = StepSectionResponse(
+            id: "550e8400-e29b-41d4-a716-446655440020",
+            header: "For the Dough",
+            steps: [StepResponse.example]
+        )
+    }
+
+    // MARK: - StepResponse
 
     public struct StepResponse: Codable, Sendable, JSONSchemaConvertible {
         /// 工程のUUID（置き換え時にIDを保持するため）
@@ -71,11 +121,11 @@ public struct RecipeResponse: Codable, Sendable, JSONSchemaConvertible {
         description: "家庭の定番カレー",
         imageURLs: ["https://example.com/curry.jpg"],
         servings: "4人分",
-        ingredients: [
-            IngredientResponse.example
+        ingredientSections: [
+            IngredientSectionResponse.example
         ],
-        steps: [
-            StepResponse.example
+        stepSections: [
+            StepSectionResponse.example
         ]
     )
 }
@@ -91,22 +141,34 @@ extension RecipeResponse {
             imageURLs: imageURLs.compactMap { URL(string: $0) }.map { .remote(url: $0) },
             ingredientsInfo: Ingredients(
                 servings: servings,
-                items: ingredients.map {
-                    Ingredient(
-                        id: $0.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
-                        name: $0.name,
-                        amount: $0.amount,
-                        isModified: $0.isModified ?? false
+                sections: ingredientSections.map { section in
+                    IngredientSection(
+                        id: section.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
+                        header: section.header,
+                        items: section.ingredients.map { ingredient in
+                            Ingredient(
+                                id: ingredient.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
+                                name: ingredient.name,
+                                amount: ingredient.amount,
+                                isModified: ingredient.isModified ?? false
+                            )
+                        }
                     )
                 }
             ),
-            steps: steps.map {
-                CookingStep(
-                    id: $0.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
-                    stepNumber: $0.stepNumber,
-                    instruction: $0.instruction,
-                    imageURLs: $0.imageURLs?.compactMap { URL(string: $0) }.map { .remote(url: $0) } ?? [],
-                    isModified: $0.isModified ?? false
+            stepSections: stepSections.map { section in
+                CookingStepSection(
+                    id: section.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
+                    header: section.header,
+                    items: section.steps.map { step in
+                        CookingStep(
+                            id: step.id.flatMap { UUID(uuidString: $0) } ?? UUID(),
+                            stepNumber: step.stepNumber,
+                            instruction: step.instruction,
+                            imageURLs: step.imageURLs?.compactMap { URL(string: $0) }.map { .remote(url: $0) } ?? [],
+                            isModified: step.isModified ?? false
+                        )
+                    }
                 )
             },
             sourceURL: sourceURL

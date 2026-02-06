@@ -14,14 +14,18 @@ struct RecipeExtractionServiceTests {
             imageURLs: [.remote(url: URL(string: "https://example.com/image.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "玉ねぎ", amount: "1個"),
-                    Ingredient(name: "にんじん", amount: "1本")
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "玉ねぎ", amount: "1個"),
+                        Ingredient(name: "にんじん", amount: "1本")
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "野菜を切る"),
-                CookingStep(stepNumber: 2, instruction: "炒める")
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "野菜を切る"),
+                    CookingStep(stepNumber: 2, instruction: "炒める")
+                ])
             ],
             sourceURL: URL(string: "https://example.com/recipe")
         )
@@ -50,8 +54,8 @@ struct RecipeExtractionServiceTests {
 
         // Assert
         #expect(recipe.title == "テストレシピ")
-        #expect(recipe.ingredientsInfo.items.count == 2)
-        #expect(recipe.steps.count == 2)
+        #expect(recipe.ingredientsInfo.allItems.count == 2)
+        #expect(recipe.allSteps.count == 2)
         #expect(mockHTML.fetchHTMLCallCount == 1)
         #expect(mockOpenAI.extractRecipeCallCount == 1)
     }

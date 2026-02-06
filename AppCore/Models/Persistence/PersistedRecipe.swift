@@ -31,13 +31,13 @@ public final class PersistedRecipe {
     /// 更新日時
     public var updatedAt: Date
 
-    /// 材料リスト
-    @Relationship(deleteRule: .cascade, inverse: \PersistedIngredient.recipe)
-    public var ingredients: [PersistedIngredient]
+    /// 材料セクション
+    @Relationship(deleteRule: .cascade, inverse: \PersistedIngredientSection.recipe)
+    public var ingredientSections: [PersistedIngredientSection]
 
-    /// 調理工程
-    @Relationship(deleteRule: .cascade, inverse: \PersistedCookingStep.recipe)
-    public var steps: [PersistedCookingStep]
+    /// 調理工程セクション
+    @Relationship(deleteRule: .cascade, inverse: \PersistedCookingStepSection.recipe)
+    public var stepSections: [PersistedCookingStepSection]
 
     /// 買い物リストとの関連（多対多）
     @Relationship(inverse: \PersistedShoppingList.recipes)
@@ -56,8 +56,8 @@ public final class PersistedRecipe {
         imageURLStrings: [String] = [],
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
-        ingredients: [PersistedIngredient] = [],
-        steps: [PersistedCookingStep] = [],
+        ingredientSections: [PersistedIngredientSection] = [],
+        stepSections: [PersistedCookingStepSection] = [],
         categories: [PersistedRecipeCategory] = []
     ) {
         self.id = id
@@ -68,8 +68,8 @@ public final class PersistedRecipe {
         self.imageURLStrings = imageURLStrings
         self.createdAt = createdAt
         self.updatedAt = updatedAt
-        self.ingredients = ingredients
-        self.steps = steps
+        self.ingredientSections = ingredientSections
+        self.stepSections = stepSections
         self.shoppingLists = []
         self.categories = categories
     }
@@ -80,30 +80,52 @@ public final class PersistedRecipe {
 extension PersistedRecipe {
     /// 永続化モデルからドメインモデルへ変換
     public func toDomain() -> Recipe {
-        // 材料を変換
-        let domainIngredients = ingredients.map { persisted in
-            Ingredient(
-                id: persisted.id,
-                name: persisted.name,
-                amount: persisted.amount,
-                isModified: persisted.isModified
-            )
-        }
-
-        // 調理工程を変換
-        let domainSteps = steps.map { persisted in
-            let stepImageURLs: [ImageSource] = persisted.imageURLStrings.compactMap { urlString in
-                guard let url = URL(string: urlString) else { return nil }
-                return .remote(url: url)
+        // 材料セクションを変換（sortOrderでソート）
+        let domainIngredientSections = ingredientSections
+            .sorted { $0.sortOrder < $1.sortOrder }
+            .map { section in
+                let domainIngredients = section.ingredients
+                    .sorted { $0.sortOrder < $1.sortOrder }
+                    .map { persisted in
+                        Ingredient(
+                            id: persisted.id,
+                            name: persisted.name,
+                            amount: persisted.amount,
+                            isModified: persisted.isModified
+                        )
+                    }
+                return IngredientSection(
+                    id: section.id,
+                    header: section.header,
+                    items: domainIngredients
+                )
             }
-            return CookingStep(
-                id: persisted.id,
-                stepNumber: persisted.stepNumber,
-                instruction: persisted.instruction,
-                imageURLs: stepImageURLs,
-                isModified: persisted.isModified
-            )
-        }
+
+        // 調理工程セクションを変換（sortOrderでソート）
+        let domainStepSections = stepSections
+            .sorted { $0.sortOrder < $1.sortOrder }
+            .map { section in
+                let domainSteps = section.steps
+                    .sorted { $0.sortOrder < $1.sortOrder }
+                    .map { persisted in
+                        let stepImageURLs: [ImageSource] = persisted.imageURLStrings.compactMap { urlString in
+                            guard let url = URL(string: urlString) else { return nil }
+                            return .remote(url: url)
+                        }
+                        return CookingStep(
+                            id: persisted.id,
+                            stepNumber: persisted.stepNumber,
+                            instruction: persisted.instruction,
+                            imageURLs: stepImageURLs,
+                            isModified: persisted.isModified
+                        )
+                    }
+                return CookingStepSection(
+                    id: section.id,
+                    header: section.header,
+                    items: domainSteps
+                )
+            }
 
         // 画像URLを変換
         let domainImageURLs: [ImageSource] = imageURLStrings.compactMap { urlString in
@@ -121,9 +143,9 @@ extension PersistedRecipe {
             imageURLs: domainImageURLs,
             ingredientsInfo: Ingredients(
                 servings: servings,
-                items: domainIngredients
+                sections: domainIngredientSections
             ),
-            steps: domainSteps,
+            stepSections: domainStepSections,
             sourceURL: sourceURL
         )
     }
@@ -131,30 +153,48 @@ extension PersistedRecipe {
     /// ドメインモデルから永続化モデルへ変換
     @MainActor
     public static func from(_ recipe: Recipe, context: ModelContext) -> PersistedRecipe {
-        // 材料を変換
-        let persistedIngredients = recipe.ingredientsInfo.items.map { item in
-            PersistedIngredient(
-                id: item.id,
-                name: item.name,
-                amount: item.amount,
-                isModified: item.isModified
+        // 材料セクションを変換
+        let persistedIngredientSections = recipe.ingredientsInfo.sections.enumerated().map { sectionIndex, section in
+            let persistedIngredients = section.items.enumerated().map { itemIndex, item in
+                PersistedIngredient(
+                    id: item.id,
+                    name: item.name,
+                    amount: item.amount,
+                    isModified: item.isModified,
+                    sortOrder: itemIndex
+                )
+            }
+            return PersistedIngredientSection(
+                id: section.id,
+                header: section.header,
+                sortOrder: sectionIndex,
+                ingredients: persistedIngredients
             )
         }
 
-        // 調理工程を変換
-        let persistedSteps = recipe.steps.map { step in
-            let imageURLStrings = step.imageURLs.compactMap { imageSource -> String? in
-                if case .remote(let url) = imageSource {
-                    return url.absoluteString
+        // 調理工程セクションを変換
+        let persistedStepSections = recipe.stepSections.enumerated().map { sectionIndex, section in
+            let persistedSteps = section.items.enumerated().map { itemIndex, step in
+                let imageURLStrings = step.imageURLs.compactMap { imageSource -> String? in
+                    if case .remote(let url) = imageSource {
+                        return url.absoluteString
+                    }
+                    return nil
                 }
-                return nil
+                return PersistedCookingStep(
+                    id: step.id,
+                    stepNumber: step.stepNumber,
+                    instruction: step.instruction,
+                    imageURLStrings: imageURLStrings,
+                    isModified: step.isModified,
+                    sortOrder: itemIndex
+                )
             }
-            return PersistedCookingStep(
-                id: step.id,
-                stepNumber: step.stepNumber,
-                instruction: step.instruction,
-                imageURLStrings: imageURLStrings,
-                isModified: step.isModified
+            return PersistedCookingStepSection(
+                id: section.id,
+                header: section.header,
+                sortOrder: sectionIndex,
+                steps: persistedSteps
             )
         }
 
@@ -173,8 +213,8 @@ extension PersistedRecipe {
             servings: recipe.ingredientsInfo.servings,
             sourceURLString: recipe.sourceURL?.absoluteString,
             imageURLStrings: imageURLStrings,
-            ingredients: persistedIngredients,
-            steps: persistedSteps
+            ingredientSections: persistedIngredientSections,
+            stepSections: persistedStepSections
         )
 
         context.insert(persisted)

@@ -13,15 +13,19 @@ struct AppStorePremiumTests {
             title: "テスト用チキンカレー",
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "鶏もも肉", amount: "300g"),
-                    Ingredient(name: "玉ねぎ", amount: "1個"),
-                    Ingredient(name: "カレールー", amount: "4かけ")
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "鶏もも肉", amount: "300g"),
+                        Ingredient(name: "玉ねぎ", amount: "1個"),
+                        Ingredient(name: "カレールー", amount: "4かけ")
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "鶏肉を一口大に切る"),
-                CookingStep(stepNumber: 2, instruction: "玉ねぎをみじん切りにする")
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "鶏肉を一口大に切る"),
+                    CookingStep(stepNumber: 2, instruction: "玉ねぎをみじん切りにする")
+                ])
             ]
         )
     }
@@ -48,7 +52,7 @@ struct AppStorePremiumTests {
         store.send(.recipe(.recipeLoaded(recipe)))
 
         // 置き換え対象を設定
-        let targetIngredient = recipe.ingredientsInfo.items[0]
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
         store.send(.recipe(.openSubstitutionSheet(ingredient: targetIngredient)))
 
         // Act
@@ -83,7 +87,7 @@ struct AppStorePremiumTests {
         store.send(.recipe(.recipeLoaded(recipe)))
 
         // 置き換え対象を設定
-        let targetIngredient = recipe.ingredientsInfo.items[0]
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
         store.send(.recipe(.openSubstitutionSheet(ingredient: targetIngredient)))
 
         // Act
@@ -123,7 +127,7 @@ struct AppStorePremiumTests {
         store.send(.recipe(.substitutionPreviewReady(recipe)))
 
         // 置き換え対象を設定
-        let targetIngredient = recipe.ingredientsInfo.items[0]
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
         store.send(.recipe(.openSubstitutionSheet(ingredient: targetIngredient)))
 
         // Act
@@ -219,7 +223,7 @@ struct AppStorePremiumTests {
 
         // 置き換えプレビューを準備（カスタマイズ結果）
         var modifiedRecipe = recipe
-        modifiedRecipe.ingredientsInfo.items[0] = Ingredient(name: "豚もも肉", amount: "300g", isModified: true)
+        modifiedRecipe.ingredientsInfo.sections[0].items[0] = Ingredient(name: "豚もも肉", amount: "300g", isModified: true)
         store.send(.recipe(.substitutionPreviewReady(modifiedRecipe)))
 
         // Act - 置き換えを承認
@@ -248,7 +252,7 @@ struct AppStorePremiumTests {
 
         // 置き換えプレビューを準備
         var modifiedRecipe = recipe
-        modifiedRecipe.ingredientsInfo.items[0] = Ingredient(name: "豚もも肉", amount: "300g", isModified: true)
+        modifiedRecipe.ingredientsInfo.sections[0].items[0] = Ingredient(name: "豚もも肉", amount: "300g", isModified: true)
         store.send(.recipe(.substitutionPreviewReady(modifiedRecipe)))
 
         // Act - 置き換えを承認

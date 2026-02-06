@@ -21,20 +21,25 @@ public final class PersistedCookingStep {
     /// LLM APIによる置き換え処理で変更されたか
     public var isModified: Bool
 
-    /// 属するレシピ（逆参照）
-    public var recipe: PersistedRecipe?
+    /// 工程の並び順（セクション内）
+    public var sortOrder: Int
+
+    /// 属するセクション（逆参照）
+    public var section: PersistedCookingStepSection?
 
     public init(
         id: UUID = UUID(),
         stepNumber: Int,
         instruction: String,
         imageURLStrings: [String] = [],
-        isModified: Bool = false
+        isModified: Bool = false,
+        sortOrder: Int = 0
     ) {
         self.id = id
         self.stepNumber = stepNumber
         self.instruction = instruction
         self.imageURLStrings = imageURLStrings
         self.isModified = isModified
+        self.sortOrder = sortOrder
     }
 }

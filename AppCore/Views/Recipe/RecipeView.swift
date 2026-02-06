@@ -139,7 +139,7 @@ struct RecipeView: View {
                     ingredientsSection(recipe.ingredientsInfo)
 
                     // Steps Section
-                    stepsSection(recipe.steps)
+                    stepsSection(recipe.stepSections)
                 }
                 .padding(.horizontal, ds.spacing.md)
                 .padding(.vertical, ds.spacing.md)
@@ -228,23 +228,50 @@ struct RecipeView: View {
                 }
             }
 
+            VStack(spacing: ds.spacing.sm) {
+                ForEach(Array(ingredientsInfo.sections.enumerated()), id: \.element.id) { sectionIndex, section in
+                    ingredientSectionView(section, sectionIndex: sectionIndex, totalSections: ingredientsInfo.sections.count)
+                }
+            }
+        }
+    }
+
+    private func ingredientSectionView(_ section: IngredientSection, sectionIndex: Int, totalSections: Int) -> some View {
+        VStack(alignment: .leading, spacing: ds.spacing.xs) {
+            // セクション見出し（ある場合のみ表示）
+            if let header = section.header {
+                Text(header)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(ds.colors.textSecondary.color)
+                    .padding(.top, sectionIndex > 0 ? ds.spacing.sm : 0)
+            }
+
             VStack(spacing: 0) {
-                ForEach(ingredientsInfo.items.indices, id: \.self) { index in
-                    let ingredient = ingredientsInfo.items[index]
-                    if index == 0 {
-                        ingredientRow(ingredient, index: index)
+                ForEach(Array(section.items.enumerated()), id: \.element.id) { itemIndex, ingredient in
+                    // 全体のインデックスを計算（Tip表示用）
+                    let globalIndex = calculateGlobalIndex(sectionIndex: sectionIndex, itemIndex: itemIndex)
+                    if sectionIndex == 0 && itemIndex == 0 {
+                        ingredientRow(ingredient, index: globalIndex)
                             .popoverTip(IngredientSubstitutionTip())
                     } else {
-                        ingredientRow(ingredient, index: index)
+                        ingredientRow(ingredient, index: globalIndex)
                     }
 
-                    if index < ingredientsInfo.items.count - 1 {
+                    if itemIndex < section.items.count - 1 {
                         Divider()
                             .background(ds.colors.separator.color)
                     }
                 }
             }
         }
+    }
+
+    /// セクションとアイテムのインデックスからアクセシビリティID用のグローバルインデックスを計算
+    private static let maxItemsPerSection = 100
+
+    private func calculateGlobalIndex(sectionIndex: Int, itemIndex: Int) -> Int {
+        return sectionIndex * Self.maxItemsPerSection + itemIndex
     }
 
     private func ingredientRow(_ ingredient: Ingredient, index: Int) -> some View {
@@ -281,7 +308,7 @@ struct RecipeView: View {
 
     // MARK: - Steps Section
 
-    private func stepsSection(_ steps: [CookingStep]) -> some View {
+    private func stepsSection(_ stepSections: [CookingStepSection]) -> some View {
         VStack(alignment: .leading, spacing: ds.spacing.sm) {
             HStack(spacing: ds.spacing.xs) {
                 Image(systemName: "list.number")
@@ -293,14 +320,33 @@ struct RecipeView: View {
                     .foregroundColor(ds.colors.textPrimary.color)
             }
 
+            VStack(spacing: ds.spacing.md) {
+                ForEach(Array(stepSections.enumerated()), id: \.element.id) { sectionIndex, section in
+                    stepSectionView(section, sectionIndex: sectionIndex)
+                }
+            }
+        }
+    }
+
+    private func stepSectionView(_ section: CookingStepSection, sectionIndex: Int) -> some View {
+        VStack(alignment: .leading, spacing: ds.spacing.sm) {
+            // セクション見出し（ある場合のみ表示）
+            if let header = section.header {
+                Text(header)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(ds.colors.textSecondary.color)
+                    .padding(.top, sectionIndex > 0 ? ds.spacing.sm : 0)
+            }
+
             VStack(spacing: ds.spacing.sm) {
-                ForEach(steps.indices, id: \.self) { index in
-                    let step = steps[index]
-                    if index == 0 {
-                        stepRow(step, index: index)
+                ForEach(Array(section.items.enumerated()), id: \.element.id) { itemIndex, step in
+                    let globalIndex = calculateGlobalIndex(sectionIndex: sectionIndex, itemIndex: itemIndex)
+                    if sectionIndex == 0 && itemIndex == 0 {
+                        stepRow(step, index: globalIndex)
                             .popoverTip(StepSubstitutionTip())
                     } else {
-                        stepRow(step, index: index)
+                        stepRow(step, index: globalIndex)
                     }
                 }
             }
@@ -444,19 +490,23 @@ struct RecipeView: View {
                 imageURLs: [],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
-                    items: [
-                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
-                        Ingredient(name: "醤油", amount: "大さじ3"),
-                        Ingredient(name: "みりん", amount: "大さじ2"),
-                        Ingredient(name: "砂糖", amount: "大さじ1"),
-                        Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                    sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
+                            Ingredient(name: "醤油", amount: "大さじ3"),
+                            Ingredient(name: "みりん", amount: "大さじ2"),
+                            Ingredient(name: "砂糖", amount: "大さじ1"),
+                            Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                        ])
                     ]
                 ),
-                steps: [
-                    CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る"),
-                    CookingStep(stepNumber: 2, instruction: "フライパンに油を熱し、鶏肉を皮目から焼く", isModified: true),
-                    CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
-                    CookingStep(stepNumber: 4, instruction: "タレを絡めながら照りが出るまで煮詰める")
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る"),
+                        CookingStep(stepNumber: 2, instruction: "フライパンに油を熱し、鶏肉を皮目から焼く", isModified: true),
+                        CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
+                        CookingStep(stepNumber: 4, instruction: "タレを絡めながら照りが出るまで煮詰める")
+                    ])
                 ]
             ),
             isLoading: false,
@@ -477,19 +527,23 @@ struct RecipeView: View {
                 imageURLs: [],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
-                    items: [
-                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
-                        Ingredient(name: "醤油", amount: "大さじ3"),
-                        Ingredient(name: "みりん", amount: "大さじ2"),
-                        Ingredient(name: "砂糖", amount: "大さじ1"),
-                        Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                    sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
+                            Ingredient(name: "醤油", amount: "大さじ3"),
+                            Ingredient(name: "みりん", amount: "大さじ2"),
+                            Ingredient(name: "砂糖", amount: "大さじ1"),
+                            Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                        ])
                     ]
                 ),
-                steps: [
-                    CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る"),
-                    CookingStep(stepNumber: 2, instruction: "フライパンに油を熱し、鶏肉を皮目から焼く", isModified: true),
-                    CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
-                    CookingStep(stepNumber: 4, instruction: "タレを絡めながら照りが出るまで煮詰める")
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る"),
+                        CookingStep(stepNumber: 2, instruction: "フライパンに油を熱し、鶏肉を皮目から焼く", isModified: true),
+                        CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
+                        CookingStep(stepNumber: 4, instruction: "タレを絡めながら照りが出るまで煮詰める")
+                    ])
                 ]
             ),
             isLoading: false,
@@ -511,32 +565,36 @@ struct RecipeView: View {
                 imageURLs: [.previewPlaceholder()],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
-                    items: [
-                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
-                        Ingredient(name: "醤油", amount: "大さじ3"),
-                        Ingredient(name: "みりん", amount: "大さじ2"),
-                        Ingredient(name: "砂糖", amount: "大さじ1"),
-                        Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                    sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
+                            Ingredient(name: "醤油", amount: "大さじ3"),
+                            Ingredient(name: "みりん", amount: "大さじ2"),
+                            Ingredient(name: "砂糖", amount: "大さじ1"),
+                            Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                        ])
                     ]
                 ),
-                steps: [
-                    CookingStep(
-                        stepNumber: 1,
-                        instruction: "鶏もも肉を一口大に切る",
-                        imageURLs: [.previewPlaceholder()]
-                    ),
-                    CookingStep(
-                        stepNumber: 2,
-                        instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
-                        imageURLs: [.previewPlaceholder()],
-                        isModified: true
-                    ),
-                    CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
-                    CookingStep(
-                        stepNumber: 4,
-                        instruction: "タレを絡めながら照りが出るまで煮詰める",
-                        imageURLs: [.previewPlaceholder()]
-                    )
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(
+                            stepNumber: 1,
+                            instruction: "鶏もも肉を一口大に切る",
+                            imageURLs: [.previewPlaceholder()]
+                        ),
+                        CookingStep(
+                            stepNumber: 2,
+                            instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
+                            imageURLs: [.previewPlaceholder()],
+                            isModified: true
+                        ),
+                        CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
+                        CookingStep(
+                            stepNumber: 4,
+                            instruction: "タレを絡めながら照りが出るまで煮詰める",
+                            imageURLs: [.previewPlaceholder()]
+                        )
+                    ])
                 ]
             ),
             isLoading: false,
@@ -560,32 +618,36 @@ struct RecipeView: View {
                 imageURLs: [.remote(url: URL(string: "https://img-global-jp.cpcdn.com/recipes/a74bad56b72e6dab/1280x1280sq80/photo.webp")!)],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
-                    items: [
-                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
-                        Ingredient(name: "醤油", amount: "大さじ3"),
-                        Ingredient(name: "みりん", amount: "大さじ2"),
-                        Ingredient(name: "砂糖", amount: "大さじ1"),
-                        Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                    sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "鶏もも肉", amount: "2枚（500g）"),
+                            Ingredient(name: "醤油", amount: "大さじ3"),
+                            Ingredient(name: "みりん", amount: "大さじ2"),
+                            Ingredient(name: "砂糖", amount: "大さじ1"),
+                            Ingredient(name: "サラダ油", amount: "小さじ2", isModified: true)
+                        ])
                     ]
                 ),
-                steps: [
-                    CookingStep(
-                        stepNumber: 1,
-                        instruction: "鶏もも肉を一口大に切る",
-                        imageURLs: [.previewPlaceholder()]
-                    ),
-                    CookingStep(
-                        stepNumber: 2,
-                        instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
-                        imageURLs: [.previewPlaceholder()],
-                        isModified: true
-                    ),
-                    CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
-                    CookingStep(
-                        stepNumber: 4,
-                        instruction: "タレを絡めながら照りが出るまで煮詰める",
-                        imageURLs: [.previewPlaceholder()]
-                    )
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(
+                            stepNumber: 1,
+                            instruction: "鶏もも肉を一口大に切る",
+                            imageURLs: [.previewPlaceholder()]
+                        ),
+                        CookingStep(
+                            stepNumber: 2,
+                            instruction: "フライパンに油を熱し、鶏肉を皮目から焼く",
+                            imageURLs: [.previewPlaceholder()],
+                            isModified: true
+                        ),
+                        CookingStep(stepNumber: 3, instruction: "両面に焼き色がついたら、醤油・みりん・砂糖を加える"),
+                        CookingStep(
+                            stepNumber: 4,
+                            instruction: "タレを絡めながら照りが出るまで煮詰める",
+                            imageURLs: [.previewPlaceholder()]
+                        )
+                    ])
                 ]
             ),
             isLoading: false,
@@ -606,12 +668,16 @@ struct RecipeView: View {
                 imageURLs: [],
                 ingredientsInfo: Ingredients(
                     servings: "2人分",
-                    items: [
-                        Ingredient(name: "鶏もも肉", amount: "2枚（500g）")
+                    sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "鶏もも肉", amount: "2枚（500g）")
+                        ])
                     ]
                 ),
-                steps: [
-                    CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る")
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(stepNumber: 1, instruction: "鶏もも肉を一口大に切る")
+                    ])
                 ],
                 sourceURL: URL(string: "https://example.com/recipe")
             ),

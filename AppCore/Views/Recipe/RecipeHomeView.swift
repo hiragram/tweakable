@@ -218,14 +218,14 @@ struct RecipeHomeView: View {
                 // Meta info
                 HStack(spacing: ds.spacing.xs) {
                     Label(
-                        "\(recipe.ingredientsInfo.items.count)",
+                        "\(recipe.ingredientsInfo.allItems.count)",
                         systemImage: "carrot.fill"
                     )
                     .font(.caption2)
                     .foregroundColor(ds.colors.textTertiary.color)
 
                     Label(
-                        "\(recipe.steps.count)",
+                        "\(recipe.allSteps.count)",
                         systemImage: "list.number"
                     )
                     .font(.caption2)
@@ -352,15 +352,19 @@ struct RecipeHomeView: View {
                     imageURLs: [.previewPlaceholder()],
                     ingredientsInfo: Ingredients(
                         servings: "2人分",
-                        items: [
-                            Ingredient(name: "鶏もも肉", amount: "2枚"),
-                            Ingredient(name: "醤油", amount: "大さじ3"),
-                            Ingredient(name: "みりん", amount: "大さじ2")
+                        sections: [
+                            IngredientSection(items: [
+                                Ingredient(name: "鶏もも肉", amount: "2枚"),
+                                Ingredient(name: "醤油", amount: "大さじ3"),
+                                Ingredient(name: "みりん", amount: "大さじ2")
+                            ])
                         ]
                     ),
-                    steps: [
-                        CookingStep(stepNumber: 1, instruction: "鶏もも肉を切る"),
-                        CookingStep(stepNumber: 2, instruction: "焼く")
+                    stepSections: [
+                        CookingStepSection(items: [
+                            CookingStep(stepNumber: 1, instruction: "鶏もも肉を切る"),
+                            CookingStep(stepNumber: 2, instruction: "焼く")
+                        ])
                     ]
                 ),
                 Recipe(
@@ -369,19 +373,23 @@ struct RecipeHomeView: View {
                     imageURLs: [.previewPlaceholder(color: .systemBrown)],
                     ingredientsInfo: Ingredients(
                         servings: "4人分",
-                        items: [
-                            Ingredient(name: "豚肉", amount: "300g"),
-                            Ingredient(name: "玉ねぎ", amount: "2個"),
-                            Ingredient(name: "人参", amount: "1本"),
-                            Ingredient(name: "じゃがいも", amount: "2個"),
-                            Ingredient(name: "カレールー", amount: "1箱")
+                        sections: [
+                            IngredientSection(items: [
+                                Ingredient(name: "豚肉", amount: "300g"),
+                                Ingredient(name: "玉ねぎ", amount: "2個"),
+                                Ingredient(name: "人参", amount: "1本"),
+                                Ingredient(name: "じゃがいも", amount: "2個"),
+                                Ingredient(name: "カレールー", amount: "1箱")
+                            ])
                         ]
                     ),
-                    steps: [
-                        CookingStep(stepNumber: 1, instruction: "野菜を切る"),
-                        CookingStep(stepNumber: 2, instruction: "肉を炒める"),
-                        CookingStep(stepNumber: 3, instruction: "野菜を加えて煮込む"),
-                        CookingStep(stepNumber: 4, instruction: "ルーを溶かす")
+                    stepSections: [
+                        CookingStepSection(items: [
+                            CookingStep(stepNumber: 1, instruction: "野菜を切る"),
+                            CookingStep(stepNumber: 2, instruction: "肉を炒める"),
+                            CookingStep(stepNumber: 3, instruction: "野菜を加えて煮込む"),
+                            CookingStep(stepNumber: 4, instruction: "ルーを溶かす")
+                        ])
                     ]
                 ),
                 Recipe(
@@ -390,14 +398,18 @@ struct RecipeHomeView: View {
                     imageURLs: [],
                     ingredientsInfo: Ingredients(
                         servings: "3人分",
-                        items: [
-                            Ingredient(name: "牛肉", amount: "200g"),
-                            Ingredient(name: "じゃがいも", amount: "3個")
+                        sections: [
+                            IngredientSection(items: [
+                                Ingredient(name: "牛肉", amount: "200g"),
+                                Ingredient(name: "じゃがいも", amount: "3個")
+                            ])
                         ]
                     ),
-                    steps: [
-                        CookingStep(stepNumber: 1, instruction: "材料を切る"),
-                        CookingStep(stepNumber: 2, instruction: "煮込む")
+                    stepSections: [
+                        CookingStepSection(items: [
+                            CookingStep(stepNumber: 1, instruction: "材料を切る"),
+                            CookingStep(stepNumber: 2, instruction: "煮込む")
+                        ])
                     ]
                 ),
                 Recipe(
@@ -406,14 +418,18 @@ struct RecipeHomeView: View {
                     imageURLs: [.previewPlaceholder(color: .systemOrange)],
                     ingredientsInfo: Ingredients(
                         servings: "2人分",
-                        items: [
-                            Ingredient(name: "味噌", amount: "大さじ2"),
-                            Ingredient(name: "豆腐", amount: "1/2丁")
+                        sections: [
+                            IngredientSection(items: [
+                                Ingredient(name: "味噌", amount: "大さじ2"),
+                                Ingredient(name: "豆腐", amount: "1/2丁")
+                            ])
                         ]
                     ),
-                    steps: [
-                        CookingStep(stepNumber: 1, instruction: "だしを取る"),
-                        CookingStep(stepNumber: 2, instruction: "味噌を溶く")
+                    stepSections: [
+                        CookingStepSection(items: [
+                            CookingStep(stepNumber: 1, instruction: "だしを取る"),
+                            CookingStep(stepNumber: 2, instruction: "味噌を溶く")
+                        ])
                     ]
                 )
             ],

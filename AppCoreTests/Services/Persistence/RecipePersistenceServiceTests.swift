@@ -10,7 +10,9 @@ struct RecipePersistenceServiceTests {
     private func makeService() throws -> RecipePersistenceService {
         let schema = Schema([
             PersistedRecipe.self,
+            PersistedIngredientSection.self,
             PersistedIngredient.self,
+            PersistedCookingStepSection.self,
             PersistedCookingStep.self,
             PersistedShoppingList.self,
             PersistedShoppingListItem.self,
@@ -31,14 +33,18 @@ struct RecipePersistenceServiceTests {
             description: "おいしい料理",
             ingredientsInfo: Ingredients(
                 servings: "2人分",
-                items: [
-                    Ingredient(name: "鶏肉", amount: "200g"),
-                    Ingredient(name: "塩", amount: "少々")
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "鶏肉", amount: "200g"),
+                        Ingredient(name: "塩", amount: "少々")
+                    ])
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "材料を切る"),
-                CookingStep(stepNumber: 2, instruction: "炒める")
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "材料を切る"),
+                    CookingStep(stepNumber: 2, instruction: "炒める")
+                ])
             ],
             sourceURL: URL(string: "https://example.com/recipe")
         )
@@ -134,20 +140,24 @@ struct RecipePersistenceServiceTests {
         let recipe1 = Recipe(
             id: UUID(),
             title: "レシピA",
-            ingredientsInfo: Ingredients(items: [
-                Ingredient(name: "鶏肉", amount: "200g"),
-                Ingredient(name: "玉ねぎ", amount: "1個")
+            ingredientsInfo: Ingredients(sections: [
+                IngredientSection(items: [
+                    Ingredient(name: "鶏肉", amount: "200g"),
+                    Ingredient(name: "玉ねぎ", amount: "1個")
+                ])
             ]),
-            steps: []
+            stepSections: []
         )
         let recipe2 = Recipe(
             id: UUID(),
             title: "レシピB",
-            ingredientsInfo: Ingredients(items: [
-                Ingredient(name: "鶏肉", amount: "300g"),
-                Ingredient(name: "にんにく", amount: "2片")
+            ingredientsInfo: Ingredients(sections: [
+                IngredientSection(items: [
+                    Ingredient(name: "鶏肉", amount: "300g"),
+                    Ingredient(name: "にんにく", amount: "2片")
+                ])
             ]),
-            steps: []
+            stepSections: []
         )
 
         try await service.saveRecipe(recipe1)
