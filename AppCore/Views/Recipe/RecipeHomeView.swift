@@ -152,6 +152,8 @@ struct RecipeHomeView: View {
                         .background(ds.colors.backgroundSecondary.color)
                         .clipShape(Capsule())
                 }
+                .frame(minHeight: 44)
+                .contentShape(Capsule())
                 .accessibilityIdentifier("recipeHome_button_addCategory")
             }
             .padding(.horizontal, ds.spacing.md)
@@ -174,6 +176,8 @@ struct RecipeHomeView: View {
                 .background(isSelected ? ds.colors.primaryBrand.color : ds.colors.backgroundSecondary.color)
                 .clipShape(Capsule())
         }
+        .frame(minHeight: 44)
+        .contentShape(Capsule())
         .buttonStyle(.plain)
         .accessibilityIdentifier(accessibilityID)
     }
