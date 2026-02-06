@@ -20,6 +20,7 @@ public final class AppStore {
     private let recipeExtractionService: any RecipeExtractionServiceProtocol
     private let recipePersistenceService: any RecipePersistenceServiceProtocol
     private let revenueCatService: any RevenueCatServiceProtocol
+    private let seedDataService: SeedDataService
 
     // MARK: - Initialization
 
@@ -57,6 +58,8 @@ public final class AppStore {
                 self.recipePersistenceService = NoOpRecipePersistenceService()
             }
         }
+
+        self.seedDataService = SeedDataService(persistenceService: self.recipePersistenceService)
     }
 
     // MARK: - Public Methods
@@ -99,12 +102,14 @@ public final class AppStore {
 
     /// アプリ起動時の処理
     private func handleBoot() async {
-        // サブスクリプション状態を読み込む
+        // サブスクリプション状態と買い物リストを先に読み込む（シードデータ投入を待たない）
         send(.subscription(.loadSubscriptionStatus))
-        // 保存済みレシピと買い物リストとカテゴリを読み込む
+        send(.shoppingList(.loadShoppingLists))
+
+        // シードデータ投入（初回のみ）完了後にレシピ・カテゴリを読み込む
+        await seedDataService.seedIfNeeded()
         send(.recipe(.loadSavedRecipes))
         send(.recipe(.loadCategories))
-        send(.shoppingList(.loadShoppingLists))
     }
 
     // MARK: - Recipe Side Effects
@@ -438,6 +443,10 @@ public final class AppStore {
             } catch {
                 send(.debug(.operationFailed(error.localizedDescription)))
             }
+
+        case .resetSeedData:
+            SeedDataService.resetSeedFlag()
+            send(.debug(.seedDataReset))
 
         default:
             // その他のアクションは副作用なし
