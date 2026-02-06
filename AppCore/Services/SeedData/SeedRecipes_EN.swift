@@ -9,7 +9,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/08/Spicy-Thai-Beef-Larb-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Uncooked jasmine rice", amount: "1/4 cup"),
                     Ingredient(name: "Peanuts", amount: "1/4 cup"),
                     Ingredient(name: "Coconut oil", amount: "1 tablespoon"),
@@ -26,13 +26,13 @@ extension SeedData {
                     Ingredient(name: "Fresh cilantro (plus more for garnish)", amount: "1/4 cup"),
                     Ingredient(name: "Fresh mint (plus more for garnish)", amount: "1/4 cup"),
                     Ingredient(name: "Boston lettuce, separated into leaves", amount: "1 head"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Toast uncooked rice in a dry wok or pan on low heat, stirring frequently until deep golden, 8-10 minutes. Grind to a coarse powder using a mortar and pestle, food processor, or blender. Set aside."),
                 CookingStep(stepNumber: 2, instruction: "Heat coconut oil in the same pan on medium-high heat. Add ground beef, stirring with a wooden spoon to break up chunks, and cook for 6-7 minutes until browned. Move beef to one side of the pan and add peanuts to the other side. Toast peanuts for 3-4 minutes. Add salt, pepper, red pepper flakes, garlic, red chilies, lime zest and juice, soy sauce, shallots, green onions, cilantro, mint, and rice powder. Toss to combine."),
                 CookingStep(stepNumber: 3, instruction: "Serve hot, spooned onto Boston lettuce leaves."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/08/02/spicy-thai-beef-larb/")
         ),
         Recipe(
@@ -42,7 +42,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Coconut-Smoothie-Bowl-4x5-1Coconut-Smoothie-Bowl-4x5-1-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "Serves 4",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Coconut milk", amount: "3 cans"),
                     Ingredient(name: "Frozen banana", amount: "½"),
                     Ingredient(name: "Honey", amount: "¼ cup"),
@@ -52,13 +52,13 @@ extension SeedData {
                     Ingredient(name: "Strawberries, sliced", amount: "1½ cups"),
                     Ingredient(name: "Blueberries", amount: "1½ cups"),
                     Ingredient(name: "Coconut flakes", amount: "¼ cup"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Pour 2 of the coconut milk cans into ice cube trays and freeze until frozen solid."),
                 CookingStep(stepNumber: 2, instruction: "Add the coconut milk ice cubes, 1 cup coconut milk, frozen banana, honey, and orange juice into a blender. Blend until thick and smooth. If the mixture is too thick and won't blend properly, drizzle in a little more orange juice at a time. The consistency should be as thick as possible."),
                 CookingStep(stepNumber: 3, instruction: "Spoon the coconut mixture into four serving bowls. Top each with a sprinkle of granola, a drizzle of honey, strawberries, blueberries, and coconut flakes. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/07/23/coconut-smoothie-bowl/")
         ),
         Recipe(
@@ -68,7 +68,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Shakshuka-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "Serves 1",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Olive oil", amount: "2 tablespoons"),
                     Ingredient(name: "Large onion, chopped", amount: "1"),
                     Ingredient(name: "Red pepper, chopped", amount: "½"),
@@ -88,12 +88,12 @@ extension SeedData {
                     Ingredient(name: "Large eggs", amount: "5"),
                     Ingredient(name: "Feta cheese, cubed", amount: "½ cup"),
                     Ingredient(name: "Cilantro, chopped", amount: "1 tablespoon"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "In a large shallow frying pan, heat the olive oil over a medium high heat. Add the onions, garlic, red pepper, and yellow pepper and cook for 5 minutes, until softened. Next add the paprika, caraway seeds, cumin, turmeric, salt, and pepper. Cook for an additional minute, stirring constantly."),
                 CookingStep(stepNumber: 2, instruction: "Add the tomatoes, tomato paste, harissa, honey, and vinegar. Reduce the heat to medium and cook for 10 minutes. You want the sauce to thicken somewhat but still loose enough to slosh around the pan when you shake it. With the back of the spoon make five \"wells\" in the shakshuka sauce and pour an egg into each of them. Continue cooking the shakshuka, covered, until the eggs are cooked to your desired doneness. Remove from the heat and top with feta and cilantro. Serve with warm pita bread."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/07/02/shakshuka/")
         ),
         Recipe(
@@ -103,7 +103,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Impossible-Churizo-Nachos-1-LOW-RES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "1 serving",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Vegetable oil", amount: "1 tablespoon"),
                     Ingredient(name: "Onion, chopped", amount: "½"),
                     Ingredient(name: "Garlic cloves", amount: "2"),
@@ -133,9 +133,9 @@ extension SeedData {
                     Ingredient(name: "Sliced pickled jalapeños", amount: "¼ cup"),
                     Ingredient(name: "Pico de gallo", amount: "1 cup"),
                     Ingredient(name: "Cilantro, chopped", amount: "2 tablespoons"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Heat vegetable oil in a pan over medium flame. Cook chopped onion and garlic for 3-4 minutes until translucent."),
                 CookingStep(stepNumber: 2, instruction: "Add the Impossible Burger and cook for 4-5 minutes until browned, breaking it apart as it cooks."),
                 CookingStep(stepNumber: 3, instruction: "Stir in the chipotle, adobo sauce, water, chili powder, cumin, paprika, oregano, salt, and pepper. Cook for 5 minutes until the liquid reduces. Lower heat and keep warm during assembly."),
@@ -143,7 +143,7 @@ extension SeedData {
                 CookingStep(stepNumber: 5, instruction: "Preheat the oven to broil. Spread tortilla chips on a baking sheet. Top with half the cheddar and Monterey Jack cheese, then the chorizo mixture, then the remaining cheese."),
                 CookingStep(stepNumber: 6, instruction: "Broil for 3-4 minutes until the cheese is melted and bubbly."),
                 CookingStep(stepNumber: 7, instruction: "Top with guacamole, sour cream, pickled jalapeños, pico de gallo, and cilantro. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/01/27/impossible-chorizo-nachos/")
         ),
         Recipe(
@@ -153,7 +153,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Chocolate-Chip-Pancakes-LOW-RES.jpeg")!)],
             ingredientsInfo: Ingredients(
                 servings: "1 serving",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "All-purpose flour", amount: "2 cups"),
                     Ingredient(name: "Baking powder", amount: "1 tablespoon"),
                     Ingredient(name: "Salt", amount: "1/2 teaspoon"),
@@ -164,14 +164,14 @@ extension SeedData {
                     Ingredient(name: "Melted butter (plus more for cooking)", amount: "3 tablespoons"),
                     Ingredient(name: "Whipped cream (optional)", amount: nil),
                     Ingredient(name: "Maple syrup (optional)", amount: nil),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "In a large bowl, mix the all-purpose flour, baking powder, salt, sugar, and chocolate chips. Whisk together the eggs, milk, and butter in a small bowl. Pour the wet mixture into the dry ingredients and mix with a whisk until fully combined."),
                 CookingStep(stepNumber: 2, instruction: "Heat a buttered griddle or frying pan over medium heat. Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake. Cook on the first side until bubbles appear on the surface, the edges begin to look dry, and the bottoms are golden-brown, about 3 minutes."),
                 CookingStep(stepNumber: 3, instruction: "Flip the pancakes. Cook until the second sides are golden-brown, 2-3 minutes. Transfer to a plate and repeat using the remaining batter."),
                 CookingStep(stepNumber: 4, instruction: "Top with whipped cream or maple syrup and serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/01/20/easy-chocolate-chip-pancakes/")
         ),
         Recipe(
@@ -181,7 +181,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/12/Eitan-Bernath-Irish-Colcannon-.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Russet or Yukon Gold potatoes", amount: "2 pounds"),
                     Ingredient(name: "Unsalted butter", amount: "4 tablespoons, plus more for serving"),
                     Ingredient(name: "Heavy cream", amount: "1/2 cup"),
@@ -190,16 +190,16 @@ extension SeedData {
                     Ingredient(name: "Scallions, thinly sliced", amount: "6"),
                     Ingredient(name: "Kosher salt", amount: "to taste"),
                     Ingredient(name: "Freshly ground black pepper", amount: "to taste"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Peel the potatoes and cut them into 1-inch chunks. Place them in a large pot, cover with cold water, and add a generous pinch of salt. Bring to a boil over high heat, then reduce to a simmer and cook until fork-tender, about 15 to 20 minutes."),
                 CookingStep(stepNumber: 2, instruction: "While the potatoes cook, melt 2 tablespoons of butter in a skillet over medium heat. Add the chopped kale and cook, stirring occasionally, until wilted and tender, about 5 minutes. Add the sliced scallions and cook for another 1 to 2 minutes. Set aside."),
                 CookingStep(stepNumber: 3, instruction: "In a small saucepan, warm the heavy cream and milk together over low heat until just steaming. Do not boil."),
                 CookingStep(stepNumber: 4, instruction: "Drain the potatoes well and return them to the pot. Mash until smooth using a potato masher or ricer. Add the remaining 2 tablespoons of butter and the warm cream mixture, and stir until incorporated."),
                 CookingStep(stepNumber: 5, instruction: "Fold the kale and scallion mixture into the mashed potatoes. Season generously with salt and lots of freshly ground black pepper."),
                 CookingStep(stepNumber: 6, instruction: "Transfer to a serving bowl, make a well in the center, and add an extra pat of butter on top. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/12/05/colcannon/")
         ),
         Recipe(
@@ -209,21 +209,21 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Watermelon-Lemonade-Slushie.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Lemon juice", amount: "1 cup (approximately 8-10 lemons)"),
                     Ingredient(name: "Sugar", amount: "1 cup"),
                     Ingredient(name: "Water", amount: "1 cup"),
                     Ingredient(name: "Cubed watermelon", amount: "4 cups"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Combine sugar and 1 cup water in a saucepan over medium heat. Bring to a boil, then simmer while stirring until sugar dissolves. Remove from heat and add lemon juice."),
                 CookingStep(stepNumber: 2, instruction: "Pour mixture into ice cube trays or a plastic wrap-lined loaf pan. Freeze for at least 6 hours or overnight."),
                 CookingStep(stepNumber: 3, instruction: "Place watermelon cubes on a baking sheet and freeze for at least 6 hours or overnight."),
                 CookingStep(stepNumber: 4, instruction: "Blend frozen lemonade cubes in a high-powered blender until achieving a slushie consistency. Transfer to a resealable container."),
                 CookingStep(stepNumber: 5, instruction: "Blend frozen watermelon pieces until reaching desired slushie consistency."),
                 CookingStep(stepNumber: 6, instruction: "Layer in tall glasses: fill one-third with watermelon mixture, two-thirds with lemonade slushie, then top with additional watermelon. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/09/01/watermelon-lemonade-slushie/")
         ),
         Recipe(
@@ -233,7 +233,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Mocha-Cupcake-with-Cookies-N-Cream-Frosting.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "24 cupcakes",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Cake flour (plus more for dusting)", amount: "1 1/2 cups"),
                     Ingredient(name: "Baking soda", amount: "3/4 tsp"),
                     Ingredient(name: "Instant coffee granules", amount: "1/4 cup"),
@@ -250,9 +250,9 @@ extension SeedData {
                     Ingredient(name: "Vanilla extract (for frosting)", amount: "1 tbsp"),
                     Ingredient(name: "Heavy cream or whole milk", amount: "4 tbsp"),
                     Ingredient(name: "Oreos, roughly chopped", amount: "12"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Preheat oven to 350°F. Grease and flour two 12-cup cupcake tins."),
                 CookingStep(stepNumber: 2, instruction: "Whisk together cake flour, baking soda, instant coffee, and salt in a large bowl."),
                 CookingStep(stepNumber: 3, instruction: "In a medium bowl, whisk eggs for 30 seconds to 1 minute, then add sugar, canola oil, sour cream, and vanilla until combined."),
@@ -266,7 +266,7 @@ extension SeedData {
                 CookingStep(stepNumber: 11, instruction: "Add vanilla and heavy cream; beat for 2-3 minutes until fluffy. Add cream 1 tablespoon at a time if frosting is too thick or grainy."),
                 CookingStep(stepNumber: 12, instruction: "Fold in chopped Oreos on low speed."),
                 CookingStep(stepNumber: 13, instruction: "Dollop 2-3 tablespoons of frosting per cupcake. Store in an airtight container for up to 2 days, or freeze for up to 2 months."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/09/12/mocha-cupcakes-with-cookies-n-cream-frosting/")
         ),
         Recipe(
@@ -276,7 +276,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Mango-Pomegranate-Pistachio-Squares.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "9 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Unsalted shelled pistachios", amount: "12 ounces"),
                     Ingredient(name: "Sugar", amount: "1/4 cup"),
                     Ingredient(name: "Kosher salt", amount: "1/4 teaspoon"),
@@ -290,9 +290,9 @@ extension SeedData {
                     Ingredient(name: "Pomegranate juice", amount: "1 cup (divided)"),
                     Ingredient(name: "Unflavored gelatin", amount: "1 1/4 ounce envelope"),
                     Ingredient(name: "Sugar", amount: "1 tablespoon"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Line an 8×8 inch pan with parchment paper, leaving overhang on all sides for easy removal."),
                 CookingStep(stepNumber: 2, instruction: "In a food processor, process pistachios into a fine meal for about 30 seconds. Add 1/4 cup sugar and salt, then pulse to combine. Add 1 egg and melted butter, then process until the mixture holds together. Press the dough firmly and evenly into the prepared pan using a flat-bottomed cup. Refrigerate while preparing the filling."),
                 CookingStep(stepNumber: 3, instruction: "Preheat the oven to 350°F."),
@@ -302,7 +302,7 @@ extension SeedData {
                 CookingStep(stepNumber: 7, instruction: "In a small saucepan, heat the remaining 3/4 cup pomegranate juice with 1 tablespoon sugar until boiling. Pour the hot juice over the gelatin mixture and stir until completely dissolved. Refrigerate until cool but still liquid, about 20 minutes."),
                 CookingStep(stepNumber: 8, instruction: "Whisk the cooled pomegranate mixture to incorporate any solidified gelatin, then pour evenly over the mango layer. Refrigerate for at least 2 hours until the jelly is fully set."),
                 CookingStep(stepNumber: 9, instruction: "Use the parchment overhang to lift the dessert from the pan. Cut into 9 squares. Store refrigerated."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/07/25/mango-pomegranate-pistachio-squares/")
         ),
         Recipe(
@@ -312,7 +312,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-BBQ-Pastrami-Grilled-Pizza.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "6 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Beef bacon, cut into 1-inch pieces", amount: "6 oz"),
                     Ingredient(name: "Thinly sliced yellow onion (about ½ large)", amount: "1 cup"),
                     Ingredient(name: "Sliced pastrami, cut into 1-inch pieces", amount: "8 oz"),
@@ -323,14 +323,14 @@ extension SeedData {
                     Ingredient(name: "Premade pizza dough", amount: "16 oz"),
                     Ingredient(name: "Honey barbecue sauce", amount: "⅓ cup"),
                     Ingredient(name: "Arugula", amount: "1 cup"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Cook beef bacon in a large frying pan over medium heat, stirring occasionally, for 3 minutes until the fat renders. Add onions and cook for 5 minutes until caramelized. Add pastrami, garlic powder, and smoked paprika. Season with salt and pepper."),
                 CookingStep(stepNumber: 2, instruction: "Cook the mixture for 5 additional minutes, stirring occasionally, until the pastrami browns slightly. Remove from heat."),
                 CookingStep(stepNumber: 3, instruction: "Preheat grill or grill pan on medium. Stretch the dough into a 12×8-inch rectangle. Oil the grill surface, transfer the dough, and cook 4 minutes per side until golden and crispy."),
                 CookingStep(stepNumber: 4, instruction: "Place the grilled dough on a baking sheet. Spread barbecue sauce evenly, leaving a 1-inch border. Top with the pastrami mixture and arugula. Cut into 6 pieces and serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/07/18/bbq-pastrami-grilled-pizza/")
         ),
         Recipe(
@@ -340,7 +340,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Tomato-Melon-Panzanella.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "6-8 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Rustic sourdough boule, cut into 1-inch pieces", amount: "1 large (~8 cups)"),
                     Ingredient(name: "Heirloom tomatoes, cored and cut into 1-inch wedges", amount: "2 large (~3½ cups)"),
                     Ingredient(name: "Kosher salt", amount: "½ teaspoon (plus more to taste)"),
@@ -352,15 +352,15 @@ extension SeedData {
                     Ingredient(name: "Basil, large leaves torn", amount: "¾ cup loosely packed (~½ ounce)"),
                     Ingredient(name: "Red onion, thinly sliced", amount: "½ cup"),
                     Ingredient(name: "Fresh mozzarella, cut into 1-inch pieces", amount: "1 ball (8 ounces)"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Preheat oven to 350°F."),
                 CookingStep(stepNumber: 2, instruction: "Add bread to a sheet tray and bake for 15 minutes until dried but not browned. Cool completely."),
                 CookingStep(stepNumber: 3, instruction: "Set a colander over a mixing bowl. Add tomatoes, sprinkle with ½ teaspoon salt, and let sit for 10 minutes to drain. Reserve the tomato liquid."),
                 CookingStep(stepNumber: 4, instruction: "Make the vinaigrette: whisk the reserved tomato liquid with garlic and balsamic vinegar. Slowly stream in olive oil while whisking. Season with salt and pepper as needed."),
                 CookingStep(stepNumber: 5, instruction: "Combine tomatoes, bread, melon, basil, red onion, and mozzarella in a bowl with the vinaigrette. Toss gently. Let flavors meld for at least 15 minutes, stirring occasionally. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/07/07/tomato-melon-panzanella/")
         ),
         Recipe(
@@ -370,7 +370,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/04/Parmesan-Truffle-Fries-With-Roasted-Garlic-Aioli-4x5-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Large garlic cloves, chopped", amount: "6"),
                     Ingredient(name: "Neutral oil", amount: "¼ cup"),
                     Ingredient(name: "Kosher salt", amount: "To taste"),
@@ -386,9 +386,9 @@ extension SeedData {
                     Ingredient(name: "Black truffle oil", amount: "1 teaspoon"),
                     Ingredient(name: "Kosher salt", amount: "To taste"),
                     Ingredient(name: "Freshly ground pepper", amount: "To taste"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Heat the neutral oil and chopped garlic in a small saucepan over medium-low heat for about 3 minutes until the garlic is lightly golden brown."),
                 CookingStep(stepNumber: 2, instruction: "Set a fine mesh sieve over a heatproof measuring cup. Pour the garlic and oil through the sieve. Transfer the garlic to a mixing bowl and refrigerate the oil for at least 10 minutes until cooled."),
                 CookingStep(stepNumber: 3, instruction: "Place the mixing bowl with garlic on a towel-lined pot to stabilize. Add egg yolks, lemon juice, Worcestershire sauce, hot sauce, and pepper. Gradually whisk in the cooled oil, starting with drops and increasing to a slow stream, until emulsified to a mayonnaise consistency. Add a little warm water if needed to thin."),
@@ -396,7 +396,7 @@ extension SeedData {
                 CookingStep(stepNumber: 5, instruction: "Heat 1½ inches of vegetable oil to 350°F in a deep skillet. Fry the potatoes in batches for 3–4 minutes until the edges start to brown. Transfer to the prepared baking sheets. Check the oil temperature between batches."),
                 CookingStep(stepNumber: 6, instruction: "Increase the oil temperature to 400°F. Fry the pre-cooked potatoes again for 1–2 minutes until crispy and golden brown all around. Transfer to clean paper towels."),
                 CookingStep(stepNumber: 7, instruction: "Toss the hot fries in a bowl with freshly grated Parmesan, sliced basil, and black truffle oil. Season with salt and pepper. Serve immediately with the garlic aioli."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/05/09/parmesan-truffle-fries-with-quick-garlic-aioli/")
         ),
         Recipe(
@@ -406,7 +406,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/12/Latkes-with-Beet-Cured-Salmon-Lox-1-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Skin-on center cut salmon", amount: "1 pound"),
                     Ingredient(name: "Small beets, peeled and finely grated", amount: "2"),
                     Ingredient(name: "Fresh dill, roughly chopped", amount: "¼ cup"),
@@ -422,15 +422,15 @@ extension SeedData {
                     Ingredient(name: "Freshly ground black pepper", amount: nil),
                     Ingredient(name: "Sour cream", amount: nil),
                     Ingredient(name: "Fresh dill", amount: nil),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Mix grated beets, dill, salt, sugar, and pepper to make the cure. Apply the mixture evenly over the salmon, wrap tightly in parchment paper, and refrigerate for 3-4 days with a weight on top. Flip the salmon on day 2."),
                 CookingStep(stepNumber: 2, instruction: "Remove the cure mixture from the salmon and slice thinly against the grain. Wrap and refrigerate any remaining salmon (keeps 4-5 days)."),
                 CookingStep(stepNumber: 3, instruction: "Line a bowl with a tea towel. Grate the potatoes and onion into the bowl, then squeeze out excess moisture. Let the liquid settle, discard the excess, and keep the white starch at the bottom. Combine the grated vegetables with eggs, flour, and salt."),
                 CookingStep(stepNumber: 4, instruction: "Heat oil in a skillet over medium-high heat. Form half-cup portions of the potato mixture into ½-inch thick pancakes and fry for 6-7 minutes until golden. Flip and repeat. Transfer to paper towels and salt generously."),
                 CookingStep(stepNumber: 5, instruction: "Top each latke with 2-3 slices of beet-cured salmon, a dollop of sour cream, fresh dill, and cracked pepper."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/12/14/latkes-with-beet-cured-salmon-lox/")
         ),
         Recipe(
@@ -440,43 +440,59 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/02/Pani-Poori-Low-Res.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
-                    Ingredient(name: "Semolina flour", amount: "1 cup"),
-                    Ingredient(name: "Baking soda", amount: "1/8 tsp"),
-                    Ingredient(name: "All-purpose flour", amount: "1 tbsp"),
-                    Ingredient(name: "Salt (for dough)", amount: "1/4 tsp"),
-                    Ingredient(name: "Water", amount: "6 tbsp"),
-                    Ingredient(name: "Oil (for dough)", amount: "1 tsp"),
-                    Ingredient(name: "Oil for deep frying", amount: nil),
-                    Ingredient(name: "Medium potatoes", amount: "4"),
-                    Ingredient(name: "Chili powder", amount: "1/4 tsp"),
-                    Ingredient(name: "Cumin", amount: "1/2 tsp"),
-                    Ingredient(name: "Coriander", amount: "1/2 tsp"),
-                    Ingredient(name: "Chaat masala", amount: "1 tsp"),
-                    Ingredient(name: "Salt (for potatoes)", amount: "1/2 tsp"),
-                    Ingredient(name: "Chopped cilantro", amount: "2 tbsp"),
-                    Ingredient(name: "Cilantro", amount: "1/2 cup"),
-                    Ingredient(name: "Mint leaves", amount: "1/2 cup"),
-                    Ingredient(name: "Green chilies", amount: "2-3"),
-                    Ingredient(name: "Ginger, peeled", amount: "1-inch piece"),
-                    Ingredient(name: "Lemon, juiced", amount: "1"),
-                    Ingredient(name: "Tamarind paste", amount: "3 tbsp"),
-                    Ingredient(name: "Brown sugar or jaggery", amount: "3 tbsp"),
-                    Ingredient(name: "Chaat masala (optional)", amount: "1 tsp"),
-                    Ingredient(name: "Salt (pinch)", amount: "A pinch"),
-                    Ingredient(name: "Tamarind chutney", amount: nil),
-                    Ingredient(name: "Pomegranate seeds", amount: nil),
-                    Ingredient(name: "Red onion", amount: nil),
-                    Ingredient(name: "Fresh cilantro", amount: nil),
+                sections: [
+                    IngredientSection(header: "For the Poori", items: [
+                        Ingredient(name: "Semolina flour", amount: "1 cup"),
+                        Ingredient(name: "Baking soda", amount: "1/8 tsp"),
+                        Ingredient(name: "All-purpose flour", amount: "1 tbsp"),
+                        Ingredient(name: "Salt (for dough)", amount: "1/4 tsp"),
+                        Ingredient(name: "Water", amount: "6 tbsp"),
+                        Ingredient(name: "Oil (for dough)", amount: "1 tsp"),
+                        Ingredient(name: "Oil for deep frying", amount: nil),
+                    ]),
+                    IngredientSection(header: "For the Aloo Masala", items: [
+                        Ingredient(name: "Medium potatoes", amount: "4"),
+                        Ingredient(name: "Chili powder", amount: "1/4 tsp"),
+                        Ingredient(name: "Cumin", amount: "1/2 tsp"),
+                        Ingredient(name: "Coriander", amount: "1/2 tsp"),
+                        Ingredient(name: "Chaat masala", amount: "1 tsp"),
+                        Ingredient(name: "Salt (for potatoes)", amount: "1/2 tsp"),
+                        Ingredient(name: "Chopped cilantro", amount: "2 tbsp"),
+                    ]),
+                    IngredientSection(header: "For the Pani Poori Water", items: [
+                        Ingredient(name: "Cilantro", amount: "1/2 cup"),
+                        Ingredient(name: "Mint leaves", amount: "1/2 cup"),
+                        Ingredient(name: "Green chilies", amount: "2-3"),
+                        Ingredient(name: "Ginger, peeled", amount: "1-inch piece"),
+                        Ingredient(name: "Lemon, juiced", amount: "1"),
+                        Ingredient(name: "Tamarind paste", amount: "3 tbsp"),
+                        Ingredient(name: "Brown sugar or jaggery", amount: "3 tbsp"),
+                        Ingredient(name: "Chaat masala (optional)", amount: "1 tsp"),
+                        Ingredient(name: "Salt (pinch)", amount: "A pinch"),
+                    ]),
+                    IngredientSection(header: "For the Garnish", items: [
+                        Ingredient(name: "Tamarind chutney", amount: nil),
+                        Ingredient(name: "Pomegranate seeds", amount: nil),
+                        Ingredient(name: "Red onion", amount: nil),
+                        Ingredient(name: "Fresh cilantro", amount: nil),
+                    ]),
                 ]
             ),
-            steps: [
-                CookingStep(stepNumber: 1, instruction: "Combine semolina flour, baking soda, all-purpose flour, and salt in a bowl. Add water and oil, then knead until the dough is smooth and elastic. Rest for one hour."),
-                CookingStep(stepNumber: 2, instruction: "Roll the dough very thin (about 1/8-inch thick) and cut into 2-inch circles."),
-                CookingStep(stepNumber: 3, instruction: "Heat oil to 400°F and deep fry the circles until they puff up and turn golden. Drain on paper towels."),
-                CookingStep(stepNumber: 4, instruction: "Blend cilantro, mint leaves, green chilies, ginger, and lemon juice until smooth. Add tamarind paste, brown sugar/jaggery, chaat masala, and a pinch of salt. Mix with 4 cups of cold water and chill."),
-                CookingStep(stepNumber: 5, instruction: "Dice potatoes into 1/2-inch cubes and boil until tender. Drain and toss with chili powder, cumin, coriander, chaat masala, salt, and chopped cilantro."),
-                CookingStep(stepNumber: 6, instruction: "Poke a hole in each poori shell, fill with spiced potatoes, then top with mint water, diced red onion, tamarind chutney, pomegranate seeds, and fresh cilantro. Serve immediately."),
+            stepSections: [
+                CookingStepSection(header: "For the Poori Dough", items: [
+                    CookingStep(stepNumber: 1, instruction: "Combine semolina flour, baking soda, all-purpose flour, and salt in a bowl. Add water and oil, then knead until the dough is smooth and elastic. Rest for one hour."),
+                    CookingStep(stepNumber: 2, instruction: "Roll the dough very thin (about 1/8-inch thick) and cut into 2-inch circles."),
+                    CookingStep(stepNumber: 3, instruction: "Heat oil to 400°F and deep fry the circles until they puff up and turn golden. Drain on paper towels."),
+                ]),
+                CookingStepSection(header: "For the Water", items: [
+                    CookingStep(stepNumber: 4, instruction: "Blend cilantro, mint leaves, green chilies, ginger, and lemon juice until smooth. Add tamarind paste, brown sugar/jaggery, chaat masala, and a pinch of salt. Mix with 4 cups of cold water and chill."),
+                ]),
+                CookingStepSection(header: "For the Potatoes", items: [
+                    CookingStep(stepNumber: 5, instruction: "Dice potatoes into 1/2-inch cubes and boil until tender. Drain and toss with chili powder, cumin, coriander, chaat masala, salt, and chopped cilantro."),
+                ]),
+                CookingStepSection(header: "To Assemble", items: [
+                    CookingStep(stepNumber: 6, instruction: "Poke a hole in each poori shell, fill with spiced potatoes, then top with mint water, diced red onion, tamarind chutney, pomegranate seeds, and fresh cilantro. Serve immediately."),
+                ]),
             ],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/02/08/pani-poori-from-scratch/")
         ),
@@ -487,7 +503,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/03/Apple-Pie-Buns-2-LOW-RES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "6 buns",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Milk", amount: "½ cup"),
                     Ingredient(name: "Granulated sugar", amount: "¼ cup"),
                     Ingredient(name: "Platinum yeast", amount: "1 packet (¼ oz)"),
@@ -507,9 +523,9 @@ extension SeedData {
                     Ingredient(name: "Salted butter, cold and cubed", amount: "4 tablespoons"),
                     Ingredient(name: "Pink Lady apple, peeled and cored, ¼\" slices", amount: "1"),
                     Ingredient(name: "Beaten egg (for egg wash)", amount: "1"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Heat the milk to 90–105°F. Combine with sugar and yeast in the bowl of a stand mixer. Let sit for 5–10 minutes until foamy."),
                 CookingStep(stepNumber: 2, instruction: "Add the softened butter, then the egg and salt. Mix gradually, adding the flour on low speed until a dough forms. Increase to medium-high and mix for 5 minutes until smooth and elastic."),
                 CookingStep(stepNumber: 3, instruction: "Knead the dough into a ball, place in a greased bowl, cover, and let rise for 1 hour until doubled in size."),
@@ -517,7 +533,7 @@ extension SeedData {
                 CookingStep(stepNumber: 5, instruction: "Roll the dough into a 10×12-inch rectangle. Spread the filling evenly, sprinkle with walnuts, and roll up tightly. Cut into 6 equal pieces. Grease a 9-inch pie pan."),
                 CookingStep(stepNumber: 6, instruction: "Make the caramel: cook the sugar undisturbed for 4 minutes over medium-high heat, then whisk for 1–2 minutes until dark amber. Remove from heat and whisk in the cold butter. Pour into the pie pan, arrange apple slices on top, then place the buns cut-side up. Cover with foil and let rise for 30 minutes."),
                 CookingStep(stepNumber: 7, instruction: "Preheat the oven to 375°F. Brush the buns with egg wash and bake for 25 minutes until golden brown. Cool for 15–30 minutes, then invert onto a serving platter."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/03/24/caramel-apple-pie-sticky-buns/")
         ),
         Recipe(
@@ -527,7 +543,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/10/Chicken-Tikka-LOW-RES-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Boneless chicken breast", amount: "2 lbs"),
                     Ingredient(name: "Ginger paste", amount: "1 tablespoon"),
                     Ingredient(name: "Garlic paste", amount: "1 tablespoon"),
@@ -550,15 +566,15 @@ extension SeedData {
                     Ingredient(name: "Large red onion, cut into 1-inch pieces", amount: "1"),
                     Ingredient(name: "Mint Chutney", amount: "1 recipe"),
                     Ingredient(name: "Roti", amount: "1 recipe"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Combine chicken with ginger paste, garlic paste, Kashmiri chili powder, salt, and lemon juice in a large bowl. Mix thoroughly by hand to coat completely. Let sit at room temperature for 20 minutes."),
                 CookingStep(stepNumber: 2, instruction: "In a separate bowl, combine coconut milk, ginger paste, garlic paste, cumin powder, Kashmiri chili powder, garam masala, turmeric, green cardamom powder, coriander powder, and red food coloring. Transfer chicken to this mixture and stir until fully coated. Cover and refrigerate for at least 6 hours or overnight."),
                 CookingStep(stepNumber: 3, instruction: "Soak wooden skewers in water for 20 minutes. Thread marinated chicken onto skewers, alternating with onion and pepper pieces. Return to refrigerator. Mix the remaining marinade with 1/2 cup vegetable oil for basting."),
                 CookingStep(stepNumber: 4, instruction: "Set oven to broiler with rack at top level. Place skewers on a greased baking sheet. Broil 3-4 minutes per side, brushing with reserved marinade after flipping, until charred and cooked through."),
                 CookingStep(stepNumber: 5, instruction: "Serve immediately with roti and mint chutney."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/10/22/chicken-tikka/")
         ),
         Recipe(
@@ -568,7 +584,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/09/Watermelon-Feta-Salad-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Lemon juice", amount: "2 tablespoons"),
                     Ingredient(name: "Orange juice", amount: "2 tablespoons"),
                     Ingredient(name: "Lemon zest", amount: "1 teaspoon"),
@@ -581,13 +597,13 @@ extension SeedData {
                     Ingredient(name: "Watermelon cubes (1-inch pieces)", amount: "5 cups"),
                     Ingredient(name: "Baby arugula", amount: "3 cups"),
                     Ingredient(name: "Feta, crumbled", amount: "1/4 cup"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "In a large bowl, stir together the lemon juice, orange juice, lemon zest, orange zest, balsamic vinegar, olive oil, salt, pepper, and chopped walnuts."),
                 CookingStep(stepNumber: 2, instruction: "Add in the watermelon cubes, baby arugula, and crumbled feta."),
                 CookingStep(stepNumber: 3, instruction: "Toss to coat in the dressing. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/09/06/watermelon-feta-arugula-salad/")
         ),
         Recipe(
@@ -597,7 +613,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/12/Fried-Chicken-with-Pickles-3.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4-6 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Kirby cucumbers, sliced ⅛ inch thick", amount: "3"),
                     Ingredient(name: "Thinly sliced onion", amount: "½ cup"),
                     Ingredient(name: "White vinegar", amount: "1 cup"),
@@ -616,9 +632,9 @@ extension SeedData {
                     Ingredient(name: "Butter (plant-based recommended)", amount: "2 tablespoons"),
                     Ingredient(name: "Boneless chicken (breasts or thighs)", amount: "2 pounds"),
                     Ingredient(name: "Corn starch or potato starch", amount: "1 cup"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Combine sliced Kirby cucumbers and thinly sliced onion in a mixing bowl, then transfer to a quart-sized container."),
                 CookingStep(stepNumber: 2, instruction: "Toast mustard and celery seeds in a saucepot over low heat for 30 seconds to 1 minute until fragrant. Add vinegar, sugar, and salt; simmer until dissolved, then remove from heat."),
                 CookingStep(stepNumber: 3, instruction: "Stir ice cubes into the vinegar mixture until melted, pour over the pickles, seal, and refrigerate for at least 12 hours."),
@@ -629,7 +645,7 @@ extension SeedData {
                 CookingStep(stepNumber: 8, instruction: "Fry chicken in batches for 3-4 minutes until barely golden at the edges. Transfer to the first prepared pan."),
                 CookingStep(stepNumber: 9, instruction: "Increase oil temperature to 400°F and refry all the chicken pieces for 2-3 minutes until medium golden brown. Transfer to the second pan and season with salt."),
                 CookingStep(stepNumber: 10, instruction: "Divide the hot chicken between the two sauce bowls, coat thoroughly, and serve warm with homemade pickles."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/12/09/popcorn-chicken-two-ways-with-homemade-pickles/")
         ),
         Recipe(
@@ -639,7 +655,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/10/Mushrooms-_Shrimp_-Grits-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Stone-ground grits", amount: "1 cup"),
                     Ingredient(name: "Half and half", amount: "1 cup"),
                     Ingredient(name: "Butter", amount: "2 tablespoons"),
@@ -656,16 +672,16 @@ extension SeedData {
                     Ingredient(name: "Flour", amount: "1 tablespoon"),
                     Ingredient(name: "Vegetable stock", amount: "1 cup"),
                     Ingredient(name: "Fresh lemon juice", amount: "For serving"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Bring salted water to a boil. Slowly whisk in the grits, stirring constantly. Reduce heat and continue whisking for about 1 minute until thickened. Slowly add the half and half, reduce to low heat, and cook for 15–20 minutes, stirring occasionally, until very creamy. Add the cheddar cheese in 4 batches, whisking between each addition. Stir in the butter, season with black pepper, and adjust salt as needed. Cover and set aside."),
                 CookingStep(stepNumber: 2, instruction: "Heat 1 tablespoon of butter in a large skillet over medium-high heat. Add the mushrooms in a single layer and sear on both sides, about 1 minute per side, working in batches and adding more butter as needed. Transfer to a plate."),
                 CookingStep(stepNumber: 3, instruction: "Add 1 tablespoon of butter to the same skillet. Sauté the scallion whites and bell pepper until soft and translucent, 8–10 minutes. Add the garlic, tomato, smoked paprika, and cayenne. Cook for 2–3 minutes until fragrant. Sprinkle in the flour and stir for 1–2 minutes, then gradually add the vegetable stock while stirring. Simmer for 2–3 minutes until lightly thickened. Taste and adjust seasonings."),
                 CookingStep(stepNumber: 4, instruction: "Return the mushrooms and any accumulated juices to the pan. Gently heat through for about 2 minutes."),
                 CookingStep(stepNumber: 5, instruction: "Check the grits' thickness. If needed, add additional half and half over low heat, whisking until reaching the desired consistency."),
                 CookingStep(stepNumber: 6, instruction: "Divide the grits among bowls and top each with the mushroom mixture. Garnish with sliced scallion greens and a squeeze of fresh lemon juice."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/10/28/shrooms-and-grits/")
         ),
         Recipe(
@@ -675,20 +691,20 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/09/Raspberry-Balsamic-Refresher-4x5-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Granulated sugar", amount: "½ cup"),
                     Ingredient(name: "Fresh mint leaves, tightly packed", amount: "½ cup"),
                     Ingredient(name: "Raspberries (about 3 cups)", amount: "2 (6 oz) containers"),
                     Ingredient(name: "Lime, juiced", amount: "1 (¼ cup)"),
                     Ingredient(name: "White balsamic vinegar", amount: "¼ cup"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Combine sugar, ½ cup water, and mint in a small saucepan over medium heat. Simmer until sugar dissolves, then cool completely for 1 hour. Strain into a serving pitcher."),
                 CookingStep(stepNumber: 2, instruction: "Blend raspberries in a food processor until smooth. Strain through a fine mesh strainer into the pitcher to remove seeds."),
                 CookingStep(stepNumber: 3, instruction: "Add lime juice, white balsamic vinegar, and 3 cups ice-cold water. Whisk until thoroughly combined."),
                 CookingStep(stepNumber: 4, instruction: "Refrigerate until serving. Pour over ice in glasses."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/09/02/raspberry-balsamic-refresher/")
         ),
         Recipe(
@@ -698,7 +714,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/06/Angel-Food-Cake-with-Port-Macerated-Strawberries-Eitan-Bernath.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "10-12 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Granulated sugar", amount: "1 3/4 cups (350g)"),
                     Ingredient(name: "Cake flour", amount: "1 cup (133g)"),
                     Ingredient(name: "Kosher salt", amount: "1/4 teaspoon"),
@@ -710,9 +726,9 @@ extension SeedData {
                     Ingredient(name: "Sugar (for berries)", amount: "1-2 tablespoons"),
                     Ingredient(name: "Brandy or port", amount: "2 tablespoons"),
                     Ingredient(name: "Whipped cream (optional)", amount: nil),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Preheat the oven to 325°F."),
                 CookingStep(stepNumber: 2, instruction: "Blend the sugar in a blender until powdery. Divide in half. Whisk one half with the cake flour and salt in a bowl and set aside."),
                 CookingStep(stepNumber: 3, instruction: "In a stand mixer with the whisk attachment, whip the egg whites and cream of tartar on medium speed until foamy. Gradually add the reserved sugar and whip to medium peaks. Fold in the vanilla and almond extracts."),
@@ -724,7 +740,7 @@ extension SeedData {
                 CookingStep(stepNumber: 9, instruction: "Loosen the cake from the sides and center tube of the pan using a knife or offset spatula."),
                 CookingStep(stepNumber: 10, instruction: "Invert the cake onto a serving tray. Cut with a serrated knife using a gentle sawing motion."),
                 CookingStep(stepNumber: 11, instruction: "Top each slice with macerated strawberries and whipped cream. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/06/24/angel-food-cake-with-macerated-strawberries/")
         ),
         Recipe(
@@ -734,7 +750,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/03/Indian-Breakfast-Buritto-Eitan-Bernath.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "Finely ground whole wheat flour", amount: "3 cups"),
                     Ingredient(name: "Kosher salt", amount: "1 tsp"),
                     Ingredient(name: "Vegetable oil", amount: "1 tbsp"),
@@ -766,9 +782,9 @@ extension SeedData {
                     Ingredient(name: "Kosher salt and freshly ground pepper", amount: "to taste"),
                     Ingredient(name: "Small red onion, thinly sliced", amount: "½"),
                     Ingredient(name: "Cilantro leaves", amount: "½ cup"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "Make the roti dough: Mix flour, salt, and oil in a bowl. Add 1 cup water and mix until dough forms. Knead 3–4 minutes until smooth. Cover and rest for at least 20 minutes."),
                 CookingStep(stepNumber: 2, instruction: "Divide dough into 6 equal pieces and shape each into a smooth ball by tucking corners inward. Cover to prevent drying."),
                 CookingStep(stepNumber: 3, instruction: "Roll each dough ball on a floured surface into a 12-inch circle, rotating 45 degrees after each roll and flipping periodically."),
@@ -781,7 +797,7 @@ extension SeedData {
                 CookingStep(stepNumber: 10, instruction: "Make the scrambled eggs: Melt butter in a non-stick pan over low heat. Add cumin seeds and cook 30–45 seconds until sizzling and fragrant."),
                 CookingStep(stepNumber: 11, instruction: "Add beaten eggs and stir continuously for 3–4 minutes until 90% set with slight liquid remaining. Remove from heat immediately."),
                 CookingStep(stepNumber: 12, instruction: "Assemble: Place a roti on a work surface. Layer ¼ of the hash browns, chili paneer, scrambled eggs, red onion slices, cilantro, and a drizzle of mint chutney in the center. Fold the nearest side over, fold in the sides, and roll tightly. Serve immediately."),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/03/25/indian-inspired-breakfast-burrito/")
         ),
     ]
