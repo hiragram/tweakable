@@ -87,6 +87,7 @@ enum UITestHelper {
     }
 
     /// レシピ詳細画面が表示されるまで待機
+    /// - Note: 最初の材料ボタン（index: 0）の存在でレシピデータのロード完了を判定する
     /// - Returns: レシピ詳細画面に到達できたかどうか
     static func waitForRecipeView(app: XCUIApplication, timeout: TimeInterval = 15) -> Bool {
         // 最初の材料ボタンが表示されることを確認（レシピデータのロード完了を示す）
