@@ -9,9 +9,12 @@ public enum ModelContainerProvider {
             PersistedRecipe.self,
             PersistedIngredient.self,
             PersistedCookingStep.self,
+            PersistedIngredientSection.self,
+            PersistedCookingStepSection.self,
             PersistedShoppingList.self,
             PersistedShoppingListItem.self,
-            PersistedShoppingListItemBreakdown.self
+            PersistedShoppingListItemBreakdown.self,
+            PersistedRecipeCategory.self
         ])
     }
 

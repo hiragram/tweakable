@@ -1,6 +1,13 @@
 import Foundation
 import SwiftData
 
+/// 永続化サービスのエラー
+public enum PersistenceError: Error {
+    case categoryNotFound
+    case recipeNotFound
+    case invalidCategoryName
+}
+
 /// レシピ永続化サービスの実装
 public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @unchecked Sendable {
     private let modelContainer: ModelContainer
@@ -292,11 +299,120 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
         }
     }
 
+    // MARK: - Category Operations
+
+    @MainActor
+    public func loadAllCategories() async throws -> (categories: [RecipeCategory], categoryRecipeMap: [UUID: Set<UUID>]) {
+        let context = modelContainer.mainContext
+        let descriptor = FetchDescriptor<PersistedRecipeCategory>(
+            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
+        )
+        let persisted = try context.fetch(descriptor)
+
+        let categories = persisted.map { $0.toDomain() }
+        var map: [UUID: Set<UUID>] = [:]
+        for category in persisted {
+            map[category.id] = Set(category.recipes.map { $0.id })
+        }
+
+        return (categories: categories, categoryRecipeMap: map)
+    }
+
+    @MainActor
+    public func createCategory(name: String) async throws -> RecipeCategory {
+        let context = modelContainer.mainContext
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty, trimmedName.count <= 50 else {
+            throw PersistenceError.invalidCategoryName
+        }
+        let persisted = PersistedRecipeCategory(name: trimmedName)
+        context.insert(persisted)
+        try context.save()
+        return persisted.toDomain()
+    }
+
+    @MainActor
+    public func renameCategory(id: UUID, newName: String) async throws -> RecipeCategory {
+        let context = modelContainer.mainContext
+        let trimmedName = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty, trimmedName.count <= 50 else {
+            throw PersistenceError.invalidCategoryName
+        }
+        let descriptor = FetchDescriptor<PersistedRecipeCategory>(
+            predicate: #Predicate { $0.id == id }
+        )
+        guard let persisted = try context.fetch(descriptor).first else {
+            throw PersistenceError.categoryNotFound
+        }
+        persisted.name = trimmedName
+        try context.save()
+        return persisted.toDomain()
+    }
+
+    @MainActor
+    public func deleteCategory(id: UUID) async throws {
+        let context = modelContainer.mainContext
+        let descriptor = FetchDescriptor<PersistedRecipeCategory>(
+            predicate: #Predicate { $0.id == id }
+        )
+        guard let persisted = try context.fetch(descriptor).first else {
+            return
+        }
+        context.delete(persisted)
+        try context.save()
+    }
+
+    @MainActor
+    public func addRecipeToCategory(recipeID: UUID, categoryID: UUID) async throws {
+        let context = modelContainer.mainContext
+
+        let categoryDescriptor = FetchDescriptor<PersistedRecipeCategory>(
+            predicate: #Predicate { $0.id == categoryID }
+        )
+        guard let category = try context.fetch(categoryDescriptor).first else {
+            throw PersistenceError.categoryNotFound
+        }
+
+        let recipeDescriptor = FetchDescriptor<PersistedRecipe>(
+            predicate: #Predicate { $0.id == recipeID }
+        )
+        guard let recipe = try context.fetch(recipeDescriptor).first else {
+            throw PersistenceError.recipeNotFound
+        }
+
+        // 重複チェック
+        if !category.recipes.contains(where: { $0.id == recipeID }) {
+            category.recipes.append(recipe)
+            try context.save()
+        }
+    }
+
+    @MainActor
+    public func removeRecipeFromCategory(recipeID: UUID, categoryID: UUID) async throws {
+        let context = modelContainer.mainContext
+
+        let categoryDescriptor = FetchDescriptor<PersistedRecipeCategory>(
+            predicate: #Predicate { $0.id == categoryID }
+        )
+        guard let category = try context.fetch(categoryDescriptor).first else {
+            return
+        }
+
+        category.recipes.removeAll { $0.id == recipeID }
+        try context.save()
+    }
+
     // MARK: - Debug Operations
 
     @MainActor
     public func deleteAllData() async throws {
         let context = modelContainer.mainContext
+
+        // カテゴリを削除（レシピとの紐付けも解除される）
+        let categories = try context.fetch(FetchDescriptor<PersistedRecipeCategory>())
+        for category in categories {
+            context.delete(category)
+        }
 
         // 親モデルを個別に取得して削除（カスケードで子も削除される）
         // ShoppingListを削除するとitemsとbreakdownsもカスケード削除される

@@ -665,4 +665,325 @@ struct RecipeReducerTests {
 
         #expect(state.currentRecipe == recipe)
     }
+
+    // MARK: - Category Helper
+
+    private func makeSampleCategory(name: String = "和食") -> RecipeCategory {
+        RecipeCategory(name: name)
+    }
+
+    // MARK: - Category Initial State Tests
+
+    @Test
+    func state_init_hasCategoryDefaults() {
+        let state = RecipeState()
+
+        #expect(state.categories.isEmpty)
+        #expect(state.categoryRecipeMap.isEmpty)
+        #expect(state.isLoadingCategories == false)
+        #expect(state.selectedCategoryFilter == nil)
+    }
+
+    // MARK: - Load Categories Tests
+
+    @Test
+    func reduce_loadCategories_setsLoadingState() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .loadCategories)
+
+        #expect(state.isLoadingCategories == true)
+    }
+
+    @Test
+    func reduce_categoriesLoaded_updatesCategoriesAndMap() {
+        var state = RecipeState()
+        state.isLoadingCategories = true
+        let cat1 = makeSampleCategory(name: "和食")
+        let cat2 = makeSampleCategory(name: "中華")
+        let recipeID = UUID()
+        let map: [UUID: Set<UUID>] = [cat1.id: [recipeID]]
+
+        RecipeReducer.reduce(state: &state, action: .categoriesLoaded([cat1, cat2], categoryRecipeMap: map))
+
+        #expect(state.categories.count == 2)
+        #expect(state.categoryRecipeMap[cat1.id] == [recipeID])
+        #expect(state.isLoadingCategories == false)
+    }
+
+    @Test
+    func reduce_categoriesLoadFailed_setsError() {
+        var state = RecipeState()
+        state.isLoadingCategories = true
+
+        RecipeReducer.reduce(state: &state, action: .categoriesLoadFailed("読み込み失敗"))
+
+        #expect(state.isLoadingCategories == false)
+        #expect(state.errorMessage == "読み込み失敗")
+    }
+
+    // MARK: - Create Category Tests
+
+    @Test
+    func reduce_createCategory_doesNotChangeState() {
+        var state = RecipeState()
+        let stateBefore = state
+
+        RecipeReducer.reduce(state: &state, action: .createCategory(name: "和食"))
+
+        #expect(state == stateBefore)
+    }
+
+    @Test
+    func reduce_categoryCreated_addsToCategories() {
+        var state = RecipeState()
+        let category = makeSampleCategory(name: "和食")
+
+        RecipeReducer.reduce(state: &state, action: .categoryCreated(category))
+
+        #expect(state.categories.count == 1)
+        #expect(state.categories.first?.name == "和食")
+    }
+
+    @Test
+    func reduce_categoryCreateFailed_setsError() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .categoryCreateFailed("作成失敗"))
+
+        #expect(state.errorMessage == "作成失敗")
+    }
+
+    // MARK: - Rename Category Tests
+
+    @Test
+    func reduce_renameCategory_doesNotChangeState() {
+        var state = RecipeState()
+        let category = makeSampleCategory(name: "和食")
+        state.categories = [category]
+        let stateBefore = state
+
+        RecipeReducer.reduce(state: &state, action: .renameCategory(id: category.id, newName: "日本食"))
+
+        #expect(state == stateBefore)
+    }
+
+    @Test
+    func reduce_categoryRenamed_updatesCategory() {
+        var state = RecipeState()
+        let category = makeSampleCategory(name: "和食")
+        state.categories = [category]
+
+        let renamed = RecipeCategory(id: category.id, name: "日本食", createdAt: category.createdAt)
+        RecipeReducer.reduce(state: &state, action: .categoryRenamed(renamed))
+
+        #expect(state.categories.count == 1)
+        #expect(state.categories.first?.name == "日本食")
+    }
+
+    @Test
+    func reduce_categoryRenameFailed_setsError() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .categoryRenameFailed("名前変更失敗"))
+
+        #expect(state.errorMessage == "名前変更失敗")
+    }
+
+    // MARK: - Delete Category Tests
+
+    @Test
+    func reduce_deleteCategory_doesNotChangeState() {
+        var state = RecipeState()
+        let category = makeSampleCategory(name: "和食")
+        state.categories = [category]
+        let stateBefore = state
+
+        RecipeReducer.reduce(state: &state, action: .deleteCategory(id: category.id))
+
+        #expect(state == stateBefore)
+    }
+
+    @Test
+    func reduce_categoryDeleted_removesFromCategories() {
+        var state = RecipeState()
+        let cat1 = makeSampleCategory(name: "和食")
+        let cat2 = makeSampleCategory(name: "中華")
+        state.categories = [cat1, cat2]
+        state.categoryRecipeMap = [cat1.id: [UUID()], cat2.id: [UUID()]]
+
+        RecipeReducer.reduce(state: &state, action: .categoryDeleted(id: cat1.id))
+
+        #expect(state.categories.count == 1)
+        #expect(state.categories.first?.id == cat2.id)
+        #expect(state.categoryRecipeMap[cat1.id] == nil)
+    }
+
+    @Test
+    func reduce_categoryDeleted_resetsFilterIfSelected() {
+        var state = RecipeState()
+        let category = makeSampleCategory(name: "和食")
+        state.categories = [category]
+        state.selectedCategoryFilter = category.id
+
+        RecipeReducer.reduce(state: &state, action: .categoryDeleted(id: category.id))
+
+        #expect(state.selectedCategoryFilter == nil)
+    }
+
+    @Test
+    func reduce_categoryDeleted_doesNotResetFilterIfDifferent() {
+        var state = RecipeState()
+        let cat1 = makeSampleCategory(name: "和食")
+        let cat2 = makeSampleCategory(name: "中華")
+        state.categories = [cat1, cat2]
+        state.selectedCategoryFilter = cat2.id
+
+        RecipeReducer.reduce(state: &state, action: .categoryDeleted(id: cat1.id))
+
+        #expect(state.selectedCategoryFilter == cat2.id)
+    }
+
+    @Test
+    func reduce_categoryDeleteFailed_setsError() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .categoryDeleteFailed("削除失敗"))
+
+        #expect(state.errorMessage == "削除失敗")
+    }
+
+    // MARK: - Recipe ↔ Category Tests
+
+    @Test
+    func reduce_addRecipeToCategory_doesNotChangeState() {
+        var state = RecipeState()
+        let stateBefore = state
+
+        RecipeReducer.reduce(state: &state, action: .addRecipeToCategory(recipeID: UUID(), categoryID: UUID()))
+
+        #expect(state == stateBefore)
+    }
+
+    @Test
+    func reduce_removeRecipeFromCategory_doesNotChangeState() {
+        var state = RecipeState()
+        let stateBefore = state
+
+        RecipeReducer.reduce(state: &state, action: .removeRecipeFromCategory(recipeID: UUID(), categoryID: UUID()))
+
+        #expect(state == stateBefore)
+    }
+
+    @Test
+    func reduce_recipeCategoryUpdated_added_updatesMap() {
+        var state = RecipeState()
+        let categoryID = UUID()
+        let recipeID = UUID()
+
+        RecipeReducer.reduce(state: &state, action: .recipeCategoryUpdated(recipeID: recipeID, categoryID: categoryID, added: true))
+
+        #expect(state.categoryRecipeMap[categoryID]?.contains(recipeID) == true)
+    }
+
+    @Test
+    func reduce_recipeCategoryUpdated_removed_updatesMap() {
+        var state = RecipeState()
+        let categoryID = UUID()
+        let recipeID = UUID()
+        state.categoryRecipeMap = [categoryID: [recipeID]]
+
+        RecipeReducer.reduce(state: &state, action: .recipeCategoryUpdated(recipeID: recipeID, categoryID: categoryID, added: false))
+
+        #expect(state.categoryRecipeMap[categoryID]?.contains(recipeID) != true)
+    }
+
+    @Test
+    func reduce_recipeCategoryUpdateFailed_setsError() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .recipeCategoryUpdateFailed("更新失敗"))
+
+        #expect(state.errorMessage == "更新失敗")
+    }
+
+    // MARK: - Category Filter Tests
+
+    @Test
+    func reduce_selectCategoryFilter_setsFilter() {
+        var state = RecipeState()
+        let categoryID = UUID()
+
+        RecipeReducer.reduce(state: &state, action: .selectCategoryFilter(categoryID))
+
+        #expect(state.selectedCategoryFilter == categoryID)
+    }
+
+    @Test
+    func reduce_selectCategoryFilter_nil_clearsFilter() {
+        var state = RecipeState()
+        state.selectedCategoryFilter = UUID()
+
+        RecipeReducer.reduce(state: &state, action: .selectCategoryFilter(nil))
+
+        #expect(state.selectedCategoryFilter == nil)
+    }
+
+    // MARK: - Computed Properties Tests
+
+    @Test
+    func filteredRecipes_withNoFilter_returnsAll() {
+        var state = RecipeState()
+        state.savedRecipes = [makeSampleRecipe(), makeSampleRecipe()]
+        state.selectedCategoryFilter = nil
+
+        #expect(state.filteredRecipes.count == 2)
+    }
+
+    @Test
+    func filteredRecipes_withFilter_returnsOnlyMatching() {
+        var state = RecipeState()
+        let recipe1 = makeSampleRecipe()
+        let recipe2 = makeSampleRecipe()
+        state.savedRecipes = [recipe1, recipe2]
+        let categoryID = UUID()
+        state.categoryRecipeMap = [categoryID: [recipe1.id]]
+        state.selectedCategoryFilter = categoryID
+
+        #expect(state.filteredRecipes.count == 1)
+        #expect(state.filteredRecipes.first?.id == recipe1.id)
+    }
+
+    @Test
+    func filteredRecipes_withEmptyCategory_returnsNone() {
+        var state = RecipeState()
+        state.savedRecipes = [makeSampleRecipe()]
+        let categoryID = UUID()
+        state.categoryRecipeMap = [categoryID: []]
+        state.selectedCategoryFilter = categoryID
+
+        #expect(state.filteredRecipes.isEmpty)
+    }
+
+    @Test
+    func uncategorizedRecipes_returnsRecipesNotInAnyCategory() {
+        var state = RecipeState()
+        let recipe1 = makeSampleRecipe()
+        let recipe2 = makeSampleRecipe()
+        let recipe3 = makeSampleRecipe()
+        state.savedRecipes = [recipe1, recipe2, recipe3]
+        let categoryID = UUID()
+        state.categoryRecipeMap = [categoryID: [recipe1.id]]
+
+        #expect(state.uncategorizedRecipes.count == 2)
+        #expect(!state.uncategorizedRecipes.contains { $0.id == recipe1.id })
+    }
+
+    @Test
+    func uncategorizedRecipes_withNoCategories_returnsAll() {
+        var state = RecipeState()
+        state.savedRecipes = [makeSampleRecipe(), makeSampleRecipe()]
+
+        #expect(state.uncategorizedRecipes.count == 2)
+    }
 }
