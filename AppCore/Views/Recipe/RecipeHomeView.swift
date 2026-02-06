@@ -34,8 +34,8 @@ struct RecipeHomeView: View {
     @State private var recipeToDelete: UUID?
 
     private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
+        GridItem(.flexible(), spacing: 10),
+        GridItem(.flexible(), spacing: 10)
     ]
 
     var body: some View {
@@ -187,7 +187,7 @@ struct RecipeHomeView: View {
                     categoryChipsView
                 }
 
-                LazyVGrid(columns: columns, spacing: 16) {
+                LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(recipes) { recipe in
                         recipeCard(recipe)
                     }
@@ -201,40 +201,53 @@ struct RecipeHomeView: View {
 
     private func recipeCard(_ recipe: Recipe) -> some View {
         Button(action: { onRecipeTapped(recipe) }) {
-            VStack(alignment: .leading, spacing: ds.spacing.sm) {
-                // Thumbnail
-                recipeImage(recipe.imageURLs.first)
-                    .frame(height: 120)
-                    .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))
+            recipeImage(recipe.imageURLs.first)
+                .frame(maxWidth: .infinity)
+                .frame(height: 200)
+                .clipped()
+                .overlay(alignment: .bottomLeading) {
+                    // Gradient overlay + Title & meta info
+                    ZStack(alignment: .bottomLeading) {
+                        LinearGradient(
+                            colors: [.clear, .black.opacity(0.6)],
+                            startPoint: .center,
+                            endPoint: .bottom
+                        )
 
-                // Title
-                Text(recipe.title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(ds.colors.textPrimary.color)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
+                        VStack(alignment: .leading, spacing: ds.spacing.xxs) {
+                            Text(recipe.title)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .lineLimit(2)
+                                .multilineTextAlignment(.leading)
 
-                // Meta info
-                HStack(spacing: ds.spacing.xs) {
-                    Label(
-                        "\(recipe.ingredientsInfo.allItems.count)",
-                        systemImage: "carrot.fill"
-                    )
-                    .font(.caption2)
-                    .foregroundColor(ds.colors.textTertiary.color)
+                            HStack(spacing: ds.spacing.xs) {
+                                Label(
+                                    "\(recipe.ingredientsInfo.allItems.count)",
+                                    systemImage: "carrot.fill"
+                                )
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.8))
 
-                    Label(
-                        "\(recipe.allSteps.count)",
-                        systemImage: "list.number"
-                    )
-                    .font(.caption2)
-                    .foregroundColor(ds.colors.textTertiary.color)
+                                Label(
+                                    "\(recipe.allSteps.count)",
+                                    systemImage: "list.number"
+                                )
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.8))
+                            }
+                        }
+                        .padding(ds.spacing.sm)
+                    }
                 }
-            }
-            .padding(ds.spacing.sm)
-            .background(ds.colors.backgroundSecondary.color)
-            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+                .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.lg))
+                .shadow(
+                    color: ds.shadow.sm.color,
+                    radius: ds.shadow.sm.radius,
+                    x: ds.shadow.sm.x,
+                    y: ds.shadow.sm.y
+                )
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.recipeCard(recipe.id))
@@ -250,53 +263,63 @@ struct RecipeHomeView: View {
     }
 
     private func recipeImage(_ source: ImageSource?) -> some View {
-        Group {
-            if let source = source {
-                switch source {
-                case .remote(let url):
-                    LazyImage(url: url) { state in
-                        if state.isLoading {
-                            placeholderImage
-                                .overlay {
-                                    ProgressView()
-                                        .scaleEffect(0.8)
-                                }
-                        } else if let image = state.image {
-                            image
+        Color.clear.overlay {
+            Group {
+                if let source = source {
+                    switch source {
+                    case .remote(let url):
+                        LazyImage(url: url) { state in
+                            if state.isLoading {
+                                placeholderImage
+                                    .overlay {
+                                        ProgressView()
+                                            .scaleEffect(0.8)
+                                    }
+                            } else if let image = state.image {
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } else {
+                                placeholderImage
+                            }
+                        }
+                    case .local(let fileURL):
+                        if let data = try? Data(contentsOf: fileURL),
+                           let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                         } else {
                             placeholderImage
                         }
-                    }
-                case .local(let fileURL):
-                    if let data = try? Data(contentsOf: fileURL),
-                       let uiImage = UIImage(data: data) {
+                    case .uiImage(let uiImage):
                         Image(uiImage: uiImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                    } else {
-                        placeholderImage
                     }
-                case .uiImage(let uiImage):
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
+                } else {
+                    placeholderImage
                 }
-            } else {
-                placeholderImage
             }
         }
-        .frame(maxWidth: .infinity)
         .clipped()
     }
 
     private var placeholderImage: some View {
         Rectangle()
-            .fill(ds.colors.backgroundTertiary.color)
+            .fill(
+                LinearGradient(
+                    colors: [
+                        ds.colors.backgroundTertiary.color,
+                        ds.colors.backgroundSecondary.color
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
             .overlay {
                 Image(systemName: "fork.knife")
-                    .font(.title2)
+                    .font(.largeTitle)
                     .foregroundColor(ds.colors.textTertiary.color)
             }
     }
