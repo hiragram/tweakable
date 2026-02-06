@@ -15,6 +15,8 @@ struct DebugMenuView: View {
     @State private var showSwitchStoreAlert = false
     @State private var showResetUserAlert = false
     @State private var showDeleteDataAlert = false
+    @State private var showResetSeedDataAlert = false
+    @State private var seedDataResetCompleted = false
     @State private var showTipResetAlert = false
     @State private var tipResetCompleted = false
 
@@ -200,6 +202,38 @@ struct DebugMenuView: View {
                     showDeleteDataAlert = true
                 }
             )
+
+            SettingsDivider()
+
+            SettingsRow(
+                icon: "arrow.counterclockwise",
+                title: "debug_menu_seed_data_reset_flag",
+                isLoading: isProcessing,
+                accessibilityIdentifier: "debugMenu_button_resetSeedData",
+                action: {
+                    showResetSeedDataAlert = true
+                }
+            )
+        }
+        .alert(
+            Text("debug_menu_seed_data_reset_alert_title", bundle: .app),
+            isPresented: $showResetSeedDataAlert
+        ) {
+            Button(String(localized: "cancel", bundle: .app), role: .cancel) {}
+            Button(String(localized: "debug_menu_seed_data_reset_alert_confirm", bundle: .app), role: .destructive) {
+                store.send(.debug(.resetSeedData))
+                seedDataResetCompleted = true
+            }
+        } message: {
+            Text("debug_menu_seed_data_reset_alert_message", bundle: .app)
+        }
+        .alert(
+            Text("debug_menu_seed_data_reset_complete_title", bundle: .app),
+            isPresented: $seedDataResetCompleted
+        ) {
+            Button(String(localized: "ok", bundle: .app)) {}
+        } message: {
+            Text("debug_menu_seed_data_reset_complete_message", bundle: .app)
         }
     }
 

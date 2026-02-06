@@ -439,6 +439,11 @@ public final class AppStore {
                 send(.debug(.operationFailed(error.localizedDescription)))
             }
 
+        case .resetSeedData:
+            // シードデータ投入済みフラグをリセット
+            UserDefaults.standard.removeObject(forKey: "seedDataInjected")
+            send(.debug(.seedDataReset))
+
         default:
             // その他のアクションは副作用なし
             break

@@ -28,6 +28,13 @@ public enum DebugReducer {
         case .dataDeleted:
             state.isProcessing = false
 
+        case .resetSeedData:
+            state.isProcessing = true
+            state.errorMessage = nil
+
+        case .seedDataReset:
+            state.isProcessing = false
+
         case .operationFailed(let message):
             state.isProcessing = false
             state.errorMessage = message

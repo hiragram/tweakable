@@ -2928,6 +2928,108 @@
           }
         }
       }
+    },
+    "debug_menu_seed_data_reset_flag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Seed Data Flag"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シードデータフラグをリセット"
+          }
+        }
+      }
+    },
+    "debug_menu_seed_data_reset_alert_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Seed Data"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シードデータをリセット"
+          }
+        }
+      }
+    },
+    "debug_menu_seed_data_reset_alert_message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seed data flag will be reset. Restart the app to re-inject seed data."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シードデータフラグがリセットされます。アプリを再起動するとシードデータが再投入されます。"
+          }
+        }
+      }
+    },
+    "debug_menu_seed_data_reset_alert_confirm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リセット"
+          }
+        }
+      }
+    },
+    "debug_menu_seed_data_reset_complete_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seed Data Reset"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シードデータリセット完了"
+          }
+        }
+      }
+    },
+    "debug_menu_seed_data_reset_complete_message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart the app to re-inject seed data."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリを再起動するとシードデータが再投入されます。"
+          }
+        }
+      }
     }
   },
   "version": "1.1"
