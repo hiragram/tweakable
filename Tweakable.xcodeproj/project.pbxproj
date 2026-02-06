@@ -18,6 +18,7 @@
 		6BC14EA9E12BCD8D57966AC1 /* Prefire in Frameworks */ = {isa = PBXBuildFile; productRef = 8F2A6A6368E5F0E8FDA73256 /* Prefire */; };
 		83C8142B8C3702E8A32222A8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 08FCE47940BCEB1C3EED8AE2 /* FirebaseAnalytics */; };
 		960FC31A43E0FFC4F0C83CC7 /* AppCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60E177FF2EF1AAC80020BBF4 /* AppCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A1B2C3D4E5F60718192A3B4C /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = D4E5F6071819A1B2C3D42A3B /* NukeUI */; };
 		AF51FFB396EC6B71FA9581EA /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 452F108779437E0070A7DA52 /* FirebaseRemoteConfig */; };
 		C8BE25BE753C7B9849D9DF66 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A409321C5710B40D143288E3 /* FirebaseCore */; };
 		CB60955DD38BFFC895B66BBF /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2AC30A568C6C059717C282C3 /* FirebaseCrashlytics */; };
@@ -25,7 +26,6 @@
 		E66CAEA06A6E996B8683C094 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B12A079B278B22C7A7973CBA /* FirebaseMessaging */; };
 		E841C22F4BBB883589B14BFA /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = C03E64C161EA5B6A08E5C843 /* RevenueCat */; };
 		F0838EE2391BA63784534E94 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 113ECDF464E0599CE3E785C5 /* FirebaseRemoteConfig */; };
-		A1B2C3D4E5F60718192A3B4C /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = D4E5F6071819A1B2C3D42A3B /* NukeUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
