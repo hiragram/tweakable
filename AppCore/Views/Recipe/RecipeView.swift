@@ -549,6 +549,8 @@ struct RecipeView: View {
     .prefireEnabled()
 }
 
+// Note: スナップショットテスト対象外（.prefireEnabled()なし）
+// 理由: リモートURL画像を使用するため、ネットワーク依存でスナップショットテストが不安定になる
 #Preview("With Recipe (Remote Hero Image)") {
     NavigationStack {
         RecipeView(
