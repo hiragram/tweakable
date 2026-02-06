@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode (skip issue creation)'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
   e2e-test:
@@ -34,57 +41,12 @@ jobs:
           path: E2ETestResults.xcresult
 
   create-fix-issue:
-    runs-on: self-hosted
     needs: e2e-test
-    if: failure()
-    permissions:
-      issues: write
-
-    steps:
-      - name: Check for existing open fix issue
-        id: check-issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          existing=$(gh issue list \
-            --repo ${{ github.repository }} \
-            --label "auto-fix,e2e-test-failure" \
-            --state open \
-            --limit 1 \
-            --json number \
-            --jq '.[0].number // empty')
-          if [ -n "$existing" ]; then
-            echo "Existing open issue found: #$existing, skipping creation"
-            echo "skip=true" >> $GITHUB_OUTPUT
-          else
-            echo "No existing open issue found, will create one"
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create fix issue
-        if: steps.check-issue.outputs.skip == 'false'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh issue create \
-            --repo ${{ github.repository }} \
-            --title "[Auto] E2E test failure on main (${{ github.sha }})" \
-            --label "auto-fix,e2e-test-failure" \
-            --body "$(cat <<'EOF'
-          @claude mainブランチでE2Eテスト（TweakableUITestsスキーム）が失敗しました。
-
-          **Commit**: ${{ github.sha }}
-          **Workflow Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-          以下の手順で修正してください:
-          1. 上記のWorkflow Runリンクからテスト失敗のログを確認する
-          2. 失敗原因を特定する
-          3. 修正ブランチを作成して修正をプッシュする
-          4. mainブランチへのPRを作成する
-
-          注意:
-          - 修正はmainブランチに直接プッシュしないこと
-          - PRを作成すること
-          - テストが通ることを確認すること
-          EOF
-          )"
+    if: failure() && github.event_name == 'push'
+    uses: ./.github/workflows/create-test-failure-issue.yml
+    with:
+      test-type: E2E
+      label: e2e-test-failure
+      scheme: TweakableUITests
+      commit-sha: ${{ github.sha }}
+      run-id: ${{ github.run_id }}
