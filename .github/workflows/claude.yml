@@ -39,7 +39,7 @@ jobs:
           settings: .claude/settings.json
           path_to_claude_code_executable: /Users/hiragram/.bun/bin/claude
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr create:*),Bash(git checkout:*),Bash(git push origin HEAD:*),Bash(xcodebuild:*),Bash(git branch:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr create:*),Bash(git checkout:*),Bash(git push origin HEAD:auto-fix/*),Bash(xcodebuild test:*),Bash(xcodebuild build:*),Bash(git branch:*)"
           additional_permissions: |
             actions: read
 
