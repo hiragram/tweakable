@@ -9,7 +9,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/08/Spicy-Thai-Beef-Larb-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "ジャスミンライス（生）", amount: "1/4カップ"),
                     Ingredient(name: "ピーナッツ", amount: "1/4カップ"),
                     Ingredient(name: "ココナッツオイル", amount: "大さじ1"),
@@ -26,13 +26,13 @@ extension SeedData {
                     Ingredient(name: "フレッシュパクチー（飾り用に追加も）", amount: "1/4カップ"),
                     Ingredient(name: "フレッシュミント（飾り用に追加も）", amount: "1/4カップ"),
                     Ingredient(name: "ボストンレタス（葉をはがす）", amount: "1個"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "生米を中華鍋またはフライパンに入れ、弱火で頻繁にかき混ぜながら8〜10分、こんがりきつね色になるまで乾煎りする。すり鉢、フードプロセッサー、またはブレンダーで粗く砕いて粉状にし、取り置く。"),
                 CookingStep(stepNumber: 2, instruction: "同じフライパンにココナッツオイルを入れ、中強火で熱する。牛ひき肉を加え、木べらでほぐしながら6〜7分、焼き色がつくまで炒める。肉をフライパンの片側に寄せ、空いた側にピーナッツを入れて3〜4分炒る。塩、こしょう、レッドペッパーフレーク、にんにく、赤唐辛子、ライムの皮と果汁、醤油、エシャロット、青ねぎ、パクチー、ミント、炒り米粉を加え、全体をよく混ぜ合わせる。"),
                 CookingStep(stepNumber: 3, instruction: "ボストンレタスの葉に盛り付け、熱いうちにいただく。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/08/02/spicy-thai-beef-larb/")
         ),
         Recipe(
@@ -42,7 +42,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Coconut-Smoothie-Bowl-4x5-1Coconut-Smoothie-Bowl-4x5-1-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "ココナッツミルク", amount: "3缶"),
                     Ingredient(name: "冷凍バナナ", amount: "½本"),
                     Ingredient(name: "はちみつ", amount: "¼カップ"),
@@ -52,13 +52,13 @@ extension SeedData {
                     Ingredient(name: "いちご（スライス）", amount: "1½カップ"),
                     Ingredient(name: "ブルーベリー", amount: "1½カップ"),
                     Ingredient(name: "ココナッツフレーク", amount: "¼カップ"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "ココナッツミルク2缶分を製氷皿に注ぎ、完全に凍るまで冷凍する。"),
                 CookingStep(stepNumber: 2, instruction: "ココナッツミルクの氷、ココナッツミルク1カップ、冷凍バナナ、はちみつ、オレンジジュースをブレンダーに入れる。濃厚で滑らかになるまでブレンドする。混ぜにくい場合はオレンジジュースを少しずつ加える。できるだけ濃厚な仕上がりにすること。"),
                 CookingStep(stepNumber: 3, instruction: "ココナッツミクスチャーを4つのボウルに盛り付ける。それぞれにグラノーラ、はちみつ、いちご、ブルーベリー、ココナッツフレークをトッピングする。すぐに召し上がれ。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/07/23/coconut-smoothie-bowl/")
         ),
         Recipe(
@@ -68,7 +68,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Shakshuka-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "1人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "オリーブオイル", amount: "大さじ2"),
                     Ingredient(name: "大きな玉ねぎ（みじん切り）", amount: "1個"),
                     Ingredient(name: "赤パプリカ（みじん切り）", amount: "½個"),
@@ -88,12 +88,12 @@ extension SeedData {
                     Ingredient(name: "卵（大）", amount: "5個"),
                     Ingredient(name: "フェタチーズ（角切り）", amount: "½カップ"),
                     Ingredient(name: "パクチー（みじん切り）", amount: "大さじ1"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "大きくて浅いフライパンにオリーブオイルを入れ、中強火で熱します。玉ねぎ、にんにく、赤パプリカ、オレンジパプリカを加え、柔らかくなるまで約5分炒めます。次にパプリカパウダー、キャラウェイシード、クミン、ターメリック、塩、こしょうを加え、絶えずかき混ぜながらさらに1分炒めます。"),
                 CookingStep(stepNumber: 2, instruction: "トマト、トマトペースト、ハリッサ、はちみつ、赤ワインビネガーを加えます。火を中火に落とし、10分煮込みます。ソースはある程度とろみがつきつつも、パンを揺するとまだ流れる程度が目安です。スプーンの背でソースに5つのくぼみを作り、それぞれに卵を1つずつ割り入れます。蓋をして、卵がお好みの固さになるまで加熱を続けます。火からおろし、フェタチーズとパクチーをのせます。温かいピタパンと一緒にお召し上がりください。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/07/02/shakshuka/")
         ),
         Recipe(
@@ -103,7 +103,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Impossible-Churizo-Nachos-1-LOW-RES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "1人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "植物油", amount: "大さじ1"),
                     Ingredient(name: "玉ねぎ（みじん切り）", amount: "½個"),
                     Ingredient(name: "にんにく", amount: "2片"),
@@ -133,9 +133,9 @@ extension SeedData {
                     Ingredient(name: "ピクルスハラペーニョ（スライス）", amount: "60ミリリットル"),
                     Ingredient(name: "ピコ・デ・ガヨ", amount: "240ミリリットル"),
                     Ingredient(name: "パクチー（刻む）", amount: "大さじ2"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "フライパンに植物油を入れ中火で熱し、刻んだ玉ねぎとにんにくを3〜4分、透き通るまで炒める。"),
                 CookingStep(stepNumber: 2, instruction: "インポッシブルバーガーを加え、崩しながら4〜5分、きつね色になるまで炒める。"),
                 CookingStep(stepNumber: 3, instruction: "チポトレ、アドボソース、水、チリパウダー、クミン、パプリカパウダー、オレガノ、塩、こしょうを加えてよく混ぜる。5分ほど煮詰めて水分を飛ばし、盛り付けまで弱火で保温する。"),
@@ -143,7 +143,7 @@ extension SeedData {
                 CookingStep(stepNumber: 5, instruction: "オーブンをブロイル（上火強）に予熱する。天板にトルティーヤチップスを広げ、チェダーチーズとモントレージャックチーズの半量、チョリソーミックス、残りのチーズの順にのせる。"),
                 CookingStep(stepNumber: 6, instruction: "ブロイルで3〜4分、チーズが溶けて泡立つまで焼く。"),
                 CookingStep(stepNumber: 7, instruction: "ワカモレ、サワークリーム、ピクルスハラペーニョ、ピコ・デ・ガヨ、パクチーをトッピングし、すぐに食卓に出す。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/01/27/impossible-chorizo-nachos/")
         ),
         Recipe(
@@ -153,7 +153,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Chocolate-Chip-Pancakes-LOW-RES.jpeg")!)],
             ingredientsInfo: Ingredients(
                 servings: "1人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "薄力粉", amount: "2カップ"),
                     Ingredient(name: "ベーキングパウダー", amount: "大さじ1"),
                     Ingredient(name: "塩", amount: "小さじ1/2"),
@@ -164,14 +164,14 @@ extension SeedData {
                     Ingredient(name: "溶かしバター（焼く用に追加分も）", amount: "大さじ3"),
                     Ingredient(name: "ホイップクリーム（お好みで）", amount: nil),
                     Ingredient(name: "メープルシロップ（お好みで）", amount: nil),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "大きなボウルに薄力粉、ベーキングパウダー、塩、砂糖、チョコチップを入れて混ぜる。小さなボウルで卵、牛乳、溶かしバターを混ぜ合わせる。湿った材料を乾いた材料に注ぎ、泡立て器でしっかり混ぜ合わせる。"),
                 CookingStep(stepNumber: 2, instruction: "バターを塗った鉄板またはフライパンを中火で熱する。生地を約1/4カップずつ流し入れる。表面に気泡が現れ、端が乾き始め、底がきつね色になるまで約3分焼く。"),
                 CookingStep(stepNumber: 3, instruction: "パンケーキをひっくり返す。裏面もきつね色になるまで2〜3分焼く。皿に移し、残りの生地も同様に焼く。"),
                 CookingStep(stepNumber: 4, instruction: "お好みでホイップクリームやメープルシロップをかけて、すぐに召し上がれ。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/01/20/easy-chocolate-chip-pancakes/")
         ),
         Recipe(
@@ -181,7 +181,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/12/Eitan-Bernath-Irish-Colcannon-.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "ラセットポテトまたはユーコンゴールドポテト", amount: "約900グラム"),
                     Ingredient(name: "無塩バター", amount: "大さじ4（盛り付け用に追加で適量）"),
                     Ingredient(name: "生クリーム", amount: "120ミリリットル"),
@@ -190,16 +190,16 @@ extension SeedData {
                     Ingredient(name: "スキャリオン（小口切り）", amount: "6本"),
                     Ingredient(name: "コーシャーソルト", amount: "適量"),
                     Ingredient(name: "粗挽き黒こしょう", amount: "適量"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "じゃがいもの皮を剥き、約2.5センチ角に切る。大きな鍋に入れ、かぶるくらいの冷水と塩ひとつまみを加える。強火で沸騰させた後、中火に落としてフォークがすっと通るまで15〜20分ほど茹でる。"),
                 CookingStep(stepNumber: 2, instruction: "じゃがいもを茹でている間に、フライパンにバター大さじ2を中火で溶かす。刻んだケールを加え、時々混ぜながらしんなりするまで約5分炒める。スキャリオンを加えてさらに1〜2分炒め、火から下ろしておく。"),
                 CookingStep(stepNumber: 3, instruction: "小鍋に生クリームと牛乳を入れ、弱火で湯気が立つ程度まで温める。沸騰させないこと。"),
                 CookingStep(stepNumber: 4, instruction: "じゃがいもの湯をしっかり切り、鍋に戻す。ポテトマッシャーやライサーで滑らかに潰す。残りのバター大さじ2と温めたクリームを加え、よく混ぜ合わせる。"),
                 CookingStep(stepNumber: 5, instruction: "ケールとスキャリオンの炒めたものをマッシュポテトに折り込む。塩とたっぷりの粗挽き黒こしょうで味を調える。"),
                 CookingStep(stepNumber: 6, instruction: "器に盛り、中央にくぼみを作ってバターをひとかけのせる。すぐに召し上がれ。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/12/05/colcannon/")
         ),
         Recipe(
@@ -209,21 +209,21 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Watermelon-Lemonade-Slushie.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "レモン汁", amount: "1カップ（レモン約8〜10個分）"),
                     Ingredient(name: "砂糖", amount: "1カップ"),
                     Ingredient(name: "水", amount: "1カップ"),
                     Ingredient(name: "スイカ（角切り）", amount: "4カップ"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "鍋に砂糖と水1カップを入れて中火にかける。沸騰させたら、かき混ぜながら砂糖が溶けるまで煮る。火を止めてレモン汁を加える。"),
                 CookingStep(stepNumber: 2, instruction: "混合液を製氷皿またはラップを敷いたパウンド型に注ぐ。6時間以上または一晩冷凍する。"),
                 CookingStep(stepNumber: 3, instruction: "角切りスイカをベーキングシートに並べ、6時間以上または一晩冷凍する。"),
                 CookingStep(stepNumber: 4, instruction: "凍ったレモネードキューブをハイパワーブレンダーでスラッシー状になるまで撹拌する。密閉容器に移す。"),
                 CookingStep(stepNumber: 5, instruction: "凍ったスイカをお好みのスラッシー状になるまでブレンダーで撹拌する。"),
                 CookingStep(stepNumber: 6, instruction: "背の高いグラスに層状に盛り付ける。1/3をスイカミックス、2/3をレモネードスラッシーで満たし、上にスイカを追加してすぐに提供する。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/09/01/watermelon-lemonade-slushie/")
         ),
         Recipe(
@@ -233,7 +233,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Mocha-Cupcake-with-Cookies-N-Cream-Frosting.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "24個分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "薄力粉（型用に追加分あり）", amount: "360ミリリットル"),
                     Ingredient(name: "重曹", amount: "小さじ3/4"),
                     Ingredient(name: "インスタントコーヒー顆粒", amount: "60ミリリットル"),
@@ -250,9 +250,9 @@ extension SeedData {
                     Ingredient(name: "バニラエクストラクト（フロスティング用）", amount: "大さじ1"),
                     Ingredient(name: "生クリームまたは牛乳", amount: "大さじ4"),
                     Ingredient(name: "オレオ（粗く砕く）", amount: "12枚"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "オーブンを180℃に予熱する。12個取りのカップケーキ型2つにバターを塗り、薄力粉をはたく。"),
                 CookingStep(stepNumber: 2, instruction: "大きなボウルに薄力粉、重曹、インスタントコーヒー、塩を入れて泡立て器で混ぜ合わせる。"),
                 CookingStep(stepNumber: 3, instruction: "別のボウルで卵を30秒〜1分ほど泡立て、砂糖、キャノーラ油、サワークリーム、バニラエクストラクトを加えてよく混ぜ合わせる。"),
@@ -266,7 +266,7 @@ extension SeedData {
                 CookingStep(stepNumber: 11, instruction: "バニラエクストラクトと生クリームを加え、2〜3分ふわふわになるまで泡立てる。固すぎる場合はクリームを大さじ1ずつ追加する。"),
                 CookingStep(stepNumber: 12, instruction: "砕いたオレオを加え、低速でさっくり混ぜ込む。"),
                 CookingStep(stepNumber: 13, instruction: "カップケーキ1個につきフロスティングを大さじ2〜3のせる。密閉容器で2日間保存可能。冷凍で最大2ヶ月保存可能。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/09/12/mocha-cupcakes-with-cookies-n-cream-frosting/")
         ),
         Recipe(
@@ -324,7 +324,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-BBQ-Pastrami-Grilled-Pizza.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "6人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "ビーフベーコン（2.5センチ幅に切る）", amount: "170グラム"),
                     Ingredient(name: "黄玉ねぎ（薄切り、大½個分）", amount: "1カップ"),
                     Ingredient(name: "パストラミ（スライス、2.5センチ幅に切る）", amount: "230グラム"),
@@ -335,14 +335,14 @@ extension SeedData {
                     Ingredient(name: "市販のピザ生地", amount: "450グラム"),
                     Ingredient(name: "ハニーバーベキューソース", amount: "80ミリリットル"),
                     Ingredient(name: "ルッコラ", amount: "1カップ"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "大きめのフライパンにビーフベーコンを入れ、中火で時々かき混ぜながら3分ほど炒めて脂を出す。玉ねぎを加えてキャラメル色になるまで5分炒める。パストラミ、ガーリックパウダー、スモークパプリカを加え、塩こしょうで味を調える。"),
                 CookingStep(stepNumber: 2, instruction: "時々かき混ぜながらさらに5分炒め、パストラミに軽く焼き色がついたら火を止める。"),
                 CookingStep(stepNumber: 3, instruction: "グリルまたはグリルパンを中火で予熱する。生地を約30×20センチの長方形に伸ばす。グリルに油を塗り、生地をのせて片面4分ずつ焼き、きつね色でカリッとさせる。"),
                 CookingStep(stepNumber: 4, instruction: "焼いた生地を天板にのせ、縁2.5センチを残してバーベキューソースを均一に塗る。パストラミの具材をのせ、ルッコラを散らす。6等分に切り、すぐに提供する。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/07/18/bbq-pastrami-grilled-pizza/")
         ),
         Recipe(
@@ -352,7 +352,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Tomato-Melon-Panzanella.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "6〜8人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "サワードウブール（2.5センチ角に切る）", amount: "1個（約8カップ）"),
                     Ingredient(name: "エアルームトマト（芯を取り2.5センチのくし切り）", amount: "大2個（約3.5カップ）"),
                     Ingredient(name: "コーシャーソルト", amount: "小さじ1/2（＋適量）"),
@@ -364,15 +364,15 @@ extension SeedData {
                     Ingredient(name: "バジル（大きい葉はちぎる）", amount: "3/4カップ（約15グラム）"),
                     Ingredient(name: "赤たまねぎ（薄切り）", amount: "1/2カップ"),
                     Ingredient(name: "フレッシュモッツァレラ（2.5センチ角に切る）", amount: "1個（約230グラム）"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "オーブンを180℃に予熱する。"),
                 CookingStep(stepNumber: 2, instruction: "天板にパンを並べ、15分焼いて乾燥させる（焦がさない）。完全に冷ます。"),
                 CookingStep(stepNumber: 3, instruction: "ボウルの上にザルをセットし、トマトを入れて塩小さじ1/2をふり、10分おいて水分を出す。出たトマトの果汁は取っておく。"),
                 CookingStep(stepNumber: 4, instruction: "ビネグレットを作る：取っておいたトマトの果汁ににんにくとバルサミコ酢を加えて混ぜ、オリーブオイルを少しずつ加えながら泡立て器でよく混ぜる。塩とこしょうで味を調える。"),
                 CookingStep(stepNumber: 5, instruction: "ボウルにトマト、パン、メロン、バジル、赤たまねぎ、モッツァレラを入れ、ビネグレットを加えてやさしく和える。15分以上おいて味をなじませ、時々混ぜる。すぐに盛り付けて提供する。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2021/07/07/tomato-melon-panzanella/")
         ),
         Recipe(
@@ -597,7 +597,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/10/Chicken-Tikka-LOW-RES-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "鶏むね肉（骨なし）", amount: "約900グラム"),
                     Ingredient(name: "ジンジャーペースト", amount: "大さじ1"),
                     Ingredient(name: "ガーリックペースト", amount: "大さじ1"),
@@ -620,15 +620,15 @@ extension SeedData {
                     Ingredient(name: "赤玉ねぎ（大・2.5センチ角に切る）", amount: "1個"),
                     Ingredient(name: "ミントチャツネ", amount: "1回分"),
                     Ingredient(name: "ロティ", amount: "1回分"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "大きなボウルに鶏肉、ジンジャーペースト、ガーリックペースト、カシミリチリパウダー、塩、レモン汁を入れ、手でしっかり揉み込む。室温で20分置く。"),
                 CookingStep(stepNumber: 2, instruction: "別のボウルにココナッツミルク、ジンジャーペースト、ガーリックペースト、クミンパウダー、カシミリチリパウダー、ガラムマサラ、ターメリック、グリーンカルダモンパウダー、コリアンダーパウダー、赤色食用色素を混ぜ合わせる。鶏肉を移し、全体にしっかり絡める。ラップをして冷蔵庫で6時間以上（できれば一晩）漬け込む。"),
                 CookingStep(stepNumber: 3, instruction: "木製の串を水に20分浸す。漬け込んだ鶏肉を串に刺し、玉ねぎとパプリカを交互に挟む。冷蔵庫に戻す。残ったマリネ液に植物油120ミリリットルを混ぜ、塗り用のタレを作る。"),
                 CookingStep(stepNumber: 4, instruction: "オーブンをブロイラー（上火強火）に設定し、天板を最上段にセットする。油を塗った天板に串を並べ、片面3〜4分ずつ焼く。裏返す際にマリネ液を塗り、表面に焦げ目がつき中まで火が通るまで焼く。"),
                 CookingStep(stepNumber: 5, instruction: "焼き上がったらすぐにロティとミントチャツネを添えて盛り付ける。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/10/22/chicken-tikka/")
         ),
         Recipe(
@@ -638,7 +638,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/09/Watermelon-Feta-Salad-4x5-LOWRES.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: nil,
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "レモン汁", amount: "大さじ2"),
                     Ingredient(name: "オレンジジュース", amount: "大さじ2"),
                     Ingredient(name: "レモンの皮（すりおろし）", amount: "小さじ1"),
@@ -651,13 +651,13 @@ extension SeedData {
                     Ingredient(name: "スイカ（2.5センチ角）", amount: "5カップ"),
                     Ingredient(name: "ベビールッコラ", amount: "3カップ"),
                     Ingredient(name: "フェタチーズ（砕く）", amount: "1/4カップ"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "大きなボウルにレモン汁、オレンジジュース、レモンの皮、オレンジの皮、バルサミコ酢、オリーブオイル、塩、こしょう、刻みくるみを入れてよく混ぜ合わせます。"),
                 CookingStep(stepNumber: 2, instruction: "スイカ、ベビールッコラ、砕いたフェタチーズを加えます。"),
                 CookingStep(stepNumber: 3, instruction: "ドレッシングが全体に行き渡るようにさっくりと和え、すぐに盛り付けます。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2020/09/06/watermelon-feta-arugula-salad/")
         ),
         Recipe(
@@ -667,7 +667,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/12/Fried-Chicken-with-Pickles-3.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4〜6人分",
-                items: [
+                sections: [
                     IngredientSection(header: "ピクル用", items: [
                         Ingredient(name: "キュウリ（カービー種）、3ミリ厚にスライス", amount: "3本"),
                         Ingredient(name: "玉ねぎ（薄切り）", amount: "½カップ"),
@@ -695,7 +695,7 @@ extension SeedData {
                     ])
                 ]
             ),
-            steps: [
+            stepSections: [
                 CookingStepSection(header: "ピクル作り", items: [
                     CookingStep(stepNumber: 1, instruction: "スライスしたキュウリと薄切り玉ねぎをボウルに合わせ、1クォートサイズの容器に移す。"),
                     CookingStep(stepNumber: 2, instruction: "鍋にマスタードシードとセロリシードを入れ、弱火で30秒〜1分、香りが立つまで炒る。ビネガー、砂糖、塩を加え、溶けるまで煮立たせたら火を止める。"),
@@ -749,14 +749,14 @@ extension SeedData {
                     ])
                 ]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "塩を加えた湯を沸騰させ、グリッツをゆっくりと加えながら絶えずかき混ぜる。火を弱めて約1分間混ぜ続け、とろみがついたらハーフアンドハーフをゆっくり加える。弱火にして15〜20分、時々かき混ぜながらクリーミーになるまで煮る。チェダーチーズを4回に分けて加え、その都度よく混ぜる。バターを加え、黒こしょうで味を調え、塩加減を整える。蓋をして置いておく。"),
                 CookingStep(stepNumber: 2, instruction: "大きなスキレットにバター大さじ1を中強火で熱する。マッシュルームを重ならないように並べ、片面約1分ずつ焼き色をつける。バッチに分けて焼き、必要に応じてバターを追加する。焼けたら皿に取り出す。"),
                 CookingStep(stepNumber: 3, instruction: "同じスキレットにバター大さじ1を加える。スキャリオンの白い部分と赤パプリカを柔らかく半透明になるまで8〜10分炒める。にんにく、トマト、スモークパプリカ、カイエンペッパーを加え、香りが立つまで2〜3分炒める。薄力粉を振り入れて1〜2分混ぜ、野菜ブイヨンを少しずつ加えながら混ぜる。2〜3分煮て軽くとろみをつけ、味を調える。"),
                 CookingStep(stepNumber: 4, instruction: "マッシュルームと溜まった肉汁をフライパンに戻し、約2分温める。"),
                 CookingStep(stepNumber: 5, instruction: "グリッツの濃度を確認する。必要に応じて弱火でハーフアンドハーフを追加し、好みの固さになるまで混ぜる。"),
                 CookingStep(stepNumber: 6, instruction: "グリッツをボウルに盛り分け、マッシュルームのソースをのせる。スキャリオンの緑の部分とレモン汁を添えて仕上げる。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/10/28/shrooms-and-grits/")
         ),
         Recipe(
@@ -766,20 +766,20 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/09/Raspberry-Balsamic-Refresher-4x5-1.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "グラニュー糖", amount: "½カップ"),
                     Ingredient(name: "フレッシュミントの葉（しっかり詰めて）", amount: "½カップ"),
                     Ingredient(name: "ラズベリー（約3カップ分）", amount: "2パック（各170グラム）"),
                     Ingredient(name: "ライム果汁", amount: "1個分（¼カップ）"),
                     Ingredient(name: "ホワイトバルサミコ酢", amount: "¼カップ"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "小鍋にグラニュー糖、水½カップ、ミントを入れて中火にかける。砂糖が溶けるまで煮たら、1時間かけて完全に冷ます。ピッチャーに濾し入れる。"),
                 CookingStep(stepNumber: 2, instruction: "ラズベリーをフードプロセッサーでなめらかになるまで撹拌する。目の細かいストレーナーでピッチャーに濾し入れ、種を取り除く。"),
                 CookingStep(stepNumber: 3, instruction: "ライム果汁、ホワイトバルサミコ酢、氷水3カップを加え、しっかり混ぜ合わせる。"),
                 CookingStep(stepNumber: 4, instruction: "提供するまで冷蔵庫で冷やす。グラスに氷を入れて注ぐ。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/09/02/raspberry-balsamic-refresher/")
         ),
         Recipe(
@@ -789,7 +789,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/06/Angel-Food-Cake-with-Port-Macerated-Strawberries-Eitan-Bernath.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "10〜12人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "グラニュー糖", amount: "1と3/4カップ（350グラム）"),
                     Ingredient(name: "薄力粉（ケーキフラワー）", amount: "1カップ（133グラム）"),
                     Ingredient(name: "コーシャーソルト", amount: "小さじ1/4"),
@@ -801,9 +801,9 @@ extension SeedData {
                     Ingredient(name: "砂糖（ベリー用）", amount: "大さじ1〜2"),
                     Ingredient(name: "ブランデーまたはポートワイン", amount: "大さじ2"),
                     Ingredient(name: "ホイップクリーム（お好みで）", amount: nil),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "オーブンを160℃に予熱する。"),
                 CookingStep(stepNumber: 2, instruction: "グラニュー糖をブレンダーでパウダー状になるまで撹拌する。半分に分け、片方を薄力粉・塩とボウルで混ぜ合わせておく。"),
                 CookingStep(stepNumber: 3, instruction: "スタンドミキサーにホイッパーを付け、卵白とクリームオブターターを中速で泡立てる。泡立ってきたら残りの砂糖を少しずつ加え、角がやわらかくお辞儀する程度（ミディアムピーク）まで泡立てる。バニラエキストラクトとアーモンドエキストラクトを折り込む。"),
@@ -815,7 +815,7 @@ extension SeedData {
                 CookingStep(stepNumber: 9, instruction: "ナイフやオフセットスパチュラを使い、型の側面と中央の筒からケーキを丁寧にはがす。"),
                 CookingStep(stepNumber: 10, instruction: "ケーキをサービングトレイにひっくり返して取り出す。波刃のナイフでやさしく前後に動かしながら切り分ける。"),
                 CookingStep(stepNumber: 11, instruction: "切り分けたケーキにマセレーテッドストロベリーとホイップクリームをのせ、すぐにいただく。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/06/24/angel-food-cake-with-macerated-strawberries/")
         ),
         Recipe(
@@ -825,7 +825,7 @@ extension SeedData {
             imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/03/Indian-Breakfast-Buritto-Eitan-Bernath.jpg")!)],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
-                items: [
+                sections: [IngredientSection(items: [
                     Ingredient(name: "全粒粉（細挽き）", amount: "3カップ"),
                     Ingredient(name: "コーシャーソルト", amount: "小さじ1"),
                     Ingredient(name: "植物油", amount: "大さじ1"),
@@ -857,9 +857,9 @@ extension SeedData {
                     Ingredient(name: "塩・こしょう", amount: "適量"),
                     Ingredient(name: "赤玉ねぎ（薄切り）", amount: "½個"),
                     Ingredient(name: "パクチーの葉", amount: "½カップ"),
-                ]
+                ])]
             ),
-            steps: [
+            stepSections: [CookingStepSection(items: [
                 CookingStep(stepNumber: 1, instruction: "ロティ生地を作る：ボウルに小麦粉、塩、油を入れて混ぜる。水1カップを加えて生地がまとまるまで混ぜ、3〜4分こねて滑らかにする。ラップをして20分以上休ませる。"),
                 CookingStep(stepNumber: 2, instruction: "生地を6等分にし、それぞれ端を内側に折り込みながら丸く成形する。乾燥しないように覆っておく。"),
                 CookingStep(stepNumber: 3, instruction: "打ち粉をした台の上で各生地を直径約30センチの円形に伸ばす。中心から外側へ麺棒を転がし、45度ずつ回転させながら均一に伸ばす。"),
@@ -872,7 +872,7 @@ extension SeedData {
                 CookingStep(stepNumber: 10, instruction: "スクランブルエッグを作る：ノンスティックパンにバターを入れ弱火で溶かす。クミンシードを加え、30〜45秒、香りが立つまで炒める。"),
                 CookingStep(stepNumber: 11, instruction: "溶き卵を加え、3〜4分絶えずかき混ぜながら、9割ほど固まり少し液体が残る状態で火から下ろす。"),
                 CookingStep(stepNumber: 12, instruction: "組み立て：ロティを広げ、中央にハッシュブラウン、チリパニール、スクランブルエッグ、赤玉ねぎ、パクチーを各¼量ずつのせ、ミントチャツネを回しかける。手前から具を包むように折り、両端を折り込んでしっかり巻く。すぐに提供する。"),
-            ],
+            ])],
             sourceURL: URL(string: "https://www.eitanbernath.com/2022/03/25/indian-inspired-breakfast-burrito/")
         ),
     ]
