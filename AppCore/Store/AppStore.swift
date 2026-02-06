@@ -27,7 +27,8 @@ public final class AppStore {
     public init(
         recipeExtractionService: (any RecipeExtractionServiceProtocol)? = nil,
         recipePersistenceService: (any RecipePersistenceServiceProtocol)? = nil,
-        revenueCatService: any RevenueCatServiceProtocol = RevenueCatService()
+        revenueCatService: any RevenueCatServiceProtocol = RevenueCatService(),
+        seedDataService: SeedDataService? = nil
     ) {
         self.revenueCatService = revenueCatService
 
@@ -59,7 +60,12 @@ public final class AppStore {
             }
         }
 
-        self.seedDataService = SeedDataService(persistenceService: self.recipePersistenceService)
+        // SeedDataService の初期化（テスト時は注入されたものを使用）
+        if let service = seedDataService {
+            self.seedDataService = service
+        } else {
+            self.seedDataService = SeedDataService(persistenceService: self.recipePersistenceService)
+        }
     }
 
     // MARK: - Public Methods
@@ -102,11 +108,11 @@ public final class AppStore {
 
     /// アプリ起動時の処理
     private func handleBoot() async {
-        // サブスクリプション状態と買い物リストを先に読み込む（シードデータ投入を待たない）
+        // サブスクリプション状態を読み込む
         send(.subscription(.loadSubscriptionStatus))
+        // 買い物リストを読み込む（シードデータの有無に関係なく読み込み可能）
         send(.shoppingList(.loadShoppingLists))
-
-        // シードデータ投入（初回のみ）完了後にレシピ・カテゴリを読み込む
+        // シードデータを投入してからレシピ・カテゴリを読み込む
         await seedDataService.seedIfNeeded()
         send(.recipe(.loadSavedRecipes))
         send(.recipe(.loadCategories))
@@ -435,6 +441,8 @@ public final class AppStore {
         case .deleteAllData:
             do {
                 try await recipePersistenceService.deleteAllData()
+                // シードデータフラグをリセット（次回起動時に再投入されるようにする）
+                SeedDataService.resetSeedFlag()
                 send(.debug(.dataDeleted))
                 // リストを空にリロード
                 send(.recipe(.savedRecipesLoaded([])))
@@ -443,10 +451,6 @@ public final class AppStore {
             } catch {
                 send(.debug(.operationFailed(error.localizedDescription)))
             }
-
-        case .resetSeedData:
-            SeedDataService.resetSeedFlag()
-            send(.debug(.seedDataReset))
 
         default:
             // その他のアクションは副作用なし

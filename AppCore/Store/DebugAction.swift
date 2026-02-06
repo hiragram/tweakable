@@ -27,12 +27,6 @@ public enum DebugAction: Sendable {
     /// データ削除完了
     case dataDeleted
 
-    /// シードデータフラグをリセットする
-    case resetSeedData
-
-    /// シードデータリセット完了
-    case seedDataReset
-
     // MARK: - Error
 
     /// 操作失敗
