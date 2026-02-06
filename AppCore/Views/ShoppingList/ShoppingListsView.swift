@@ -34,6 +34,7 @@ struct ShoppingListsView: View {
                 listView
             }
         }
+        .background(ds.colors.backgroundPrimary.color)
         .navigationTitle(String(localized: .shoppingListsTitle))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

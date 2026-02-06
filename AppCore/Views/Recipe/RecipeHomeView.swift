@@ -48,6 +48,7 @@ struct RecipeHomeView: View {
                 recipeGridView
             }
         }
+        .background(ds.colors.backgroundPrimary.color)
         .confirmationDialog(
             String(localized: .recipeDeleteConfirmationTitle),
             isPresented: $showDeleteConfirmation,
