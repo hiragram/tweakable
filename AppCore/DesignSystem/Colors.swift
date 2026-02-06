@@ -91,10 +91,10 @@ extension ColorPalette {
         primaryBrand: AdaptiveColor(light: "2C3E50", dark: "3D5266"),
         secondaryBrand: AdaptiveColor(light: "2A7B7B", dark: "3A8F8F"),
 
-        // Background - Cool white / dark slate
-        backgroundPrimary: AdaptiveColor(light: "FAFBFC", dark: "1A1D21"),
-        backgroundSecondary: AdaptiveColor(light: "F4F6F8", dark: "24282E"),
-        backgroundTertiary: AdaptiveColor(light: "EBEEF2", dark: "2E333A"),
+        // Background - Navy-tinted cool tones
+        backgroundPrimary: AdaptiveColor(light: "F0F3F7", dark: "181E26"),
+        backgroundSecondary: AdaptiveColor(light: "E8EDF3", dark: "1F2733"),
+        backgroundTertiary: AdaptiveColor(light: "DDE4EE", dark: "263040"),
 
         // Text - Navy tones
         textPrimary: AdaptiveColor(light: "2C3E50", dark: "E8ECF0"),

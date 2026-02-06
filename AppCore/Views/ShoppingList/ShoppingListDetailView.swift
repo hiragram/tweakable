@@ -44,6 +44,7 @@ struct ShoppingListDetailView: View {
                 listView
             }
         }
+        .background(ds.colors.backgroundPrimary.color)
         .navigationTitle(shoppingList.name)
     }
 

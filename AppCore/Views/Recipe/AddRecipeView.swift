@@ -105,6 +105,7 @@ struct AddRecipeView: View {
                 .padding(.horizontal, ds.spacing.lg)
                 .padding(.bottom, ds.spacing.xl)
             }
+            .background(ds.colors.backgroundPrimary.color)
             .navigationTitle(String(localized: .addRecipeNavigationTitle))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

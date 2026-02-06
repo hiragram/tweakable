@@ -146,6 +146,7 @@ struct RecipeView: View {
                 .frame(maxWidth: .infinity)
             }
         }
+        .background(ds.colors.backgroundPrimary.color)
         .onScrollGeometryChange(for: Bool.self) { geometry in
             // 280pt以上スクロールしたらナビゲーションタイトルを表示
             geometry.contentOffset.y > 280
@@ -194,7 +195,7 @@ struct RecipeView: View {
         .overlay(alignment: .top) {
             SmoothGradient(
                 from: .clear,
-                to: Color(uiColor: .systemBackground),
+                to: ds.colors.backgroundPrimary.color,
                 startPoint: .bottom,
                 endPoint: .top
             )
