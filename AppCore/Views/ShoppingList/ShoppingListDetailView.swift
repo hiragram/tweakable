@@ -10,6 +10,8 @@ enum ShoppingListDetailAccessibilityID {
     static func itemRow(_ id: UUID) -> String { "shoppingListDetail_button_item_\(id.uuidString)" }
     static func itemCheckbox(_ id: UUID) -> String { "shoppingListDetail_button_checkbox_\(id.uuidString)" }
     static func breakdownSection(_ id: UUID) -> String { "shoppingListDetail_section_breakdown_\(id.uuidString)" }
+    static let recipeSection = "shoppingListDetail_section_recipes"
+    static func recipeRow(_ id: UUID) -> String { "shoppingListDetail_button_recipe_\(id.uuidString)" }
 }
 
 // MARK: - ShoppingListDetailView
@@ -19,8 +21,10 @@ struct ShoppingListDetailView: View {
     private let ds = DesignSystem.default
 
     let shoppingList: ShoppingListDTO
+    let recipes: [Recipe]
     let isUpdatingItem: Bool
     let onItemCheckedChanged: (UUID, Bool) -> Void
+    let onRecipeTapped: (Recipe) -> Void
 
     @State private var expandedItemIDs: Set<UUID> = []
 
@@ -77,6 +81,11 @@ struct ShoppingListDetailView: View {
                 TipView(ShoppingListCheckoffTip())
                     .padding(.horizontal, ds.spacing.sm)
 
+                // Recipe section
+                if !recipes.isEmpty {
+                    recipeSectionView
+                }
+
                 let (groupedItems, sortedCategories) = groupedItemsByCategory
 
                 ForEach(sortedCategories, id: \.self) { category in
@@ -112,6 +121,63 @@ struct ShoppingListDetailView: View {
         }
         .accessibilityIdentifier(ShoppingListDetailAccessibilityID.list)
     }
+
+    // MARK: - Recipe Section
+
+    private var recipeSectionView: some View {
+        VStack(alignment: .leading, spacing: ds.spacing.sm) {
+            Text(.shoppingListDetailRecipeSectionTitle)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(ds.colors.textSecondary.color)
+
+            VStack(spacing: 0) {
+                ForEach(Array(recipes.enumerated()), id: \.element.id) { index, recipe in
+                    Button {
+                        onRecipeTapped(recipe)
+                    } label: {
+                        HStack(spacing: ds.spacing.md) {
+                            Image(systemName: "fork.knife")
+                                .font(.body)
+                                .foregroundColor(ds.colors.primaryBrand.color)
+
+                            VStack(alignment: .leading, spacing: ds.spacing.xs) {
+                                Text(recipe.title)
+                                    .font(.body)
+                                    .foregroundColor(ds.colors.textPrimary.color)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
+
+                                Text(String(localized: .shoppingListDetailRecipeIngredientsCount(recipe.ingredientsInfo.allItems.count)))
+                                    .font(.subheadline)
+                                    .foregroundColor(ds.colors.textSecondary.color)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(ds.colors.textTertiary.color)
+                        }
+                        .padding(ds.spacing.md)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier(ShoppingListDetailAccessibilityID.recipeRow(recipe.id))
+
+                    if index < recipes.count - 1 {
+                        Divider()
+                            .padding(.leading, 52)
+                    }
+                }
+            }
+            .background(ds.colors.backgroundSecondary.color)
+            .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.md))
+        }
+        .accessibilityIdentifier(ShoppingListDetailAccessibilityID.recipeSection)
+    }
+
+    // MARK: - Item Row
 
     private func itemRow(_ item: ShoppingListItemDTO) -> some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -218,8 +284,10 @@ struct ShoppingListDetailView: View {
                 recipeIDs: [],
                 items: []
             ),
+            recipes: [],
             isUpdatingItem: false,
-            onItemCheckedChanged: { _, _ in }
+            onItemCheckedChanged: { _, _ in },
+            onRecipeTapped: { _ in }
         )
     }
     .prefireEnabled()
@@ -311,8 +379,35 @@ struct ShoppingListDetailView: View {
                     )
                 ]
             ),
+            recipes: [
+                Recipe(
+                    title: "鶏の照り焼き",
+                    ingredientsInfo: Ingredients(sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "鶏もも肉", amount: "200g"),
+                            Ingredient(name: "醤油", amount: "大さじ2"),
+                            Ingredient(name: "みりん", amount: "大さじ2")
+                        ])
+                    ]),
+                    stepSections: []
+                ),
+                Recipe(
+                    title: "カレーライス",
+                    ingredientsInfo: Ingredients(sections: [
+                        IngredientSection(items: [
+                            Ingredient(name: "豚バラ肉", amount: "300g"),
+                            Ingredient(name: "玉ねぎ", amount: "2個"),
+                            Ingredient(name: "人参", amount: "2本"),
+                            Ingredient(name: "じゃがいも", amount: "2個"),
+                            Ingredient(name: "カレールー", amount: "1箱")
+                        ])
+                    ]),
+                    stepSections: []
+                )
+            ],
             isUpdatingItem: false,
-            onItemCheckedChanged: { _, _ in }
+            onItemCheckedChanged: { _, _ in },
+            onRecipeTapped: { _ in }
         )
     }
     .prefireEnabled()
