@@ -7,6 +7,7 @@ struct RecipeHomeContainerView: View {
     let store: AppStore
 
     @State private var urlText: String = ""
+    @State private var searchText: String = ""
     @State private var showingAddRecipe: Bool = false
     @State private var showingRecipe: Bool = false
     @State private var showingShoppingLists: Bool = false
@@ -23,34 +24,57 @@ struct RecipeHomeContainerView: View {
 
     var body: some View {
         NavigationStack {
-            RecipeHomeView(
-                recipes: store.state.recipe.filteredRecipes,
-                categories: store.state.recipe.categories,
-                selectedCategoryID: store.state.recipe.selectedCategoryFilter,
-                isLoading: store.state.recipe.isLoadingSavedRecipes,
-                onRecipeTapped: { recipe in
-                    store.send(.recipe(.selectSavedRecipe(recipe)))
-                    showingRecipe = true
-                },
-                onAddTapped: {
-                    showingAddRecipe = true
-                },
-                onDeleteConfirmed: { id in
-                    store.send(.recipe(.deleteRecipe(id: id)))
-                },
-                onCategoryTapped: { categoryID in
-                    store.send(.recipe(.selectCategoryFilter(categoryID)))
-                },
-                onAddCategoryTapped: {
-                    newCategoryName = ""
-                    showingAddCategory = true
-                },
-                onCategoryLongPressed: { category in
-                    categoryToManage = category
-                    showingCategoryActions = true
+            Group {
+                if store.state.recipe.isSearchActive {
+                    RecipeSearchResultsView(
+                        results: store.state.recipe.searchFilteredResults,
+                        categories: store.state.recipe.categories,
+                        selectedCategoryID: store.state.recipe.selectedSearchCategoryFilter,
+                        categoryCounts: store.state.recipe.searchResultCategoryCounts,
+                        totalCount: store.state.recipe.searchResults.count,
+                        onRecipeTapped: { recipe in
+                            store.send(.recipe(.selectSavedRecipe(recipe)))
+                            showingRecipe = true
+                        },
+                        onCategoryTapped: { categoryID in
+                            store.send(.recipe(.selectSearchCategoryFilter(categoryID)))
+                        }
+                    )
+                } else {
+                    RecipeHomeView(
+                        recipes: store.state.recipe.filteredRecipes,
+                        categories: store.state.recipe.categories,
+                        selectedCategoryID: store.state.recipe.selectedCategoryFilter,
+                        isLoading: store.state.recipe.isLoadingSavedRecipes,
+                        onRecipeTapped: { recipe in
+                            store.send(.recipe(.selectSavedRecipe(recipe)))
+                            showingRecipe = true
+                        },
+                        onAddTapped: {
+                            showingAddRecipe = true
+                        },
+                        onDeleteConfirmed: { id in
+                            store.send(.recipe(.deleteRecipe(id: id)))
+                        },
+                        onCategoryTapped: { categoryID in
+                            store.send(.recipe(.selectCategoryFilter(categoryID)))
+                        },
+                        onAddCategoryTapped: {
+                            newCategoryName = ""
+                            showingAddCategory = true
+                        },
+                        onCategoryLongPressed: { category in
+                            categoryToManage = category
+                            showingCategoryActions = true
+                        }
+                    )
                 }
-            )
-            .navigationTitle(String(localized: .myRecipesTitle))
+            }
+            .searchable(text: $searchText, prompt: String(localized: .searchRecipesPlaceholder))
+            .onChange(of: searchText) { _, newValue in
+                store.send(.recipe(.updateSearchQuery(newValue)))
+            }
+            .navigationTitle(store.state.recipe.isSearchActive ? String(localized: .searchResultsTitle) : String(localized: .myRecipesTitle))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {

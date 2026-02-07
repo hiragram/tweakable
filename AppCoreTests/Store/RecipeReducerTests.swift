@@ -845,6 +845,31 @@ struct RecipeReducerTests {
     }
 
     @Test
+    func reduce_categoryDeleted_resetsSearchCategoryFilterIfMatching() {
+        var state = RecipeState()
+        let category = makeSampleCategory(name: "和食")
+        state.categories = [category]
+        state.selectedSearchCategoryFilter = category.id
+
+        RecipeReducer.reduce(state: &state, action: .categoryDeleted(id: category.id))
+
+        #expect(state.selectedSearchCategoryFilter == nil)
+    }
+
+    @Test
+    func reduce_categoryDeleted_keepsSearchCategoryFilterIfDifferent() {
+        var state = RecipeState()
+        let cat1 = makeSampleCategory(name: "和食")
+        let cat2 = makeSampleCategory(name: "中華")
+        state.categories = [cat1, cat2]
+        state.selectedSearchCategoryFilter = cat2.id
+
+        RecipeReducer.reduce(state: &state, action: .categoryDeleted(id: cat1.id))
+
+        #expect(state.selectedSearchCategoryFilter == cat2.id)
+    }
+
+    @Test
     func reduce_categoryDeleteFailed_setsError() {
         var state = RecipeState()
 
@@ -927,6 +952,291 @@ struct RecipeReducerTests {
         RecipeReducer.reduce(state: &state, action: .selectCategoryFilter(nil))
 
         #expect(state.selectedCategoryFilter == nil)
+    }
+
+    // MARK: - Search Query Tests
+
+    @Test
+    func reduce_updateSearchQuery_setsQuery() {
+        var state = RecipeState()
+
+        RecipeReducer.reduce(state: &state, action: .updateSearchQuery("鶏肉"))
+
+        #expect(state.searchQuery == "鶏肉")
+    }
+
+    @Test
+    func reduce_updateSearchQuery_resetsSearchCategoryFilter() {
+        var state = RecipeState()
+        state.selectedSearchCategoryFilter = UUID()
+
+        RecipeReducer.reduce(state: &state, action: .updateSearchQuery("鶏肉"))
+
+        #expect(state.selectedSearchCategoryFilter == nil)
+    }
+
+    @Test
+    func reduce_updateSearchQuery_emptyString_clearsQuery() {
+        var state = RecipeState()
+        state.searchQuery = "鶏肉"
+
+        RecipeReducer.reduce(state: &state, action: .updateSearchQuery(""))
+
+        #expect(state.searchQuery == "")
+    }
+
+    @Test
+    func reduce_selectSearchCategoryFilter_setsFilter() {
+        var state = RecipeState()
+        let categoryID = UUID()
+
+        RecipeReducer.reduce(state: &state, action: .selectSearchCategoryFilter(categoryID))
+
+        #expect(state.selectedSearchCategoryFilter == categoryID)
+    }
+
+    @Test
+    func reduce_selectSearchCategoryFilter_nil_clearsFilter() {
+        var state = RecipeState()
+        state.selectedSearchCategoryFilter = UUID()
+
+        RecipeReducer.reduce(state: &state, action: .selectSearchCategoryFilter(nil))
+
+        #expect(state.selectedSearchCategoryFilter == nil)
+    }
+
+    // MARK: - Search Computed Properties Tests
+
+    @Test
+    func isSearchActive_withNonEmptyQuery_returnsTrue() {
+        var state = RecipeState()
+        state.searchQuery = "鶏肉"
+
+        #expect(state.isSearchActive == true)
+    }
+
+    @Test
+    func isSearchActive_withEmptyQuery_returnsFalse() {
+        let state = RecipeState()
+
+        #expect(state.isSearchActive == false)
+    }
+
+    @Test
+    func isSearchActive_withWhitespaceOnlyQuery_returnsFalse() {
+        var state = RecipeState()
+        state.searchQuery = "   "
+
+        #expect(state.isSearchActive == false)
+    }
+
+    @Test
+    func searchResults_matchesTitle_returnsResultWithTitleField() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "鶏の照り焼き",
+                ingredientsInfo: Ingredients(sections: []),
+                stepSections: []
+            )
+        ]
+        state.searchQuery = "鶏"
+
+        #expect(state.searchResults.count == 1)
+        #expect(state.searchResults.first?.matchFields.contains(.title) == true)
+    }
+
+    @Test
+    func searchResults_matchesDescription_returnsResultWithDescriptionField() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "料理",
+                description: "甘辛いタレが美味しい",
+                ingredientsInfo: Ingredients(sections: []),
+                stepSections: []
+            )
+        ]
+        state.searchQuery = "甘辛"
+
+        #expect(state.searchResults.count == 1)
+        #expect(state.searchResults.first?.matchFields.contains(.description) == true)
+    }
+
+    @Test
+    func searchResults_matchesIngredientName_returnsResultWithIngredientsField() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "料理",
+                ingredientsInfo: Ingredients(sections: [
+                    IngredientSection(items: [Ingredient(name: "鶏もも肉", amount: "200g")])
+                ]),
+                stepSections: []
+            )
+        ]
+        state.searchQuery = "鶏もも"
+
+        #expect(state.searchResults.count == 1)
+        #expect(state.searchResults.first?.matchFields.contains(.ingredients) == true)
+    }
+
+    @Test
+    func searchResults_matchesStepInstruction_returnsResultWithStepsField() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "料理",
+                ingredientsInfo: Ingredients(sections: []),
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(stepNumber: 1, instruction: "鶏肉を一口大に切る")
+                    ])
+                ]
+            )
+        ]
+        state.searchQuery = "一口大"
+
+        #expect(state.searchResults.count == 1)
+        #expect(state.searchResults.first?.matchFields.contains(.steps) == true)
+    }
+
+    @Test
+    func searchResults_matchesMultipleFields_returnsResultWithAllMatchedFields() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "鶏の照り焼き",
+                description: "鶏肉を使った料理",
+                ingredientsInfo: Ingredients(sections: [
+                    IngredientSection(items: [Ingredient(name: "鶏もも肉", amount: "200g")])
+                ]),
+                stepSections: [
+                    CookingStepSection(items: [
+                        CookingStep(stepNumber: 1, instruction: "鶏肉を切る")
+                    ])
+                ]
+            )
+        ]
+        state.searchQuery = "鶏"
+
+        #expect(state.searchResults.count == 1)
+        guard let result = state.searchResults.first else {
+            Issue.record("searchResults should not be empty")
+            return
+        }
+        #expect(result.matchFields.contains(.title))
+        #expect(result.matchFields.contains(.description))
+        #expect(result.matchFields.contains(.ingredients))
+        #expect(result.matchFields.contains(.steps))
+    }
+
+    @Test
+    func searchResults_noMatch_returnsEmpty() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "カレーライス",
+                ingredientsInfo: Ingredients(sections: []),
+                stepSections: []
+            )
+        ]
+        state.searchQuery = "パスタ"
+
+        #expect(state.searchResults.isEmpty)
+    }
+
+    @Test
+    func searchResults_caseInsensitive_matchesRegardlessOfCase() {
+        var state = RecipeState()
+        state.savedRecipes = [
+            Recipe(
+                title: "Chicken Teriyaki",
+                ingredientsInfo: Ingredients(sections: []),
+                stepSections: []
+            )
+        ]
+        state.searchQuery = "chicken"
+
+        #expect(state.searchResults.count == 1)
+    }
+
+    @Test
+    func searchResults_emptyQuery_returnsEmpty() {
+        var state = RecipeState()
+        state.savedRecipes = [makeSampleRecipe()]
+        state.searchQuery = ""
+
+        #expect(state.searchResults.isEmpty)
+    }
+
+    @Test
+    func searchFilteredResults_withNoFilter_returnsAllSearchResults() {
+        var state = RecipeState()
+        let recipe1 = Recipe(title: "鶏の照り焼き", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        let recipe2 = Recipe(title: "鶏肉カレー", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        state.savedRecipes = [recipe1, recipe2]
+        state.searchQuery = "鶏"
+        state.selectedSearchCategoryFilter = nil
+
+        #expect(state.searchFilteredResults.count == 2)
+    }
+
+    @Test
+    func searchFilteredResults_withFilter_returnsOnlyMatchingCategory() {
+        var state = RecipeState()
+        let recipe1 = Recipe(title: "鶏の照り焼き", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        let recipe2 = Recipe(title: "鶏肉カレー", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        state.savedRecipes = [recipe1, recipe2]
+        state.searchQuery = "鶏"
+        let categoryID = UUID()
+        state.categoryRecipeMap = [categoryID: [recipe1.id]]
+        state.selectedSearchCategoryFilter = categoryID
+
+        #expect(state.searchFilteredResults.count == 1)
+        #expect(state.searchFilteredResults.first?.recipe.id == recipe1.id)
+    }
+
+    @Test
+    func searchFilteredResults_withFilterAndNoMatches_returnsEmpty() {
+        var state = RecipeState()
+        let recipe1 = Recipe(title: "鶏の照り焼き", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        state.savedRecipes = [recipe1]
+        state.searchQuery = "鶏"
+        let categoryID = UUID()
+        state.categoryRecipeMap = [categoryID: []]  // empty category
+        state.selectedSearchCategoryFilter = categoryID
+
+        #expect(state.searchFilteredResults.isEmpty)
+    }
+
+    @Test
+    func searchResultCategoryCounts_returnsCorrectCounts() {
+        var state = RecipeState()
+        let recipe1 = Recipe(title: "鶏の照り焼き", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        let recipe2 = Recipe(title: "鶏肉カレー", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        let recipe3 = Recipe(title: "パスタ", ingredientsInfo: Ingredients(sections: []), stepSections: [])
+        state.savedRecipes = [recipe1, recipe2, recipe3]
+        state.searchQuery = "鶏"
+        let cat1 = UUID()
+        let cat2 = UUID()
+        state.categoryRecipeMap = [cat1: [recipe1.id, recipe3.id], cat2: [recipe2.id]]
+
+        let counts = state.searchResultCategoryCounts
+        #expect(counts[cat1] == 1)  // recipe1のみヒット（recipe3は「鶏」を含まない）
+        #expect(counts[cat2] == 1)  // recipe2がヒット
+    }
+
+    @Test
+    func searchResultCategoryCounts_withNoResults_returnsZeroCounts() {
+        var state = RecipeState()
+        state.savedRecipes = [Recipe(title: "パスタ", ingredientsInfo: Ingredients(sections: []), stepSections: [])]
+        state.searchQuery = "鶏"
+        let categoryID = UUID()
+        state.categoryRecipeMap = [categoryID: [state.savedRecipes[0].id]]
+
+        let counts = state.searchResultCategoryCounts
+        #expect(counts[categoryID] == 0)
     }
 
     // MARK: - Computed Properties Tests
