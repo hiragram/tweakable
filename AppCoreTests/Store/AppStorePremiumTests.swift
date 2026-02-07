@@ -264,4 +264,80 @@ struct AppStorePremiumTests {
         // Assert - 自動保存は呼ばれない
         #expect(mockPersistenceService.saveRecipeCallCount == 0)
     }
+
+    // MARK: - Substitution Service Call Tests
+
+    @Test("プレミアムユーザーの置き換えリクエストがExtractionServiceを呼び出す")
+    func requestSubstitution_whenPremium_callsExtractionService() async {
+        // Arrange
+        let mockRevenueCatService = MockRevenueCatServiceForTests()
+        mockRevenueCatService.isPremium = true
+
+        let mockRecipeService = MockRecipeExtractionService()
+        let substitutedRecipe = makeSampleRecipe()
+        // substituteRecipeが返すレシピを設定
+        mockRecipeService.substitutedRecipe = substitutedRecipe
+
+        let store = AppStore(
+            recipeExtractionService: mockRecipeService,
+            revenueCatService: mockRevenueCatService
+        )
+
+        // プレミアム状態
+        store.send(.subscription(.subscriptionStatusLoaded(isPremium: true)))
+
+        // レシピを設定
+        let recipe = makeSampleRecipe()
+        store.send(.recipe(.recipeLoaded(recipe)))
+
+        // 置き換え対象を設定
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
+        store.send(.recipe(.openSubstitutionSheet(ingredient: targetIngredient)))
+
+        // Act
+        store.send(.recipe(.requestSubstitution(prompt: "鶏肉を豚肉に変えて")))
+
+        // 副作用が実行されるまで待機
+        try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+
+        // Assert
+        #expect(mockRecipeService.substituteRecipeCallCount == 1)
+        #expect(mockRecipeService.lastSubstitutionPrompt == "鶏肉を豚肉に変えて")
+    }
+
+    @Test("置き換え成功時にプレビューモードに切り替わる")
+    func requestSubstitution_successFlow_setsPreviewMode() async {
+        // Arrange
+        let mockRevenueCatService = MockRevenueCatServiceForTests()
+        mockRevenueCatService.isPremium = true
+
+        let mockRecipeService = MockRecipeExtractionService()
+        var substitutedRecipe = makeSampleRecipe()
+        substitutedRecipe.ingredientsInfo.sections[0].items[0] = Ingredient(name: "豚肉", amount: "300g", isModified: true)
+        mockRecipeService.substitutedRecipe = substitutedRecipe
+
+        let store = AppStore(
+            recipeExtractionService: mockRecipeService,
+            revenueCatService: mockRevenueCatService
+        )
+
+        store.send(.subscription(.subscriptionStatusLoaded(isPremium: true)))
+
+        let recipe = makeSampleRecipe()
+        store.send(.recipe(.recipeLoaded(recipe)))
+
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
+        store.send(.recipe(.openSubstitutionSheet(ingredient: targetIngredient)))
+
+        // Act
+        store.send(.recipe(.requestSubstitution(prompt: "鶏肉を豚肉に変えて")))
+
+        // 副作用が実行されるまで待機
+        try? await Task.sleep(nanoseconds: 200_000_000) // 200ms
+
+        // Assert
+        #expect(store.state.recipe.substitutionSheetMode == .preview)
+        #expect(store.state.recipe.previewRecipe != nil)
+        #expect(store.state.recipe.isProcessingSubstitution == false)
+    }
 }
