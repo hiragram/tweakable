@@ -227,13 +227,20 @@ struct RecipeSearchResultsView: View {
                         }
                     }
                 case .local(let fileURL):
-                    if let data = try? Data(contentsOf: fileURL),
-                       let uiImage = UIImage(data: data) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } else {
-                        placeholderImage
+                    LazyImage(url: fileURL) { state in
+                        if state.isLoading {
+                            placeholderImage
+                                .overlay {
+                                    ProgressView()
+                                        .scaleEffect(0.6)
+                                }
+                        } else if let image = state.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } else {
+                            placeholderImage
+                        }
                     }
                 case .uiImage(let uiImage):
                     Image(uiImage: uiImage)
