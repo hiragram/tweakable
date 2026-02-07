@@ -1,0 +1,87 @@
+name: Create Test Failure Issue
+
+on:
+  workflow_call:
+    inputs:
+      test-type:
+        description: 'Test type (Unit or E2E)'
+        required: true
+        type: string
+      label:
+        description: 'Label for the issue (e.g. unit-test-failure)'
+        required: true
+        type: string
+      scheme:
+        description: 'Xcode scheme name'
+        required: true
+        type: string
+      commit-sha:
+        description: 'Commit SHA that triggered the failure'
+        required: true
+        type: string
+      run-id:
+        description: 'Workflow run ID'
+        required: true
+        type: string
+
+jobs:
+  create-fix-issue:
+    runs-on: self-hosted
+    permissions:
+      issues: write
+
+    steps:
+      - name: Check for existing open fix issue
+        id: check-issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          if ! existing=$(gh issue list \
+            --repo ${{ github.repository }} \
+            --label "auto-fix" \
+            --label "${{ inputs.label }}" \
+            --state open \
+            --limit 1 \
+            --json number \
+            --jq '.[0].number // empty' 2>&1); then
+            echo "Error checking for existing issues: $existing"
+            echo "Proceeding with caution, skipping issue creation"
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if [ -n "$existing" ]; then
+            echo "Existing open issue found: #$existing, skipping creation"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "No existing open issue found, will create one"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create fix issue
+        if: steps.check-issue.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo ${{ github.repository }} \
+            --title "[Auto] ${{ inputs.test-type }} test failure on main (commit: ${{ inputs.commit-sha }})" \
+            --label "auto-fix,${{ inputs.label }}" \
+            --body "$(cat <<'EOF'
+          @claude mainブランチで${{ inputs.test-type }}テスト（${{ inputs.scheme }}スキーム）が失敗しました。
+
+          **Commit**: ${{ inputs.commit-sha }}
+          **Workflow Run**: https://github.com/${{ github.repository }}/actions/runs/${{ inputs.run-id }}
+
+          以下の手順で修正してください:
+          1. 上記のWorkflow Runリンクからテスト失敗のログを確認する
+          2. 失敗原因を特定する
+          3. 修正ブランチを作成して修正をプッシュする
+          4. mainブランチへのPRを作成する
+
+          注意:
+          - 修正はmainブランチに直接プッシュしないこと
+          - PRを作成すること
+          - テストが通ることを確認すること
+          EOF
+          )"

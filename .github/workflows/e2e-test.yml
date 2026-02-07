@@ -1,0 +1,52 @@
+name: E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode (skip issue creation)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  e2e-test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E Tests
+        uses: sersoft-gmbh/xcodebuild-action@v4
+        with:
+          project: Tweakable.xcodeproj
+          scheme: TweakableUITests
+          destination: 'platform=iOS Simulator,name=iPhone 17 Pro'
+          action: test
+          result-bundle-path: E2ETestResults.xcresult
+          build-settings: CODE_SIGNING_ALLOWED=NO
+          retry-tests-on-failure: true
+          test-iterations: 3
+          parallel-testing-enabled: false
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: E2ETestResults
+          path: E2ETestResults.xcresult
+
+  create-fix-issue:
+    needs: e2e-test
+    if: failure() && github.event_name == 'push'
+    uses: ./.github/workflows/create-test-failure-issue.yml
+    with:
+      test-type: E2E
+      label: e2e-test-failure
+      scheme: TweakableUITests
+      commit-sha: ${{ github.sha }}
+      run-id: ${{ github.run_id }}
