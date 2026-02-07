@@ -55,6 +55,14 @@ public struct RecipeState: Equatable, Sendable {
     /// 現在選択中のカテゴリフィルタ（nilなら全レシピ表示）
     public var selectedCategoryFilter: UUID? = nil
 
+    // MARK: - Search State
+
+    /// 検索クエリ（空文字列で検索非アクティブ）
+    public var searchQuery: String = ""
+
+    /// 検索結果画面でのカテゴリフィルタ（nilなら全検索結果表示）
+    public var selectedSearchCategoryFilter: UUID? = nil
+
     public init() {}
 }
 
@@ -68,6 +76,56 @@ extension RecipeState {
         }
         let recipeIDs = categoryRecipeMap[categoryID] ?? []
         return savedRecipes.filter { recipeIDs.contains($0.id) }
+    }
+
+    // MARK: - Search Computed Properties
+
+    /// 検索がアクティブかどうか
+    public var isSearchActive: Bool {
+        !searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    /// 検索結果（全カテゴリ、カテゴリフィルタ適用前）
+    public var searchResults: [RecipeSearchResult] {
+        guard isSearchActive else { return [] }
+        let query = searchQuery.lowercased()
+        return savedRecipes.compactMap { recipe in
+            var matchFields = SearchMatchField()
+
+            if recipe.title.lowercased().contains(query) {
+                matchFields.insert(.title)
+            }
+            if let desc = recipe.description, desc.lowercased().contains(query) {
+                matchFields.insert(.description)
+            }
+            if recipe.ingredientsInfo.allItems.contains(where: { $0.name.lowercased().contains(query) }) {
+                matchFields.insert(.ingredients)
+            }
+            if recipe.allSteps.contains(where: { $0.instruction.lowercased().contains(query) }) {
+                matchFields.insert(.steps)
+            }
+
+            return matchFields.isEmpty ? nil : RecipeSearchResult(recipe: recipe, matchFields: matchFields)
+        }
+    }
+
+    /// カテゴリフィルタ適用後の検索結果
+    public var searchFilteredResults: [RecipeSearchResult] {
+        guard let categoryID = selectedSearchCategoryFilter else {
+            return searchResults
+        }
+        let recipeIDs = categoryRecipeMap[categoryID] ?? []
+        return searchResults.filter { recipeIDs.contains($0.recipe.id) }
+    }
+
+    /// 検索結果における各カテゴリの件数
+    public var searchResultCategoryCounts: [UUID: Int] {
+        let resultIDs = Set(searchResults.map { $0.recipe.id })
+        var counts: [UUID: Int] = [:]
+        for (categoryID, recipeIDs) in categoryRecipeMap {
+            counts[categoryID] = recipeIDs.intersection(resultIDs).count
+        }
+        return counts
     }
 
     /// どのカテゴリにも属さないレシピ

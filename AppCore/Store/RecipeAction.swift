@@ -151,4 +151,12 @@ public enum RecipeAction: Sendable {
 
     /// カテゴリフィルタを変更
     case selectCategoryFilter(UUID?)
+
+    // MARK: - Search
+
+    /// 検索クエリを更新（selectedSearchCategoryFilterもリセット）
+    case updateSearchQuery(String)
+
+    /// 検索結果画面のカテゴリフィルタを変更
+    case selectSearchCategoryFilter(UUID?)
 }

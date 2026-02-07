@@ -172,6 +172,9 @@ public enum RecipeReducer {
             if state.selectedCategoryFilter == id {
                 state.selectedCategoryFilter = nil
             }
+            if state.selectedSearchCategoryFilter == id {
+                state.selectedSearchCategoryFilter = nil
+            }
 
         case .categoryDeleteFailed(let message):
             state.errorMessage = message
@@ -196,6 +199,15 @@ public enum RecipeReducer {
 
         case .selectCategoryFilter(let id):
             state.selectedCategoryFilter = id
+
+        // MARK: - Search
+
+        case .updateSearchQuery(let query):
+            state.searchQuery = query
+            state.selectedSearchCategoryFilter = nil
+
+        case .selectSearchCategoryFilter(let id):
+            state.selectedSearchCategoryFilter = id
         }
     }
 }
