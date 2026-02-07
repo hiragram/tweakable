@@ -986,6 +986,40 @@
       },
       "extractionState": "manual"
     },
+    "shopping_list_detail_recipe_ingredients_count %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ingredients"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 材料"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "shopping_list_detail_recipe_section_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recipes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピ"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "shopping_lists_create_button": {
       "localizations": {
         "en": {
