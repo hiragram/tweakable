@@ -33,8 +33,6 @@ jobs:
     steps:
       - name: Check for existing open fix issue
         id: check-issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           if ! existing=$(gh issue list \
@@ -60,8 +58,6 @@ jobs:
 
       - name: Create fix issue
         if: steps.check-issue.outputs.skip == 'false'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh issue create \
             --repo ${{ github.repository }} \
