@@ -12,6 +12,9 @@ on:
         default: 'false'
         type: boolean
 
+permissions:
+  issues: write
+
 jobs:
   e2e-test:
     runs-on: self-hosted
