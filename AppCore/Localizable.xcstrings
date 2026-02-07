@@ -2952,13 +2952,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Title"
+            "value": "Found in title"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "タイトル"
+            "value": "タイトルに含む"
           }
         }
       }
@@ -2969,13 +2969,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Description"
+            "value": "Found in description"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "説明"
+            "value": "説明に含む"
           }
         }
       }
@@ -2986,13 +2986,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ingredients"
+            "value": "Found in ingredients"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "材料"
+            "value": "材料に含む"
           }
         }
       }
@@ -3003,13 +3003,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Steps"
+            "value": "Found in steps"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "工程"
+            "value": "工程に含む"
           }
         }
       }
@@ -3044,6 +3044,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "検索条件に一致するレシピがありません"
+          }
+        }
+      }
+    },
+    "search_results_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search Results"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "検索結果"
           }
         }
       }

@@ -178,31 +178,30 @@ struct RecipeSearchResultsView: View {
     // MARK: - Match Badges
 
     private func matchBadgesView(_ matchFields: SearchMatchField) -> some View {
-        HStack(spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
             if matchFields.contains(.title) {
-                matchBadge(String(localized: .searchResultsMatchTitle))
+                matchIndicator(String(localized: .searchResultsMatchTitle))
             }
             if matchFields.contains(.description) {
-                matchBadge(String(localized: .searchResultsMatchDescription))
+                matchIndicator(String(localized: .searchResultsMatchDescription))
             }
             if matchFields.contains(.ingredients) {
-                matchBadge(String(localized: .searchResultsMatchIngredients))
+                matchIndicator(String(localized: .searchResultsMatchIngredients))
             }
             if matchFields.contains(.steps) {
-                matchBadge(String(localized: .searchResultsMatchSteps))
+                matchIndicator(String(localized: .searchResultsMatchSteps))
             }
         }
     }
 
-    private func matchBadge(_ text: String) -> some View {
-        Text(text)
-            .font(.caption2)
-            .fontWeight(.medium)
-            .foregroundColor(ds.colors.textSecondary.color)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
-            .background(ds.colors.backgroundTertiary.color)
-            .clipShape(Capsule())
+    private func matchIndicator(_ text: String) -> some View {
+        HStack(spacing: 4) {
+            Image(systemName: "checkmark")
+                .font(.system(size: 8, weight: .bold))
+            Text(text)
+                .font(.caption2)
+        }
+        .foregroundColor(ds.colors.textTertiary.color)
     }
 
     // MARK: - Recipe Image
@@ -338,7 +337,7 @@ enum SearchResultsPreviewData {
             onRecipeTapped: { _ in },
             onCategoryTapped: { _ in }
         )
-        .navigationTitle("検索結果")
+        .navigationTitle(String(localized: .searchResultsTitle))
     }
     .prefireEnabled()
 }

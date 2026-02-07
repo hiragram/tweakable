@@ -74,7 +74,7 @@ struct RecipeHomeContainerView: View {
             .onChange(of: searchText) { _, newValue in
                 store.send(.recipe(.updateSearchQuery(newValue)))
             }
-            .navigationTitle(String(localized: .myRecipesTitle))
+            .navigationTitle(store.state.recipe.isSearchActive ? String(localized: .searchResultsTitle) : String(localized: .myRecipesTitle))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
