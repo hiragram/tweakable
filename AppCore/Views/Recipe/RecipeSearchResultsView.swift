@@ -143,7 +143,7 @@ struct RecipeSearchResultsView: View {
 
     private func searchResultRow(_ result: RecipeSearchResult) -> some View {
         Button(action: { onRecipeTapped(result.recipe) }) {
-            HStack(spacing: ds.spacing.md) {
+            HStack(alignment: .top, spacing: ds.spacing.md) {
                 recipeImage(result.recipe.imageURLs.first)
 
                 VStack(alignment: .leading, spacing: ds.spacing.xs) {
