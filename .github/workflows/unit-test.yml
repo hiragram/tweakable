@@ -1,19 +1,10 @@
 name: Unit Tests
 
 on:
-  push:
+  pull_request:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Dry run mode (skip issue creation)'
-        required: false
-        default: 'false'
-        type: boolean
-
-permissions:
-  issues: write
 
 jobs:
   test:
@@ -57,14 +48,3 @@ jobs:
         with:
           name: TestResults
           path: TestResults.xcresult
-
-  create-fix-issue:
-    needs: test
-    if: failure() && github.event_name == 'push'
-    uses: ./.github/workflows/create-test-failure-issue.yml
-    with:
-      test-type: Unit
-      label: unit-test-failure
-      scheme: AppCore
-      commit-sha: ${{ github.sha }}
-      run-id: ${{ github.run_id }}
