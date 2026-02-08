@@ -22,7 +22,7 @@ jobs:
 
       - name: Clean previous results
         run: |
-          rm -rf TestResults.xcresult
+          rm -rf TestResults-ja.xcresult TestResults-en.xcresult
           rm -rf /tmp/CIDerivedData
 
       - name: Create CI simulator
@@ -40,26 +40,39 @@ jobs:
           xcrun simctl boot "$CI_DEVICE_ID"
           echo "CI_DEVICE_ID=$CI_DEVICE_ID" >> "$GITHUB_ENV"
 
-      - name: Run tests
+      - name: Run tests (Japanese)
         run: |
           set -o pipefail
           xcodebuild test \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
+            -testConfiguration Japanese \
             -derivedDataPath /tmp/CIDerivedData \
-            -resultBundlePath TestResults.xcresult \
+            -resultBundlePath TestResults-ja.xcresult \
             -parallel-testing-enabled NO \
-            -retry-tests-on-failure \
-            -test-iterations 3 \
             CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path test-reports
+            2>&1 | xcbeautify --report junit --report-path test-reports-ja
+
+      - name: Run tests (English)
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project Tweakable.xcodeproj \
+            -scheme AppCore \
+            -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
+            -testConfiguration English \
+            -derivedDataPath /tmp/CIDerivedData \
+            -resultBundlePath TestResults-en.xcresult \
+            -parallel-testing-enabled NO \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | xcbeautify --report junit --report-path test-reports-en
 
       - name: Publish test results
         uses: mikepenz/action-junit-report@v5
         if: always()
         with:
-          report_paths: 'test-reports/junit.xml'
+          report_paths: 'test-reports-*/junit.xml'
           include_passed: true
           detailed_summary: true
           annotate_only: true
@@ -69,7 +82,9 @@ jobs:
         if: always()
         with:
           name: TestResults
-          path: TestResults.xcresult
+          path: |
+            TestResults-ja.xcresult
+            TestResults-en.xcresult
 
       - name: Delete CI simulator
         if: always()
