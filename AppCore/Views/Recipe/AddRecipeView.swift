@@ -130,7 +130,6 @@ struct AddRecipeView: View {
         onCloseTapped: {}
     )
     .prefireEnabled()
-    .snapshot(perceptualPrecision: 0.98)
 }
 
 #Preview("AddRecipe With URL") {
@@ -141,7 +140,6 @@ struct AddRecipeView: View {
         onCloseTapped: {}
     )
     .prefireEnabled()
-    .snapshot(perceptualPrecision: 0.98)
 }
 
 #Preview("AddRecipe Loading") {
@@ -152,5 +150,4 @@ struct AddRecipeView: View {
         onCloseTapped: {}
     )
     .prefireEnabled()
-    .snapshot(perceptualPrecision: 0.98)
 }
