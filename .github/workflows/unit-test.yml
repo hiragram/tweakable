@@ -20,14 +20,34 @@ jobs:
             brew install xcbeautify
           fi
 
+      - name: Clean previous results
+        run: |
+          rm -rf TestResults.xcresult
+          rm -rf /tmp/CIDerivedData
+
+      - name: Create CI simulator
+        run: |
+          xcrun simctl delete CI-iPhone-17-Pro 2>/dev/null || true
+          CI_DEVICE_ID=$(xcrun simctl create CI-iPhone-17-Pro \
+            com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro \
+            com.apple.CoreSimulator.SimRuntime.iOS-26-2)
+          xcrun simctl boot "$CI_DEVICE_ID"
+          sleep 5
+          xcrun simctl spawn "$CI_DEVICE_ID" defaults write .GlobalPreferences AppleLanguages -array ja en
+          xcrun simctl spawn "$CI_DEVICE_ID" defaults write .GlobalPreferences AppleLocale -string ja_JP
+          xcrun simctl shutdown "$CI_DEVICE_ID"
+          sleep 2
+          xcrun simctl boot "$CI_DEVICE_ID"
+          echo "CI_DEVICE_ID=$CI_DEVICE_ID" >> "$GITHUB_ENV"
+
       - name: Run tests
         run: |
           set -o pipefail
           xcodebuild test \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
-            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
-            -derivedDataPath /tmp/CIDerivedData \
+            -testPlan AppCore \
+            -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
             -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \
             CODE_SIGNING_ALLOWED=NO \
@@ -48,3 +68,8 @@ jobs:
         with:
           name: TestResults
           path: TestResults.xcresult
+
+      - name: Delete CI simulator
+        if: always()
+        run: |
+          xcrun simctl delete CI-iPhone-17-Pro 2>/dev/null || true
