@@ -70,6 +70,7 @@ struct RecipeHomeView: View {
 
     private var loadingView: some View {
         ProgressView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Empty View
@@ -111,6 +112,7 @@ struct RecipeHomeView: View {
 
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyView)
     }
 
