@@ -35,6 +35,8 @@ jobs:
             -derivedDataPath /tmp/CIDerivedData \
             -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \
+            -retry-tests-on-failure \
+            -test-iterations 3 \
             CODE_SIGNING_ALLOWED=NO \
             2>&1 | xcbeautify --report junit --report-path test-reports
 
