@@ -46,6 +46,7 @@ jobs:
           xcodebuild build-for-testing \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
+            -testPlan AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
             -derivedDataPath /tmp/CIDerivedData \
             -parallel-testing-enabled NO \
@@ -58,6 +59,7 @@ jobs:
           xcodebuild test-without-building \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
+            -testPlan AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
             -only-test-configuration Japanese \
             -derivedDataPath /tmp/CIDerivedData \
@@ -72,6 +74,7 @@ jobs:
           xcodebuild test-without-building \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
+            -testPlan AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
             -only-test-configuration English \
             -derivedDataPath /tmp/CIDerivedData \
