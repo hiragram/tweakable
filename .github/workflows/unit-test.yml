@@ -20,6 +20,11 @@ jobs:
             brew install xcbeautify
           fi
 
+      - name: Clean previous results
+        run: |
+          rm -rf TestResults.xcresult
+          rm -rf /tmp/CIDerivedData
+
       - name: Run tests
         run: |
           set -o pipefail
