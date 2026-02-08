@@ -31,7 +31,7 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:Tweakable.xcodeproj",
         "identifier" : "13421E21D638B9A2AF490E9D",

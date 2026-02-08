@@ -5,9 +5,11 @@
 # スナップショットテストのリファレンス画像を再生成するスクリプト
 #
 # 処理内容:
-# 1. スナップショットリファレンス画像のディレクトリを削除
-# 2. スナップショットテストを実行（リファレンス画像がないため失敗する）
-# 3. スナップショットテストを再実行（再生成された画像で成功するはず）
+# 1. スナップショット専用シミュレータを作成（日本語設定）
+# 2. スナップショットリファレンス画像のディレクトリを削除
+# 3. スナップショットテストを実行（リファレンス画像がないため失敗する）
+# 4. スナップショットテストを再実行（再生成された画像で成功するはず）
+# 5. 専用シミュレータを削除
 #
 
 set -e
@@ -16,10 +18,34 @@ cd "$(git rev-parse --show-toplevel)"
 
 SNAPSHOTS_DIR="AppCoreTests/__Snapshots__/PreviewTests"
 SCHEME="AppCore"
-DESTINATION="platform=iOS Simulator,name=iPhone 17 Pro"
 TEST_TARGET="AppCoreTests/PreviewTests"
+SIM_NAME="Snapshot-iPhone-17-Pro"
+DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro"
+RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-26-2"
+
+cleanup() {
+    echo ""
+    echo "シミュレータを削除しています..."
+    xcrun simctl delete "$SIM_NAME" 2>/dev/null || true
+}
+trap cleanup EXIT
 
 echo "=== スナップショットリファレンス画像の再生成 ==="
+echo ""
+
+# Step 0: 専用シミュレータを作成
+echo "Step 0: スナップショット専用シミュレータを作成しています..."
+xcrun simctl delete "$SIM_NAME" 2>/dev/null || true
+SIM_ID=$(xcrun simctl create "$SIM_NAME" "$DEVICE_TYPE" "$RUNTIME")
+xcrun simctl boot "$SIM_ID"
+sleep 5
+xcrun simctl spawn "$SIM_ID" defaults write .GlobalPreferences AppleLanguages -array ja en
+xcrun simctl spawn "$SIM_ID" defaults write .GlobalPreferences AppleLocale -string ja_JP
+xcrun simctl shutdown "$SIM_ID"
+sleep 2
+xcrun simctl boot "$SIM_ID"
+DESTINATION="platform=iOS Simulator,id=$SIM_ID"
+echo "  作成完了: $SIM_NAME ($SIM_ID)"
 echo ""
 
 # Step 1: リファレンス画像を削除
@@ -41,6 +67,7 @@ echo ""
 # テストを実行（失敗が期待されるため || true で継続）
 xcodebuild test \
     -scheme "$SCHEME" \
+    -testPlan AppCore \
     -destination "$DESTINATION" \
     -only-testing:"$TEST_TARGET" \
     2>&1 || true
@@ -55,6 +82,7 @@ echo ""
 
 xcodebuild test \
     -scheme "$SCHEME" \
+    -testPlan AppCore \
     -destination "$DESTINATION" \
     -only-testing:"$TEST_TARGET" \
     2>&1
