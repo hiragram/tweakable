@@ -67,6 +67,7 @@ echo ""
 # テストを実行（失敗が期待されるため || true で継続）
 xcodebuild test \
     -scheme "$SCHEME" \
+    -testPlan AppCore \
     -destination "$DESTINATION" \
     -only-testing:"$TEST_TARGET" \
     2>&1 || true
@@ -81,6 +82,7 @@ echo ""
 
 xcodebuild test \
     -scheme "$SCHEME" \
+    -testPlan AppCore \
     -destination "$DESTINATION" \
     -only-testing:"$TEST_TARGET" \
     2>&1
