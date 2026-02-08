@@ -10,6 +10,7 @@ import SwiftUI
 /// アプリのルートビュー
 public struct RootView: View {
     @State private var store: AppStore
+    @State private var imagePrefetchService = ImagePrefetchService()
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     /// UIテスト用: オンボーディングを強制的にスキップするフラグ
@@ -67,6 +68,9 @@ public struct RootView: View {
             OnboardingView(onComplete: {
                 hasCompletedOnboarding = true
             })
+            .onAppear {
+                imagePrefetchService.startPrefetchingSeedImages()
+            }
         } else {
             RecipeHomeContainerView(store: store)
         }
