@@ -16,7 +16,7 @@ cd "$(git rev-parse --show-toplevel)"
 
 SNAPSHOTS_DIR="AppCoreTests/__Snapshots__/PreviewTests"
 SCHEME="AppCore"
-DESTINATION="platform=iOS Simulator,name=iPhone 17 Pro"
+DESTINATION="platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2"
 TEST_TARGET="AppCoreTests/PreviewTests"
 
 echo "=== スナップショットリファレンス画像の再生成 ==="
