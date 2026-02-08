@@ -27,8 +27,10 @@ jobs:
 
       - name: Create CI simulator
         run: |
-          xcrun simctl delete CI-iPhone-17-Pro 2>/dev/null || true
-          CI_DEVICE_ID=$(xcrun simctl create CI-iPhone-17-Pro \
+          CI_SIM_NAME="CI-iPhone-17-Pro-${GITHUB_RUN_ID}"
+          echo "CI_SIM_NAME=$CI_SIM_NAME" >> "$GITHUB_ENV"
+          xcrun simctl delete "$CI_SIM_NAME" 2>/dev/null || true
+          CI_DEVICE_ID=$(xcrun simctl create "$CI_SIM_NAME" \
             com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro \
             com.apple.CoreSimulator.SimRuntime.iOS-26-2)
           xcrun simctl boot "$CI_DEVICE_ID"
@@ -51,16 +53,7 @@ jobs:
             -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \
             CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path test-reports
-
-      - name: Publish test results
-        uses: mikepenz/action-junit-report@v5
-        if: always()
-        with:
-          report_paths: 'test-reports/junit.xml'
-          include_passed: true
-          detailed_summary: true
-          annotate_only: true
+            2>&1 | xcbeautify
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -72,4 +65,4 @@ jobs:
       - name: Delete CI simulator
         if: always()
         run: |
-          xcrun simctl delete CI-iPhone-17-Pro 2>/dev/null || true
+          xcrun simctl delete "$CI_SIM_NAME" 2>/dev/null || true
