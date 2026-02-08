@@ -26,7 +26,7 @@ jobs:
           xcodebuild test \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
-            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2' \
             -derivedDataPath /tmp/CIDerivedData \
             -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \

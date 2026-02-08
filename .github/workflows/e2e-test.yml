@@ -28,7 +28,7 @@ jobs:
         with:
           project: Tweakable.xcodeproj
           scheme: TweakableUITests
-          destination: 'platform=iOS Simulator,name=iPhone 17 Pro'
+          destination: 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2'
           action: test
           result-bundle-path: E2ETestResults.xcresult
           build-settings: CODE_SIGNING_ALLOWED=NO
