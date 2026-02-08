@@ -22,7 +22,7 @@ jobs:
 
       - name: Clean previous results
         run: |
-          rm -rf TestResults-ja.xcresult TestResults-en.xcresult
+          rm -rf TestResults.xcresult
           rm -rf /tmp/CIDerivedData
 
       - name: Create CI simulator
@@ -40,54 +40,24 @@ jobs:
           xcrun simctl boot "$CI_DEVICE_ID"
           echo "CI_DEVICE_ID=$CI_DEVICE_ID" >> "$GITHUB_ENV"
 
-      - name: Build for testing
+      - name: Run tests
         run: |
           set -o pipefail
-          xcodebuild build-for-testing \
+          xcodebuild test \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
             -testPlan AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
-            -derivedDataPath /tmp/CIDerivedData \
+            -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \
             CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify
-
-      - name: Run tests (Japanese)
-        run: |
-          set -o pipefail
-          xcodebuild test-without-building \
-            -project Tweakable.xcodeproj \
-            -scheme AppCore \
-            -testPlan AppCore \
-            -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
-            -only-test-configuration Japanese \
-            -derivedDataPath /tmp/CIDerivedData \
-            -resultBundlePath TestResults-ja.xcresult \
-            -parallel-testing-enabled NO \
-            CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path test-reports-ja
-
-      - name: Run tests (English)
-        run: |
-          set -o pipefail
-          xcodebuild test-without-building \
-            -project Tweakable.xcodeproj \
-            -scheme AppCore \
-            -testPlan AppCore \
-            -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
-            -only-test-configuration English \
-            -derivedDataPath /tmp/CIDerivedData \
-            -resultBundlePath TestResults-en.xcresult \
-            -parallel-testing-enabled NO \
-            CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path test-reports-en
+            2>&1 | xcbeautify --report junit --report-path test-reports
 
       - name: Publish test results
         uses: mikepenz/action-junit-report@v5
         if: always()
         with:
-          report_paths: 'test-reports-*/junit.xml'
+          report_paths: 'test-reports/junit.xml'
           include_passed: true
           detailed_summary: true
           annotate_only: true
@@ -97,9 +67,7 @@ jobs:
         if: always()
         with:
           name: TestResults
-          path: |
-            TestResults-ja.xcresult
-            TestResults-en.xcresult
+          path: TestResults.xcresult
 
       - name: Delete CI simulator
         if: always()
