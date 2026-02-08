@@ -162,8 +162,11 @@ struct AppStorePremiumTests {
         // Act
         store.send(.recipe(.loadRecipe(url: url)))
 
-        // 副作用が実行されるまで待機
-        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+        // 副作用チェーン（extractRecipe → recipeLoaded → saveRecipe）が完了するまでポーリング
+        for _ in 0..<20 {
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
+            if mockPersistenceService.saveRecipeCallCount >= 1 { break }
+        }
 
         // Assert
         #expect(mockPersistenceService.saveRecipeCallCount == 1)
@@ -193,8 +196,11 @@ struct AppStorePremiumTests {
         // Act
         store.send(.recipe(.loadRecipe(url: url)))
 
-        // 副作用が実行されるまで待機
-        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+        // 副作用チェーン（extractRecipe → recipeLoaded → saveRecipe → recipeSaveFailed）が完了するまでポーリング
+        for _ in 0..<20 {
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
+            if mockPersistenceService.saveRecipeCallCount >= 1 { break }
+        }
 
         // Assert - レシピは読み込まれている
         #expect(store.state.recipe.currentRecipe != nil)
@@ -229,8 +235,11 @@ struct AppStorePremiumTests {
         // Act - 置き換えを承認
         store.send(.recipe(.approveSubstitution))
 
-        // 副作用が実行されるまで待機
-        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms
+        // 副作用チェーン（approveSubstitution → saveRecipe）が完了するまでポーリング
+        for _ in 0..<20 {
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
+            if mockPersistenceService.saveRecipeCallCount >= 1 { break }
+        }
 
         // Assert - 自動保存が呼ばれる
         #expect(mockPersistenceService.saveRecipeCallCount == 1)
