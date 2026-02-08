@@ -322,4 +322,66 @@ struct ShoppingListReducerTests {
 
         #expect(state.errorMessage == nil)
     }
+
+    // MARK: - Additional Edge Case Tests
+
+    @Test
+    func reduce_shoppingListCreated_appendsToExistingLists() {
+        var state = ShoppingListState()
+        let existingList = makeSampleShoppingList(name: "既存リスト")
+        state.shoppingLists = [existingList]
+        state.isCreatingList = true
+        let newList = makeSampleShoppingList(name: "新しいリスト")
+
+        ShoppingListReducer.reduce(state: &state, action: .shoppingListCreated(newList))
+
+        #expect(state.shoppingLists.count == 2)
+        #expect(state.shoppingLists.contains { $0.id == existingList.id })
+        #expect(state.shoppingLists.contains { $0.id == newList.id })
+    }
+
+    @Test
+    func reduce_itemCheckedUpdated_uncheckPreviouslyCheckedItem() {
+        var state = ShoppingListState()
+        let itemID = UUID()
+        let item = ShoppingListItemDTO(
+            id: itemID,
+            name: "鶏肉",
+            totalAmount: "200g",
+            category: nil,
+            isChecked: true, // 既にチェック済み
+            breakdowns: []
+        )
+        let list = ShoppingListDTO(
+            id: UUID(),
+            name: "テスト",
+            createdAt: Date(),
+            updatedAt: Date(),
+            recipeIDs: [],
+            items: [item]
+        )
+        state.currentShoppingList = list
+        state.isUpdatingItem = true
+
+        ShoppingListReducer.reduce(state: &state, action: .itemCheckedUpdated(itemID: itemID, isChecked: false))
+
+        #expect(state.currentShoppingList?.items.first { $0.id == itemID }?.isChecked == false)
+    }
+
+    @Test
+    func reduce_shoppingListDeleted_fromMultipleLists_onlyRemovesTarget() {
+        var state = ShoppingListState()
+        let list1 = makeSampleShoppingList(id: UUID(), name: "リスト1")
+        let list2 = makeSampleShoppingList(id: UUID(), name: "リスト2")
+        let list3 = makeSampleShoppingList(id: UUID(), name: "リスト3")
+        state.shoppingLists = [list1, list2, list3]
+        state.isDeletingList = true
+
+        ShoppingListReducer.reduce(state: &state, action: .shoppingListDeleted(id: list2.id))
+
+        #expect(state.shoppingLists.count == 2)
+        #expect(state.shoppingLists.contains { $0.id == list1.id })
+        #expect(!state.shoppingLists.contains { $0.id == list2.id })
+        #expect(state.shoppingLists.contains { $0.id == list3.id })
+    }
 }

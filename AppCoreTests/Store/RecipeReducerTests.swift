@@ -1296,4 +1296,229 @@ struct RecipeReducerTests {
 
         #expect(state.uncategorizedRecipes.count == 2)
     }
+
+    // MARK: - Full Substitution Flow Tests
+
+    @Test
+    func fullSubstitutionFlow_requestPreviewApprove_updatesCurrentRecipe() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+
+        // 1. シートを開く
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
+        RecipeReducer.reduce(state: &state, action: .openSubstitutionSheet(ingredient: targetIngredient))
+        #expect(state.substitutionTarget != nil)
+        #expect(state.originalRecipeSnapshot == recipe)
+
+        // 2. 置き換えリクエスト
+        RecipeReducer.reduce(state: &state, action: .requestSubstitution(prompt: "鶏肉を豚肉に"))
+        #expect(state.isProcessingSubstitution == true)
+
+        // 3. プレビュー準備完了
+        var modifiedRecipe = makeSampleRecipe()
+        // modifiedRecipeの材料を変更したバージョンを作成
+        modifiedRecipe.ingredientsInfo.sections[0].items[0] = Ingredient(name: "豚肉", amount: "200g", isModified: true)
+        RecipeReducer.reduce(state: &state, action: .substitutionPreviewReady(modifiedRecipe))
+        #expect(state.previewRecipe != nil)
+        #expect(state.substitutionSheetMode == .preview)
+        #expect(state.isProcessingSubstitution == false)
+
+        // 4. 承認
+        RecipeReducer.reduce(state: &state, action: .approveSubstitution)
+        #expect(state.currentRecipe != nil)
+        #expect(state.substitutionTarget == nil)
+        #expect(state.previewRecipe == nil)
+        #expect(state.originalRecipeSnapshot == nil)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func fullSubstitutionFlow_requestPreviewReject_restoresState() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
+        RecipeReducer.reduce(state: &state, action: .openSubstitutionSheet(ingredient: targetIngredient))
+        RecipeReducer.reduce(state: &state, action: .requestSubstitution(prompt: "鶏肉を豚肉に"))
+
+        var modifiedRecipe = makeSampleRecipe()
+        modifiedRecipe.ingredientsInfo.sections[0].items[0] = Ingredient(name: "豚肉", amount: "200g", isModified: true)
+        RecipeReducer.reduce(state: &state, action: .substitutionPreviewReady(modifiedRecipe))
+
+        // 拒否
+        RecipeReducer.reduce(state: &state, action: .rejectSubstitution)
+
+        #expect(state.currentRecipe == recipe) // 元のレシピのまま
+        #expect(state.substitutionTarget == nil)
+        #expect(state.previewRecipe == nil)
+        #expect(state.originalRecipeSnapshot == nil)
+        #expect(state.substitutionSheetMode == .input)
+    }
+
+    @Test
+    func fullSubstitutionFlow_additionalSubstitution_keepsPreviewUntilNewReady() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
+        RecipeReducer.reduce(state: &state, action: .openSubstitutionSheet(ingredient: targetIngredient))
+        RecipeReducer.reduce(state: &state, action: .requestSubstitution(prompt: "鶏肉を豚肉に"))
+
+        var modifiedRecipe = makeSampleRecipe()
+        modifiedRecipe.ingredientsInfo.sections[0].items[0] = Ingredient(name: "豚肉", amount: "200g", isModified: true)
+        RecipeReducer.reduce(state: &state, action: .substitutionPreviewReady(modifiedRecipe))
+        #expect(state.previewRecipe != nil)
+
+        // 追加置き換えリクエスト
+        RecipeReducer.reduce(state: &state, action: .requestAdditionalSubstitution(prompt: "さらに塩を減らして"))
+        #expect(state.isProcessingSubstitution == true)
+        #expect(state.substitutionSheetMode == .input)
+        // previewRecipeは保持される（新しいpreviewReadyが来るまで）
+        #expect(state.previewRecipe != nil)
+    }
+
+    @Test
+    func fullSubstitutionFlow_errorDuringRequest_keepsSheetOpenForRetry() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+
+        let targetIngredient = recipe.ingredientsInfo.allItems[0]
+        RecipeReducer.reduce(state: &state, action: .openSubstitutionSheet(ingredient: targetIngredient))
+        let originalTarget = state.substitutionTarget
+
+        RecipeReducer.reduce(state: &state, action: .requestSubstitution(prompt: "鶏肉を豚肉に"))
+
+        // エラー発生
+        RecipeReducer.reduce(state: &state, action: .substitutionFailed("API呼び出しに失敗しました"))
+
+        // シートは開いたまま（リトライ可能）
+        #expect(state.substitutionTarget == originalTarget)
+        #expect(state.errorMessage == "API呼び出しに失敗しました")
+        #expect(state.isProcessingSubstitution == false)
+
+        // 再度リクエスト可能
+        RecipeReducer.reduce(state: &state, action: .requestSubstitution(prompt: "鶏肉を牛肉に"))
+        #expect(state.isProcessingSubstitution == true)
+        #expect(state.errorMessage == nil)
+    }
+
+    @Test
+    func approveSubstitution_whenPreviewRecipeIsNil_doesNotChangeCurrent() {
+        var state = RecipeState()
+        let recipe = makeSampleRecipe()
+        state.currentRecipe = recipe
+        state.previewRecipe = nil // 明示的にnil
+
+        RecipeReducer.reduce(state: &state, action: .approveSubstitution)
+
+        #expect(state.currentRecipe == recipe) // 変更なし
+    }
+
+    // MARK: - Computed Properties Edge Case Tests
+
+    @Test
+    func uncategorizedRecipes_recipeInMultipleCategories_isNotUncategorized() {
+        var state = RecipeState()
+        let recipe1 = makeSampleRecipe()
+        let recipe2 = Recipe(
+            title: "別のレシピ",
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "トマト", amount: "2個")])]),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "切る")])]
+        )
+        state.savedRecipes = [recipe1, recipe2]
+
+        let cat1 = UUID()
+        let cat2 = UUID()
+        state.categoryRecipeMap = [
+            cat1: [recipe1.id],
+            cat2: [recipe1.id, recipe2.id]
+        ]
+
+        let uncategorized = state.uncategorizedRecipes
+        #expect(uncategorized.isEmpty)
+    }
+
+    @Test
+    func searchResults_matchesIngredientInSecondSection_returnsResult() {
+        var state = RecipeState()
+        let recipe = Recipe(
+            title: "テスト",
+            ingredientsInfo: Ingredients(
+                sections: [
+                    IngredientSection(header: "メイン", items: [Ingredient(name: "鶏肉", amount: "200g")]),
+                    IngredientSection(header: "ソース", items: [Ingredient(name: "にんにく", amount: "2片")])
+                ]
+            ),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "炒める")])]
+        )
+        state.savedRecipes = [recipe]
+        state.searchQuery = "にんにく"
+
+        let results = state.searchResults
+        #expect(results.count == 1)
+        #expect(results[0].matchFields.contains(.ingredients))
+    }
+
+    @Test
+    func searchResults_matchesStepInSecondSection_returnsResult() {
+        var state = RecipeState()
+        let recipe = Recipe(
+            title: "テスト",
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "鶏肉", amount: "200g")])]),
+            stepSections: [
+                CookingStepSection(header: "下準備", items: [CookingStep(stepNumber: 1, instruction: "材料を洗う")]),
+                CookingStepSection(header: "調理", items: [CookingStep(stepNumber: 2, instruction: "フライパンで炒める")])
+            ]
+        )
+        state.savedRecipes = [recipe]
+        state.searchQuery = "フライパン"
+
+        let results = state.searchResults
+        #expect(results.count == 1)
+        #expect(results[0].matchFields.contains(.steps))
+    }
+
+    @Test
+    func filteredRecipes_withNonExistentCategoryFilter_returnsEmpty() {
+        var state = RecipeState()
+        state.savedRecipes = [makeSampleRecipe()]
+        state.selectedCategoryFilter = UUID() // 存在しないカテゴリID
+        state.categoryRecipeMap = [:] // 空マップ
+
+        #expect(state.filteredRecipes.isEmpty)
+    }
+
+    @Test
+    func searchResultCategoryCounts_countsCorrectly() {
+        var state = RecipeState()
+        let recipe1 = makeSampleRecipe()
+        let recipe2 = Recipe(
+            title: "鶏肉のグリル",
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "鶏肉", amount: "300g")])]),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "焼く")])]
+        )
+        let recipe3 = Recipe(
+            title: "サラダ",
+            ingredientsInfo: Ingredients(sections: [IngredientSection(items: [Ingredient(name: "レタス", amount: "1個")])]),
+            stepSections: [CookingStepSection(items: [CookingStep(stepNumber: 1, instruction: "盛り付ける")])]
+        )
+        state.savedRecipes = [recipe1, recipe2, recipe3]
+        state.searchQuery = "鶏肉"
+
+        let catA = UUID()
+        let catB = UUID()
+        state.categoryRecipeMap = [
+            catA: [recipe1.id, recipe2.id],
+            catB: [recipe3.id]
+        ]
+
+        let counts = state.searchResultCategoryCounts
+        // recipe1("テスト料理" ingredientに鶏肉含む) と recipe2("鶏肉のグリル" titleとingredientに鶏肉含む) がヒット
+        #expect(counts[catA] == 2)
+        #expect(counts[catB] == 0)
+    }
 }
