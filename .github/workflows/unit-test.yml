@@ -40,14 +40,26 @@ jobs:
           xcrun simctl boot "$CI_DEVICE_ID"
           echo "CI_DEVICE_ID=$CI_DEVICE_ID" >> "$GITHUB_ENV"
 
-      - name: Run tests (Japanese)
+      - name: Build for testing
         run: |
           set -o pipefail
-          xcodebuild test \
+          xcodebuild build-for-testing \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
-            -testConfiguration Japanese \
+            -derivedDataPath /tmp/CIDerivedData \
+            -parallel-testing-enabled NO \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | xcbeautify
+
+      - name: Run tests (Japanese)
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project Tweakable.xcodeproj \
+            -scheme AppCore \
+            -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
+            -only-test-configuration Japanese \
             -derivedDataPath /tmp/CIDerivedData \
             -resultBundlePath TestResults-ja.xcresult \
             -parallel-testing-enabled NO \
@@ -57,11 +69,11 @@ jobs:
       - name: Run tests (English)
         run: |
           set -o pipefail
-          xcodebuild test \
+          xcodebuild test-without-building \
             -project Tweakable.xcodeproj \
             -scheme AppCore \
             -destination "platform=iOS Simulator,id=$CI_DEVICE_ID" \
-            -testConfiguration English \
+            -only-test-configuration English \
             -derivedDataPath /tmp/CIDerivedData \
             -resultBundlePath TestResults-en.xcresult \
             -parallel-testing-enabled NO \
