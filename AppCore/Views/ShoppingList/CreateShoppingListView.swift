@@ -273,4 +273,5 @@ struct CreateShoppingListView: View {
         onCancelTapped: {}
     )
     .prefireEnabled()
+    .snapshot(perceptualPrecision: 0.98)
 }
