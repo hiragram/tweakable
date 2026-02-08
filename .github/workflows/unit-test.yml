@@ -51,16 +51,7 @@ jobs:
             -resultBundlePath TestResults.xcresult \
             -parallel-testing-enabled NO \
             CODE_SIGNING_ALLOWED=NO \
-            2>&1 | xcbeautify --report junit --report-path test-reports
-
-      - name: Publish test results
-        uses: mikepenz/action-junit-report@v5
-        if: always()
-        with:
-          report_paths: 'test-reports/junit.xml'
-          include_passed: true
-          detailed_summary: true
-          annotate_only: true
+            2>&1 | xcbeautify
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
