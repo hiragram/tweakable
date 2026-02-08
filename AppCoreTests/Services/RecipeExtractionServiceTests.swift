@@ -178,4 +178,153 @@ struct RecipeExtractionServiceTests {
             }
         }
     }
+
+    // MARK: - substituteRecipe Tests
+
+    @Test
+    func substituteRecipe_success_returnsRecipe() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html></html>")
+        let originalRecipe = makeMockRecipe()
+        let expectedRecipe = Recipe(
+            title: "置き換え後レシピ",
+            description: "置き換え後の説明",
+            imageURLs: [.remote(url: URL(string: "https://example.com/image.jpg")!)],
+            ingredientsInfo: Ingredients(
+                servings: "2人分",
+                sections: [
+                    IngredientSection(items: [
+                        Ingredient(name: "かぼちゃ", amount: "1/4個"),
+                        Ingredient(name: "にんじん", amount: "1本")
+                    ])
+                ]
+            ),
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(stepNumber: 1, instruction: "野菜を切る"),
+                    CookingStep(stepNumber: 2, instruction: "炒める")
+                ])
+            ],
+            sourceURL: URL(string: "https://example.com/recipe")
+        )
+        let mockOpenAI = MockOpenAIClient(recipe: originalRecipe)
+        mockOpenAI.substitutedRecipe = expectedRecipe
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let target = SubstitutionTarget.ingredient(originalRecipe.ingredientsInfo.allItems[0])
+
+        // Act
+        let result = try await service.substituteRecipe(
+            recipe: originalRecipe,
+            target: target,
+            prompt: "玉ねぎをかぼちゃに"
+        )
+
+        // Assert
+        #expect(result.title == expectedRecipe.title)
+        #expect(mockOpenAI.substituteRecipeCallCount == 1)
+    }
+
+    @Test
+    func substituteRecipe_apiKeyNotConfigured_throwsApiKeyNotConfiguredError() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html></html>")
+        let originalRecipe = makeMockRecipe()
+        let mockOpenAI = MockOpenAIClient(recipe: originalRecipe)
+        mockOpenAI.substitutionError = .apiKeyNotConfigured
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let target = SubstitutionTarget.ingredient(originalRecipe.ingredientsInfo.allItems[0])
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.apiKeyNotConfigured) {
+            try await service.substituteRecipe(
+                recipe: originalRecipe,
+                target: target,
+                prompt: "置き換えて"
+            )
+        }
+    }
+
+    @Test
+    func substituteRecipe_otherError_throwsExtractionFailed() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html></html>")
+        let originalRecipe = makeMockRecipe()
+        let mockOpenAI = MockOpenAIClient(recipe: originalRecipe)
+        mockOpenAI.substitutionError = .noResponseContent
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let target = SubstitutionTarget.ingredient(originalRecipe.ingredientsInfo.allItems[0])
+
+        // Act & Assert
+        do {
+            _ = try await service.substituteRecipe(
+                recipe: originalRecipe,
+                target: target,
+                prompt: "置き換えて"
+            )
+            Issue.record("Expected error to be thrown")
+        } catch {
+            if case RecipeExtractionError.extractionFailed = error {
+                // Expected
+            } else if case RecipeExtractionError.apiKeyNotConfigured = error {
+                Issue.record("Expected extractionFailed, but got apiKeyNotConfigured")
+            } else {
+                Issue.record("Unexpected error type: \(error)")
+            }
+        }
+    }
+
+    @Test
+    func substituteRecipe_passesCorrectTargetAndPrompt() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html></html>")
+        let originalRecipe = makeMockRecipe()
+        let mockOpenAI = MockOpenAIClient(recipe: originalRecipe)
+        mockOpenAI.substitutedRecipe = originalRecipe
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let targetIngredient = originalRecipe.ingredientsInfo.allItems[0]
+        let target = SubstitutionTarget.ingredient(targetIngredient)
+        let prompt = "玉ねぎをかぼちゃに変えて"
+
+        // Act
+        _ = try await service.substituteRecipe(
+            recipe: originalRecipe,
+            target: target,
+            prompt: prompt
+        )
+
+        // Assert
+        #expect(mockOpenAI.substituteRecipeCallCount == 1)
+        #expect(mockOpenAI.lastSubstitutionPrompt == prompt)
+        let lastCall = mockOpenAI.substituteRecipeCalls.last
+        #expect(lastCall?.target == target)
+        #expect(lastCall?.targetLanguage != nil)
+    }
 }
