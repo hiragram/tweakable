@@ -2,9 +2,14 @@ import Foundation
 
 /// レシピ抽出サービスのエラー
 public enum RecipeExtractionError: Error, Sendable, Equatable {
-    case htmlFetchFailed(String)
+    /// HTML取得に失敗（ネットワークエラー、HTTPエラー、不正なURL等）
+    case htmlFetchFailed(HTMLFetcherError)
+    /// APIキーが設定されていない
     case apiKeyNotConfigured
+    /// レシピの解析に失敗
     case extractionFailed(String)
+    /// API使用量の上限に達した
+    case quotaExceeded
 }
 
 /// レシピ抽出サービスのプロトコル

@@ -6,6 +6,8 @@ public enum OpenAIClientError: Error, Sendable, Equatable {
     case networkError(String)
     case noResponseContent
     case decodingError(String)
+    /// API使用量の上限に達した（OpenAI APIのinsufficient_quota）
+    case quotaExceeded
 }
 
 /// OpenAIクライアントのプロトコル

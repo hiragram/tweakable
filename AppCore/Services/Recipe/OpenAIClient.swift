@@ -309,6 +309,8 @@ public struct OpenAIClient: OpenAIClientProtocol, Sendable {
     private func executeQuery(openAI: OpenAI, query: ChatQuery) async throws -> ChatResult {
         do {
             return try await openAI.chats(query: query)
+        } catch let apiError as APIError where apiError.code == "insufficient_quota" {
+            throw OpenAIClientError.quotaExceeded
         } catch {
             #if DEBUG
             print("OpenAI API error: \(error)")

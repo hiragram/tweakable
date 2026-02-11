@@ -21,8 +21,10 @@ public struct RecipeExtractionService: RecipeExtractionServiceProtocol, Sendable
         let html: String
         do {
             html = try await htmlFetcher.fetchHTML(from: url)
+        } catch let error as HTMLFetcherError {
+            throw RecipeExtractionError.htmlFetchFailed(error)
         } catch {
-            throw RecipeExtractionError.htmlFetchFailed(error.localizedDescription)
+            throw RecipeExtractionError.htmlFetchFailed(.networkError(error.localizedDescription))
         }
 
         // 2. 端末の言語設定を取得
@@ -38,6 +40,8 @@ public struct RecipeExtractionService: RecipeExtractionServiceProtocol, Sendable
             )
         } catch let error as OpenAIClientError where error == .apiKeyNotConfigured {
             throw RecipeExtractionError.apiKeyNotConfigured
+        } catch let error as OpenAIClientError where error == .quotaExceeded {
+            throw RecipeExtractionError.quotaExceeded
         } catch {
             throw RecipeExtractionError.extractionFailed(error.localizedDescription)
         }
@@ -60,6 +64,8 @@ public struct RecipeExtractionService: RecipeExtractionServiceProtocol, Sendable
             )
         } catch let error as OpenAIClientError where error == .apiKeyNotConfigured {
             throw RecipeExtractionError.apiKeyNotConfigured
+        } catch let error as OpenAIClientError where error == .quotaExceeded {
+            throw RecipeExtractionError.quotaExceeded
         } catch {
             throw RecipeExtractionError.extractionFailed(error.localizedDescription)
         }
