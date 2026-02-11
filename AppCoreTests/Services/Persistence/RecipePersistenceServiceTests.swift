@@ -87,6 +87,50 @@ struct RecipePersistenceServiceTests {
     }
 
     @Test
+    func loadAllRecipes_sortedByUpdatedAtDescending() async throws {
+        let service = try makeService()
+        let recipe1 = makeSampleRecipe(title: "古いレシピ")
+        let recipe2 = makeSampleRecipe(title: "新しいレシピ")
+
+        // recipe1を先に保存（updatedAtが古い）
+        try await service.saveRecipe(recipe1)
+        // 少し待ってからrecipe2を保存（updatedAtが新しい）
+        try await Task.sleep(for: .milliseconds(50))
+        try await service.saveRecipe(recipe2)
+
+        let all = try await service.loadAllRecipes()
+        #expect(all.count == 2)
+        #expect(all[0].title == "新しいレシピ")
+        #expect(all[1].title == "古いレシピ")
+    }
+
+    @Test
+    func loadAllRecipes_updatedRecipeComesFirst() async throws {
+        let service = try makeService()
+        let recipe1 = makeSampleRecipe(title: "レシピ1")
+        let recipe2 = makeSampleRecipe(title: "レシピ2")
+
+        try await service.saveRecipe(recipe1)
+        try await Task.sleep(for: .milliseconds(50))
+        try await service.saveRecipe(recipe2)
+
+        // recipe1を更新 → updatedAtが最新になる
+        try await Task.sleep(for: .milliseconds(50))
+        let updated1 = Recipe(
+            id: recipe1.id,
+            title: "レシピ1（更新）",
+            ingredientsInfo: recipe1.ingredientsInfo,
+            stepSections: recipe1.stepSections
+        )
+        try await service.saveRecipe(updated1)
+
+        let all = try await service.loadAllRecipes()
+        #expect(all.count == 2)
+        #expect(all[0].title == "レシピ1（更新）")
+        #expect(all[1].title == "レシピ2")
+    }
+
+    @Test
     func deleteRecipe_removesRecipe() async throws {
         let service = try makeService()
         let recipe = makeSampleRecipe()

@@ -123,7 +123,7 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
     public func loadAllRecipes() async throws -> [Recipe] {
         let context = modelContainer.mainContext
         let descriptor = FetchDescriptor<PersistedRecipe>(
-            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+            sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
         )
         let persisted = try context.fetch(descriptor)
         return persisted.map { $0.toDomain() }

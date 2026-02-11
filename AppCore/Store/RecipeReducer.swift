@@ -91,12 +91,11 @@ public enum RecipeReducer {
             break
 
         case .recipeSaved(let recipe):
-            // 既存のレシピを更新、なければ追加
+            // 既存のレシピがあれば削除してから先頭に挿入（updatedAt DESC順を維持）
             if let index = state.savedRecipes.firstIndex(where: { $0.id == recipe.id }) {
-                state.savedRecipes[index] = recipe
-            } else {
-                state.savedRecipes.append(recipe)
+                state.savedRecipes.remove(at: index)
             }
+            state.savedRecipes.insert(recipe, at: 0)
 
         case .recipeSaveFailed(let message):
             state.errorMessage = message
