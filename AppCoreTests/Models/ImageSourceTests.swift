@@ -59,6 +59,22 @@ struct ImageSourceTests {
         #expect(source1 != source2)
     }
 
+    // MARK: - Equality Tests (bundled)
+
+    @Test
+    func bundled_sameName_isEqual() {
+        let source1 = ImageSource.bundled(name: "seed-shakshuka")
+        let source2 = ImageSource.bundled(name: "seed-shakshuka")
+        #expect(source1 == source2)
+    }
+
+    @Test
+    func bundled_differentName_isNotEqual() {
+        let source1 = ImageSource.bundled(name: "seed-shakshuka")
+        let source2 = ImageSource.bundled(name: "seed-chicken-tikka")
+        #expect(source1 != source2)
+    }
+
     // MARK: - Cross-case Equality Tests
 
     @Test
@@ -76,6 +92,20 @@ struct ImageSourceTests {
         let remote = ImageSource.remote(url: url)
         let uiImage = ImageSource.uiImage(UIImage())
         #expect(remote != uiImage)
+    }
+
+    @Test
+    func bundled_and_remote_isNotEqual() {
+        let bundled = ImageSource.bundled(name: "seed-shakshuka")
+        let remote = ImageSource.remote(url: URL(string: "https://example.com/image.jpg")!)
+        #expect(bundled != remote)
+    }
+
+    @Test
+    func bundled_and_uiImage_isNotEqual() {
+        let bundled = ImageSource.bundled(name: "seed-shakshuka")
+        let uiImage = ImageSource.uiImage(UIImage())
+        #expect(bundled != uiImage)
     }
 
     // MARK: - previewPlaceholder Tests

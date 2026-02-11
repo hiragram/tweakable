@@ -6,7 +6,7 @@ extension SeedData {
             id: UUID(uuidString: "BF150F53-89A1-4087-8EA1-0A13A0A0792C")!,
             title: "Spicy Thai Beef Larb",
             description: "A Thai salad jam-packed with tons of great flavors and textures. The ground toasted rice adds a nutty flavor and helps the sauce adhere to the protein.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/08/Spicy-Thai-Beef-Larb-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-spicy-thai-beef-larb")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [IngredientSection(items: [
@@ -39,7 +39,7 @@ extension SeedData {
             id: UUID(uuidString: "9682B83C-13B0-43FE-A99B-8C67489920D3")!,
             title: "Coconut Smoothie Bowl (Homemade Playa Bowls)",
             description: "A thick and creamy coconut smoothie bowl topped with fresh berries, granola, and coconut flakes — a tropical breakfast that feels like vacation.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Coconut-Smoothie-Bowl-4x5-1Coconut-Smoothie-Bowl-4x5-1-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-coconut-smoothie-bowl")],
             ingredientsInfo: Ingredients(
                 servings: "Serves 4",
                 sections: [IngredientSection(items: [
@@ -65,7 +65,7 @@ extension SeedData {
             id: UUID(uuidString: "3EFBCECD-22A7-496A-8EB9-960E512C744C")!,
             title: "Shakshuka",
             description: "A classic North African dish of eggs poached in a richly spiced tomato sauce, topped with feta and cilantro. Especially popular in Israel as a breakfast staple.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Shakshuka-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-shakshuka")],
             ingredientsInfo: Ingredients(
                 servings: "Serves 1",
                 sections: [IngredientSection(items: [
@@ -100,7 +100,7 @@ extension SeedData {
             id: UUID(uuidString: "34DD05D2-BBB7-448A-83F9-E5EBF0203385")!,
             title: "Impossible™ Chorizo Nachos",
             description: "Loaded nachos topped with melted cheese, guacamole, salsa, sour cream, and a spicy chorizo crumble made from Impossible Burger.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Impossible-Churizo-Nachos-1-LOW-RES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-impossible-chorizo-nachos")],
             ingredientsInfo: Ingredients(
                 servings: "1 serving",
                 sections: [IngredientSection(items: [
@@ -150,7 +150,7 @@ extension SeedData {
             id: UUID(uuidString: "27CE6371-C411-4E56-9570-2849D8967E11")!,
             title: "Easy Chocolate Chip Pancakes",
             description: "Fluffy homemade pancakes loaded with chocolate chips. Ready in minutes and perfect for a weekend breakfast.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Chocolate-Chip-Pancakes-LOW-RES.jpeg")!)],
+            imageURLs: [.bundled(name: "seed-chocolate-chip-pancakes")],
             ingredientsInfo: Ingredients(
                 servings: "1 serving",
                 sections: [IngredientSection(items: [
@@ -178,7 +178,7 @@ extension SeedData {
             id: UUID(uuidString: "DCBB31A1-52DA-44CB-AB9F-6E5CC9CA101B")!,
             title: "Irish Colcannon",
             description: "A traditional Irish mashed potato dish loaded with butter and cream, with fresh kale and scallions mixed in for crunch, brightness, and beautiful color.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/12/Eitan-Bernath-Irish-Colcannon-.jpg")!)],
+            imageURLs: [.bundled(name: "seed-irish-colcannon")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [
@@ -206,7 +206,7 @@ extension SeedData {
             id: UUID(uuidString: "646F7CC0-236A-4EC0-9EE2-0754D133262E")!,
             title: "Watermelon Lemonade Slushie",
             description: "A refreshing frozen drink that layers vibrant watermelon slushie with homemade lemonade ice for the perfect summer treat.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Watermelon-Lemonade-Slushie.jpg")!)],
+            imageURLs: [.bundled(name: "seed-watermelon-lemonade-slushie")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [
@@ -230,7 +230,7 @@ extension SeedData {
             id: UUID(uuidString: "C39BE14C-A122-4C93-9943-7C297902DE7D")!,
             title: "Mocha Cupcakes with Cookies 'n Cream Frosting",
             description: "Rich chocolate-coffee cupcakes topped with a fluffy vanilla buttercream frosting loaded with crushed Oreos.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Mocha-Cupcake-with-Cookies-N-Cream-Frosting.jpg")!)],
+            imageURLs: [.bundled(name: "seed-mocha-cupcakes")],
             ingredientsInfo: Ingredients(
                 servings: "24 cupcakes",
                 sections: [IngredientSection(items: [
@@ -273,7 +273,7 @@ extension SeedData {
             id: UUID(uuidString: "A94CC7B4-6001-4B56-BB5E-2E25889120B4")!,
             title: "Mango Pomegranate Pistachio Squares",
             description: "A stunning three-layer dessert with a nutty pistachio crust, creamy mango curd filling, and tart pomegranate jelly topping. Can be prepared hours ahead for easy entertaining.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Mango-Pomegranate-Pistachio-Squares.jpg")!)],
+            imageURLs: [.bundled(name: "seed-mango-pomegranate-pistachio")],
             ingredientsInfo: Ingredients(
                 servings: "9 servings",
                 sections: [IngredientSection(items: [
@@ -309,7 +309,7 @@ extension SeedData {
             id: UUID(uuidString: "325A6995-3A17-4804-B0C6-86D29E0812EC")!,
             title: "BBQ Pastrami Grilled Pizza",
             description: "A grilled pizza topped with caramelized pastrami and beef bacon in honey BBQ sauce, finished with fresh arugula.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-BBQ-Pastrami-Grilled-Pizza.jpg")!)],
+            imageURLs: [.bundled(name: "seed-bbq-pastrami-pizza")],
             ingredientsInfo: Ingredients(
                 servings: "6 servings",
                 sections: [IngredientSection(items: [
@@ -337,7 +337,7 @@ extension SeedData {
             id: UUID(uuidString: "CCB4F25F-9A1E-42F2-9C81-CD8680D59D46")!,
             title: "Tomato Melon Panzanella",
             description: "A vibrant bread salad featuring ripe heirloom tomatoes, fresh melon, and toasted sourdough. The tomato juice released during salting becomes the base of a balsamic vinaigrette.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Tomato-Melon-Panzanella.jpg")!)],
+            imageURLs: [.bundled(name: "seed-tomato-melon-panzanella")],
             ingredientsInfo: Ingredients(
                 servings: "6-8 servings",
                 sections: [IngredientSection(items: [
@@ -367,7 +367,7 @@ extension SeedData {
             id: UUID(uuidString: "2499E2A0-EBEE-4B86-968E-C5AAC9FB7242")!,
             title: "Parmesan Truffle Fries with Quick Garlic Aioli",
             description: "Crispy double-fried matchstick potatoes tossed with Parmesan, basil, and truffle oil, served with a rich homemade garlic aioli.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/04/Parmesan-Truffle-Fries-With-Roasted-Garlic-Aioli-4x5-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-parmesan-truffle-fries")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [
@@ -403,7 +403,7 @@ extension SeedData {
             id: UUID(uuidString: "9DB3BCA1-D26F-40AD-9E26-148009EF81EA")!,
             title: "Latkes with Beet Cured Salmon Lox",
             description: "A Hanukkah-inspired dish featuring crispy potato latkes paired with homemade beet-cured salmon lox. Crunchy on the outside and perfectly soft on the inside.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/12/Latkes-with-Beet-Cured-Salmon-Lox-1-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-latkes-beet-cured-salmon")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [IngredientSection(items: [
@@ -437,7 +437,7 @@ extension SeedData {
             id: UUID(uuidString: "FF2049A9-09FE-4FD6-B887-8D6A0735E712")!,
             title: "Pani Poori From Scratch",
             description: "A classic Indian street food with crispy fried semolina shells filled with spiced potatoes, topped with tangy mint water, tamarind chutney, and pomegranate seeds.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/02/Pani-Poori-Low-Res.jpg")!)],
+            imageURLs: [.bundled(name: "seed-pani-poori")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [
@@ -500,7 +500,7 @@ extension SeedData {
             id: UUID(uuidString: "76C97FB2-26AB-4922-BE3A-235D488B8155")!,
             title: "Caramel Apple Pie Sticky Buns",
             description: "A decadent fusion of apple pie and cinnamon buns, featuring soft yeast dough filled with spiced apple butter and walnuts, topped with homemade caramel and fresh apple slices.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/03/Apple-Pie-Buns-2-LOW-RES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-apple-pie-sticky-buns")],
             ingredientsInfo: Ingredients(
                 servings: "6 buns",
                 sections: [IngredientSection(items: [
@@ -540,7 +540,7 @@ extension SeedData {
             id: UUID(uuidString: "3D872087-1606-42EA-B839-013A53E875F1")!,
             title: "Chicken Tikka",
             description: "Juicy, flavor-packed chicken tikka made with a two-stage marinating process. Served with homemade roti and mint chutney.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/10/Chicken-Tikka-LOW-RES-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-chicken-tikka")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [
@@ -581,7 +581,7 @@ extension SeedData {
             id: UUID(uuidString: "DCCC4552-649C-4B6A-9715-A833C208C138")!,
             title: "Watermelon Feta Arugula Salad",
             description: "A refreshing salad combining sweet watermelon, peppery arugula, and crumbled feta, all tossed in a tangy citrus-balsamic walnut dressing.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/09/Watermelon-Feta-Salad-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-watermelon-feta-salad")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [IngredientSection(items: [
@@ -610,7 +610,7 @@ extension SeedData {
             id: UUID(uuidString: "E3CE7FFB-A44D-462C-BD5C-8893B4BD893A")!,
             title: "Popcorn Chicken Two Ways with Homemade Pickles",
             description: "Korean fried chicken-inspired crispy popcorn chicken served with two sauces – sweet honey mustard and spicy gochujang buffalo – plus homemade quick pickles.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/12/Fried-Chicken-with-Pickles-3.jpg")!)],
+            imageURLs: [.bundled(name: "seed-popcorn-chicken")],
             ingredientsInfo: Ingredients(
                 servings: "4-6 servings",
                 sections: [IngredientSection(items: [
@@ -652,7 +652,7 @@ extension SeedData {
             id: UUID(uuidString: "835117FB-65FC-49F4-8C33-E6CDC9A0236B")!,
             title: "Shrooms and Grits",
             description: "A plant-based twist on classic southern shrimp and grits, using pink oyster mushrooms for a seafood-like taste over creamy cheddar grits.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/10/Mushrooms-_Shrimp_-Grits-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-shrooms-and-grits")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [
@@ -688,7 +688,7 @@ extension SeedData {
             id: UUID(uuidString: "C8DA5326-E776-40D6-B887-7FCA48682451")!,
             title: "Raspberry Balsamic Refresher",
             description: "A sophisticated mocktail inspired by shrub-making techniques, combining fresh raspberries with white balsamic vinegar and mint for a refreshing non-alcoholic drink.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/09/Raspberry-Balsamic-Refresher-4x5-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-raspberry-balsamic-refresher")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [
@@ -711,7 +711,7 @@ extension SeedData {
             id: UUID(uuidString: "13BA66F2-D9F3-4A0B-B8BB-9E8671DD38FC")!,
             title: "Angel Food Cake with Macerated Strawberries",
             description: "A feather-light vanilla and almond cake topped with brandy-macerated strawberries and whipped cream, perfect for entertaining a crowd.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/06/Angel-Food-Cake-with-Port-Macerated-Strawberries-Eitan-Bernath.jpg")!)],
+            imageURLs: [.bundled(name: "seed-angel-food-cake")],
             ingredientsInfo: Ingredients(
                 servings: "10-12 servings",
                 sections: [IngredientSection(items: [
@@ -747,7 +747,7 @@ extension SeedData {
             id: UUID(uuidString: "4B420A85-4CD3-4DFC-A57A-797BA5DC0A49")!,
             title: "Indian Inspired Breakfast Burrito",
             description: "A fusion breakfast burrito featuring homemade roti, mint chutney, chaat masala hash browns, chili paneer, and cumin scrambled eggs.",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/03/Indian-Breakfast-Buritto-Eitan-Bernath.jpg")!)],
+            imageURLs: [.bundled(name: "seed-indian-breakfast-burrito")],
             ingredientsInfo: Ingredients(
                 servings: "4 servings",
                 sections: [IngredientSection(items: [

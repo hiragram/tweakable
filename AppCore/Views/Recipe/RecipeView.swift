@@ -189,6 +189,10 @@ struct RecipeView: View {
                 }
             case .uiImage(let uiImage):
                 heroImageContent(Image(uiImage: uiImage))
+            case .bundled(let name):
+                if let uiImage = UIImage(named: name, in: .app, with: nil) {
+                    heroImageContent(Image(uiImage: uiImage))
+                }
             }
         }
         .clipShape(RoundedCorner(radius: ds.cornerRadius.xl, corners: [.bottomLeft, .bottomRight]))
@@ -429,6 +433,12 @@ struct RecipeView: View {
                         Image(uiImage: uiImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                    case .bundled(let name):
+                        if let uiImage = UIImage(named: name, in: .app, with: nil) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.sm))

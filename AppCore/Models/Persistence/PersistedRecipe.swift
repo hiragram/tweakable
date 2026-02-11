@@ -108,10 +108,7 @@ extension PersistedRecipe {
                 let domainSteps = section.steps
                     .sorted { $0.sortOrder < $1.sortOrder }
                     .map { persisted in
-                        let stepImageURLs: [ImageSource] = persisted.imageURLStrings.compactMap { urlString in
-                            guard let url = URL(string: urlString) else { return nil }
-                            return .remote(url: url)
-                        }
+                        let stepImageURLs: [ImageSource] = persisted.imageURLStrings.compactMap { ImageSource.fromPersistenceString($0) }
                         return CookingStep(
                             id: persisted.id,
                             stepNumber: persisted.stepNumber,
@@ -128,10 +125,7 @@ extension PersistedRecipe {
             }
 
         // 画像URLを変換
-        let domainImageURLs: [ImageSource] = imageURLStrings.compactMap { urlString in
-            guard let url = URL(string: urlString) else { return nil }
-            return .remote(url: url)
-        }
+        let domainImageURLs: [ImageSource] = imageURLStrings.compactMap { ImageSource.fromPersistenceString($0) }
 
         // ソースURLを変換
         let sourceURL: URL? = sourceURLString.flatMap { URL(string: $0) }
@@ -175,12 +169,7 @@ extension PersistedRecipe {
         // 調理工程セクションを変換
         let persistedStepSections = recipe.stepSections.enumerated().map { sectionIndex, section in
             let persistedSteps = section.items.enumerated().map { itemIndex, step in
-                let imageURLStrings = step.imageURLs.compactMap { imageSource -> String? in
-                    if case .remote(let url) = imageSource {
-                        return url.absoluteString
-                    }
-                    return nil
-                }
+                let imageURLStrings = step.imageURLs.compactMap { $0.toPersistenceString() }
                 return PersistedCookingStep(
                     id: step.id,
                     stepNumber: step.stepNumber,
@@ -198,13 +187,8 @@ extension PersistedRecipe {
             )
         }
 
-        // 画像URLを変換（リモートURLのみ）
-        let imageURLStrings = recipe.imageURLs.compactMap { imageSource -> String? in
-            if case .remote(let url) = imageSource {
-                return url.absoluteString
-            }
-            return nil
-        }
+        // 画像URLを変換
+        let imageURLStrings = recipe.imageURLs.compactMap { $0.toPersistenceString() }
 
         let persisted = PersistedRecipe(
             id: recipe.id,

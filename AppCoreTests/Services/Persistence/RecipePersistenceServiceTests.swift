@@ -430,6 +430,97 @@ struct RecipePersistenceServiceTests {
         #expect(recipeIDs?.isEmpty == true)
     }
 
+    // MARK: - Bundled Step Image Tests
+
+    @Test
+    func saveRecipe_withBundledStepImages_persistsBundledURLs() async throws {
+        let service = try makeService()
+
+        let recipe = Recipe(
+            id: UUID(),
+            title: "バンドル画像テスト",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(
+                        stepNumber: 1,
+                        instruction: "テスト工程",
+                        imageURLs: [
+                            .bundled(name: "seed-shakshuka"),
+                            .remote(url: URL(string: "https://example.com/step.jpg")!)
+                        ]
+                    )
+                ])
+            ]
+        )
+
+        try await service.saveRecipe(recipe)
+
+        let loaded = try await service.loadRecipe(id: recipe.id)
+        #expect(loaded != nil)
+        #expect(loaded?.allSteps.first?.imageURLs.count == 2)
+
+        if case .bundled(let name) = loaded?.allSteps.first?.imageURLs[0] {
+            #expect(name == "seed-shakshuka")
+        } else {
+            Issue.record("Expected .bundled case for step image")
+        }
+
+        if case .remote(let url) = loaded?.allSteps.first?.imageURLs[1] {
+            #expect(url.absoluteString == "https://example.com/step.jpg")
+        } else {
+            Issue.record("Expected .remote case for step image")
+        }
+    }
+
+    @Test
+    func saveRecipe_updateExisting_preservesBundledStepImages() async throws {
+        let service = try makeService()
+        let id = UUID()
+
+        let initial = Recipe(
+            id: id,
+            title: "初期",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(
+                        stepNumber: 1,
+                        instruction: "工程1",
+                        imageURLs: [.bundled(name: "seed-shakshuka")]
+                    )
+                ])
+            ]
+        )
+        try await service.saveRecipe(initial)
+
+        let updated = Recipe(
+            id: id,
+            title: "更新",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: [
+                CookingStepSection(items: [
+                    CookingStep(
+                        stepNumber: 1,
+                        instruction: "更新された工程",
+                        imageURLs: [.bundled(name: "seed-chicken-tikka")]
+                    )
+                ])
+            ]
+        )
+        try await service.saveRecipe(updated)
+
+        let loaded = try await service.loadRecipe(id: id)
+        #expect(loaded?.title == "更新")
+        #expect(loaded?.allSteps.first?.instruction == "更新された工程")
+
+        if case .bundled(let name) = loaded?.allSteps.first?.imageURLs.first {
+            #expect(name == "seed-chicken-tikka")
+        } else {
+            Issue.record("Expected .bundled case after update")
+        }
+    }
+
     @Test
     func loadAllCategories_returnsCategoriesWithRecipeMap() async throws {
         let service = try makeService()
