@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "seed-watermelon-lemonade-slushie.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

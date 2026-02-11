@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "seed-indian-breakfast-burrito.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -161,6 +161,14 @@ struct SavedRecipesListView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
+                case .bundled(let name):
+                    if let uiImage = UIImage(named: name, in: .app, with: nil) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        placeholderImage
+                    }
                 }
             } else {
                 placeholderImage

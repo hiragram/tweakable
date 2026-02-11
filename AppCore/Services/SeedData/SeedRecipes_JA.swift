@@ -6,7 +6,7 @@ extension SeedData {
             id: UUID(uuidString: "BF150F53-89A1-4087-8EA1-0A13A0A0792C")!,
             title: "スパイシー・タイ風ビーフラープ",
             description: "豊かな風味と食感が詰まったタイ風サラダ。炒った米を砕いて加えることで、香ばしさとソースの絡みが格段にアップします。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/08/Spicy-Thai-Beef-Larb-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-spicy-thai-beef-larb")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [IngredientSection(items: [
@@ -39,7 +39,7 @@ extension SeedData {
             id: UUID(uuidString: "9682B83C-13B0-43FE-A99B-8C67489920D3")!,
             title: "ココナッツスムージーボウル（自家製プラヤボウル）",
             description: "濃厚でクリーミーなココナッツスムージーに新鮮なベリー、グラノーラ、ココナッツフレークをトッピングした、まるでバカンス気分のトロピカル朝食。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Coconut-Smoothie-Bowl-4x5-1Coconut-Smoothie-Bowl-4x5-1-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-coconut-smoothie-bowl")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [IngredientSection(items: [
@@ -65,7 +65,7 @@ extension SeedData {
             id: UUID(uuidString: "3EFBCECD-22A7-496A-8EB9-960E512C744C")!,
             title: "シャクシュカ",
             description: "スパイス香るトマトソースに卵を落として煮込む北アフリカの定番料理。イスラエルでは朝食の定番として親しまれています。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/07/Shakshuka-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-shakshuka")],
             ingredientsInfo: Ingredients(
                 servings: "1人分",
                 sections: [IngredientSection(items: [
@@ -100,7 +100,7 @@ extension SeedData {
             id: UUID(uuidString: "34DD05D2-BBB7-448A-83F9-E5EBF0203385")!,
             title: "インポッシブル チョリソーナチョス",
             description: "とろけるチーズ、ワカモレ、サルサ、サワークリーム、そしてインポッシブルバーガーで作るスパイシーなチョリソーそぼろをたっぷりのせたナチョス。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Impossible-Churizo-Nachos-1-LOW-RES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-impossible-chorizo-nachos")],
             ingredientsInfo: Ingredients(
                 servings: "1人分",
                 sections: [IngredientSection(items: [
@@ -150,7 +150,7 @@ extension SeedData {
             id: UUID(uuidString: "27CE6371-C411-4E56-9570-2849D8967E11")!,
             title: "簡単チョコチップパンケーキ",
             description: "チョコチップたっぷりのふわふわ自家製パンケーキ。短時間で作れる週末の朝食にぴったりの一品。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/01/Chocolate-Chip-Pancakes-LOW-RES.jpeg")!)],
+            imageURLs: [.bundled(name: "seed-chocolate-chip-pancakes")],
             ingredientsInfo: Ingredients(
                 servings: "1人分",
                 sections: [IngredientSection(items: [
@@ -178,7 +178,7 @@ extension SeedData {
             id: UUID(uuidString: "DCBB31A1-52DA-44CB-AB9F-6E5CC9CA101B")!,
             title: "アイリッシュ・コルカノン",
             description: "バターとクリームをたっぷり使ったアイルランドの伝統的なマッシュポテト。フレッシュケールとスキャリオンを混ぜ込み、食感と彩りを加えた一品。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/12/Eitan-Bernath-Irish-Colcannon-.jpg")!)],
+            imageURLs: [.bundled(name: "seed-irish-colcannon")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [IngredientSection(items: [
@@ -206,7 +206,7 @@ extension SeedData {
             id: UUID(uuidString: "646F7CC0-236A-4EC0-9EE2-0754D133262E")!,
             title: "スイカレモネードスラッシー",
             description: "鮮やかなスイカのスラッシーと自家製レモネードアイスを重ねた、夏にぴったりの爽やかなフローズンドリンク。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Watermelon-Lemonade-Slushie.jpg")!)],
+            imageURLs: [.bundled(name: "seed-watermelon-lemonade-slushie")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [IngredientSection(items: [
@@ -230,7 +230,7 @@ extension SeedData {
             id: UUID(uuidString: "C39BE14C-A122-4C93-9943-7C297902DE7D")!,
             title: "モカカップケーキ クッキー&クリームフロスティング",
             description: "濃厚なチョコレートコーヒーカップケーキに、砕いたオレオ入りのふわふわバニラバタークリームフロスティングをトッピング。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/09/Eitan-Bernath-Mocha-Cupcake-with-Cookies-N-Cream-Frosting.jpg")!)],
+            imageURLs: [.bundled(name: "seed-mocha-cupcakes")],
             ingredientsInfo: Ingredients(
                 servings: "24個分",
                 sections: [IngredientSection(items: [
@@ -273,7 +273,7 @@ extension SeedData {
             id: UUID(uuidString: "A94CC7B4-6001-4B56-BB5E-2E25889120B4")!,
             title: "マンゴー・ザクロ・ピスタチオスクエア",
             description: "ナッツ香るピスタチオクラスト、クリーミーなマンゴーカード、酸味のあるザクロゼリーの3層デザート。おもてなしに最適で、数時間前に準備可能。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Mango-Pomegranate-Pistachio-Squares.jpg")!)],
+            imageURLs: [.bundled(name: "seed-mango-pomegranate-pistachio")],
             ingredientsInfo: Ingredients(
                 servings: "9人分",
                 sections: [
@@ -321,7 +321,7 @@ extension SeedData {
             id: UUID(uuidString: "325A6995-3A17-4804-B0C6-86D29E0812EC")!,
             title: "BBQパストラミ・グリルドピザ",
             description: "パストラミとビーフベーコンをキャラメリゼし、ハニーBBQソースを塗ったグリルピザにルッコラを添えた一品。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-BBQ-Pastrami-Grilled-Pizza.jpg")!)],
+            imageURLs: [.bundled(name: "seed-bbq-pastrami-pizza")],
             ingredientsInfo: Ingredients(
                 servings: "6人分",
                 sections: [IngredientSection(items: [
@@ -349,7 +349,7 @@ extension SeedData {
             id: UUID(uuidString: "CCB4F25F-9A1E-42F2-9C81-CD8680D59D46")!,
             title: "トマトとメロンのパンツァネッラ",
             description: "完熟トマト、フレッシュメロン、トーストしたサワードウを使った彩り豊かなパンサラダ。塩をふったトマトから出る果汁がバルサミコビネグレットのベースになります。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/06/Eitan-Bernath-Tomato-Melon-Panzanella.jpg")!)],
+            imageURLs: [.bundled(name: "seed-tomato-melon-panzanella")],
             ingredientsInfo: Ingredients(
                 servings: "6〜8人分",
                 sections: [IngredientSection(items: [
@@ -379,7 +379,7 @@ extension SeedData {
             id: UUID(uuidString: "2499E2A0-EBEE-4B86-968E-C5AAC9FB7242")!,
             title: "パルメザントリュフフライ ガーリックアイオリ添え",
             description: "二度揚げでカリカリに仕上げたマッチ棒状のフライドポテトに、パルメザンチーズ、バジル、トリュフオイルを絡め、手作りガーリックアイオリを添えた一品。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/04/Parmesan-Truffle-Fries-With-Roasted-Garlic-Aioli-4x5-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-parmesan-truffle-fries")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [
@@ -435,7 +435,7 @@ extension SeedData {
             id: UUID(uuidString: "9DB3BCA1-D26F-40AD-9E26-148009EF81EA")!,
             title: "ラトケス ビーツキュアサーモンロックス添え",
             description: "ハヌカにぴったりの一品。外はカリッと中はふわっとしたポテトラトケスに、自家製ビーツキュアサーモンを合わせます。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/12/Latkes-with-Beet-Cured-Salmon-Lox-1-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-latkes-beet-cured-salmon")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [
@@ -481,7 +481,7 @@ extension SeedData {
             id: UUID(uuidString: "FF2049A9-09FE-4FD6-B887-8D6A0735E712")!,
             title: "パニプーリ（一から手作り）",
             description: "インドの定番ストリートフード。サクサクのセモリナ粉シェルにスパイス入りポテトを詰め、ミントウォーターとタマリンドチャツネをかけて仕上げます。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/02/Pani-Poori-Low-Res.jpg")!)],
+            imageURLs: [.bundled(name: "seed-pani-poori")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [
@@ -544,7 +544,7 @@ extension SeedData {
             id: UUID(uuidString: "76C97FB2-26AB-4922-BE3A-235D488B8155")!,
             title: "キャラメルアップルパイ・スティッキーバンズ",
             description: "アップルパイとシナモンロールを融合させた贅沢なスイーツ。スパイス入りアップルバターとくるみを巻き込んだふわふわの生地に、自家製キャラメルとりんごをトッピング。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2021/03/Apple-Pie-Buns-2-LOW-RES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-apple-pie-sticky-buns")],
             ingredientsInfo: Ingredients(
                 servings: "6個分",
                 sections: [
@@ -594,7 +594,7 @@ extension SeedData {
             id: UUID(uuidString: "3D872087-1606-42EA-B839-013A53E875F1")!,
             title: "チキンティッカ",
             description: "2段階のマリネで仕上げる、ジューシーで風味豊かなチキンティッカ。手作りのロティとミントチャツネを添えて。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/10/Chicken-Tikka-LOW-RES-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-chicken-tikka")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [IngredientSection(items: [
@@ -635,7 +635,7 @@ extension SeedData {
             id: UUID(uuidString: "DCCC4552-649C-4B6A-9715-A833C208C138")!,
             title: "スイカとフェタチーズのルッコラサラダ",
             description: "甘いスイカ、ピリッとしたルッコラ、フェタチーズを、柑橘バルサミコくるみドレッシングで和えた爽やかなサラダです。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2020/09/Watermelon-Feta-Salad-4x5-LOWRES.jpg")!)],
+            imageURLs: [.bundled(name: "seed-watermelon-feta-salad")],
             ingredientsInfo: Ingredients(
                 servings: nil,
                 sections: [IngredientSection(items: [
@@ -664,7 +664,7 @@ extension SeedData {
             id: UUID(uuidString: "E3CE7FFB-A44D-462C-BD5C-8893B4BD893A")!,
             title: "ポップコーンチキン 2種のソース添え 自家製ピクルス付き",
             description: "韓国フライドチキンにインスパイアされたカリカリのポップコーンチキンを、甘いハニーマスタードソースとスパイシーなコチュジャンバッファローソースの2種で楽しむ一品。自家製ピクルスを添えて。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/12/Fried-Chicken-with-Pickles-3.jpg")!)],
+            imageURLs: [.bundled(name: "seed-popcorn-chicken")],
             ingredientsInfo: Ingredients(
                 servings: "4〜6人分",
                 sections: [
@@ -723,7 +723,7 @@ extension SeedData {
             id: UUID(uuidString: "835117FB-65FC-49F4-8C33-E6CDC9A0236B")!,
             title: "マッシュルームとグリッツ",
             description: "南部料理の定番シュリンプ＆グリッツを植物ベースにアレンジ。ピンクオイスターマッシュルームとクリーミーなチェダーグリッツの組み合わせ。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/10/Mushrooms-_Shrimp_-Grits-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-shrooms-and-grits")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [
@@ -763,7 +763,7 @@ extension SeedData {
             id: UUID(uuidString: "C8DA5326-E776-40D6-B887-7FCA48682451")!,
             title: "ラズベリー バルサミコ リフレッシャー",
             description: "シュラブ（果実酢ドリンク）の手法にインスピレーションを得た、フレッシュラズベリーとホワイトバルサミコ酢、ミントを組み合わせた爽やかなノンアルコールドリンクです。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/09/Raspberry-Balsamic-Refresher-4x5-1.jpg")!)],
+            imageURLs: [.bundled(name: "seed-raspberry-balsamic-refresher")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [IngredientSection(items: [
@@ -786,7 +786,7 @@ extension SeedData {
             id: UUID(uuidString: "13BA66F2-D9F3-4A0B-B8BB-9E8671DD38FC")!,
             title: "エンゼルフードケーキ マセレーテッドストロベリー添え",
             description: "バニラとアーモンドが香るふわふわの軽いケーキに、ブランデーで漬けた甘いいちごとホイップクリームを添えた、おもてなしにぴったりのデザートです。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/06/Angel-Food-Cake-with-Port-Macerated-Strawberries-Eitan-Bernath.jpg")!)],
+            imageURLs: [.bundled(name: "seed-angel-food-cake")],
             ingredientsInfo: Ingredients(
                 servings: "10〜12人分",
                 sections: [IngredientSection(items: [
@@ -822,7 +822,7 @@ extension SeedData {
             id: UUID(uuidString: "4B420A85-4CD3-4DFC-A57A-797BA5DC0A49")!,
             title: "インド風ブレックファストブリトー",
             description: "手作りロティにミントチャツネ、チャートマサラ味のハッシュブラウン、チリパニール、クミンスクランブルエッグを包んだフュージョン朝食ブリトー。",
-            imageURLs: [.remote(url: URL(string: "https://www.eitanbernath.com/wp-content/uploads/2022/03/Indian-Breakfast-Buritto-Eitan-Bernath.jpg")!)],
+            imageURLs: [.bundled(name: "seed-indian-breakfast-burrito")],
             ingredientsInfo: Ingredients(
                 servings: "4人分",
                 sections: [IngredientSection(items: [

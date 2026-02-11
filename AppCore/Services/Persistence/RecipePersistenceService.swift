@@ -35,12 +35,7 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
             existing.descriptionText = recipe.description
             existing.servings = recipe.ingredientsInfo.servings
             existing.sourceURLString = recipe.sourceURL?.absoluteString
-            existing.imageURLStrings = recipe.imageURLs.compactMap { imageSource -> String? in
-                if case .remote(let url) = imageSource {
-                    return url.absoluteString
-                }
-                return nil
-            }
+            existing.imageURLStrings = recipe.imageURLs.compactMap { $0.toPersistenceString() }
             existing.updatedAt = Date()
 
             // 材料セクションを更新
@@ -77,12 +72,7 @@ public final class RecipePersistenceService: RecipePersistenceServiceProtocol, @
             }
             existing.stepSections = recipe.stepSections.enumerated().map { sectionIndex, section in
                 let persistedSteps = section.items.enumerated().map { itemIndex, step in
-                    let imageURLStrings = step.imageURLs.compactMap { imageSource -> String? in
-                        if case .remote(let url) = imageSource {
-                            return url.absoluteString
-                        }
-                        return nil
-                    }
+                    let imageURLStrings = step.imageURLs.compactMap { $0.toPersistenceString() }
                     return PersistedCookingStep(
                         id: step.id,
                         stepNumber: step.stepNumber,

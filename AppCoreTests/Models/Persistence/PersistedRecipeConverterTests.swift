@@ -126,6 +126,58 @@ struct PersistedRecipeConverterTests {
         }
     }
 
+    @Test
+    func toDomain_convertsBundledImageURLs() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let persisted = PersistedRecipe(
+            id: UUID(),
+            title: "テスト",
+            imageURLStrings: ["bundled://seed-shakshuka"]
+        )
+        context.insert(persisted)
+
+        let domain = persisted.toDomain()
+
+        #expect(domain.imageURLs.count == 1)
+        if case .bundled(let name) = domain.imageURLs[0] {
+            #expect(name == "seed-shakshuka")
+        } else {
+            Issue.record("Expected .bundled case")
+        }
+    }
+
+    @Test
+    func toDomain_convertsMixedImageURLs() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let persisted = PersistedRecipe(
+            id: UUID(),
+            title: "テスト",
+            imageURLStrings: [
+                "bundled://seed-shakshuka",
+                "https://example.com/image.jpg"
+            ]
+        )
+        context.insert(persisted)
+
+        let domain = persisted.toDomain()
+
+        #expect(domain.imageURLs.count == 2)
+        if case .bundled(let name) = domain.imageURLs[0] {
+            #expect(name == "seed-shakshuka")
+        } else {
+            Issue.record("Expected .bundled case for first image")
+        }
+        if case .remote(let url) = domain.imageURLs[1] {
+            #expect(url.absoluteString == "https://example.com/image.jpg")
+        } else {
+            Issue.record("Expected .remote case for second image")
+        }
+    }
+
     // MARK: - from Domain Tests
 
     @Test
@@ -262,6 +314,79 @@ struct PersistedRecipeConverterTests {
         // リモートURLのみ保存される
         #expect(persisted.imageURLStrings.count == 1)
         #expect(persisted.imageURLStrings[0] == "https://example.com/a.jpg")
+    }
+
+    @Test
+    @MainActor
+    func fromDomain_convertsBundledImageURLs() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let domain = Recipe(
+            id: UUID(),
+            title: "テスト",
+            imageURLs: [.bundled(name: "seed-shakshuka")],
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+
+        let persisted = PersistedRecipe.from(domain, context: context)
+
+        #expect(persisted.imageURLStrings.count == 1)
+        #expect(persisted.imageURLStrings[0] == "bundled://seed-shakshuka")
+    }
+
+    @Test
+    @MainActor
+    func fromDomain_convertsMixedImageURLs() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let domain = Recipe(
+            id: UUID(),
+            title: "テスト",
+            imageURLs: [
+                .bundled(name: "seed-shakshuka"),
+                .remote(url: URL(string: "https://example.com/a.jpg")!),
+                .local(fileURL: URL(fileURLWithPath: "/tmp/local.jpg")),
+                .uiImage(UIImage())
+            ],
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+
+        let persisted = PersistedRecipe.from(domain, context: context)
+
+        // bundledとremoteのみ保存される
+        #expect(persisted.imageURLStrings.count == 2)
+        #expect(persisted.imageURLStrings[0] == "bundled://seed-shakshuka")
+        #expect(persisted.imageURLStrings[1] == "https://example.com/a.jpg")
+    }
+
+    @Test
+    @MainActor
+    func roundTrip_preservesBundledImageURLs() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+
+        let original = Recipe(
+            id: UUID(),
+            title: "バンドル画像テスト",
+            imageURLs: [.bundled(name: "seed-chicken-tikka")],
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+
+        // Domain -> Persisted -> Domain
+        let persisted = PersistedRecipe.from(original, context: context)
+        let restored = persisted.toDomain()
+
+        #expect(restored.imageURLs.count == 1)
+        if case .bundled(let name) = restored.imageURLs[0] {
+            #expect(name == "seed-chicken-tikka")
+        } else {
+            Issue.record("Expected .bundled case after round trip")
+        }
     }
 
     // MARK: - Multiple Sections Tests
