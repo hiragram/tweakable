@@ -41,6 +41,11 @@ public enum ImageSource: Equatable, Sendable {
     static let bundledPrefix = "bundled://"
 
     /// 永続化用の文字列表現に変換
+    ///
+    /// - Returns:
+    ///   - `.remote`: URL文字列をそのまま返す（例: `"https://example.com/image.jpg"`）
+    ///   - `.bundled`: `"bundled://"` プレフィックス + 画像名（例: `"bundled://seed-shakshuka"`）
+    ///   - `.local`, `.uiImage`: `nil`（一時的な画像のため永続化対象外）
     func toPersistenceString() -> String? {
         switch self {
         case .remote(let url):
@@ -53,6 +58,12 @@ public enum ImageSource: Equatable, Sendable {
     }
 
     /// 永続化文字列からImageSourceを復元
+    ///
+    /// - Parameter string: `toPersistenceString()` が生成した文字列
+    /// - Returns:
+    ///   - `"bundled://"` で始まる場合: `.bundled` ケース
+    ///   - それ以外で有効なURL: `.remote` ケース
+    ///   - 無効な文字列: `nil`
     static func fromPersistenceString(_ string: String) -> ImageSource? {
         if string.hasPrefix(bundledPrefix) {
             return .bundled(name: String(string.dropFirst(bundledPrefix.count)))
