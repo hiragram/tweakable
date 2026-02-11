@@ -612,35 +612,154 @@
       },
       "extractionState": "manual"
     },
-    "recipe_error_extraction_failed": {
+    "recipe_error_analysis_failed": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to parse recipe information: %@"
+            "value": "Couldn't analyze the recipe. Please try again or try a different recipe."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "レシピ情報を解析できませんでした: %@"
+            "value": "レシピを解析できませんでした。もう一度お試しいただくか、別のレシピをお試しください。"
           }
         }
       },
       "extractionState": "manual"
     },
-    "recipe_error_html_fetch_failed": {
+    "recipe_error_fetch_general": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to fetch recipe from this site: %@"
+            "value": "Couldn't fetch the recipe from this site. Please try again."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "このサイトからレシピを取得できませんでした: %@"
+            "value": "このサイトからレシピを取得できませんでした。もう一度お試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_invalid_url": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The URL is not valid. Please check the URL and try again."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URLが正しくありません。URLを確認してもう一度お試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_network": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't connect to the internet. Please check your connection and try again."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インターネットに接続できません。接続を確認してもう一度お試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_page_not_found": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recipe page not found. Please check the URL and try again."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピページが見つかりませんでした。URLを確認してもう一度お試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_page_unreadable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't read the recipe page. Please try a recipe from a different site."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピページの内容を読み取れませんでした。別のサイトのレシピをお試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_quota_exceeded": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API usage limit reached. Please try again later."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APIの利用制限に達しました。しばらくしてからもう一度お試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_site_issue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recipe site is having issues. Please try again later."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシピサイトで問題が発生しています。しばらくしてからもう一度お試しください。"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "recipe_error_site_restricted": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This site restricts access. Please try a recipe from a different site."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このサイトはアクセスが制限されています。別のサイトのレシピをお試しください。"
           }
         }
       },
@@ -685,13 +804,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "An unexpected error occurred"
+            "value": "Something went wrong. Please try again."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "予期しないエラーが発生しました"
+            "value": "問題が発生しました。もう一度お試しください。"
           }
         }
       },
@@ -1178,13 +1297,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to modify the recipe"
+            "value": "Couldn't modify the recipe. Please try again."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "レシピの変更に失敗しました"
+            "value": "レシピの変更に失敗しました。もう一度お試しください。"
           }
         }
       },
@@ -1229,13 +1348,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "An unexpected error occurred during substitution"
+            "value": "Something went wrong while modifying the recipe. Please try again."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "置き換え中に予期しないエラーが発生しました"
+            "value": "レシピの変更中に問題が発生しました。もう一度お試しください。"
           }
         }
       },

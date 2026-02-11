@@ -61,7 +61,7 @@ struct RecipeExtractionServiceTests {
     }
 
     @Test
-    func extractRecipe_htmlFetchFails_throwsHTMLFetchError() async throws {
+    func extractRecipe_htmlFetchFails_networkError() async throws {
         // Arrange
         let mockHTML = MockHTMLFetcher(error: HTMLFetcherError.networkError("Connection failed"))
         let mockOpenAI = MockOpenAIClient(recipe: makeMockRecipe())
@@ -76,7 +76,91 @@ struct RecipeExtractionServiceTests {
         let url = URL(string: "https://example.com/recipe")!
 
         // Act & Assert
-        await #expect(throws: RecipeExtractionError.self) {
+        await #expect(throws: RecipeExtractionError.htmlFetchFailed(.networkError("Connection failed"))) {
+            try await service.extractRecipe(from: url)
+        }
+    }
+
+    @Test
+    func extractRecipe_htmlFetchFails_invalidURL() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(error: HTMLFetcherError.invalidURL)
+        let mockOpenAI = MockOpenAIClient(recipe: makeMockRecipe())
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.htmlFetchFailed(.invalidURL)) {
+            try await service.extractRecipe(from: url)
+        }
+    }
+
+    @Test
+    func extractRecipe_htmlFetchFails_httpError() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(error: HTMLFetcherError.httpError(statusCode: 404))
+        let mockOpenAI = MockOpenAIClient(recipe: makeMockRecipe())
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.htmlFetchFailed(.httpError(statusCode: 404))) {
+            try await service.extractRecipe(from: url)
+        }
+    }
+
+    @Test
+    func extractRecipe_htmlFetchFails_noData() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(error: HTMLFetcherError.noData)
+        let mockOpenAI = MockOpenAIClient(recipe: makeMockRecipe())
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.htmlFetchFailed(.noData)) {
+            try await service.extractRecipe(from: url)
+        }
+    }
+
+    @Test
+    func extractRecipe_htmlFetchFails_decodingError() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(error: HTMLFetcherError.decodingError)
+        let mockOpenAI = MockOpenAIClient(recipe: makeMockRecipe())
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.htmlFetchFailed(.decodingError)) {
             try await service.extractRecipe(from: url)
         }
     }
@@ -144,6 +228,27 @@ struct RecipeExtractionServiceTests {
         // Act & Assert
         // OpenAIClientError.apiKeyNotConfiguredがRecipeExtractionError.apiKeyNotConfiguredに変換されることを確認
         await #expect(throws: RecipeExtractionError.apiKeyNotConfigured) {
+            try await service.extractRecipe(from: url)
+        }
+    }
+
+    @Test
+    func extractRecipe_quotaExceeded_throwsQuotaExceededError() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html><body>Recipe content</body></html>")
+        let mockOpenAI = MockOpenAIClient(error: .quotaExceeded)
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let url = URL(string: "https://example.com/recipe")!
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.quotaExceeded) {
             try await service.extractRecipe(from: url)
         }
     }
@@ -250,6 +355,33 @@ struct RecipeExtractionServiceTests {
 
         // Act & Assert
         await #expect(throws: RecipeExtractionError.apiKeyNotConfigured) {
+            try await service.substituteRecipe(
+                recipe: originalRecipe,
+                target: target,
+                prompt: "置き換えて"
+            )
+        }
+    }
+
+    @Test
+    func substituteRecipe_quotaExceeded_throwsQuotaExceededError() async throws {
+        // Arrange
+        let mockHTML = MockHTMLFetcher(html: "<html></html>")
+        let originalRecipe = makeMockRecipe()
+        let mockOpenAI = MockOpenAIClient(recipe: originalRecipe)
+        mockOpenAI.substitutionError = .quotaExceeded
+        let mockConfig = MockConfigurationService(apiKey: "test-api-key")
+
+        let service = RecipeExtractionService(
+            htmlFetcher: mockHTML,
+            openAIClient: mockOpenAI,
+            configurationService: mockConfig
+        )
+
+        let target = SubstitutionTarget.ingredient(originalRecipe.ingredientsInfo.allItems[0])
+
+        // Act & Assert
+        await #expect(throws: RecipeExtractionError.quotaExceeded) {
             try await service.substituteRecipe(
                 recipe: originalRecipe,
                 target: target,

@@ -300,25 +300,65 @@ public final class AppStore {
     }
 
     /// RecipeExtractionErrorからローカライズされたエラーメッセージを構築
+    ///
+    /// 技術的な詳細はデバッグログにのみ出力し、ユーザーにはローカライズされた汎用メッセージを返す。
     private func buildRecipeErrorMessage(_ error: Error, context: RecipeErrorContext) -> String {
+        #if DEBUG
+        print("Recipe error [\(context)]: \(error)")
+        #endif
+
         if let recipeError = error as? RecipeExtractionError {
             switch recipeError {
-            case .htmlFetchFailed(let detail):
-                return context == .load
-                    ? String(localized: .recipeErrorHtmlFetchFailed(detail))
-                    : String(localized: .substitutionErrorFailed) + ": \(detail)"
+            case .htmlFetchFailed(let fetcherError):
+                return buildHTMLFetchUserMessage(fetcherError)
             case .apiKeyNotConfigured:
                 return String(localized: .recipeErrorApiKeyNotConfigured)
             case .extractionFailed(let detail):
+                // detailはデバッグログ用。ユーザーにはcontextに応じた汎用メッセージを表示
+                #if DEBUG
+                print("Extraction detail: \(detail)")
+                #endif
                 return context == .load
-                    ? String(localized: .recipeErrorExtractionFailed(detail))
-                    : String(localized: .substitutionErrorFailed) + ": \(detail)"
+                    ? String(localized: .recipeErrorAnalysisFailed)
+                    : String(localized: .substitutionErrorFailed)
+            case .quotaExceeded:
+                return String(localized: .recipeErrorQuotaExceeded)
             }
         } else {
-            let baseMessage = context == .load
+            #if DEBUG
+            print("Unexpected error: \(error.localizedDescription)")
+            #endif
+            return context == .load
                 ? String(localized: .recipeErrorUnexpected)
                 : String(localized: .substitutionErrorUnexpected)
-            return baseMessage + ": \(error.localizedDescription)"
+        }
+    }
+
+    /// HTMLFetcherErrorからユーザー向けメッセージを構築
+    ///
+    /// HTTPステータスコードに応じた適切なエラーメッセージを返す:
+    /// - 401/403: アクセス制限（ログイン必要、bot検出等）
+    /// - 404: ページが見つからない
+    /// - 500-599: サーバーエラー
+    private func buildHTMLFetchUserMessage(_ error: HTMLFetcherError) -> String {
+        switch error {
+        case .invalidURL:
+            return String(localized: .recipeErrorInvalidUrl)
+        case .networkError:
+            return String(localized: .recipeErrorNetwork)
+        case .httpError(let statusCode):
+            switch statusCode {
+            case 401, 403:
+                return String(localized: .recipeErrorSiteRestricted)
+            case 404:
+                return String(localized: .recipeErrorPageNotFound)
+            case 500...599:
+                return String(localized: .recipeErrorSiteIssue)
+            default:
+                return String(localized: .recipeErrorFetchGeneral)
+            }
+        case .noData, .decodingError:
+            return String(localized: .recipeErrorPageUnreadable)
         }
     }
 
