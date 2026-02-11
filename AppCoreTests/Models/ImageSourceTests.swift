@@ -135,4 +135,94 @@ struct ImageSourceTests {
         let placeholder2 = ImageSource.previewPlaceholder(color: .red, size: CGSize(width: 100, height: 100))
         #expect(placeholder1 != placeholder2)
     }
+
+    // MARK: - Persistence Tests
+
+    @Test
+    func toPersistenceString_remote_returnsAbsoluteString() {
+        let source = ImageSource.remote(url: URL(string: "https://example.com/image.jpg")!)
+        #expect(source.toPersistenceString() == "https://example.com/image.jpg")
+    }
+
+    @Test
+    func toPersistenceString_bundled_returnsPrefixedName() {
+        let source = ImageSource.bundled(name: "seed-shakshuka")
+        #expect(source.toPersistenceString() == "bundled://seed-shakshuka")
+    }
+
+    @Test
+    func toPersistenceString_local_returnsNil() {
+        let source = ImageSource.local(fileURL: URL(fileURLWithPath: "/tmp/test.jpg"))
+        #expect(source.toPersistenceString() == nil)
+    }
+
+    @Test
+    func toPersistenceString_uiImage_returnsNil() {
+        let source = ImageSource.uiImage(UIImage())
+        #expect(source.toPersistenceString() == nil)
+    }
+
+    @Test
+    func fromPersistenceString_remote_returnsRemoteCase() {
+        let result = ImageSource.fromPersistenceString("https://example.com/image.jpg")
+        if case .remote(let url) = result {
+            #expect(url.absoluteString == "https://example.com/image.jpg")
+        } else {
+            Issue.record("Expected .remote case")
+        }
+    }
+
+    @Test
+    func fromPersistenceString_bundled_returnsBundledCase() {
+        let result = ImageSource.fromPersistenceString("bundled://seed-shakshuka")
+        if case .bundled(let name) = result {
+            #expect(name == "seed-shakshuka")
+        } else {
+            Issue.record("Expected .bundled case")
+        }
+    }
+
+    @Test
+    func fromPersistenceString_emptyString_returnsNil() {
+        let result = ImageSource.fromPersistenceString("")
+        #expect(result == nil)
+    }
+
+    @Test
+    func fromPersistenceString_bundledPrefixOnly_returnsEmptyName() {
+        let result = ImageSource.fromPersistenceString("bundled://")
+        if case .bundled(let name) = result {
+            #expect(name == "")
+        } else {
+            Issue.record("Expected .bundled case with empty name")
+        }
+    }
+
+    @Test
+    func fromPersistenceString_nonBundledString_returnsRemoteIfValidURL() {
+        // URL(string:) は多くの文字列を有効なURLとして受け入れるため、
+        // bundled://以外の文字列はremoteとして扱われる
+        let result = ImageSource.fromPersistenceString("https://example.com/photo.png")
+        if case .remote(let url) = result {
+            #expect(url.absoluteString == "https://example.com/photo.png")
+        } else {
+            Issue.record("Expected .remote case")
+        }
+    }
+
+    @Test
+    func persistence_roundTrip_remote() {
+        let original = ImageSource.remote(url: URL(string: "https://example.com/image.jpg")!)
+        let string = original.toPersistenceString()!
+        let restored = ImageSource.fromPersistenceString(string)
+        #expect(original == restored)
+    }
+
+    @Test
+    func persistence_roundTrip_bundled() {
+        let original = ImageSource.bundled(name: "seed-shakshuka")
+        let string = original.toPersistenceString()!
+        let restored = ImageSource.fromPersistenceString(string)
+        #expect(original == restored)
+    }
 }
