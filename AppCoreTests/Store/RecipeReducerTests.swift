@@ -574,6 +574,63 @@ struct RecipeReducerTests {
     }
 
     @Test
+    func reduce_recipeSaved_newRecipeIsInsertedAtFront() {
+        var state = RecipeState()
+        let existingRecipe = Recipe(
+            id: UUID(),
+            title: "既存レシピ",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+        state.savedRecipes = [existingRecipe]
+
+        let newRecipe = makeSampleRecipe()
+        RecipeReducer.reduce(state: &state, action: .recipeSaved(newRecipe))
+
+        #expect(state.savedRecipes.count == 2)
+        #expect(state.savedRecipes.first?.id == newRecipe.id)
+    }
+
+    @Test
+    func reduce_recipeSaved_updatedRecipeMovesToFront() {
+        var state = RecipeState()
+        let recipeA = Recipe(
+            id: UUID(),
+            title: "レシピA",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+        let recipeB = Recipe(
+            id: UUID(),
+            title: "レシピB",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+        let recipeC = Recipe(
+            id: UUID(),
+            title: "レシピC",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+        state.savedRecipes = [recipeA, recipeB, recipeC]
+
+        // recipeC を更新 → 先頭に移動するはず
+        let updatedC = Recipe(
+            id: recipeC.id,
+            title: "レシピC（更新）",
+            ingredientsInfo: Ingredients(sections: []),
+            stepSections: []
+        )
+        RecipeReducer.reduce(state: &state, action: .recipeSaved(updatedC))
+
+        #expect(state.savedRecipes.count == 3)
+        #expect(state.savedRecipes[0].id == recipeC.id)
+        #expect(state.savedRecipes[0].title == "レシピC（更新）")
+        #expect(state.savedRecipes[1].id == recipeA.id)
+        #expect(state.savedRecipes[2].id == recipeB.id)
+    }
+
+    @Test
     func reduce_recipeSaveFailed_setsError() {
         var state = RecipeState()
 
