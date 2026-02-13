@@ -39,13 +39,20 @@ struct RecipeHomeView: View {
     ]
 
     var body: some View {
-        Group {
-            if isLoading {
-                loadingView
-            } else if recipes.isEmpty {
-                emptyView
-            } else {
-                recipeGridView
+        VStack(spacing: 0) {
+            if !isLoading && !categories.isEmpty {
+                categoryChipsView
+                    .padding(.vertical, ds.spacing.sm)
+            }
+
+            Group {
+                if isLoading {
+                    loadingView
+                } else if recipes.isEmpty {
+                    emptyView
+                } else {
+                    recipeGridView
+                }
             }
         }
         .background(ds.colors.backgroundPrimary.color)
@@ -189,18 +196,12 @@ struct RecipeHomeView: View {
 
     private var recipeGridView: some View {
         ScrollView {
-            VStack(spacing: ds.spacing.sm) {
-                if !categories.isEmpty {
-                    categoryChipsView
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(recipes) { recipe in
+                    recipeCard(recipe)
                 }
-
-                LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(recipes) { recipe in
-                        recipeCard(recipe)
-                    }
-                }
-                .padding(.horizontal, ds.spacing.md)
             }
+            .padding(.horizontal, ds.spacing.md)
             .padding(.vertical, ds.spacing.sm)
         }
         .accessibilityIdentifier(RecipeHomeAccessibilityID.grid)
