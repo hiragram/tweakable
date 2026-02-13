@@ -60,6 +60,14 @@ public enum ShoppingListAction: Sendable {
     /// アイテムチェック更新失敗
     case itemCheckUpdateFailed(String)
 
+    // MARK: - Recipe Search
+
+    /// 買い物リスト作成画面のレシピ検索クエリを更新
+    case updateRecipeSearchQuery(String)
+
+    /// 買い物リスト作成画面のカテゴリフィルタを変更
+    case selectRecipeSearchCategoryFilter(UUID?)
+
     // MARK: - Clear
 
     /// エラーをクリア
