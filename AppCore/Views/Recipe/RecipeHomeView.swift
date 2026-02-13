@@ -45,6 +45,7 @@ struct RecipeHomeView: View {
             if !isLoading && !categories.isEmpty {
                 categoryChipsView
                     .padding(.vertical, ds.spacing.sm)
+                    .background(ds.colors.backgroundPrimary.color)
             }
 
             Group {
@@ -57,7 +58,6 @@ struct RecipeHomeView: View {
                 }
             }
         }
-        .background(ds.colors.backgroundPrimary.color)
         .confirmationDialog(
             String(localized: .recipeDeleteConfirmationTitle),
             isPresented: $showDeleteConfirmation,
@@ -80,6 +80,7 @@ struct RecipeHomeView: View {
     private var loadingView: some View {
         ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(ds.colors.backgroundPrimary.color)
     }
 
     // MARK: - Empty View
@@ -122,6 +123,7 @@ struct RecipeHomeView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(ds.colors.backgroundPrimary.color)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyView)
     }
 
@@ -206,6 +208,7 @@ struct RecipeHomeView: View {
             .padding(.horizontal, ds.spacing.md)
             .padding(.vertical, ds.spacing.sm)
         }
+        .background(ds.colors.backgroundPrimary.color)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.grid)
     }
 
