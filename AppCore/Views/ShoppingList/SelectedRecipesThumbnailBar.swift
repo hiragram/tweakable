@@ -1,4 +1,3 @@
-import NukeUI
 import Prefire
 import SwiftUI
 
@@ -12,6 +11,11 @@ enum SelectedRecipesThumbnailBarAccessibilityID {
 
 // MARK: - SelectedRecipesThumbnailBar
 
+/// 選択中のレシピをサムネイル表示する水平スクロールバー
+///
+/// 買い物リスト作成画面で、選択されたレシピをサムネイル画像とタイトルで表示する。
+/// 各サムネイルには削除ボタンが付いており、選択を解除できる。
+/// レシピが1件も選択されていない場合は何も表示しない。
 struct SelectedRecipesThumbnailBar: View {
     private let ds = DesignSystem.default
 
@@ -37,13 +41,16 @@ struct SelectedRecipesThumbnailBar: View {
 
     private func recipeThumbnail(_ recipe: Recipe) -> some View {
         VStack(spacing: ds.spacing.xxs) {
-            thumbnailImage(recipe.imageURLs.first)
-                .frame(width: 50, height: 50)
-                .clipShape(RoundedRectangle(cornerRadius: ds.cornerRadius.xs))
-                .overlay(alignment: .topTrailing) {
-                    removeButton(recipe.id)
-                }
-                .accessibilityIdentifier(SelectedRecipesThumbnailBarAccessibilityID.recipe(recipe.id))
+            RecipeImageView(
+                source: recipe.imageURLs.first,
+                size: 50,
+                cornerRadius: ds.cornerRadius.xs,
+                placeholderIconSize: 16
+            )
+            .overlay(alignment: .topTrailing) {
+                removeButton(recipe.id)
+            }
+            .accessibilityIdentifier(SelectedRecipesThumbnailBarAccessibilityID.recipe(recipe.id))
 
             Text(recipe.title)
                 .font(.caption2)
@@ -69,66 +76,6 @@ struct SelectedRecipesThumbnailBar: View {
         }
         .offset(x: 4, y: -4)
         .accessibilityIdentifier(SelectedRecipesThumbnailBarAccessibilityID.remove(recipeID))
-    }
-
-    // MARK: - Thumbnail Image
-
-    private func thumbnailImage(_ source: ImageSource?) -> some View {
-        Group {
-            if let source = source {
-                switch source {
-                case .remote(let url):
-                    LazyImage(url: url) { state in
-                        if state.isLoading {
-                            placeholderImage
-                                .overlay {
-                                    ProgressView()
-                                        .scaleEffect(0.5)
-                                }
-                        } else if let image = state.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } else {
-                            placeholderImage
-                        }
-                    }
-                case .local(let fileURL):
-                    if let data = try? Data(contentsOf: fileURL),
-                       let uiImage = UIImage(data: data) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } else {
-                        placeholderImage
-                    }
-                case .uiImage(let uiImage):
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                case .bundled(let name):
-                    if let uiImage = UIImage(named: name, in: .app, with: nil) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } else {
-                        placeholderImage
-                    }
-                }
-            } else {
-                placeholderImage
-            }
-        }
-    }
-
-    private var placeholderImage: some View {
-        Rectangle()
-            .fill(ds.colors.backgroundSecondary.color)
-            .overlay {
-                Image(systemName: "fork.knife")
-                    .font(.system(size: 16))
-                    .foregroundColor(ds.colors.textTertiary.color)
-            }
     }
 }
 
