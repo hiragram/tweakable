@@ -85,6 +85,15 @@ public enum ShoppingListReducer {
             state.isUpdatingItem = false
             state.errorMessage = message
 
+        // MARK: - Recipe Search
+
+        case .updateRecipeSearchQuery(let query):
+            state.recipeSearchQuery = query
+            state.selectedRecipeSearchCategoryFilter = nil
+
+        case .selectRecipeSearchCategoryFilter(let id):
+            state.selectedRecipeSearchCategoryFilter = id
+
         // MARK: - Clear
 
         case .clearError:

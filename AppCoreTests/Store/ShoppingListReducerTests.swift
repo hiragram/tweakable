@@ -56,6 +56,8 @@ struct ShoppingListReducerTests {
         #expect(state.isCreatingList == false)
         #expect(state.isDeletingList == false)
         #expect(state.errorMessage == nil)
+        #expect(state.recipeSearchQuery == "")
+        #expect(state.selectedRecipeSearchCategoryFilter == nil)
     }
 
     // MARK: - Load Shopping Lists Tests
@@ -383,5 +385,47 @@ struct ShoppingListReducerTests {
         #expect(state.shoppingLists.contains { $0.id == list1.id })
         #expect(!state.shoppingLists.contains { $0.id == list2.id })
         #expect(state.shoppingLists.contains { $0.id == list3.id })
+    }
+
+    // MARK: - Recipe Search Query Tests
+
+    @Test
+    func reduce_updateRecipeSearchQuery_updatesQuery() {
+        var state = ShoppingListState()
+
+        ShoppingListReducer.reduce(state: &state, action: .updateRecipeSearchQuery("チキン"))
+
+        #expect(state.recipeSearchQuery == "チキン")
+    }
+
+    @Test
+    func reduce_updateRecipeSearchQuery_resetsCategoryFilter() {
+        var state = ShoppingListState()
+        state.selectedRecipeSearchCategoryFilter = UUID()
+
+        ShoppingListReducer.reduce(state: &state, action: .updateRecipeSearchQuery("パスタ"))
+
+        #expect(state.recipeSearchQuery == "パスタ")
+        #expect(state.selectedRecipeSearchCategoryFilter == nil)
+    }
+
+    @Test
+    func reduce_selectRecipeSearchCategoryFilter_updatesFilter() {
+        var state = ShoppingListState()
+        let categoryID = UUID()
+
+        ShoppingListReducer.reduce(state: &state, action: .selectRecipeSearchCategoryFilter(categoryID))
+
+        #expect(state.selectedRecipeSearchCategoryFilter == categoryID)
+    }
+
+    @Test
+    func reduce_selectRecipeSearchCategoryFilter_canSetNil() {
+        var state = ShoppingListState()
+        state.selectedRecipeSearchCategoryFilter = UUID()
+
+        ShoppingListReducer.reduce(state: &state, action: .selectRecipeSearchCategoryFilter(nil))
+
+        #expect(state.selectedRecipeSearchCategoryFilter == nil)
     }
 }

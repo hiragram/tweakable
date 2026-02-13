@@ -88,44 +88,21 @@ extension RecipeState {
     /// 検索結果（全カテゴリ、カテゴリフィルタ適用前）
     public var searchResults: [RecipeSearchResult] {
         guard isSearchActive else { return [] }
-        let query = searchQuery.lowercased()
-        return savedRecipes.compactMap { recipe in
-            var matchFields = SearchMatchField()
-
-            if recipe.title.lowercased().contains(query) {
-                matchFields.insert(.title)
-            }
-            if let desc = recipe.description, desc.lowercased().contains(query) {
-                matchFields.insert(.description)
-            }
-            if recipe.ingredientsInfo.allItems.contains(where: { $0.name.lowercased().contains(query) }) {
-                matchFields.insert(.ingredients)
-            }
-            if recipe.allSteps.contains(where: { $0.instruction.lowercased().contains(query) }) {
-                matchFields.insert(.steps)
-            }
-
-            return matchFields.isEmpty ? nil : RecipeSearchResult(recipe: recipe, matchFields: matchFields)
-        }
+        return RecipeSearchHelper.searchResults(recipes: savedRecipes, query: searchQuery)
     }
 
     /// カテゴリフィルタ適用後の検索結果
     public var searchFilteredResults: [RecipeSearchResult] {
-        guard let categoryID = selectedSearchCategoryFilter else {
-            return searchResults
-        }
-        let recipeIDs = categoryRecipeMap[categoryID] ?? []
-        return searchResults.filter { recipeIDs.contains($0.recipe.id) }
+        RecipeSearchHelper.filteredResults(
+            results: searchResults,
+            categoryID: selectedSearchCategoryFilter,
+            categoryRecipeMap: categoryRecipeMap
+        )
     }
 
     /// 検索結果における各カテゴリの件数
     public var searchResultCategoryCounts: [UUID: Int] {
-        let resultIDs = Set(searchResults.map { $0.recipe.id })
-        var counts: [UUID: Int] = [:]
-        for (categoryID, recipeIDs) in categoryRecipeMap {
-            counts[categoryID] = recipeIDs.intersection(resultIDs).count
-        }
-        return counts
+        RecipeSearchHelper.categoryCounts(results: searchResults, categoryRecipeMap: categoryRecipeMap)
     }
 
     /// どのカテゴリにも属さないレシピ

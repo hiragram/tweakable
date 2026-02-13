@@ -25,5 +25,11 @@ public struct ShoppingListState: Equatable, Sendable {
     /// エラーメッセージ
     public var errorMessage: String?
 
+    /// 買い物リスト作成画面のレシピ検索クエリ
+    public var recipeSearchQuery: String = ""
+
+    /// 買い物リスト作成画面のカテゴリフィルタ（nilなら全表示）
+    public var selectedRecipeSearchCategoryFilter: UUID? = nil
+
     public init() {}
 }
