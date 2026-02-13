@@ -39,6 +39,8 @@ struct RecipeHomeView: View {
     ]
 
     var body: some View {
+        // カテゴリチップはコンテンツ切り替え(empty/grid)の外に配置し、
+        // 空カテゴリ選択時でも常にフィルタ操作できるようにする
         VStack(spacing: 0) {
             if !isLoading && !categories.isEmpty {
                 categoryChipsView
