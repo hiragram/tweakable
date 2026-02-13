@@ -401,6 +401,74 @@ final class SavedRecipesNavigationUITests: XCTestCase {
     }
 }
 
+// MARK: - Category Filter Tests
+
+@MainActor
+final class CategoryFilterUITests: XCTestCase {
+    var app: XCUIApplication!
+
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+
+        app = XCUIApplication()
+        // UIテストモードで起動（プレミアムユーザー、保存済みレシピあり、オンボーディングスキップ、Tipは無効化）
+        app.launchArguments = ["--uitesting", "--mock-premium", "--mock-saved-recipes", "--skip-onboarding", "-disableTips"]
+        app.launch()
+
+        // レシピホーム画面が表示されるまで待機
+        let reachedHome = UITestHelper.waitForRecipeHomeScreen(app: app)
+        XCTAssertTrue(reachedHome, "レシピホーム画面に到達できませんでした")
+    }
+
+    override func tearDownWithError() throws {
+        app?.terminate()
+        app = nil
+    }
+
+    /// 新しいカテゴリを追加→そのカテゴリに切り替え→ゼロ件表示を確認→
+    /// 「すべて」に戻る→レシピが再び表示されることを確認
+    func testCategoryFilterShowsEmptyThenRecoversOnAllTab() throws {
+        // 前提: レシピグリッドが表示されている（モックレシピ2件）
+        let grid = app.scrollViews[RecipeHomeAccessibilityIDs.grid]
+        XCTAssertTrue(grid.waitForExistence(timeout: 5), "レシピグリッドが表示されていること")
+
+        // Step 1: カテゴリ追加ボタンをタップ
+        let addCategoryButton = app.buttons["recipeHome_button_addCategory"]
+        XCTAssertTrue(addCategoryButton.waitForExistence(timeout: 5), "カテゴリ追加ボタンが表示されていること")
+        addCategoryButton.tap()
+
+        // Step 2: アラートでカテゴリ名を入力して作成
+        let alertTextField = app.alerts.textFields.firstMatch
+        XCTAssertTrue(alertTextField.waitForExistence(timeout: 5), "カテゴリ名入力フィールドが表示されること")
+        alertTextField.tap()
+        alertTextField.typeText("テストカテゴリ")
+
+        // 「作成」ボタンをタップ
+        let createButton = app.alerts.buttons.element(boundBy: 1)
+        createButton.tap()
+
+        // Step 3: 新しいカテゴリチップが表示されるまで待機してタップ
+        // カテゴリ作成後、チップが表示されるまで少し待つ
+        let newCategoryChip = app.buttons.matching(NSPredicate(format: "label == %@", "テストカテゴリ")).firstMatch
+        XCTAssertTrue(newCategoryChip.waitForExistence(timeout: 5), "新しいカテゴリチップが表示されること")
+        newCategoryChip.tap()
+
+        // Step 4: レシピが0件なのでemptyViewが表示される
+        let emptyView = app.otherElements[RecipeHomeAccessibilityIDs.emptyView]
+        XCTAssertTrue(emptyView.waitForExistence(timeout: 5), "空カテゴリ選択時にemptyViewが表示されること")
+
+        // Step 5: カテゴリチップがまだ表示されていることを確認（今回のバグ修正の核心）
+        let allCategoryChip = app.buttons.matching(NSPredicate(format: "label == %@", "すべて")).firstMatch
+        XCTAssertTrue(allCategoryChip.exists, "emptyView表示中でもカテゴリチップが見えること")
+
+        // Step 6: 「すべて」をタップしてフィルタを解除
+        allCategoryChip.tap()
+
+        // Step 7: レシピグリッドが再び表示される
+        XCTAssertTrue(grid.waitForExistence(timeout: 5), "「すべて」に戻るとレシピグリッドが再表示されること")
+    }
+}
+
 // MARK: - XCUIElement Extension
 
 extension XCUIElement {

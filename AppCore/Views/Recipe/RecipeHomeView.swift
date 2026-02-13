@@ -39,16 +39,25 @@ struct RecipeHomeView: View {
     ]
 
     var body: some View {
-        Group {
-            if isLoading {
-                loadingView
-            } else if recipes.isEmpty {
-                emptyView
-            } else {
-                recipeGridView
+        // カテゴリチップはコンテンツ切り替え(empty/grid)の外に配置し、
+        // 空カテゴリ選択時でも常にフィルタ操作できるようにする
+        VStack(spacing: 0) {
+            if !isLoading && !categories.isEmpty {
+                categoryChipsView
+                    .padding(.vertical, ds.spacing.sm)
+                    .background(ds.colors.backgroundPrimary.color)
+            }
+
+            Group {
+                if isLoading {
+                    loadingView
+                } else if recipes.isEmpty {
+                    emptyView
+                } else {
+                    recipeGridView
+                }
             }
         }
-        .background(ds.colors.backgroundPrimary.color)
         .confirmationDialog(
             String(localized: .recipeDeleteConfirmationTitle),
             isPresented: $showDeleteConfirmation,
@@ -71,6 +80,7 @@ struct RecipeHomeView: View {
     private var loadingView: some View {
         ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(ds.colors.backgroundPrimary.color)
     }
 
     // MARK: - Empty View
@@ -113,6 +123,7 @@ struct RecipeHomeView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(ds.colors.backgroundPrimary.color)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.emptyView)
     }
 
@@ -189,20 +200,15 @@ struct RecipeHomeView: View {
 
     private var recipeGridView: some View {
         ScrollView {
-            VStack(spacing: ds.spacing.sm) {
-                if !categories.isEmpty {
-                    categoryChipsView
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(recipes) { recipe in
+                    recipeCard(recipe)
                 }
-
-                LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(recipes) { recipe in
-                        recipeCard(recipe)
-                    }
-                }
-                .padding(.horizontal, ds.spacing.md)
             }
+            .padding(.horizontal, ds.spacing.md)
             .padding(.vertical, ds.spacing.sm)
         }
+        .background(ds.colors.backgroundPrimary.color)
         .accessibilityIdentifier(RecipeHomeAccessibilityID.grid)
     }
 
